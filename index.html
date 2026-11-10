@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ІТ-Майстерня</title>
+<meta name="description" content="Навчальні ігри, квести й тренажери з інформатики для 1–11 класу.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='5' y='12' width='46' height='46' rx='12' fill='%23bddcf3' transform='rotate(-9 28 35)'/%3E%3Crect x='13' y='6' width='46' height='46' rx='12' fill='%23f6c6a6'/%3E%3Cpath d='M27 17v26l7-6 5 10 5-2.4-5-10h9.5z' fill='%233b3450'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&family=Rubik:wght@600;700;800&display=swap" rel="stylesheet">
+<script>
+  (function(){
+    var t=null;
+    try{t=localStorage.getItem('itm-theme')}catch(e){}
+    if(t!=='light'&&t!=='dark'){t=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light'}
+    document.documentElement.setAttribute('data-theme',t);
+  })();
+</script>
+<style>
+:root{
+  --bg:#f7f1e8; --bg2:#efe5d6; --ink:#3b3450; --muted:#6f6787; --card:#fffaf2; --line:rgba(59,52,80,.12);
+  --peach:#f6c6a6; --mint:#bfe3cf; --lilac:#d5c7f1; --sky:#bddcf3; --butter:#f6e19c; --coral:#ee9384;
+  --paper:#fffaf2; --frame:#5b5376; --shadow:rgba(90,66,44,.22); --shadowc:#503c28; --grain:.5;
+  --ghost:#ffffff; --gridc:color-mix(in srgb,var(--mint) 70%,transparent);
+  --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .3 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#24212e; --bg2:#2c2839; --ink:#f0e9fb; --muted:#b4aac8; --card:#353042; --line:rgba(240,233,251,.12);
+  --peach:#b88b74; --mint:#78a691; --lilac:#9284b8; --sky:#7598b3; --butter:#c2ad6a; --coral:#c06f62;
+  --paper:#4a4359; --frame:#1b1924; --shadow:rgba(0,0,0,.45); --shadowc:#000; --grain:.25;
+  --ghost:#e6def3; --gridc:color-mix(in srgb,var(--mint) 28%,transparent);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background-color:var(--bg);background-image:var(--noise);color:var(--ink);font-family:Nunito,system-ui,sans-serif;line-height:1.5;transition:background .4s,color .4s;overflow-x:hidden}
+
+h1,h2,h3{font-family:Rubik,Nunito,sans-serif;margin:0;line-height:1.15}
+a{color:inherit}
+.wrap{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:0 20px}
+
+/* SVG paper classes */
+.pe{fill:var(--peach)} .mi{fill:var(--mint)} .li{fill:var(--lilac)} .sk{fill:var(--sky)}
+.bu{fill:var(--butter)} .co{fill:var(--coral)} .cr{fill:var(--paper)} .fr{fill:var(--frame)} .ink{fill:var(--ink)}
+.st{fill:none;stroke:var(--ink);stroke-width:4;stroke-linecap:round}
+.rv{fill:var(--bg2)} .gw{fill:var(--ghost)} .gridl{stroke:var(--line);stroke-width:1}
+.slot{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:3 3;opacity:.8}
+.kl{fill:var(--ink);font:800 14px Rubik,sans-serif;text-anchor:middle;dominant-baseline:central}
+#paper feDropShadow{flood-color:var(--shadowc)}
+
+/* header */
+header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);transition:background .4s}
+.bar{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font:800 20px Rubik,sans-serif}
+.logo svg{width:38px;height:38px}
+.tools{display:flex;align-items:center;gap:10px}
+.plug{width:84px;height:44px;padding:0;border:0;background:var(--card);border-radius:14px;cursor:pointer;box-shadow:0 2px 0 var(--shadow),0 0 0 1px var(--line);overflow:hidden}
+.plug svg{width:84px;height:44px;display:block}
+.plug .sockshade{fill:var(--shadow)}
+.plug .sockplate{fill:var(--paper);stroke:var(--line);stroke-width:1}
+.plug .sockwell{fill:var(--bg2)}
+.plug .sockinner{fill:none;stroke:var(--shadow);stroke-width:2.2;stroke-linecap:round}
+.plug .sockclip{fill:var(--muted);opacity:.7}
+.plug .sockhole{fill:var(--frame);opacity:.85}
+.plug .cable{fill:none;stroke:var(--muted);stroke-width:4;stroke-linecap:round}
+.plug .pin{fill:var(--butter);stroke:color-mix(in srgb,var(--butter) 60%,#3a2a10);stroke-width:.6}
+.plug .plugshade{fill:color-mix(in srgb,var(--coral) 68%,#2a1a20)}
+.plug .plugring{fill:none;stroke:color-mix(in srgb,var(--coral) 75%,#2a1a20);stroke-width:1.6;opacity:.7}
+.plug .plughl{fill:none;stroke:rgba(255,255,255,.6);stroke-width:2;stroke-linecap:round}
+.plug .plugcore{fill:color-mix(in srgb,var(--coral) 60%,#2a1a20)}
+.plug .front{transform-box:view-box;transform-origin:62px 20px;opacity:1;transform:none;transition:opacity .15s .26s,transform .35s cubic-bezier(.3,1.7,.5,1) .26s}
+.plug .side{transform-box:view-box;transform-origin:6px 23px;opacity:0;transform:translateX(18px);transition:transform .28s ease-in,opacity .1s .2s}
+:root[data-theme="dark"] .plug .front{opacity:0;transform:scale(1.25);transition:transform .2s ease-out,opacity .12s .1s}
+:root[data-theme="dark"] .plug .side{opacity:1;transform:translate(0,3px) rotate(8deg);transition:opacity .1s .14s,transform .6s cubic-bezier(.3,1.6,.45,1) .14s}
+.plug:focus-visible,.ibtn:focus-visible,.btn:focus-visible,.tab:focus-visible,.card:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+.ibtn{width:40px;height:40px;border-radius:14px;border:0;cursor:pointer;background:var(--lilac);color:var(--ink);font:800 18px Rubik,sans-serif;box-shadow:0 2px 0 var(--shadow)}
+
+/* hero */
+.hero{position:relative;padding:56px 0 40px}
+.hero::before{content:"";position:absolute;inset:-20px 0 0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px),
+    linear-gradient(var(--gridc) 2px,transparent 2px),linear-gradient(90deg,var(--gridc) 2px,transparent 2px);
+  background-size:28px 28px,28px 28px,140px 140px,140px 140px;
+  -webkit-mask-image:radial-gradient(ellipse 70% 75% at 60% 45%,#000 30%,transparent 78%);
+          mask-image:radial-gradient(ellipse 70% 75% at 60% 45%,#000 30%,transparent 78%)}
+.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1.05fr;gap:32px;align-items:center}
+.hero h1{font-size:clamp(40px,6vw,68px);letter-spacing:-.02em}
+.hero h1 span{background:linear-gradient(transparent 62%,var(--butter) 62%);padding:0 .08em}
+.hero p{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:30ch;margin:18px 0 28px}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 22px;border-radius:16px;border:0;cursor:pointer;text-decoration:none;font:700 17px Nunito,sans-serif;color:var(--ink);background:var(--card);box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);transition:transform .15s}
+.btn.main{background:var(--coral);color:#2e2638;box-shadow:0 3px 0 color-mix(in srgb,var(--coral) 55%,#000)}
+.btn:hover{transform:translateY(-2px) rotate(-.6deg)}
+.art{position:relative;max-width:560px;width:100%;justify-self:end}
+.art svg{width:100%;height:auto;display:block;overflow:visible}
+.chip{position:absolute;padding:7px 13px;border-radius:12px;background:var(--card);font:700 14px Nunito,sans-serif;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);white-space:nowrap;animation:pop .4s cubic-bezier(.4,1.6,.5,1) both;animation-delay:1.15s}
+.chip.c1{top:4%;right:2%;transform:rotate(4deg)}
+.chip.c2{top:44%;left:-2%;transform:rotate(-5deg);animation-delay:1.25s}
+.chip.c3{bottom:5%;right:6%;transform:rotate(-3deg);animation-delay:1.35s}
+.piece{transform-box:fill-box;transform-origin:center;animation:glue .55s cubic-bezier(.3,1.45,.5,1) both;animation-delay:var(--d,0s)}
+@keyframes glue{from{opacity:0;transform:translateY(-28px) rotate(-6deg) scale(.95)}}
+@keyframes pop{from{opacity:0;scale:.6}}
+
+/* catalog */
+.catalog{padding:30px 0 70px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;border-bottom:3px solid var(--line);margin-bottom:34px}
+.tab{position:relative;bottom:-3px;padding:12px 20px 10px;border:0;border-radius:16px 16px 0 0;cursor:pointer;font:700 16px Rubik,sans-serif;color:var(--ink);background:color-mix(in srgb,var(--tc) 45%,var(--bg));box-shadow:inset 0 -3px 0 var(--line);transition:transform .15s,background .2s}
+.tab:hover{transform:translateY(-2px)}
+.tab[aria-selected="true"]{background:var(--tc);box-shadow:0 -2px 0 var(--shadow) inset,0 -1px 4px var(--shadow)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:30px 24px}
+.card{position:relative;display:flex;flex-direction:column;text-decoration:none;background:var(--card);border-radius:20px;padding:12px;box-shadow:0 4px 0 var(--shadow),0 0 0 1px var(--line),0 14px 30px -18px var(--shadow);transition:transform .2s,box-shadow .2s;animation:pop .35s ease both}
+.card:nth-child(3n+1){transform:rotate(-.8deg)} .card:nth-child(3n+2){transform:rotate(.6deg)}
+.card:hover{transform:translateY(-6px) rotate(-.5deg);box-shadow:0 8px 0 var(--shadow),0 0 0 1px var(--line),0 22px 34px -18px var(--shadow)}
+.card::before{content:"";position:absolute;top:-11px;left:50%;width:74px;height:22px;margin-left:-37px;transform:rotate(-3deg);background:color-mix(in srgb,var(--tape) 75%,transparent);border-radius:3px;box-shadow:0 1px 2px var(--shadow)}
+.card .pic{border-radius:14px;aspect-ratio:16/10;background:color-mix(in srgb,var(--cbg) 60%,var(--card));overflow:hidden}
+.card .pic svg{width:100%;height:100%;display:block}
+.card .txt{padding:14px 6px 6px;display:flex;flex-direction:column;flex:1}
+.card .tag{align-self:flex-start;margin-top:auto}
+.card h3{font-size:20px}
+.card p{margin:6px 0 12px;color:var(--muted);font-size:15px}
+.tag{display:inline-block;padding:3px 10px;border-radius:9px;font:700 13px Nunito,sans-serif;background:color-mix(in srgb,var(--cbg) 70%,var(--card))}
+
+footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-size:14px;padding:0 0 34px}
+
+/* info */
+dialog{border:0;border-radius:22px;padding:0;max-width:440px;width:calc(100% - 32px);background:var(--card);color:var(--ink);box-shadow:0 6px 0 var(--shadow),0 30px 60px -20px rgba(0,0,0,.4)}
+dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
+.dlg{padding:26px 26px 22px;position:relative}
+.dlg h2{font-size:24px;margin-bottom:10px}
+.dlg h3{font-size:16px;margin:16px 0 6px}
+.dlg p,.dlg li{color:var(--muted);font-size:15px;margin:0}
+.dlg ul{margin:0;padding-left:20px}
+.dlg .x{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:12px;border:0;background:var(--bg2);color:var(--ink);font:700 20px Rubik;cursor:pointer}
+.gh{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:10px 16px;border-radius:14px;background:var(--butter);color:#2e2638;text-decoration:none;font-weight:800;box-shadow:0 3px 0 var(--shadow)}
+.gh svg{width:18px;height:18px}
+.ai{margin-top:14px!important;font-size:13px!important;opacity:.85}
+
+@media (max-width:860px){
+  .hero{padding:30px 0 20px}
+  .hero-grid{grid-template-columns:1fr;gap:26px}
+  .hero p{max-width:none}
+  .art{justify-self:center;max-width:480px}
+}
+@media (max-width:520px){
+  .logo span{font-size:18px}
+  .tab{padding:10px 13px 8px;font-size:14px}
+  .chip{font-size:12px;padding:5px 10px}
+  .chip.c2{left:0}
+  .btn{padding:13px 18px;font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="paper" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="2.5" stdDeviation="1.6" flood-opacity=".3"/>
+    </filter>
+  </defs>
+</svg>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#top" aria-label="ІТ-Майстерня">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect class="sk" x="5" y="12" width="46" height="46" rx="12" transform="rotate(-9 28 35)"/><rect class="pe" x="13" y="6" width="46" height="46" rx="12" filter="url(#paper)"/><path d="M27 17v26l7-6 5 10 5-2.4-5-10h9.5z" fill="#3b3450"/></svg>
+      <span>ІТ-Майстерня</span>
+    </a>
+    <div class="tools">
+      <button class="plug" id="plug" type="button" aria-label="Перемкнути тему">
+        <svg viewBox="0 0 84 44" aria-hidden="true">
+          <rect class="sockshade" x="44" y="5" width="36" height="34" rx="10"/>
+          <rect class="sockplate" x="44" y="3" width="36" height="34" rx="10"/>
+          <circle class="sockwell" cx="62" cy="20" r="12.5"/>
+          <path class="sockinner" d="M51 20a11 11 0 0 1 22 0"/>
+          <rect class="sockclip" x="60.3" y="8.6" width="3.4" height="2.4" rx="1"/>
+          <rect class="sockclip" x="60.3" y="29" width="3.4" height="2.4" rx="1"/>
+          <circle class="sockhole" cx="57.2" cy="20" r="2.2"/>
+          <circle class="sockhole" cx="66.8" cy="20" r="2.2"/>
+          <g class="side">
+            <path class="cable" d="M-30 25C-12 25-4 23 6 23"/>
+            <rect class="pin" x="30" y="16.4" width="13" height="3.2" rx="1.6"/>
+            <rect class="pin" x="30" y="25.4" width="13" height="3.2" rx="1.6"/>
+            <rect class="plugshade" x="4" y="19.5" width="9" height="10" rx="3"/>
+            <rect class="plugshade" x="10" y="12.5" width="22" height="21" rx="6"/>
+            <rect class="co" x="4" y="17.5" width="9" height="10" rx="3"/>
+            <rect class="co" x="10" y="11" width="22" height="20.5" rx="6"/>
+            <rect class="plugcore" x="29" y="12.5" width="3.5" height="18" rx="1.7"/>
+            <path class="plugring" d="M17 14v14M21.5 14v14"/>
+            <path class="plughl" d="M13.5 14h12"/>
+          </g>
+          <g class="front">
+            <circle class="plugshade" cx="62" cy="22.2" r="14"/>
+            <circle class="co" cx="62" cy="20" r="14"/>
+            <circle class="plugring" cx="62" cy="20" r="9"/>
+            <path class="plughl" d="M52.6 16.2a10.5 10.5 0 0 1 7.6-6.6"/>
+            <circle class="plugshade" cx="62" cy="21" r="5.6"/>
+            <circle class="co" cx="62" cy="20" r="5"/>
+            <path class="cable" d="M62 20C50 21 44 34 -10 36"/>
+          </g>
+        </svg>
+      </button>
+      <button class="ibtn" id="infoBtn" type="button" aria-label="Про сайт">i</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1>ІТ-<span>Майстерня</span></h1>
+        <p>Навчальні ігри, квести й тренажери з інформатики для 1–11 класу.</p>
+        <div class="btns">
+          <a class="btn main" href="#catalog">Обрати клас</a>
+          <a class="btn" href="#catalog" data-go="teacher">Для вчителя</a>
+        </div>
+      </div>
+
+      <div class="art">
+        <svg viewBox="0 0 520 440" role="img" aria-label="Паперовий комп'ютер з іграми та квестами на екрані">
+          <g class="piece" style="--d:0s" filter="url(#paper)">
+            <path class="mi" d="M78 130C48 50 196 14 272 50S462 30 474 150 506 352 366 384 84 420 64 304 104 214 78 130Z"/>
+            <circle class="li" cx="430" cy="92" r="46"/>
+          </g>
+          <g class="piece" style="--d:.15s" filter="url(#paper)">
+            <path class="pe" d="M232 262h56l14 42h-84z"/>
+            <rect class="pe" x="196" y="298" width="128" height="14" rx="7"/>
+            <rect class="fr" x="118" y="66" width="284" height="200" rx="18"/>
+            <rect class="sk" x="132" y="80" width="256" height="170" rx="10"/>
+          </g>
+          <g class="piece" style="--d:.35s" filter="url(#paper)">
+            <rect class="co" x="148" y="98" width="70" height="88" rx="9"/>
+            <path class="cr" d="M174 124v36l28-18z"/>
+            <rect class="mi" x="228" y="98" width="70" height="88" rx="9"/>
+            <rect class="cr" x="240" y="114" width="12" height="12" rx="3"/><rect class="cr" x="258" y="117" width="30" height="6" rx="3"/>
+            <rect class="cr" x="240" y="136" width="12" height="12" rx="3"/><rect class="cr" x="258" y="139" width="30" height="6" rx="3"/>
+            <rect class="cr" x="240" y="158" width="12" height="12" rx="3"/><rect class="cr" x="258" y="161" width="22" height="6" rx="3"/>
+            <rect class="li" x="308" y="98" width="64" height="88" rx="9"/>
+            <text x="340" y="142" class="kl" style="font-size:20px">&lt;/&gt;</text>
+            <rect class="cr" x="148" y="202" width="224" height="16" rx="8"/>
+            <rect class="bu" x="148" y="202" width="146" height="16" rx="8"/>
+          </g>
+          <g class="piece" style="--d:.55s" filter="url(#paper)">
+            <rect class="bu" x="146" y="326" width="228" height="68" rx="13"/>
+            <g id="heroKeys"></g>
+          </g>
+          <g class="piece" style="--d:.75s" filter="url(#paper)">
+            <g transform="translate(46 168) rotate(-14)">
+              <rect class="co" x="0" y="10" width="46" height="46" rx="6"/>
+              <circle class="co" cx="23" cy="10" r="10"/><circle class="co" cx="46" cy="33" r="10"/>
+            </g>
+            <g transform="translate(446 236)">
+              <g class="li">
+                <rect x="-6" y="-31" width="12" height="62" rx="3"/>
+                <rect x="-6" y="-31" width="12" height="62" rx="3" transform="rotate(45)"/>
+                <rect x="-6" y="-31" width="12" height="62" rx="3" transform="rotate(90)"/>
+                <rect x="-6" y="-31" width="12" height="62" rx="3" transform="rotate(135)"/>
+                <circle r="23"/>
+              </g>
+              <circle class="cr" r="9"/>
+            </g>
+            <g transform="translate(398 360) rotate(-38)">
+              <rect class="bu" x="0" y="0" width="86" height="16" rx="3"/>
+              <rect class="pe" x="-8" y="0" width="12" height="16" rx="3"/>
+              <path class="cr" d="M86 0l22 8-22 8z"/><path class="fr" d="M101 5.5l7 2.5-7 2.5z"/>
+            </g>
+          </g>
+          <g class="piece" style="--d:.95s" filter="url(#paper)">
+            <path class="cr" d="M322 160v40l11-9 8 17 9-4-8-17h14z" style="stroke:var(--ink);stroke-width:3;stroke-linejoin:round"/>
+          </g>
+        </svg>
+        <span class="chip c1">🎮 Ігри</span>
+        <span class="chip c2">🧩 Квести</span>
+        <span class="chip c3">⌨️ Тренажери</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="catalog" id="catalog">
+    <div class="wrap">
+      <div class="tabs" role="tablist" id="tabs"></div>
+      <div class="grid" id="grid" role="tabpanel"></div>
+    </div>
+  </section>
+</main>
+
+<footer>ІТ-Майстерня · 2026</footer>
+
+<dialog id="info" aria-labelledby="infoTitle">
+  <div class="dlg">
+    <button class="x" type="button" id="infoClose" aria-label="Закрити">×</button>
+    <h2 id="infoTitle">ІТ-Майстерня</h2>
+    <p>Усі навчальні ігри, квести й тренажери з інформатики в одному місці — для учнів 1–11 класу та вчителів.</p>
+    <h3>Як користуватися</h3>
+    <ul>
+      <li>Обери вкладку зі своїм класом або «Для вчителя».</li>
+      <li>Натисни на картку — застосунок відкриється в новій вкладці.</li>
+      <li>Штекер угорі перемикає тему: у розетці — світла, витягнутий — темна.</li>
+    </ul>
+    <a class="gh" href="https://github.com/whyuxavier/it-maysternia" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6L2.5 9.3l6.6-.8z"/></svg>
+      GitHub
+    </a>
+    <p class="ai">Створено з використанням ШІ.</p>
+  </div>
+</dialog>
+
+<script>
+/* =====================================================================
+   ШПАРГАЛКА: як додати новий застосунок / курс / квест
+   ---------------------------------------------------------------------
+   1. Скопіюй будь-який рядок зі списку APPS нижче й встав його туди,
+      де картка має стояти (порядок у списку = порядок на сайті).
+   2. Заміни поля:
+        tab   — вкладка:  '1-4' | '5-7' | '8-11' | 'teacher'
+        title — назва, як на самому сайті
+        desc  — короткий опис (одне речення)
+        type  — бейдж: 'Гра', 'Квест', 'Курс', 'Тренажер', 'Інструмент'…
+        art   — картинка. Поки немає своєї — пиши 'default'
+                (або взагалі не пиши art — буде загальна картинка).
+                Готові: pctrainer, keys, pixel, academy, mines, compass,
+                circle, alias, snake, python9, textdoc, data, iot, excel,
+                bugs, ghost, server, qr, web, pybook
+        bg    — колір фону картинки: '--peach' | '--mint' | '--lilac' |
+                '--sky' | '--butter' | '--coral'
+        repo  — назва репозиторію на GitHub (посилання збереться саме:
+                https://whyuxavier.github.io/НАЗВА/)
+                Якщо сайт живе деінде — замість repo напиши url:'https://…'
+   3. Не забудь кому в кінці рядка. Збережи й завантаж index.html на GitHub.
+
+   Приклад:
+   {tab:'8-11', title:'Місія «Мережі»', desc:'Квест про мережі', type:'Квест', art:'default', bg:'--sky', repo:'network-quest'},
+
+   Своя картинка пізніше: додай функцію в об'єкт ART (за зразком інших,
+   полотно 320×200) і впиши її назву в поле art.
+   ===================================================================== */
+const GH = 'https://whyuxavier.github.io/';
+const TABS = [
+  {id:'1-4',     label:'1–4 клас',    color:'--peach'},
+  {id:'5-7',     label:'5–7 клас',    color:'--mint'},
+  {id:'8-11',    label:'8–11 клас',   color:'--lilac'},
+  {id:'teacher', label:'Для вчителя', color:'--butter'}
+];
+const APPS = [
+  {tab:'1-4',  title:'Тренажер мишки та клавіатури', desc:'Перші кроки з комп\'ютером разом з котиком Фіфі', type:'Тренажер',    art:'pctrainer', bg:'--peach',  repo:'pc-trainer'},
+  {tab:'1-4',  title:'Клавіатурний пазл',            desc:'Збери клавіатуру з розсипаних клавіш',           type:'Гра',         art:'keys',      bg:'--sky',    repo:'key-puzzle'},
+  {tab:'1-4',  title:'Пікселька',                    desc:'Малюй піксельні картинки',                       type:'Редактор',    art:'pixel',     bg:'--lilac',  repo:'pixelka'},
+
+  {tab:'5-7',  title:'Keyboard Academy',             desc:'Вчимося друкувати наосліп',                      type:'Тренажер',    art:'academy',   bg:'--butter', repo:'keyboard-academy'},
+  {tab:'5-7',  title:'Сапер',                        desc:'Знайди всі міни й не підірвись',                 type:'Гра',         art:'mines',     bg:'--sky',    repo:'minesweeper'},
+  {tab:'5-7',  title:'АйтіКомпас',                   desc:'Дізнайся свій рівень з інформатики',             type:'Діагностика', art:'compass',   bg:'--mint',   repo:'it-compass'},
+  {tab:'5-7',  title:'Намалюй коло',                 desc:'Намалюй фігуру одним рухом',                     type:'Гра',         art:'circle',    bg:'--peach',  repo:'draw-circle'},
+  {tab:'5-7',  title:'SERVER ROOM',                  desc:'Полагодь серверну разом з професором',           type:'Гра',         art:'server',    bg:'--lilac',  repo:'server-room'},
+
+  {tab:'8-11', title:'Веб-програмування',            desc:'HTML, CSS і JavaScript за 12 уроків',            type:'Курс',        art:'web',       bg:'--peach',  repo:'learn-web'},
+  {tab:'8-11', title:'Python з нуля',                desc:'Модулі для 8 і 9 класу',                         type:'Курс',        art:'pybook',    bg:'--mint',   repo:'learn-python'},
+  {tab:'8-11', title:'Python-змійка',                desc:'Перші кроки в Python',                           type:'Квест',       art:'snake',     bg:'--mint',   repo:'python-quest-8'},
+  {tab:'8-11', title:'Підсумковий квест: Python, 9 клас', desc:'Цикли, списки, Turtle і Tkinter',           type:'Квест',       art:'python9',   bg:'--sky',    repo:'python-quest-9'},
+  {tab:'8-11', title:'Місія «Документ»',             desc:'Списки, стовпці, колонтитули й зміст',           type:'Квест',       art:'textdoc',   bg:'--butter', repo:'text-document-quest'},
+  {tab:'8-11', title:'Місія «Аналітик даних»',       desc:'Мода, медіана й середнє на практиці',            type:'Квест',       art:'data',      bg:'--lilac',  repo:'data-analysis-quest'},
+  {tab:'8-11', title:'Місія «Інтернет речей»',       desc:'Квест про розумні пристрої',                     type:'Квест',       art:'iot',       bg:'--lilac',  repo:'iot-quest'},
+  {tab:'8-11', title:'Excel Tournament',             desc:'Змагання з електронних таблиць',                 type:'Турнір',      art:'excel',     bg:'--mint',   repo:'excel-tournament'},
+  {tab:'8-11', title:'Баг-шторм',                    desc:'Виправ помилки, поки падають вікна',             type:'Гра',         art:'bugs',      bg:'--coral',  repo:'bug-storm'},
+  {tab:'8-11', title:'Ghost in HTML',                desc:'Виправ код і звільни привида',                   type:'Квест',       art:'ghost',     bg:'--sky',    repo:'ghost-in-html'},
+
+  {tab:'teacher', title:'Генератор QR-кодів',        desc:'QR-код для посилання на весь екран',             type:'Інструмент',  art:'qr',        bg:'--butter', repo:'qr-creator'},
+  {tab:'teacher', title:'Інформатичний Еліас',          desc:'Поясни IT-термін команді',                       type:'Гра',         art:'alias',     bg:'--lilac',  repo:'it-alias'}
+];
+
+/* ===== Паперові ілюстрації карток ===== */
+const P = 'filter="url(#paper)"';
+const R=(c,x,y,w,h,r=4,ex='')=>`<rect class="${c}" x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" ${ex}/>`;
+const C=(c,x,y,r)=>`<circle class="${c}" cx="${x}" cy="${y}" r="${r}"/>`;
+const G=(inner,t)=>`<g ${P}${t?` transform="${t}"`:''}>${inner}</g>`;
+const T=(x,y,s,txt,size=14)=>`<text class="kl" x="${x}" y="${y}" style="font-size:${size}px">${txt}</text>`;
+const ground=(c='mi')=>G(`<path class="${c}" d="M0 164C70 146 120 156 170 162S270 146 320 156V200H0Z"/>`);
+const star=(x,y,s=1,c='bu')=>G(`<path class="${c}" d="M0-16 4.7-5.5 16-4.4 7.5 3.4 9.9 15 0 9 -9.9 15-7.5 3.4-16-4.4-4.7-5.5Z"/>`,`translate(${x} ${y}) scale(${s})`);
+const pencil=(x,y,a,len=70)=>G(R('bu',0,0,len,14,3)+R('pe',-7,0,10,14,3)+`<path class="cr" d="M${len} 0l18 7-18 7z"/><path class="fr" d="M${len+12} 4.7l6 2.3-6 2.3z"/>`,`translate(${x} ${y}) rotate(${a})`);
+const win=(x,y,w,h,body='cr',bar='li')=>R(body,x,y,w,h,9)+`<path class="${bar}" d="M${x} ${y+18}V${y+9}a9 9 0 0 1 9-9h${w-18}a9 9 0 0 1 9 9v9z"/>`+C('co',x+11,y+9,3)+C('bu',x+20,y+9,3)+C('mi',x+29,y+9,3);
+const line=(x,y,w,c='li')=>R(c,x,y,w,6,3);
+
+const ART = {
+  default(){
+    return ground('mi')+
+      G(R('cr',96,34,128,118,14)+R('li',96,34,128,22,14)+R('li',96,46,128,10,0)+C('co',110,45,3.5)+C('bu',120,45,3.5)+C('mi',130,45,3.5)+
+        line(112,72,64,'co')+line(112,86,96)+line(112,100,80)+R('bu',112,116,44,24,6)+R('sk',162,116,46,24,6))+
+      G(`<g class="li">${[0,45,90,135].map(a=>`<rect x="-5" y="-25" width="10" height="50" rx="3" transform="rotate(${a})"/>`).join('')}<circle r="18"/></g>`+C('cr',0,0,7),'translate(246 66)')+
+      G(`<path class="cr" d="M0 0v34l9-8 7 15 8-3.5-7-15h12z" style="stroke:var(--ink);stroke-width:2.5;stroke-linejoin:round"/>`,'translate(196 120)')+
+      star(66,62,.9)+star(268,148,.6,'pe');
+  },
+  pctrainer(){
+    return ground('mi')+
+      `<path d="M128 40C128 14 76 24 40 12" class="st" style="stroke:var(--muted);stroke-width:4"/>`+
+      G(`<path class="cr" d="M94 74a34 34 0 0 1 68 0v42a34 34 0 0 1-68 0z"/><path d="M128 42v38M95 80h66" class="st" style="stroke-width:2.5;opacity:.3"/>`+R('co',123,52,10,18,5))+
+      G(`<path class="pe" d="M198 96l6-36 22 24zM262 96l-6-36-22 24z"/>`+C('pe',230,112,36)+
+        R('co',222,80,5,13,2.5,'opacity=".7"')+R('co',229,78,5,15,2.5,'opacity=".7"')+R('co',236,80,5,13,2.5,'opacity=".7"')+
+        C('cr',230,128,13)+C('ink',217,108,4.5)+C('ink',243,108,4.5)+`<path class="co" d="M225 121h10l-5 6z"/>`)+
+      `<path d="M84 52l-12-8M80 70H64M90 36l-6-14" class="st" style="stroke:var(--coral);stroke-width:3.5"/>`;
+  },
+  keys(){
+    let k='';
+    const miss=new Set(['0-3','1-5','2-1']);
+    for(let r=0;r<3;r++)for(let c=0;c<8;c++){
+      const x=70+r*6+c*21, y=90+r*21;
+      k+= miss.has(r+'-'+c) ? `<rect class="slot" x="${x}" y="${y}" width="17" height="17" rx="3"/>` : R('cr',x,y,17,17,3);
+    }
+    const fly=[[56,28,-14,'Ф','pe'],[146,12,9,'І','bu'],[236,30,-7,'Й','co']]
+      .map(([x,y,a,l,c])=>`<g transform="translate(${x} ${y}) rotate(${a} 16 16)">${R(c,0,0,32,32,7)}${T(16,17,0,l,17)}</g>`).join('');
+    return ground('mi')+G(R('li',56,80,208,96,13))+G(k+R('cr',112,155,96,13,4))+G(fly);
+  },
+  pixel(){
+    const rows=['.11...11.','1111.1111','111111111','111111111','.1111111.','..11111..','...111...','....1....'];
+    let px='';
+    rows.forEach((row,j)=>[...row].forEach((v,i)=>{ if(v==='1'){const hl=(j===1&&i===1)||(j===2&&i===1)||(j===1&&i===2); px+=`<rect class="${hl?'pe':'co'}" x="${82+i*12}" y="${44+j*12}" width="12" height="12"/>`;}}));
+    let grid='';
+    for(let i=0;i<=9;i++) grid+=`<path d="M${82+i*12} 44v96M82 ${44+i*12}h108" class="gridl"/>`;
+    return G(R('cr',68,28,136,128,12))+G(px)+grid.replace(/M82 \d+h108/g,m=>+m.split(' ')[1].replace('h108','')>140?'':m)+
+      G(R('cr',220,46,66,98,14)+C('co',238,66,8)+C('bu',268,66,8)+C('mi',238,94,8)+C('sk',268,94,8)+C('li',238,122,8)+C('pe',268,122,8))+
+      pencil(40,170,-34,62);
+  },
+  academy(){
+    let k='';
+    for(let r=0;r<3;r++)for(let c=0;c<11;c++){ if(r===0&&c>3&&c<7)continue; k+=R('li',52+r*5+c*19.5,106+r*20,16,15,3); }
+    return G(R('cr',40,96,240,82,12))+G(k)+
+      G(R('bu',128,62,64,62,12)+T(160,94,0,'Ф',30))+
+      G(`<path class="fr" d="M160 18l46 17-46 17-46-17z"/>`+R('fr',140,38,40,14,3)+`<path d="M200 36v22" class="st" style="stroke-width:2.5"/>`+C('bu',200,60,5));
+  },
+  mines(){
+    let s='';
+    const rev={'0-0':'','0-1':'','0-2':'1','1-0':'','1-1':'2','2-0':'1','2-1':'','3-0':''};
+    for(let r=0;r<4;r++)for(let c=0;c<6;c++){
+      const x=72+c*30, y=40+r*30, key=r+'-'+c;
+      if(key in rev){ s+=R('rv',x,y,26,26,5); if(rev[key]) s+=`<text class="kl" x="${x+13}" y="${y+14}" style="font-size:16px;fill:var(${rev[key]==='1'?'--frame':'--coral'})">${rev[key]}</text>`; }
+      else if(key==='3-4'){ s+=R('co',x,y,26,26,5); }
+      else s+=R('li',x,y,26,26,5);
+    }
+    const mine=`<g transform="translate(205 143)">${[0,45,90,135].map(a=>`<rect class="ink" x="-1.6" y="-11" width="3.2" height="22" rx="1.5" transform="rotate(${a})"/>`).join('')}${C('ink',0,0,7)}${C('cr',-2.5,-2.5,2)}</g>`;
+    const flag=`<g transform="translate(162 70)">${R('ink',0,0,2.6,18,1)}<path class="co" d="M2.6 0h11l-4 4.5 4 4.5h-11z"/></g>`;
+    return G(R('cr',60,28,204,146,14))+G(s)+mine+flag+star(282,40,.9);
+  },
+  compass(){
+    return G(C('cr',160,100,74))+G(C('sk',160,100,60))+
+      G(C('cr',160,100,46)+C('bu',160,47,4.5)+C('bu',213,100,4.5)+C('bu',160,153,4.5)+C('bu',107,100,4.5))+
+      G(`<path class="co" d="M160 58l11 42h-22z"/><path class="li" d="M160 142l11-42h-22z"/>`+C('bu',160,100,7),'rotate(-28 160 100)')+
+      G(R('pe',0,0,50,36,6)+R('sk',6,6,38,24,3)+R('pe',19,36,12,8,0)+R('pe',12,43,26,5,2),'translate(26 40) rotate(-9)')+
+      G(R('cr',0,0,40,50,5)+line(7,10,26)+line(7,20,20)+line(7,30,24),'translate(250 104) rotate(10)')+star(272,38,.85);
+  },
+  circle(){
+    return G(R('cr',70,22,180,156,10),'rotate(-3 160 100)')+
+      G(`<path d="M162 50C202 48 214 80 212 104C210 134 186 152 158 150C126 148 108 126 110 100C112 74 130 54 160 52" fill="none" style="stroke:var(--coral);stroke-width:9;stroke-linecap:round"/>`)+
+      pencil(150,40,-58,58)+
+      G(`<path class="mi" d="M262 164l18-32 18 32z"/>`)+G(R('sk',30,140,30,30,5))+star(270,44,.8);
+  },
+  alias(){
+    return G(R('li',36,30,118,68,20)+`<path class="li" d="M64 94l-6 26 30-24z"/>`+T(95,64,0,'?',34))+
+      G(R('pe',166,62,118,68,20)+`<path class="pe" d="M256 126l10 24-30-22z"/>`+T(225,96,0,'!',34))+
+      G(`<path class="bu" d="M134 132h32l-16 18zM134 176h32l-16-18z"/>`+R('fr',128,126,44,7,3)+R('fr',128,174,44,7,3))+
+      G(R('cr',0,0,34,46,5)+R('co',6,6,22,6,3)+R('sk',6,16,16,6,3),'translate(232 148) rotate(14)');
+  },
+  snake(){
+    return ground('mi')+
+      G(`<path d="M70 150C70 110 130 110 130 130S190 150 190 110 230 70 246 86" fill="none" style="stroke:var(--coral);stroke-width:22;stroke-linecap:round"/>`)+
+      G(C('co',250,84,19)+C('cr',244,78,6)+C('cr',258,78,6)+C('ink',245,79,3)+C('ink',259,79,3)+`<path d="M264 94l14 6-8 2 6 6-12-6z" style="fill:var(--coral)"/>`)+
+      star(80,52,.9);
+  },
+  python9(){
+    const ed=R('fr',34,28,196,138,12)+C('co',48,40,3.5)+C('bu',58,40,3.5)+C('mi',68,40,3.5)+
+      line(50,58,40,'co')+line(96,58,60,'sk')+line(62,74,70,'mi')+line(62,90,46,'bu')+line(114,90,40,'sk')+line(50,106,30,'co')+line(86,106,80,'li')+line(62,122,56,'mi')+line(50,138,24,'bu');
+    return G(ed)+G(`<path class="mi" d="M226 152a28 24 0 0 1 56 0z"/>`+C('mi',290,140,9)+C('ink',293,138,2)+C('bu',254,142,9)+R('mi',230,150,10,10,5)+R('mi',266,150,10,10,5))+star(270,52,1.1);
+  },
+  textdoc(){
+    return G(R('pe',72,30,120,150,8),'rotate(-7 132 105)')+
+      G(R('cr',112,18,140,168,8)+R('li',112,18,140,22,8)+R('li',112,30,140,10,0)+line(124,52,86,'co')+
+        line(124,70,52)+line(124,80,48)+line(124,90,52)+line(124,100,40)+line(186,70,54)+line(186,80,50)+line(186,90,54)+line(186,100,46)+
+        C('co',128,124,3.5)+line(136,121,60)+C('co',128,138,3.5)+line(136,135,74)+C('co',128,152,3.5)+line(136,149,50)+R('fr',190,144,3,16,1.5)+line(124,172,116,'bu'))+
+      pencil(242,60,58,52);
+  },
+  data(){
+    return G(R('cr',34,36,164,136,14))+
+      G(R('sk',54,110,22,48,4)+R('co',84,80,22,78,4)+R('bu',114,96,22,62,4)+R('mi',144,62,22,96,4)+R('li',174,122,14,36,4))+
+      `<path d="M50 160h140" class="st" style="stroke-width:3;opacity:.4"/>`+
+      G(C('li',246,78,36)+`<path class="co" d="M246 78V42a36 36 0 0 1 33 50z"/><path class="bu" d="M246 78l33 14a36 36 0 0 1-21 20z"/>`)+
+      G(`<rect class="fr" x="-4" y="16" width="8" height="26" rx="4" transform="rotate(-40)"/>`+C('fr',0,0,18)+C('sk',0,0,12),'translate(246 150)');
+  },
+  iot(){
+    return ground('mi')+
+      G(R('pe',192,52,15,30,2)+R('cr',104,92,112,78,4)+`<path class="co" d="M90 100L160 44l70 56z"/>`+R('pe',147,128,27,42,4)+R('bu',116,106,24,22,3)+R('sk',182,106,24,22,3))+
+      G(R('fr',0,0,42,72,9)+R('sk',5,9,32,52,4)+R('mi',10,20,22,12,6)+C('cr',26,26,4.5)+R('bu',10,40,22,12,6)+C('cr',16,46,4.5),'translate(244 98)')+
+      G(`<path class="st" d="M250 56a26 26 0 0 1 36 0M257 66a15 15 0 0 1 22 0"/>`+C('ink',268,76,4))+
+      G(C('bu',14,14,15)+R('pe',7,28,14,12,3),'translate(44 48)')+
+      G(`<path class="cr" d="M24 112a12 12 0 0 1 22-6 10 10 0 0 1 16 8h-38z"/>`);
+  },
+  excel(){
+    let g='';
+    for(let i=1;i<5;i++) g+=R('li',36+i*40,56,1.5,118,0);
+    for(let j=1;j<5;j++) g+=R('li',36,56+j*24,186,1.5,0);
+    return G(R('cr',36,34,186,140,10)+`<path class="mi" d="M36 58V44a10 10 0 0 1 10-10h166a10 10 0 0 1 10 10v14z"/>`+g+
+        R('bu',77,81,38,22,0)+R('bu',117,105,38,22,0)+R('sk',157,129,38,22,0)+C('cr',50,46,4)+C('cr',62,46,4))+
+      G(`<path class="bu" d="M240 56h56v22a28 28 0 0 1-56 0z"/><path d="M240 64h-8a12 12 0 0 0 12 16M296 64h8a12 12 0 0 1-12 16" class="st" style="stroke:var(--butter);stroke-width:5"/>`+R('bu',262,104,12,20,2)+R('pe',248,122,40,14,5))+star(268,74,.6,'cr');
+  },
+  bugs(){
+    const ew=(x,y,a)=>G(R('cr',0,0,112,74,9)+`<path class="co" d="M0 18V9a9 9 0 0 1 9-9h94a9 9 0 0 1 9 9v9z"/>`+C('co',24,44,11)+`<path d="M19 39l10 10M29 39l-10 10" class="st" style="stroke:var(--paper);stroke-width:3"/>`+line(42,36,52)+line(42,48,40),`translate(${x} ${y}) rotate(${a})`);
+    return ew(30,40,-8)+ew(96,66,4)+ew(170,30,9)+
+      G(`<path d="M232 150h-14M268 150h14M234 138l-12-8M266 138l12-8M234 162l-12 8M266 162l12 8" class="st" style="stroke-width:3"/>`+C('fr',250,128,10)+C('co',250,152,20)+`<path d="M250 132v40" class="st" style="stroke-width:2.5"/>`+C('fr',242,146,3.5)+C('fr',258,158,3.5)+C('fr',243,162,2.5));
+  },
+  ghost(){
+    return G(win(34,30,204,134,'fr','li')+line(48,62,70,'co')+line(48,78,110,'sk')+line(48,94,90,'mi')+line(48,110,120,'bu')+line(48,126,64,'sk'))+
+      `<text class="kl" x="196" y="140" style="font-size:20px;fill:var(--butter)">&lt;/&gt;</text>`+
+      G(`<path class="gw" d="M222 160v-58a32 32 0 0 1 64 0v58l-10.7-9-10.6 9-10.7-9-10.7 9-10.6-9z"/>`+C('ink',244,104,5)+C('ink',264,104,5)+`<path class="ink" d="M248 120a6 6 0 0 1 12 0z"/>`);
+  },
+  server(){
+    const rack=(x)=>{let s=R('fr',x,30,74,140,8);for(let i=0;i<5;i++){s+=R('li',x+8,40+i*25,58,18,4)+C(i%2?'mi':'co',x+56,49+i*25,3)+line(x+14,46+i*25,26,'cr');}return s;};
+    return G(rack(56))+G(rack(140))+
+      `<path d="M130 160C140 186 170 186 178 168" class="st" style="stroke:var(--coral);stroke-width:4"/>`+
+      G(R('pe',236,124,38,44,8)+`<path d="M274 136a10 10 0 0 1 0 20" class="st" style="stroke:var(--peach);stroke-width:6"/>`+R('cr',242,120,26,8,4))+
+      `<path d="M246 110c-6-8 6-12 0-20M260 110c-6-8 6-12 0-20" class="st" style="stroke:var(--muted);stroke-width:3"/>`;
+  },
+  qr(){
+    const c=8, x0=104, y0=38, n=14; let m='', s=7;
+    const fz=(i,j)=>(i<6&&j<6)||(i>7&&j<6)||(i<6&&j>7);
+    for(let j=0;j<n;j++)for(let i=0;i<n;i++){ s=(s*73+41)%101; if(!fz(i,j)&&s%3!==0) m+=R('ink',x0+i*c,y0+j*c,c,c,1.5); }
+    const fd=(i,j)=>{const x=x0+i*c,y=y0+j*c;return R('ink',x,y,40,40,6)+R('cr',x+7,y+7,26,26,4)+R('ink',x+13,y+13,14,14,3)};
+    return G(R('cr',92,26,136,136,12))+`<g opacity=".85">${m}${fd(0,0)}${fd(9,0)}${fd(0,9)}</g>`+
+      G(R('fr',0,0,60,100,11)+R('sk',6,11,48,74,5)+`<path d="M14 26v-7h7M39 19h7v7M46 70v7h-7M21 77h-7v-7" fill="none" style="stroke:var(--coral);stroke-width:3.5;stroke-linecap:round"/>`,'translate(222 84) rotate(12)')+
+      pencil(22,128,-32);
+  },
+  web(){
+    return G(win(30,30,210,138))+G(R('li',44,58,182,34,6)+R('bu',44,100,56,54,6)+R('mi',107,100,56,54,6)+R('sk',170,100,56,54,6))+
+      `<text class="kl" x="135" y="76" style="font-size:18px">&lt;/&gt;</text>`+
+      G(R('pe',0,0,64,13,6)+R('li',60,-1,14,15,3)+`<path class="co" d="M74 -2c14 0 22 6 24 9-2 3-10 9-24 9z"/>`,'translate(236 168) rotate(-58)');
+  },
+  pybook(){
+    return G(`<path class="cr" d="M46 64Q103 46 160 66V176Q103 158 46 172Z"/><path class="cr" d="M160 66Q217 46 274 64V172Q217 158 160 176Z"/>`)+
+      `<path d="M160 66V176" class="st" style="stroke-width:2;opacity:.25"/>`+
+      G(line(62,82,70,'co')+line(62,96,80)+line(72,110,60)+line(72,124,70)+line(62,138,50,'mi')+line(176,82,60,'sk')+line(176,96,80)+line(186,110,64)+line(176,124,74,'bu')+line(186,138,54))+
+      G(R('co',236,52,14,40,2)+`<path class="co" d="M236 92l7-7 7 7z"/>`)+
+      G(C('bu',90,34,16)+R('pe',83,48,14,10,3),'')+`<path d="M90 8v-4M66 20l-4-3M114 20l4-3" class="st" style="stroke:var(--butter);stroke-width:3"/>`;
+  }
+};
+
+/* ===== Клавіші в hero ===== */
+(function(){
+  let k='';
+  for(let r=0;r<3;r++)for(let c=0;c<10;c++){
+    k+=`<rect class="cr" x="${160+r*6+c*19.4}" y="${336+r*17}" width="15" height="13" rx="3"/>`;
+  }
+  document.getElementById('heroKeys').innerHTML=k;
+})();
+
+/* ===== Каталог ===== */
+const tabsEl=document.getElementById('tabs'), gridEl=document.getElementById('grid');
+let current='1-4';
+function renderTabs(){
+  tabsEl.innerHTML=TABS.map(t=>`<button class="tab" role="tab" type="button" data-tab="${t.id}" aria-selected="${t.id===current}" style="--tc:var(${t.color})">${t.label}</button>`).join('');
+}
+function renderGrid(){
+  const tab=TABS.find(t=>t.id===current);
+  const list=APPS.filter(a=>a.tab===current);
+  gridEl.innerHTML=list.map(a=>`
+    <a class="card" href="${a.url||GH+a.repo+'/'}" target="_blank" rel="noopener" style="--cbg:var(${a.bg});--tape:var(${tab.color})">
+      <div class="pic"><svg viewBox="0 0 320 200" aria-hidden="true">${(ART[a.art]||ART.default)()}</svg></div>
+      <div class="txt"><h3>${a.title}</h3><p>${a.desc}</p><span class="tag">${a.type}</span></div>
+    </a>`).join('');
+}
+function setTab(id){current=id;renderTabs();renderGrid()}
+tabsEl.addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)setTab(b.dataset.tab)});
+tabsEl.addEventListener('keydown',e=>{
+  if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;
+  const i=TABS.findIndex(t=>t.id===current), n=(i+(e.key==='ArrowRight'?1:-1)+TABS.length)%TABS.length;
+  setTab(TABS[n].id); tabsEl.querySelector(`[data-tab="${TABS[n].id}"]`).focus();
+});
+document.querySelectorAll('[data-go]').forEach(a=>a.addEventListener('click',()=>setTab(a.dataset.go)));
+setTab(current);
+
+/* ===== Штекер-тема ===== */
+const root=document.documentElement, plug=document.getElementById('plug');
+function syncPlug(){
+  const dark=root.getAttribute('data-theme')==='dark';
+  plug.setAttribute('aria-pressed',String(!dark));
+  plug.title=dark?'Вставити штекер — світла тема':'Витягнути штекер — темна тема';
+}
+plug.addEventListener('click',()=>{
+  const t=root.getAttribute('data-theme')==='dark'?'light':'dark';
+  root.setAttribute('data-theme',t);
+  try{localStorage.setItem('itm-theme',t)}catch(e){}
+  syncPlug();
+});
+syncPlug();
+
+/* ===== Вікно [i] ===== */
+const info=document.getElementById('info');
+document.getElementById('infoBtn').addEventListener('click',()=>info.showModal());
+document.getElementById('infoClose').addEventListener('click',()=>info.close());
+info.addEventListener('click',e=>{if(e.target===info)info.close()});
+</script>
+</body>
+</html>
