@@ -365,10 +365,10 @@ const APPS = [
   {tab:'1-4',  title:'Тренажер мишки та клавіатури', desc:'Перші кроки з комп\'ютером разом з котиком Фіфі', type:'Тренажер',    art:'pctrainer', bg:'--peach',  repo:'pc-trainer'},
   {tab:'1-4',  title:'Клавіатурний пазл',            desc:'Збери клавіатуру з розсипаних клавіш',            type:'Гра',         art:'keys',      bg:'--sky',    repo:'key-puzzle'},
   {tab:'1-4',  title:'Пікселька',                    desc:'Малюй піксельні картинки',                        type:'Редактор',    art:'pixel',     bg:'--lilac',  repo:'pixelka'},
-  {tab:'1-4',  title:'MOUSE RACER',                  desc:'Аркадні перегони де мишка - це твоє кермо',       type:'Гра',         art:'default',   bg:'--sky',    repo:'mouse-racer'},
+  {tab:'1-4',  title:'MOUSE RACER',                  desc:'Аркадні перегони де мишка - це твоє кермо',       type:'Гра',         art:'racer',     bg:'--mint',    repo:'mouse-racer'},
 
   {tab:'5-7',  title:'Keyboard Academy',             desc:'Вчимося друкувати наосліп',                      type:'Тренажер',    art:'academy',   bg:'--butter', repo:'keyboard-academy'},
-  {tab:'5-7',  title:'MOUSE RACER',                  desc:'Аркадні перегони де мишка - це твоє кермо',      type:'Гра',         art:'default',   bg:'--sky',    repo:'mouse-racer'},
+  {tab:'5-7',  title:'MOUSE RACER',                  desc:'Аркадні перегони де мишка - це твоє кермо',      type:'Гра',         art:'racer',     bg:'--mint',    repo:'mouse-racer'},
   {tab:'5-7',  title:'Сапер',                        desc:'Знайди всі міни й не підірвись',                 type:'Гра',         art:'mines',     bg:'--sky',    repo:'minesweeper'},
   {tab:'5-7',  title:'Айті Компас',                  desc:'Дізнайся свій рівень з інформатики',             type:'Діагностика', art:'compass',   bg:'--mint',   repo:'it-compass'},
   {tab:'5-7',  title:'SERVER ROOM',                  desc:'Полагодь серверну разом з професором',           type:'Гра',         art:'server',    bg:'--lilac',  repo:'server-room'},
@@ -410,6 +410,26 @@ const ART = {
       G(`<g class="li">${[0,45,90,135].map(a=>`<rect x="-5" y="-25" width="10" height="50" rx="3" transform="rotate(${a})"/>`).join('')}<circle r="18"/></g>`+C('cr',0,0,7),'translate(246 66)')+
       G(`<path class="cr" d="M0 0v34l9-8 7 15 8-3.5-7-15h12z" style="stroke:var(--ink);stroke-width:2.5;stroke-linejoin:round"/>`,'translate(196 120)')+
       star(66,62,.9)+star(268,148,.6,'pe');
+  },
+    racer(){
+    const car=(x,y,c,h=50)=>
+      R('ink',x-3,y+7,5,12,2)+R('ink',x+26,y+7,5,12,2)+R('ink',x-3,y+h-18,5,12,2)+R('ink',x+26,y+h-18,5,12,2)+
+      R(c,x,y,28,h,8)+R('sk',x+4,y+10,20,9,3)+R('sk',x+4,y+h-13,20,6,3);
+    let dash='';
+    for(const x of [139,176]) for(let y=-6;y<200;y+=54) dash+=R('cr',x,y,5,28,2);
+    return G(R('fr',104,-10,112,220,0))+
+      R('cr',110,-10,3,220,0,'opacity=".8"')+R('cr',207,-10,3,220,0,'opacity=".8"')+dash+
+      G(C('mi',52,58,26)+C('mi',76,96,17)+C('mi',40,150,21))+
+      C('cr',44,50,9)+C('cr',71,91,6)+C('cr',34,143,7)+
+      G([34,62,90].map(y=>C('bu',160,y,8)+C('pe',160,y,3.5)).join(''))+
+      G(car(108,26,'bu')+R('ink',112,48,20,5,2))+
+      G(car(183,-14,'li',64))+
+      G(`<path class="bu" d="M150 172h8l-4 20zM162 172h8l-4 20z"/>`+car(146,124,'co'))+
+      `<path d="M264 62C264 30 298 40 308 8" class="st" style="stroke:var(--muted);stroke-width:4"/>`+
+      G(`<path class="cr" d="M236 90a28 28 0 0 1 56 0v44a28 28 0 0 1-56 0z"/>`+
+        `<path class="sk" d="M236 98v-8a28 28 0 0 1 26-28v36z"/><path class="pe" d="M292 98v-8a28 28 0 0 0-26-28v36z"/>`+
+        `<path class="ink" d="M243 80l9-7v5h7v4h-7v5zM285 80l-9-7v5h-7v4h7v5z"/>`)+
+      star(262,170,.6)+star(84,24,.5,'pe');
   },
   pctrainer(){
     return ground('mi')+
