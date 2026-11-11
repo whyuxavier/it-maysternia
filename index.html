@@ -3,8 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ІТ-Майстерня</title>
-<meta name="description" content="Навчальні ігри, квести й тренажери з інформатики для 1–11 класу.">
+<title>ІТ-Майстерня з Олександром Васильовичем — ігри та квести з інформатики</title>
+<meta name="description" content="ІТ-Майстерня з Олександром Васильовичем Мрочком: безкоштовні навчальні ігри, квести, тренажери й курси з інформатики для 1–11 класу та вчителів.">
+<meta name="author" content="Олександр Васильович Мрочко">
+<meta name="keywords" content="ІТ-Майстерня, Олександр Васильович, Мрочко, інформатика, навчальні ігри, квести, тренажер клавіатури, Python, НУШ">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ІТ-Майстерня з Олександром Васильовичем">
+<meta property="og:description" content="Навчальні ігри, квести, тренажери й курси з інформатики для 1–11 класу.">
+<meta property="og:url" content="https://whyuxavier.github.io/it-maysternia/">
+<meta property="og:locale" content="uk_UA">
+<link rel="canonical" href="https://whyuxavier.github.io/it-maysternia/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"ІТ-Майстерня з Олександром Васильовичем","url":"https://whyuxavier.github.io/it-maysternia/","inLanguage":"uk","description":"Навчальні ігри, квести, тренажери й курси з інформатики для 1–11 класу.","author":{"@type":"Person","name":"Олександр Васильович Мрочко","jobTitle":"Вчитель інформатики","sameAs":["https://github.com/whyuxavier"]}}</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='5' y='12' width='46' height='46' rx='12' fill='%23bddcf3' transform='rotate(-9 28 35)'/%3E%3Crect x='13' y='6' width='46' height='46' rx='12' fill='%23f6c6a6'/%3E%3Cpath d='M27 17v26l7-6 5 10 5-2.4-5-10h9.5z' fill='%233b3450'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -89,6 +98,7 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 8
 .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1.05fr;gap:32px;align-items:center}
 .hero h1{font-size:clamp(40px,6vw,68px);letter-spacing:-.02em}
 .hero h1 span{background:linear-gradient(transparent 62%,var(--butter) 62%);padding:0 .08em}
+.by{font:700 clamp(18px,2.2vw,22px) Rubik,sans-serif;color:var(--coral);margin-top:10px;transform:rotate(-1.2deg);transform-origin:left}
 .hero p{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:30ch;margin:18px 0 28px}
 .btns{display:flex;flex-wrap:wrap;gap:12px}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 22px;border-radius:16px;border:0;cursor:pointer;text-decoration:none;font:700 17px Nunito,sans-serif;color:var(--ink);background:var(--card);box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);transition:transform .15s}
@@ -217,6 +227,7 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
     <div class="wrap hero-grid">
       <div>
         <h1>ІТ-<span>Майстерня</span></h1>
+        <div class="by">з Олександром Васильовичем</div>
         <p>Навчальні ігри, квести й тренажери з інформатики для 1–11 класу.</p>
         <div class="btns">
           <a class="btn main" href="#catalog">Обрати клас</a>
@@ -299,6 +310,7 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
     <button class="x" type="button" id="infoClose" aria-label="Закрити">×</button>
     <h2 id="infoTitle">ІТ-Майстерня</h2>
     <p>Усі навчальні ігри, квести й тренажери з інформатики в одному місці — для учнів 1–11 класу та вчителів.</p>
+    <p style="margin-top:8px">Автор — Олександр Васильович Мрочко, вчитель інформатики.</p>
     <h3>Як користуватися</h3>
     <ul>
       <li>Обери вкладку зі своїм класом або «Для вчителя».</li>
