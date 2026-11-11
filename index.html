@@ -339,7 +339,7 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
         art   — картинка. Поки немає своєї — пиши 'default'
                 (або взагалі не пиши art — буде загальна картинка).
                 Готові: pctrainer, keys, pixel, academy, mines, compass,
-                circle, alias, snake, python9, textdoc, data, iot, excel,
+                circle, alias, tangram, snake, python9, textdoc, data, iot, excel,
                 bugs, ghost, server, qr, web, pybook
         bg    — колір фону картинки: '--peach' | '--mint' | '--lilac' |
                 '--sky' | '--butter' | '--coral'
@@ -365,6 +365,7 @@ const APPS = [
   {tab:'1-4',  title:'Тренажер мишки та клавіатури', desc:'Перші кроки з комп\'ютером разом з котиком Фіфі', type:'Тренажер',    art:'pctrainer', bg:'--peach',  repo:'pc-trainer'},
   {tab:'1-4',  title:'Клавіатурний пазл',            desc:'Збери клавіатуру з розсипаних клавіш',            type:'Гра',         art:'keys',      bg:'--sky',    repo:'key-puzzle'},
   {tab:'1-4',  title:'Пікселька',                    desc:'Малюй піксельні картинки',                        type:'Редактор',    art:'pixel',     bg:'--lilac',  repo:'pixelka'},
+  {tab:'1-4',  title:'Танграм',                      desc:'Склади фігуру з семи частинок',                  type:'Гра',         art:'tangram',   bg:'--butter', repo:'tangram'},
   {tab:'1-4',  title:'MOUSE RACER',                  desc:'Аркадні перегони де мишка - це твоє кермо',       type:'Гра',         art:'racer',     bg:'--mint',    repo:'mouse-racer'},
 
   {tab:'5-7',  title:'Keyboard Academy',             desc:'Вчимося друкувати наосліп',                      type:'Тренажер',    art:'academy',   bg:'--butter', repo:'keyboard-academy'},
@@ -372,6 +373,7 @@ const APPS = [
   {tab:'5-7',  title:'Сапер',                        desc:'Знайди всі міни й не підірвись',                 type:'Гра',         art:'mines',     bg:'--sky',    repo:'minesweeper'},
   {tab:'5-7',  title:'Айті Компас',                  desc:'Дізнайся свій рівень з інформатики',             type:'Діагностика', art:'compass',   bg:'--mint',   repo:'it-compass'},
   {tab:'5-7',  title:'SERVER ROOM',                  desc:'Полагодь серверну разом з професором',           type:'Гра',         art:'server',    bg:'--lilac',  repo:'server-room'},
+  {tab:'5-7',  title:'Танграм',                      desc:'Склади фігуру з семи частинок',                  type:'Гра',         art:'tangram',   bg:'--butter', repo:'tangram'},
 
   {tab:'8-11', title:'Веб-програмування',            desc:'HTML, CSS і JavaScript за 12 уроків',            type:'Курс',        art:'web',       bg:'--peach',  repo:'learn-web'},
   {tab:'8-11', title:'Python з нуля',                desc:'Модулі для 8 і 9 класу',                         type:'Курс',        art:'pybook',    bg:'--mint',   repo:'learn-python'},
@@ -439,6 +441,17 @@ const ART = {
         R('co',222,80,5,13,2.5,'opacity=".7"')+R('co',229,78,5,15,2.5,'opacity=".7"')+R('co',236,80,5,13,2.5,'opacity=".7"')+
         C('cr',230,128,13)+C('ink',217,108,4.5)+C('ink',243,108,4.5)+`<path class="co" d="M225 121h10l-5 6z"/>`)+
       `<path d="M84 52l-12-8M80 70H64M90 36l-6-14" class="st" style="stroke:var(--coral);stroke-width:3.5"/>`;
+  },
+  tangram(){
+    const pc=(c,pts,t='')=>`<polygon class="${c}" points="${pts}"${t?` transform="${t}"`:''}/>`;
+    return G(R('cr',40,26,164,148,14))+
+      `<g transform="translate(62 40)">`+
+      G(pc('co','0,0 120,0 60,60'))+G(pc('sk','0,0 60,60 0,120'))+
+      G(pc('mi','90,30 120,60 90,90 60,60'))+G(pc('bu','60,60 90,90 30,90'))+
+      G(pc('pe','0,120 30,90 90,90 60,120'))+G(pc('li','120,60 120,120 60,120'))+
+      `<polygon class="slot" points="120,0 120,60 90,30"/></g>`+
+      G(pc('co','0,0 0,60 -30,30','translate(246 58) rotate(18) scale(1.15)'))+
+      star(270,150,.7,'li');
   },
   keys(){
     let k='';
