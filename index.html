@@ -339,7 +339,7 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
         art   — картинка. Поки немає своєї — пиши 'default'
                 (або взагалі не пиши art — буде загальна картинка).
                 Готові: pctrainer, keys, pixel, academy, mines, compass,
-                circle, alias, tangram, invaders, blocks, firstpc, flowchart, snake, python9, textdoc, data, iot, excel,
+                circle, alias, tangram, invaders, blocks, firstpc, flowchart, wordshaker, cyber, snake, python9, textdoc, data, iot, excel,
                 bugs, ghost, server, qr, web, pybook
         bg    — колір фону картинки: '--peach' | '--mint' | '--lilac' |
                 '--sky' | '--butter' | '--coral'
@@ -384,6 +384,7 @@ const APPS = [
   {tab:'8-11', title:'Excel Tournament',             desc:'Змагання з електронних таблиць',                 type:'Турнір',      art:'excel',     bg:'--mint',   repo:'excel-tournament'},
 
   {tab:'teacher', title:'Генератор QR-кодів',        desc:'QR-код для посилання на весь екран',             type:'Інструмент',  art:'qr',        bg:'--butter', repo:'qr-creator'},
+  {tab:'teacher', title:'Кібертурнір',               desc:'Турнірна сітка для шкільних змагань',            type:'Інструмент',  art:'cyber',     bg:'--lilac',  repo:'cyber-tournament'},
 
   {tab:'games',title:'Інформатичний Еліас',          desc:'Поясни IT-термін команді',                       type:'Гра',         art:'alias',     bg:'--lilac',  repo:'it-alias'},
   {tab:'games',title:'Баг-шторм',                    desc:'Виправ помилки, поки падають вікна',             type:'Гра',         art:'bugs',      bg:'--coral',  repo:'bug-storm'},
@@ -394,6 +395,7 @@ const APPS = [
   {tab:'games',title:'Сапер',                        desc:'Знайди всі міни й не підірвись',                 type:'Гра',         art:'mines',     bg:'--sky',    repo:'minesweeper'},
   {tab:'games',title:'AI Invaders',                  desc:'Захисти планету від нашестя ботів',              type:'Гра',         art:'invaders',  bg:'--lilac',  repo:'ai-invaders'},
   {tab:'games',title:'Block Puzzle',                 desc:'Склади блоки в ряди, як у Майнкрафті',           type:'Гра',         art:'blocks',    bg:'--sky',    repo:'block-puzzle'},
+  {tab:'games',title:'WordShaker',                   desc:'Знайди якомога більше слів за 3 хвилини',        type:'Гра',         art:'wordshaker',bg:'--sky',    repo:'wordshaker'},
 ];
 
 /* ===== Паперові ілюстрації карток ===== */
@@ -502,6 +504,26 @@ const ART = {
       G(R('pe',62,148,68,28,6)+R('cr',76,159,40,6,3))+
       G(`<path class="co" d="M206 148h56l-10 28h-56z"/>`+R('cr',214,159,36,6,3))+
       star(270,40,.75);
+  },
+  wordshaker(){
+    const L='СЛОВОГРАКОДМИША'.split(''); L.push('Т');
+    let t='';
+    L.forEach((ch,k)=>{const i=k%4,j=Math.floor(k/4),x=104+i*28,y=56+j*28,hl=[0,1,2,3,4].includes(k);
+      t+=R(hl?'bu':'cr',x,y,24,24,3)+`<path d="M${x} ${y+24}V${y}h24" fill="none" style="stroke:#fff;stroke-width:2;opacity:.7"/>`+T(x+12,y+13,0,ch,13);});
+    return G(R('li',80,22,160,160,6)+R('fr',80,22,160,20,6)+R('fr',80,34,160,8,0)+R('cr',90,28,50,6,3)+R('cr',212,26,10,10,2)+R('cr',225,26,10,10,2)+
+      R('cr',94,48,132,124,4,'opacity=".55"'))+G(t)+
+      G(R('cr',0,0,46,28,6)+`<text class="kl" x="23" y="15" style="font-size:12px">3:00</text>`,'translate(250 120) rotate(8)')+
+      star(52,58,.8);
+  },
+  cyber(){
+    const slot=(x,y,c)=>R(c,x,y,58,18,5)+R('cr',x+8,y+6,30,6,3);
+    const ln=(d)=>`<path d="${d}" fill="none" class="st" style="stroke-width:3;opacity:.55"/>`;
+    return G(R('fr',22,18,276,164,14))+
+      ln('M92 47h12v20h12M92 87h12v-20')+ln('M92 127h12v20h12M92 167h12v-20')+ln('M174 67h12v40h12M174 147h12v-40')+
+      G(slot(34,38,'co')+slot(34,78,'sk')+slot(34,118,'mi')+slot(34,158,'li'))+
+      G(slot(116,58,'co')+slot(116,138,'mi'))+
+      G(`<path class="bu" d="M212 70h56v18a28 28 0 0 1-56 0z"/><path d="M212 76h-9a11 11 0 0 0 12 15M268 76h9a11 11 0 0 1-12 15" class="st" style="stroke:var(--butter);stroke-width:5"/>`+R('bu',234,114,12,16,2)+R('pe',222,128,36,12,4))+
+      star(240,90,.55,'cr')+star(280,40,.6,'bu')+star(204,46,.45,'pe');
   },
   keys(){
     let k='';
