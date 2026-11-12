@@ -332,14 +332,14 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
    1. Скопіюй будь-який рядок зі списку APPS нижче й встав його туди,
       де картка має стояти (порядок у списку = порядок на сайті).
    2. Заміни поля:
-        tab   — вкладка:  '1-4' | '5-7' | '8-11' | 'teacher'
+        tab   — вкладка:  '1-4' | '5-7' | '8-11' | 'games' | 'teacher'
         title — назва, як на самому сайті
         desc  — короткий опис (одне речення)
         type  — бейдж: 'Гра', 'Квест', 'Курс', 'Тренажер', 'Інструмент'…
         art   — картинка. Поки немає своєї — пиши 'default'
                 (або взагалі не пиши art — буде загальна картинка).
                 Готові: pctrainer, keys, pixel, academy, mines, compass,
-                circle, alias, tangram, snake, python9, textdoc, data, iot, excel,
+                circle, alias, tangram, invaders, blocks, snake, python9, textdoc, data, iot, excel,
                 bugs, ghost, server, qr, web, pybook
         bg    — колір фону картинки: '--peach' | '--mint' | '--lilac' |
                 '--sky' | '--butter' | '--coral'
@@ -359,26 +359,19 @@ const TABS = [
   {id:'1-4',     label:'1–4 клас',    color:'--peach'},
   {id:'5-7',     label:'5–7 клас',    color:'--mint'},
   {id:'8-11',    label:'8–11 клас',   color:'--lilac'},
+  {id:'games',   label:'Ігри та експерименти', color:'--coral'},
   {id:'teacher', label:'Для вчителя', color:'--butter'}
 ];
 const APPS = [
   {tab:'1-4',  title:'Тренажер мишки та клавіатури', desc:'Перші кроки з комп\'ютером разом з котиком Фіфі', type:'Тренажер',    art:'pctrainer', bg:'--peach',  repo:'pc-trainer'},
-  {tab:'1-4',  title:'Клавіатурний пазл',            desc:'Збери клавіатуру з розсипаних клавіш',            type:'Гра',         art:'keys',      bg:'--sky',    repo:'key-puzzle'},
   {tab:'1-4',  title:'Пікселька',                    desc:'Малюй піксельні картинки',                        type:'Редактор',    art:'pixel',     bg:'--lilac',  repo:'pixelka'},
-  {tab:'1-4',  title:'Танграм',                      desc:'Склади фігуру з семи частинок',                  type:'Гра',         art:'tangram',   bg:'--butter', repo:'tangram'},
-  {tab:'1-4',  title:'MOUSE RACER',                  desc:'Аркадні перегони де мишка - це твоє кермо',       type:'Гра',         art:'racer',     bg:'--mint',    repo:'mouse-racer'},
 
   {tab:'5-7',  title:'Айті Компас',                  desc:'Дізнайся свій рівень з інформатики',             type:'Діагностика', art:'compass',   bg:'--mint',   repo:'it-compass'},
   {tab:'5-7',  title:'Keyboard Academy',             desc:'Вчимося друкувати наосліп',                      type:'Тренажер',    art:'academy',   bg:'--butter', repo:'keyboard-academy'},
-  {tab:'5-7',  title:'MOUSE RACER',                  desc:'Аркадні перегони де мишка - це твоє кермо',      type:'Гра',         art:'racer',     bg:'--mint',    repo:'mouse-racer'},
-  {tab:'5-7',  title:'Сапер',                        desc:'Знайди всі міни й не підірвись',                 type:'Гра',         art:'mines',     bg:'--sky',    repo:'minesweeper'},
-  {tab:'5-7',  title:'SERVER ROOM',                  desc:'Полагодь серверну разом з професором',           type:'Гра',         art:'server',    bg:'--lilac',  repo:'server-room'},
-  {tab:'5-7',  title:'Танграм',                      desc:'Склади фігуру з семи частинок',                  type:'Гра',         art:'tangram',   bg:'--butter', repo:'tangram'},
 
   {tab:'8-11', title:'Веб-програмування',            desc:'HTML, CSS і JavaScript за 12 уроків',            type:'Курс',        art:'web',       bg:'--peach',  repo:'learn-web'},
   {tab:'8-11', title:'Python з нуля',                desc:'Модулі для 8 і 9 класу',                         type:'Курс',        art:'pybook',    bg:'--mint',   repo:'learn-python'},
   {tab:'8-11', title:'Keyboard Academy',             desc:'Вчимося друкувати наосліп',                      type:'Тренажер',    art:'academy',   bg:'--butter', repo:'keyboard-academy'},
-  {tab:'8-11', title:'Баг-шторм',                    desc:'Виправ помилки, поки падають вікна',             type:'Гра',         art:'bugs',      bg:'--coral',  repo:'bug-storm'},
   {tab:'8-11', title:'Ghost in HTML',                desc:'Виправ код і звільни привида',                   type:'Квест',       art:'ghost',     bg:'--sky',    repo:'ghost-in-html'},
   {tab:'8-11', title:'Квест: Python, 8 клас',        desc:'Перші кроки в Python',                           type:'Квест',       art:'snake',     bg:'--mint',   repo:'python-quest-8'},
   {tab:'8-11', title:'Квест: Python, 9 клас',        desc:'Цикли, списки, Turtle і Tkinter',                type:'Квест',       art:'python9',   bg:'--sky',    repo:'python-quest-9'},
@@ -388,8 +381,17 @@ const APPS = [
   {tab:'8-11', title:'Excel Tournament',             desc:'Змагання з електронних таблиць',                 type:'Турнір',      art:'excel',     bg:'--mint',   repo:'excel-tournament'},
 
   {tab:'teacher', title:'Генератор QR-кодів',        desc:'QR-код для посилання на весь екран',             type:'Інструмент',  art:'qr',        bg:'--butter', repo:'qr-creator'},
-  {tab:'teacher', title:'Інформатичний Еліас',       desc:'Поясни IT-термін команді',                       type:'Гра',         art:'alias',     bg:'--lilac',  repo:'it-alias'},
-  {tab:'teacher',  title:'Намалюй коло',             desc:'Намалюй фігуру одним рухом',                     type:'Гра',         art:'circle',    bg:'--peach',  repo:'draw-circle'},
+
+  {tab:'games',title:'Клавіатурний пазл',            desc:'Збери клавіатуру з розсипаних клавіш',            type:'Гра',         art:'keys',      bg:'--sky',    repo:'key-puzzle'},
+  {tab:'games',title:'Танграм',                      desc:'Склади фігуру з семи частинок',                  type:'Гра',         art:'tangram',   bg:'--butter', repo:'tangram'},
+  {tab:'games',title:'MOUSE RACER',                  desc:'Аркадні перегони де мишка - це твоє кермо',       type:'Гра',         art:'racer',     bg:'--mint',    repo:'mouse-racer'},
+  {tab:'games',title:'Сапер',                        desc:'Знайди всі міни й не підірвись',                 type:'Гра',         art:'mines',     bg:'--sky',    repo:'minesweeper'},
+  {tab:'games',title:'SERVER ROOM',                  desc:'Полагодь серверну разом з професором',           type:'Гра',         art:'server',    bg:'--lilac',  repo:'server-room'},
+  {tab:'games',title:'Баг-шторм',                    desc:'Виправ помилки, поки падають вікна',             type:'Гра',         art:'bugs',      bg:'--coral',  repo:'bug-storm'},
+  {tab:'games',title:'Інформатичний Еліас',       desc:'Поясни IT-термін команді',                       type:'Гра',         art:'alias',     bg:'--lilac',  repo:'it-alias'},
+  {tab:'games', title:'Намалюй коло',             desc:'Намалюй фігуру одним рухом',                     type:'Гра',         art:'circle',    bg:'--peach',  repo:'draw-circle'},
+  {tab:'games',title:'AI Invaders',                  desc:'Захисти планету від нашестя ботів',              type:'Гра',         art:'invaders',  bg:'--lilac',  repo:'ai-invaders'},
+  {tab:'games',title:'Block Puzzle',                 desc:'Склади блоки в ряди, як у Майнкрафті',           type:'Гра',         art:'blocks',    bg:'--sky',    repo:'block-puzzle'},
 ];
 
 /* ===== Паперові ілюстрації карток ===== */
@@ -452,6 +454,31 @@ const ART = {
       `<polygon class="slot" points="120,0 120,60 90,30"/></g>`+
       G(pc('co','0,0 0,60 -30,30','translate(246 58) rotate(18) scale(1.15)'))+
       star(270,150,.7,'li');
+  },
+  invaders(){
+    const alien=(x,y,c)=>{const m=['..1..1..','.111111.','11.11.11','11111111','.1....1.'];let o='';m.forEach((r,j)=>[...r].forEach((v,i)=>{if(v==='1')o+=`<rect class="${c}" x="${x+i*6}" y="${y+j*6}" width="6" height="6"/>`}));return o;};
+    return G(R('fr',30,20,260,160,16))+
+      G(alien(66,40,'mi')+alien(136,40,'bu')+alien(206,40,'co')+alien(100,78,'sk')+alien(172,78,'li'))+
+      `<rect class="bu" x="158" y="104" width="4" height="22" rx="2"/>`+
+      G(`<path class="pe" d="M160 132l22 30h-44z"/>`+R('pe',140,156,40,10,3)+R('co',155,124,10,10,3))+
+      G(C('cr',70,154,3)+C('cr',250,140,2.5)+C('cr',236,60,2));
+  },
+  blocks(){
+    const S=30;
+    const dirt='style="fill:color-mix(in srgb,var(--peach) 70%,#8a5a3a)"', spk='style="fill:color-mix(in srgb,var(--peach) 45%,#5a3a22)"';
+    const blk=(x,y,grass,stone)=>{
+      if(stone) return `<rect x="${x}" y="${y}" width="${S}" height="${S}" rx="3" style="fill:color-mix(in srgb,var(--sky) 40%,#8b8f9a)"/><rect x="${x+6}" y="${y+7}" width="8" height="6" rx="1" style="fill:#6f737e;opacity:.6"/><rect x="${x+17}" y="${y+18}" width="7" height="5" rx="1" style="fill:#6f737e;opacity:.6"/>`;
+      let o=`<rect x="${x}" y="${y}" width="${S}" height="${S}" rx="3" ${dirt}/>`+
+        `<rect x="${x+5}" y="${y+16}" width="5" height="5" ${spk}/><rect x="${x+19}" y="${y+21}" width="5" height="5" ${spk}/><rect x="${x+15}" y="${y+11}" width="4" height="4" ${spk}/>`;
+      if(grass) o+=`<path class="mi" d="M${x} ${y+3}a3 3 0 0 1 3-3h${S-6}a3 3 0 0 1 3 3v7h-5v4h-6v-4h-6v5h-6v-5h-5v4h-${S-27}z"/>`;
+      return o;
+    };
+    const rows=['......11.','11..1111.','11111111.','1111.1111'];
+    let g='';
+    rows.forEach((r,j)=>[...r].forEach((v,i)=>{ if(v==='1'){ const above=j>0&&rows[j-1][i]==='1'; g+=blk(25+i*S,58+j*S,!above,j===3&&(i===2||i===6)); }}));
+    return G(g)+
+      G(blk(0,0,true)+blk(S,0,true)+blk(S,S,false),'translate(118 8) rotate(-6)')+
+      star(276,36,.8);
   },
   keys(){
     let k='';
