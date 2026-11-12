@@ -339,7 +339,7 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
         art   — картинка. Поки немає своєї — пиши 'default'
                 (або взагалі не пиши art — буде загальна картинка).
                 Готові: pctrainer, keys, pixel, academy, mines, compass,
-                circle, alias, tangram, invaders, blocks, firstpc, snake, python9, textdoc, data, iot, excel,
+                circle, alias, tangram, invaders, blocks, firstpc, flowchart, snake, python9, textdoc, data, iot, excel,
                 bugs, ghost, server, qr, web, pybook
         bg    — колір фону картинки: '--peach' | '--mint' | '--lilac' |
                 '--sky' | '--butter' | '--coral'
@@ -370,6 +370,7 @@ const APPS = [
 
   {tab:'5-7',  title:'Айті Компас',                  desc:'Дізнайся свій рівень з інформатики',             type:'Діагностика', art:'compass',   bg:'--mint',   repo:'it-compass'},
   {tab:'5-7',  title:'Keyboard Academy',             desc:'Вчимося друкувати наосліп',                      type:'Тренажер',    art:'academy',   bg:'--butter', repo:'keyboard-academy'},
+  {tab:'5-7',  title:'Блок-схеми',                   desc:'Будуй алгоритми з блоків',                       type:'Редактор',    art:'flowchart', bg:'--lilac',  repo:'flowchart'},
 
   {tab:'8-11', title:'Веб-програмування',            desc:'HTML, CSS і JavaScript за 12 уроків',            type:'Курс',        art:'web',       bg:'--peach',  repo:'learn-web'},
   {tab:'8-11', title:'Python з нуля',                desc:'Модулі для 8 і 9 класу',                         type:'Курс',        art:'pybook',    bg:'--mint',   repo:'learn-python'},
@@ -489,6 +490,18 @@ const ART = {
       G(R('bu',62,150,132,24,7)+[0,1,2,3,4,5,6,7].map(i=>R('cr',70+i*15,156,11,5,2)).join('')+R('cr',96,164,64,5,2))+
       G(`<path class="cr" d="M220 158a14 14 0 0 1 28 0v8a14 14 0 0 1-28 0z"/>`+R('co',232,152,4,10,2))+
       star(40,56,.8)+star(288,40,.6,'pe');
+  },
+  flowchart(){
+    const ar=(d)=>`<path d="${d}" class="st" style="stroke-width:3"/>`;
+    return G(R('cr',26,18,268,166,14))+
+      ar('M160 50v14')+ar('M155 59l5 6 5-6')+ar('M160 100v12')+ar('M155 107l5 6 5-6')+
+      ar('M196 132h28v14')+ar('M219 141l5 6 5-6')+ar('M124 132H96v14')+ar('M91 141l5 6 5-6')+
+      G(R('mi',124,28,72,24,12)+R('cr',140,37,40,6,3))+
+      G(R('sk',116,66,88,34,6)+R('cr',130,79,60,6,3))+
+      G(`<path class="bu" d="M160 112l36 20-36 20-36-20z"/>`+R('cr',148,129,24,6,3))+
+      G(R('pe',62,148,68,28,6)+R('cr',76,159,40,6,3))+
+      G(`<path class="co" d="M206 148h56l-10 28h-56z"/>`+R('cr',214,159,36,6,3))+
+      star(270,40,.75);
   },
   keys(){
     let k='';
