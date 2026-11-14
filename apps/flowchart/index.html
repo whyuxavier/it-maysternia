@@ -1,0 +1,709 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Блок-схема</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%236f8ad6'/%3E%3Crect x='9' y='4' width='14' height='6' rx='3' fill='%238fd1bd'/%3E%3Cpath d='M16 10v3' stroke='%23fff' stroke-width='1.6'/%3E%3Cpath d='M16 13l7 6-7 6-7-6z' fill='%23f0c96a'/%3E%3Cpath d='M23 19h3v8' stroke='%23fff' stroke-width='1.6' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Unbounded:wght@600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: header strip · palette rail (left) · graph-paper canvas · Python drawer (right) */
+:root{
+  --paper:#f4f5fa; --grid:rgba(111,138,214,.10); --grid2:rgba(111,138,214,.19);
+  --panel:#fbfcff; --line:rgba(60,64,100,.13); --ink:#23242e; --muted:#676a7d; --ed:#fcfcff;
+  --accent:#6f8ad6; --accent-soft:rgba(111,138,214,.13); --on-accent:#ffffff; --danger:#d0566a;
+  --gold:#d9aa3c; --mint:#8fd1bd;
+  --node-ink:#23242e; --f-term:#dcf1ea; --f-proc:#e3e9f8; --f-io:#ebe5f8; --f-dec:#f8ecd0; --f-loop:#f7dfe3;
+  --font-ui:"Manrope","Segoe UI",system-ui,sans-serif;
+  --font-brand:"Unbounded","Manrope","Segoe UI",sans-serif;
+  --font-code:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#1b1d23; --grid:rgba(143,166,238,.07); --grid2:rgba(143,166,238,.13);
+  --panel:#2a2d36; --line:rgba(255,255,255,.1); --ink:#e6e7ef; --muted:#9a9caf; --ed:#1e2026;
+  --accent:#8fa6ee; --accent-soft:rgba(143,166,238,.16); --on-accent:#ffffff; --danger:#ff8a9a;
+  --gold:#f0c96a; --mint:#6fcbb8;
+  --node-ink:#1b1d23; --f-term:#7fd3c1; --f-proc:#9fb2f0; --f-io:#c2b2f2; --f-dec:#f0cd78; --f-loop:#ff9fac;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#1b1d23; --grid:rgba(143,166,238,.07); --grid2:rgba(143,166,238,.13);
+  --panel:#2a2d36; --line:rgba(255,255,255,.1); --ink:#e6e7ef; --muted:#9a9caf; --ed:#1e2026;
+  --accent:#8fa6ee; --accent-soft:rgba(143,166,238,.16); --on-accent:#ffffff; --danger:#ff8a9a;
+  --gold:#f0c96a; --mint:#6fcbb8;
+  --node-ink:#1b1d23; --f-term:#7fd3c1; --f-proc:#9fb2f0; --f-io:#c2b2f2; --f-dec:#f0cd78; --f-loop:#ff9fac;
+  color-scheme:dark}
+html{height:100%;box-sizing:border-box}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+body{height:100%;margin:0;overflow:hidden;background:var(--paper);color:var(--ink);font:500 14px/1.45 var(--font-ui)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.app{height:100%;position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:auto minmax(0,1fr);
+  grid-template-areas:"top top top" "pal stage code"}
+
+/* header */
+.top{grid-area:top;display:flex;align-items:center;gap:12px;padding-block:8px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  border-bottom:1px solid var(--line);background:var(--panel);z-index:5}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;min-width:0}
+.brand svg{flex:none}
+.brand b{font:600 16px/1 var(--font-brand);letter-spacing:.01em;white-space:nowrap}
+.tools{display:flex;align-items:center;gap:6px}
+.tb{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);cursor:pointer;font-weight:600;white-space:nowrap}
+.tb svg{width:18px;height:18px;flex:none}
+.tb.icon{width:36px;padding:0;justify-content:center}
+.tb:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.tb:disabled{opacity:.38;cursor:default}
+.tb.warn{border-color:var(--danger);color:var(--danger)}
+.tb.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.tb.info{font:800 15px/1 var(--font-brand);width:36px;padding:0;justify-content:center;border-radius:50%}
+.sep{width:1px;height:22px;background:var(--line);margin:0 4px}
+
+/* palette */
+.palette{grid-area:pal;width:184px;display:flex;flex-direction:column;gap:6px;padding-block:14px;
+  padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:12px;border-right:1px solid var(--line);background:var(--panel);overflow:auto}
+.pal-title{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 4px 4px}
+.blk{display:flex;align-items:center;gap:10px;padding:8px;border:1px solid transparent;border-radius:10px;background:none;cursor:pointer;text-align:left;font-weight:600;font-size:13px;line-height:1.2}
+.blk:hover{background:var(--accent-soft);border-color:var(--line)}
+.blk svg{width:48px;height:30px;flex:none;overflow:visible}
+.blk .s{stroke:var(--node-ink);stroke-width:1.4;stroke-linejoin:round}
+.f-term{fill:var(--f-term)}.f-proc{fill:var(--f-proc)}.f-io{fill:var(--f-io)}.f-dec{fill:var(--f-dec)}.f-loop{fill:var(--f-loop)}
+.pal-hint{margin-top:auto;font-size:12px;color:var(--muted);padding:8px 4px 0;display:flex;gap:8px;align-items:center}
+.pal-hint i{width:11px;height:11px;border-radius:50%;border:2px solid var(--accent);background:var(--panel);flex:none}
+
+/* stage */
+.stage{grid-area:stage;position:relative;overflow:hidden;background-color:var(--paper);
+  background-image:linear-gradient(var(--grid2) 1px,transparent 1px),linear-gradient(90deg,var(--grid2) 1px,transparent 1px),
+                   linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px)}
+#svg{position:absolute;inset:0;width:100%;height:100%;touch-action:none;user-select:none;-webkit-user-select:none;cursor:default}
+#svg.panning{cursor:grabbing}
+.node{cursor:grab}
+.node text{pointer-events:none}
+.edge .hit{fill:none;stroke:transparent;stroke-width:16;pointer-events:stroke;cursor:pointer}
+.edge text{pointer-events:none}
+.port{opacity:0;pointer-events:none;cursor:crosshair;transition:opacity .12s}
+.node:hover .port,.node.sel .port{opacity:1;pointer-events:all}
+.port .ph{fill:transparent}
+.port .pv{fill:var(--panel);stroke:var(--accent);stroke-width:2.2}
+.port:hover .pv{fill:var(--accent)}
+#editor{position:absolute;z-index:4;height:38px;padding:0 10px;border:2px solid var(--accent);border-radius:8px;background:var(--panel);color:var(--ink);
+  font:600 15px var(--font-ui);text-align:center;box-shadow:0 6px 20px rgba(20,30,70,.18)}
+.zoom{position:absolute;right:max(12px,env(safe-area-inset-right,0px));bottom:12px;display:flex;align-items:center;gap:2px;padding:3px;border:1px solid var(--line);border-radius:10px;background:var(--panel);z-index:3}
+.zoom button{width:32px;height:30px;border:0;border-radius:7px;background:none;cursor:pointer;display:grid;place-items:center}
+.zoom button:hover{background:var(--accent-soft);color:var(--accent)}
+.zoom svg{width:17px;height:17px}
+.zoom output{min-width:44px;text-align:center;font:500 12px var(--font-code);color:var(--muted);font-variant-numeric:tabular-nums}
+.toast{position:absolute;left:50%;top:14px;transform:translateX(-50%);padding:8px 14px;border-radius:9px;background:var(--ink);color:var(--panel);font-weight:600;font-size:13px;z-index:6;pointer-events:none}
+
+/* code panel */
+.code{grid-area:code;width:320px;display:flex;flex-direction:column;gap:10px;padding-block:14px;
+  padding-left:14px;padding-right:max(14px,env(safe-area-inset-right,0px));border-left:1px solid var(--line);background:var(--panel);min-height:0}
+.code.closed{display:none}
+.code-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.code h2{margin:0;font:600 14px/1.2 var(--font-brand);text-wrap:balance}
+.code .x{display:none}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:5px 10px;border:1px solid var(--line);border-radius:20px;background:none;cursor:pointer;font-size:12.5px;font-weight:600}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+#code{flex:1;min-height:160px;resize:none;width:100%;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--ed);color:var(--ink);
+  font:400 13.5px/1.6 var(--font-code);tab-size:4;white-space:pre;overflow:auto}
+#code:focus{outline:none;border-color:var(--accent)}
+.err{margin:0;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--danger) 12%,transparent);color:var(--danger);font-size:13px;font-weight:600}
+.primary{height:42px;border:0;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--mint));color:var(--on-accent);font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.primary:hover{filter:brightness(1.08)}
+.primary svg{width:18px;height:18px}
+
+/* info */
+.ov{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:16px;background:rgba(10,16,40,.45)}
+.dlg{width:min(460px,100%);max-height:100%;overflow:auto;padding:22px;border-radius:16px;background:var(--panel);border:1px solid var(--line);box-shadow:0 20px 60px rgba(10,16,40,.3)}
+.dlg h2{margin:0 0 6px;font:600 19px/1.25 var(--font-brand)}
+.dlg h3{margin:16px 0 6px;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.dlg p{margin:0}
+.dlg ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.legend{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center}
+.legend svg{width:42px;height:24px;overflow:visible}
+.legend .s{stroke:var(--node-ink);stroke-width:1.4}
+kbd{font:500 12px var(--font-code);padding:1px 5px;border:1px solid var(--line);border-radius:5px;background:var(--paper)}
+.gh{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:9px 14px;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);font-weight:700}
+.gh:hover{border-color:var(--accent);color:var(--accent)}
+.gh svg{width:18px;height:18px}
+.gh .star{color:var(--gold)}
+.ai{margin-top:14px!important;font-size:12px;color:var(--muted)}
+.dlg-x{float:right;margin:-6px -6px 0 0}
+
+@media (max-width:900px){
+  .code{position:absolute;top:0;right:0;bottom:0;z-index:8;width:min(360px,100%);box-shadow:-12px 0 40px rgba(10,16,40,.2)}
+  .app .code{grid-area:auto}
+  .code-wrap{position:absolute;inset:0}
+  .code .x{display:inline-flex}
+}
+@media (max-width:640px){
+  .app{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"top" "stage" "pal"}
+  .palette{width:auto;flex-direction:row;gap:4px;padding-block:6px;padding-right:max(8px,env(safe-area-inset-right,0px));padding-left:max(8px,env(safe-area-inset-left,0px));
+    border-right:0;border-top:1px solid var(--line);overflow-x:auto}
+  .pal-title,.pal-hint{display:none}
+  .blk{flex:1 0 64px;flex-direction:column;gap:3px;padding:6px 4px;font-size:10.5px;text-align:center}
+  .blk svg{width:40px;height:24px}
+  .tb span{display:none}
+  .tb{padding:0;width:36px;justify-content:center}
+  .tb.wide{width:auto;padding:0 10px}
+  .sep{display:none}
+  .brand b{font-size:14px}
+  .tools{gap:4px}
+}
+@media (max-width:380px){.brand b{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="app" id="app">
+  <header class="top">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="var(--accent)"/><rect x="9" y="4" width="14" height="6" rx="3" fill="var(--mint)"/><path d="M16 10v3" stroke="var(--on-accent)" stroke-width="1.6"/><path d="M16 13l7 6-7 6-7-6z" fill="var(--gold)"/><path d="M23 19h3v8" stroke="var(--on-accent)" stroke-width="1.6" fill="none"/></svg>
+      <b>Блок-схема</b>
+    </div>
+    <div class="tools">
+      <button class="tb" id="bNew" title="Нова схема"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M12 12v6M9 15h6"/></svg><span id="bNewT">Нова</span></button>
+      <button class="tb icon" id="bUndo" title="Скасувати (Ctrl+Z)" aria-label="Скасувати"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>
+      <button class="tb icon" id="bDel" title="Видалити (Delete)" aria-label="Видалити" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg></button>
+      <span class="sep"></span>
+      <button class="tb" id="bPng" title="Зберегти як картинку PNG"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span>PNG</span></button>
+      <button class="tb wide on" id="bCode" title="Код Python → схема" aria-expanded="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><b style="font-weight:700">Py</b></button>
+      <button class="tb info" id="bInfo" aria-label="Про проєкт">i</button>
+    </div>
+  </header>
+
+  <aside class="palette" id="palette" aria-label="Блоки">
+    <p class="pal-title">Блоки</p>
+    <button class="blk" data-type="term"><svg viewBox="0 0 48 30"><rect class="s f-term" x="2" y="5" width="44" height="20" rx="10"/></svg>Початок / кінець</button>
+    <button class="blk" data-type="proc"><svg viewBox="0 0 48 30"><rect class="s f-proc" x="2" y="5" width="44" height="20" rx="2"/></svg>Дія</button>
+    <button class="blk" data-type="io"><svg viewBox="0 0 48 30"><polygon class="s f-io" points="9,5 46,5 39,25 2,25"/></svg>Введення / виведення</button>
+    <button class="blk" data-type="dec"><svg viewBox="0 0 48 30"><polygon class="s f-dec" points="24,1 47,15 24,29 1,15"/></svg>Умова</button>
+    <button class="blk" data-type="loop"><svg viewBox="0 0 48 30"><polygon class="s f-loop" points="10,5 38,5 46,15 38,25 10,25 2,15"/></svg>Цикл</button>
+    <p class="pal-hint"><i></i>тягни, щоб з'єднати</p>
+  </aside>
+
+  <main class="stage" id="stage">
+    <svg id="svg" aria-label="Полотно блок-схеми">
+      <defs id="defs"></defs>
+      <g id="world"><g id="gE"></g><g id="gN"></g><g id="gT"></g></g>
+    </svg>
+    <input id="editor" hidden autocomplete="off" spellcheck="false" aria-label="Текст блоку">
+    <div class="zoom">
+      <button id="zOut" aria-label="Зменшити"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+      <output id="zVal">100%</output>
+      <button id="zIn" aria-label="Збільшити"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button id="zFit" aria-label="Показати всю схему" title="Показати всю схему"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+    </div>
+    <div class="toast" id="toast" hidden></div>
+  </main>
+
+  <section class="code" id="codePanel" aria-label="Python у схему">
+    <div class="code-head">
+      <h2>Python → схема</h2>
+      <button class="tb icon x" id="bCodeX" aria-label="Закрити"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="chips" id="chips"></div>
+    <textarea id="code" spellcheck="false" aria-label="Код Python"></textarea>
+    <p class="err" id="codeErr" hidden></p>
+    <button class="primary" id="bBuild"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Побудувати схему</button>
+  </section>
+</div>
+
+<div class="ov" id="info" hidden>
+  <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="infoT">
+    <button class="tb icon dlg-x" id="infoX" aria-label="Закрити"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <h2 id="infoT">Блок-схема</h2>
+    <p>Редактор блок-схем алгоритмів: збирай схему з блоків або встав код Python — схема побудується сама.</p>
+    <h3>Блоки</h3>
+    <div class="legend">
+      <svg viewBox="0 0 48 30"><rect class="s f-term" x="2" y="5" width="44" height="20" rx="10"/></svg><span>початок і кінець алгоритму</span>
+      <svg viewBox="0 0 48 30"><rect class="s f-proc" x="2" y="5" width="44" height="20" rx="2"/></svg><span>дія, обчислення</span>
+      <svg viewBox="0 0 48 30"><polygon class="s f-io" points="9,5 46,5 39,25 2,25"/></svg><span>введення або виведення даних</span>
+      <svg viewBox="0 0 48 30"><polygon class="s f-dec" points="24,1 47,15 24,29 1,15"/></svg><span>умова: так / ні</span>
+      <svg viewBox="0 0 48 30"><polygon class="s f-loop" points="10,5 38,5 46,15 38,25 10,25 2,15"/></svg><span>цикл з параметром (for)</span>
+    </div>
+    <h3>Правила</h3>
+    <ul>
+      <li>Натисни блок у панелі — він стане під виділеним і з'єднається з ним.</li>
+      <li>Перетягуй блоки мишею або пальцем, полотно — по порожньому місцю.</li>
+      <li>Щоб з'єднати, тягни кружечок на краю блоку до іншого блоку.</li>
+      <li>Повторний клік по виділеному блоку чи стрілці — змінити текст.</li>
+      <li><kbd>Delete</kbd> — видалити, <kbd>Ctrl</kbd>+<kbd>Z</kbd> — скасувати, коліщатко — масштаб.</li>
+      <li>Python: встав код і натисни «Побудувати схему».</li>
+    </ul>
+    <a class="gh" href="https://github.com/whyuxavier/it-maysternia/tree/main/apps/flowchart" target="_blank" rel="noopener">
+      <svg class="star" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+      whyuxavier/flowchart
+    </a>
+    <p class="ai">Створено з використанням ШІ.</p>
+  </div>
+</div>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s);
+const svg=$('#svg'),world=$('#world'),gE=$('#gE'),gN=$('#gN'),gT=$('#gT'),stage=$('#stage'),editor=$('#editor');
+const OUT={term:['b'],proc:['b'],io:['b'],dec:['b','l','r'],loop:['b','r']};
+const KEY='blok-skhema-v1';
+const LIVE={ink:'var(--ink)',nodeInk:'var(--node-ink)',paper:'var(--paper)',accent:'var(--accent)',term:'var(--f-term)',proc:'var(--f-proc)',io:'var(--f-io)',dec:'var(--f-dec)',loop:'var(--f-loop)',font:'Manrope,"Segoe UI",system-ui,sans-serif'};
+const LIGHT={ink:'#23242e',nodeInk:'#23242e',paper:'#ffffff',accent:'#6f8ad6',term:'#dcf1ea',proc:'#e3e9f8',io:'#ebe5f8',dec:'#f8ecd0',loop:'#f7dfe3',font:'Manrope,Arial,sans-serif'};
+const EX=[
+ ['Парне?',`n = int(input("Введи число: "))
+if n % 2 == 0:
+    print("Парне")
+else:
+    print("Непарне")`],
+ ['Сума 1…n',`n = int(input())
+s = 0
+i = 1
+while i <= n:
+    s = s + i
+    i = i + 1
+print(s)`],
+ ['Множення (for)',`x = int(input())
+for i in range(1, 11):
+    print(x, "*", i, "=", x * i)`],
+ ['Оцінка',`bal = int(input())
+if bal >= 10:
+    print("Високий")
+elif bal >= 7:
+    print("Достатній")
+else:
+    print("Середній")`]
+];
+
+let S={nodes:[],edges:[],seq:1};
+let view={x:0,y:0,k:1};
+let sel=null, editing=null, drag=null;
+const hist=[];
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const byId=id=>S.nodes.find(n=>n.id===id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* ---------- sizes ---------- */
+const meas=document.createElement('canvas').getContext('2d');
+const FONT='600 14px Manrope, "Segoe UI", system-ui, sans-serif';
+let cache=new Map();
+function wrap(text,maxW){
+  meas.font=FONT; const out=[];
+  for(const para of String(text).split('\n')){
+    const words=para.split(/\s+/).filter(Boolean); let line='';
+    for(const w of words){const t=line?line+' '+w:w; if(meas.measureText(t).width>maxW&&line){out.push(line);line=w}else line=t}
+    out.push(line);
+  }
+  return out.length?out:[''];
+}
+function sizeOf(type,text){
+  const key=type+'|'+text; if(cache.has(key)) return cache.get(key);
+  const lines=wrap(text||' ',type==='dec'?150:200); meas.font=FONT;
+  const tw=Math.max(20,...lines.map(l=>meas.measureText(l).width)), th=lines.length*18; let w,h;
+  if(type==='dec'){w=Math.max(150,tw*1.7+50);h=Math.max(80,th*2.6+36)}
+  else if(type==='io'){w=Math.max(130,tw+58);h=Math.max(44,th+22)}
+  else if(type==='loop'){w=Math.max(140,tw+58);h=Math.max(46,th+24)}
+  else if(type==='term'){w=Math.max(120,tw+44);h=Math.max(44,th+20)}
+  else {w=Math.max(120,tw+32);h=Math.max(44,th+22)}
+  const r={w:Math.round(w/2)*2,h:Math.round(h/2)*2,lines}; cache.set(key,r); return r;
+}
+const sz=n=>sizeOf(n.type,n.text);
+function portRel(type,s,p){return p==='b'?{x:0,y:s.h/2}:p==='l'?{x:-s.w/2,y:0}:{x:s.w/2,y:0}}
+function shape(type,w,h){
+  const a=w/2,b=h/2;
+  if(type==='term') return `<rect x="${-a}" y="${-b}" width="${w}" height="${h}" rx="${b}"/>`;
+  if(type==='proc') return `<rect x="${-a}" y="${-b}" width="${w}" height="${h}" rx="3"/>`;
+  if(type==='io'){const s=14;return `<polygon points="${-a+s},${-b} ${a},${-b} ${a-s},${b} ${-a},${b}"/>`}
+  if(type==='dec') return `<polygon points="0,${-b} ${a},0 0,${b} ${-a},0"/>`;
+  const s=16; return `<polygon points="${-a+s},${-b} ${a-s},${-b} ${a},0 ${a-s},${b} ${-a+s},${b} ${-a},0"/>`;
+}
+
+/* ---------- edges ---------- */
+function route(e){
+  const a=byId(e.from),b=byId(e.to); if(!a||!b) return null;
+  const sa=sz(a),sb=sz(b),pr=portRel(a.type,sa,e.port);
+  const P0={x:a.x+pr.x,y:a.y+pr.y},T={x:b.x,y:b.y-sb.h/2};
+  const back=T.y<P0.y+12; let P;
+  if(e.port==='b'){
+    if(!back){
+      if(Math.abs(P0.x-T.x)<1) P=[P0,T];
+      else{let ym=T.y-20; if(ym<P0.y+10) ym=(P0.y+T.y)/2; P=[P0,{x:P0.x,y:ym},{x:T.x,y:ym},T]}
+    }else{
+      const lane=e.lane!=null?b.x+e.lane:Math.min(a.x-sa.w/2,b.x-sb.w/2)-30;
+      const y1=P0.y+18,y2=T.y-20;
+      P=[P0,{x:P0.x,y:y1},{x:lane,y:y1},{x:lane,y:y2},{x:T.x,y:y2},T];
+    }
+  }else{
+    const d=e.port==='r'?1:-1;
+    if(!back&&d*(T.x-P0.x)>20&&T.y-P0.y>20) P=[P0,{x:T.x,y:P0.y},T];
+    else{const ox=e.lane!=null?a.x+e.lane:P0.x+d*30,y2=T.y-20;P=[P0,{x:ox,y:P0.y},{x:ox,y:y2},{x:T.x,y:y2},T]}
+  }
+  return P;
+}
+function cleanPts(P){
+  const o=[P[0]];
+  for(let i=1;i<P.length;i++){const q=P[i],l=o[o.length-1]; if(Math.hypot(q.x-l.x,q.y-l.y)>.5) o.push(q)}
+  for(let i=o.length-2;i>0;i--){const a=o[i-1],b=o[i],c=o[i+1]; if((Math.abs(a.x-b.x)<.5&&Math.abs(b.x-c.x)<.5)||(Math.abs(a.y-b.y)<.5&&Math.abs(b.y-c.y)<.5)) o.splice(i,1)}
+  return o;
+}
+function pathD(P){
+  P=cleanPts(P); let d=`M${P[0].x},${P[0].y}`;
+  const tw=(p,q,r)=>{const L=Math.hypot(q.x-p.x,q.y-p.y)||1;return{x:p.x+(q.x-p.x)*r/L,y:p.y+(q.y-p.y)*r/L}};
+  for(let i=1;i<P.length-1;i++){
+    const a=P[i-1],p=P[i],c=P[i+1],r=Math.min(9,Math.hypot(p.x-a.x,p.y-a.y)/2,Math.hypot(c.x-p.x,c.y-p.y)/2);
+    const p1=tw(p,a,r),p2=tw(p,c,r); d+=` L${p1.x},${p1.y} Q${p.x},${p.y} ${p2.x},${p2.y}`;
+  }
+  const L=P[P.length-1]; return d+` L${L.x},${L.y}`;
+}
+function labelPos(e,P){
+  const s=P[0];
+  if(e.port==='b') return {x:s.x+8,y:s.y+19,a:'start'};
+  if(e.port==='r') return {x:s.x+6,y:s.y-10,a:'start'};
+  return {x:s.x-6,y:s.y-10,a:'end'};
+}
+function defLabel(n,p){return n.type==='dec'?(p==='r'?'ні':'так'):''}
+
+/* ---------- render ---------- */
+function markers(C,suf){
+  const m=(id,c)=>`<marker id="${id}" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0.8 L10,5 L0,9.2 z" style="fill:${c}"/></marker>`;
+  return m('ar'+suf,C.ink)+m('arS'+suf,C.accent);
+}
+function markup(C,live){
+  let E='',N='';
+  for(const e of S.edges){
+    const P=route(e); if(!P) continue;
+    const d=pathD(P),on=live&&sel&&sel.kind==='edge'&&sel.id===e.id,col=on?C.accent:C.ink,suf=live?'':'X';
+    E+=`<g class="edge" data-eid="${e.id}">${live?`<path class="hit" d="${d}"/>`:''}<path d="${d}" style="fill:none;stroke:${col};stroke-width:${on?2.6:1.8}px;stroke-linejoin:round;stroke-linecap:round" marker-end="url(#${on?'arS':'ar'}${suf})"/>`;
+    if(e.label){const lp=labelPos(e,P);meas.font='700 12.5px Manrope, "Segoe UI", sans-serif';const tw=meas.measureText(e.label).width,w=Math.ceil(tw+14),h=20,x0=lp.a==='end'?lp.x-w:lp.x,y0=lp.y-h/2-4,lc=/^ні$/i.test(e.label)?C.loop:/^так$/i.test(e.label)?C.term:C.proc;
+      E+=`<rect x="${x0}" y="${y0}" width="${w}" height="${h}" rx="10" style="fill:${lc};stroke:${on?C.accent:C.nodeInk};stroke-width:1.2px"/><text x="${x0+w/2}" y="${y0+h/2}" dy="0.35em" text-anchor="middle" style="font:700 12.5px ${C.font};fill:${C.nodeInk}">${esc(e.label)}</text>`}
+    E+='</g>';
+  }
+  for(const n of S.nodes){
+    const s=sz(n),on=live&&sel&&sel.kind==='node'&&sel.id===n.id,sh=shape(n.type,s.w,s.h);
+    N+=`<g class="node${on?' sel':''}" data-id="${n.id}" transform="translate(${n.x},${n.y})">`;
+    if(on) N+=`<g style="fill:none;stroke:${C.accent};stroke-width:9px;stroke-opacity:.28;stroke-linejoin:round">${sh}</g>`;
+    N+=`<g style="fill:${C[n.type]};stroke:${on?C.accent:C.nodeInk};stroke-width:1.7px;stroke-linejoin:round">${sh}</g>`;
+    const y0=-(s.lines.length-1)*9;
+    N+=`<text text-anchor="middle" style="font:600 14px ${C.font};fill:${C.nodeInk}">${s.lines.map((l,i)=>`<tspan x="0" y="${y0+i*18}" dy="0.35em">${esc(l)}</tspan>`).join('')}</text>`;
+    if(live) for(const p of OUT[n.type]){const pt=portRel(n.type,s,p);N+=`<g class="port" data-port="${p}" transform="translate(${pt.x},${pt.y})"><circle r="13" class="ph"/><circle r="5.5" class="pv"/></g>`}
+    N+='</g>';
+  }
+  return {E,N};
+}
+$('#defs').innerHTML=markers(LIVE,'');
+function render(){const m=markup(LIVE,true);gE.innerHTML=m.E;gN.innerHTML=m.N;updateUI()}
+function applyView(){
+  world.setAttribute('transform',`translate(${view.x},${view.y}) scale(${view.k})`);
+  const g=20*view.k,G=100*view.k;
+  stage.style.backgroundSize=`${G}px ${G}px,${G}px ${G}px,${g}px ${g}px,${g}px ${g}px`;
+  stage.style.backgroundPosition=`${view.x}px ${view.y}px`;
+  $('#zVal').textContent=Math.round(view.k*100)+'%';
+  if(editing) placeEditor();
+}
+function updateUI(){$('#bDel').disabled=!sel;$('#bUndo').disabled=!hist.length}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({S,code:$('#code').value}))}catch(e){}}
+function snap(){hist.push(JSON.stringify(S));if(hist.length>80)hist.shift()}
+function changed(){render();save()}
+function undo(){if(!hist.length)return;S=JSON.parse(hist.pop());sel=null;closeEditor(false);changed()}
+function select(kind,id){sel=kind?{kind,id}:null;render()}
+
+/* ---------- geometry helpers ---------- */
+function rect(){return svg.getBoundingClientRect()}
+function toWorld(cx,cy){const r=rect();return{x:(cx-r.left-view.x)/view.k,y:(cy-r.top-view.y)/view.k}}
+function bbox(){
+  if(!S.nodes.length) return null; let x1=1e9,y1=1e9,x2=-1e9,y2=-1e9;
+  const add=(x,y)=>{x1=Math.min(x1,x);y1=Math.min(y1,y);x2=Math.max(x2,x);y2=Math.max(y2,y)};
+  for(const n of S.nodes){const s=sz(n);add(n.x-s.w/2,n.y-s.h/2);add(n.x+s.w/2,n.y+s.h/2)}
+  for(const e of S.edges){const P=route(e);if(P)for(const p of P)add(p.x,p.y);if(P&&e.label){const l=labelPos(e,P);add(l.x+(l.a==='end'?-30:30),l.y-12)}}
+  return{x:x1,y:y1,w:x2-x1,h:y2-y1};
+}
+function zoomAt(sx,sy,k){k=clamp(k,.25,2.5);const wx=(sx-view.x)/view.k,wy=(sy-view.y)/view.k;view.k=k;view.x=sx-wx*k;view.y=sy-wy*k;applyView()}
+function fit(){
+  const b=bbox(),r=rect(); if(!b||!r.width) return;
+  const pad=Math.min(56,r.width*.08),k=clamp(Math.min((r.width-pad*2)/b.w,(r.height-pad*2)/b.h),.3,1.25);
+  view.k=k;view.x=r.width/2-(b.x+b.w/2)*k;view.y=r.height/2-(b.y+b.h/2)*k;applyView();
+}
+function ensureVisible(n){
+  const r=rect(),s=sz(n),sx=n.x*view.k+view.x,sy=n.y*view.k+view.y,m=30;
+  let dx=0,dy=0;
+  if(sy+s.h*view.k/2>r.height-m-50) dy=r.height-m-50-(sy+s.h*view.k/2);
+  if(sy-s.h*view.k/2<m) dy=m-(sy-s.h*view.k/2);
+  if(sx+s.w*view.k/2>r.width-m) dx=r.width-m-(sx+s.w*view.k/2);
+  if(sx-s.w*view.k/2<m) dx=m-(sx-s.w*view.k/2);
+  if(dx||dy){view.x+=dx;view.y+=dy;applyView()}
+}
+
+/* ---------- editing text ---------- */
+function startEdit(kind,id){
+  closeEditor(true);
+  const t=kind==='node'?byId(id):S.edges.find(e=>e.id===id); if(!t) return;
+  editing={kind,id,orig:kind==='node'?t.text:(t.label||'')};
+  editor.value=editing.orig; editor.hidden=false; placeEditor(); editor.focus(); editor.select();
+}
+function placeEditor(){
+  if(!editing) return; let cx,cy,w;
+  if(editing.kind==='node'){const n=byId(editing.id);if(!n)return;const s=sz(n);cx=n.x*view.k+view.x;cy=n.y*view.k+view.y;w=Math.max(170,s.w*view.k+20)}
+  else{const e=S.edges.find(x=>x.id===editing.id);const P=e&&route(e);if(!P)return;const l=labelPos(e,P);cx=l.x*view.k+view.x;cy=l.y*view.k+view.y;w=110}
+  const r=rect(); w=Math.min(w,r.width-16);
+  editor.style.width=w+'px'; editor.style.left=clamp(cx-w/2,8,r.width-w-8)+'px'; editor.style.top=clamp(cy-19,8,r.height-46)+'px';
+}
+function closeEditor(commit){
+  if(!editing) return; const ed=editing; editing=null; editor.hidden=true;
+  if(!commit) return; const v=editor.value.trim();
+  if(v===ed.orig) return;
+  if(ed.kind==='node'){const n=byId(ed.id);if(n&&v){snap();n.text=v}}
+  else{const e=S.edges.find(x=>x.id===ed.id);if(e){snap();e.label=v}}
+  changed();
+}
+editor.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();closeEditor(true)}else if(e.key==='Escape'){e.preventDefault();closeEditor(false)}e.stopPropagation()});
+editor.addEventListener('blur',()=>closeEditor(true));
+
+/* ---------- pointer ---------- */
+const ptrs=new Map();
+svg.addEventListener('pointerdown',e=>{
+  if(editing) closeEditor(true);
+  try{svg.setPointerCapture(e.pointerId)}catch(_){}
+  ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(ptrs.size===2){
+    const [p1,p2]=[...ptrs.values()],r=rect(),m={x:(p1.x+p2.x)/2-r.left,y:(p1.y+p2.y)/2-r.top};
+    drag={mode:'pinch',d0:Math.hypot(p1.x-p2.x,p1.y-p2.y)||1,k0:view.k,w:{x:(m.x-view.x)/view.k,y:(m.y-view.y)/view.k}};gT.innerHTML='';return;
+  }
+  const t=e.target,port=t.closest('.port'),ng=t.closest('.node'),eg=t.closest('.edge');
+  if(port&&ng){drag={mode:'link',from:+ng.dataset.id,port:port.dataset.port};e.preventDefault();return}
+  if(ng){
+    const id=+ng.dataset.id,n=byId(id),was=sel&&sel.kind==='node'&&sel.id===id;
+    if(!was) select('node',id);
+    const w=toWorld(e.clientX,e.clientY);
+    drag={mode:'move',id,ox:n.x-w.x,oy:n.y-w.y,sx:e.clientX,sy:e.clientY,moved:false,was};return;
+  }
+  if(eg){const id=+eg.dataset.eid,was=sel&&sel.kind==='edge'&&sel.id===id;if(!was)select('edge',id);drag={mode:'edge',id,was};return}
+  if(sel) select(null);
+  drag={mode:'pan',sx:e.clientX,sy:e.clientY,vx:view.x,vy:view.y};svg.classList.add('panning');
+});
+svg.addEventListener('pointermove',e=>{
+  if(ptrs.has(e.pointerId)) ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(!drag) return;
+  if(drag.mode==='pinch'){
+    if(ptrs.size<2) return; const [p1,p2]=[...ptrs.values()],r=rect();
+    const k=clamp(drag.k0*Math.hypot(p1.x-p2.x,p1.y-p2.y)/drag.d0,.25,2.5),m={x:(p1.x+p2.x)/2-r.left,y:(p1.y+p2.y)/2-r.top};
+    view.k=k;view.x=m.x-drag.w.x*k;view.y=m.y-drag.w.y*k;applyView();return;
+  }
+  if(drag.mode==='pan'){view.x=drag.vx+e.clientX-drag.sx;view.y=drag.vy+e.clientY-drag.sy;applyView();return}
+  if(drag.mode==='move'){
+    if(!drag.moved){if(Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)<4)return;drag.moved=true;snap()}
+    const w=toWorld(e.clientX,e.clientY),n=byId(drag.id);
+    n.x=Math.round((w.x+drag.ox)/10)*10;n.y=Math.round((w.y+drag.oy)/10)*10;render();return;
+  }
+  if(drag.mode==='link'){
+    const a=byId(drag.from),pr=portRel(a.type,sz(a),drag.port),w=toWorld(e.clientX,e.clientY);
+    gT.innerHTML=`<path d="M${a.x+pr.x},${a.y+pr.y} L${w.x},${w.y}" style="fill:none;stroke:var(--accent);stroke-width:2px;stroke-dasharray:6 5" marker-end="url(#arS)"/>`;
+  }
+});
+function endPtr(e){
+  ptrs.delete(e.pointerId); svg.classList.remove('panning');
+  if(!drag) return; const d=drag;
+  if(d.mode==='pinch'){if(ptrs.size===0)drag=null;else drag=null;return}
+  drag=null;
+  if(d.mode==='move'){if(d.moved)save();else if(d.was&&e.type==='pointerup')startEdit('node',d.id);return}
+  if(d.mode==='edge'){if(d.was&&e.type==='pointerup')startEdit('edge',d.id);return}
+  if(d.mode==='link'){
+    gT.innerHTML='';
+    if(e.type!=='pointerup') return;
+    const el=document.elementFromPoint(e.clientX,e.clientY),ng=el&&el.closest&&el.closest('.node');
+    if(!ng) return; const to=+ng.dataset.id; if(to===d.from) return;
+    if(S.edges.some(x=>x.from===d.from&&x.port===d.port&&x.to===to)) return;
+    snap(); S.edges=S.edges.filter(x=>!(x.from===d.from&&x.port===d.port));
+    const a=byId(d.from),ne={id:S.seq++,from:d.from,to,port:d.port,label:defLabel(a,d.port)};
+    S.edges.push(ne); sel={kind:'edge',id:ne.id}; changed();
+  }
+}
+svg.addEventListener('pointerup',endPtr);
+svg.addEventListener('pointercancel',endPtr);
+svg.addEventListener('wheel',e=>{e.preventDefault();const r=rect();zoomAt(e.clientX-r.left,e.clientY-r.top,view.k*Math.exp(-e.deltaY*(e.ctrlKey?.01:.0015)))},{passive:false});
+
+/* ---------- actions ---------- */
+function defaultText(type){
+  if(type==='term') return S.nodes.some(n=>n.type==='term'&&/початок/i.test(n.text))?'Кінець':'Початок';
+  return {proc:'Дія',io:'Ввести x',dec:'x > 0',loop:'i in range(5)'}[type];
+}
+function addNode(type){
+  closeEditor(true); snap();
+  const n={id:S.seq++,type,text:defaultText(type),x:0,y:0},ns=sz(n);
+  const s=sel&&sel.kind==='node'?byId(sel.id):null;
+  const free=s&&OUT[s.type].find(p=>!S.edges.some(e=>e.from===s.id&&e.port===p));
+  if(s&&free){
+    const ss=sz(s);
+    n.y=s.y+ss.h/2+44+ns.h/2;
+    n.x=free==='b'?s.x:s.x+(free==='r'?1:-1)*(ss.w/2+ns.w/2+40);
+    S.edges.push({id:S.seq++,from:s.id,to:n.id,port:free,label:defLabel(s,free)});
+  }else{
+    const r=rect(),c=toWorld(r.left+r.width/2,r.top+r.height/2);n.x=c.x;n.y=c.y;
+    while(S.nodes.some(m=>Math.abs(m.x-n.x)<40&&Math.abs(m.y-n.y)<30)) n.y+=40;
+  }
+  n.x=Math.round(n.x/10)*10;n.y=Math.round(n.y/10)*10;
+  S.nodes.push(n); sel={kind:'node',id:n.id}; changed(); ensureVisible(n);
+  if(type!=='term') startEdit('node',n.id);
+}
+function delSel(){
+  if(!sel) return; snap();
+  if(sel.kind==='node'){S.nodes=S.nodes.filter(n=>n.id!==sel.id);S.edges=S.edges.filter(e=>e.from!==sel.id&&e.to!==sel.id)}
+  else S.edges=S.edges.filter(e=>e.id!==sel.id);
+  sel=null; changed();
+}
+function blank(){
+  snap(); S={nodes:[{id:1,type:'term',text:'Початок',x:0,y:0},{id:2,type:'term',text:'Кінець',x:0,y:120}],edges:[{id:3,from:1,to:2,port:'b',label:''}],seq:4};
+  sel={kind:'node',id:1}; changed(); fit();
+}
+document.querySelectorAll('.blk').forEach(b=>b.addEventListener('click',()=>addNode(b.dataset.type)));
+$('#bDel').onclick=delSel; $('#bUndo').onclick=undo;
+let newArm=0;
+$('#bNew').onclick=()=>{
+  const btn=$('#bNew');
+  if(S.nodes.length<=2||newArm){clearTimeout(newArm);newArm=0;btn.classList.remove('warn');$('#bNewT').textContent='Нова';blank();return}
+  btn.classList.add('warn');$('#bNewT').textContent='Очистити?';
+  newArm=setTimeout(()=>{newArm=0;btn.classList.remove('warn');$('#bNewT').textContent='Нова'},2600);
+};
+$('#zIn').onclick=()=>{const r=rect();zoomAt(r.width/2,r.height/2,view.k*1.2)};
+$('#zOut').onclick=()=>{const r=rect();zoomAt(r.width/2,r.height/2,view.k/1.2)};
+$('#zFit').onclick=fit;
+document.addEventListener('keydown',e=>{
+  if(/INPUT|TEXTAREA/.test(e.target.tagName)) return;
+  if(!$('#info').hidden){if(e.key==='Escape')closeInfo();return}
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();undo()}
+  else if(e.key==='Delete'||e.key==='Backspace'){if(sel){e.preventDefault();delSel()}}
+  else if(e.key==='Enter'&&sel){e.preventDefault();startEdit(sel.kind,sel.id)}
+  else if(e.key==='Escape'&&sel) select(null);
+});
+let toastT;
+function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>el.hidden=true,1800)}
+
+/* ---------- PNG ---------- */
+$('#bPng').onclick=()=>{
+  const b=bbox(); if(!b) return; const m=36,W=Math.ceil(b.w+m*2),H=Math.ceil(b.h+m*2);
+  const k=markup(LIGHT,false);
+  const src=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="${b.x-m} ${b.y-m} ${W} ${H}"><rect x="${b.x-m}" y="${b.y-m}" width="${W}" height="${H}" fill="#ffffff"/><defs>${markers(LIGHT,'X')}</defs>${k.E}${k.N}</svg>`;
+  const img=new Image();
+  img.onload=()=>{
+    const c=document.createElement('canvas');c.width=W*2;c.height=H*2;const x=c.getContext('2d');x.scale(2,2);x.drawImage(img,0,0,W,H);
+    c.toBlob(bl=>{if(!bl)return;const a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='blok-skhema.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),3000);toast('Картинку збережено')});
+  };
+  img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(src);
+};
+
+/* ---------- Python → flowchart ---------- */
+function stripComment(t){let q=null;for(let i=0;i<t.length;i++){const c=t[i];if(q){if(c==='\\')i++;else if(c===q)q=null}else if(c==='"'||c==="'")q=c;else if(c==='#')return t.slice(0,i)}return t}
+function parse(src){
+  const L=[];
+  src.replace(/\t/g,'    ').split('\n').forEach((raw,i)=>{const t=stripComment(raw).replace(/\s+$/,'');if(t.trim())L.push({ind:t.length-t.trimStart().length,t:t.trim(),no:i+1})});
+  if(!L.length) throw new Error('Напиши або встав код.');
+  let i=0;
+  const child=(ind,no)=>{if(i<L.length&&L[i].ind>ind)return block(L[i].ind);throw new Error(`Рядок ${no}: після «:» потрібен рядок з відступом.`)};
+  function block(ind){
+    const out=[];
+    while(i<L.length&&L[i].ind===ind){
+      const {t,no}=L[i];i++;let m;
+      if(m=t.match(/^if\s+(.+):$/)){
+        const node={k:'if',c:m[1].trim(),then:child(ind,no),else:[]};out.push(node);let cur=node;
+        while(i<L.length&&L[i].ind===ind){
+          const l=L[i];let m2;
+          if(m2=l.t.match(/^elif\s+(.+):$/)){i++;const n2={k:'if',c:m2[1].trim(),then:child(ind,l.no),else:[]};cur.else=[n2];cur=n2}
+          else if(/^else\s*:$/.test(l.t)){i++;cur.else=child(ind,l.no);break}
+          else break;
+        }
+      }else if(m=t.match(/^while\s+(.+):$/)) out.push({k:'while',c:m[1].trim(),body:child(ind,no)});
+      else if(m=t.match(/^for\s+(.+?)\s+in\s+(.+):$/)) out.push({k:'for',c:`${m[1]} in ${m[2].trim()}`,body:child(ind,no)});
+      else if(/^(elif|else)\b/.test(t)) throw new Error(`Рядок ${no}: «${t.split(/[\s:]/)[0]}» без «if» перед ним.`);
+      else if(/:$/.test(t)){out.push(simple(t.slice(0,-1)));if(i<L.length&&L[i].ind>ind)out.push(...block(L[i].ind))}
+      else out.push(simple(t));
+    }
+    return out;
+  }
+  const tree=block(L[0].ind);
+  if(i<L.length) throw new Error(`Рядок ${L[i].no}: перевір відступи.`);
+  return tree;
+}
+function simple(t){
+  let m;
+  if(m=t.match(/^([^\s=()]+(?:\s*,\s*[^\s=()]+)*)\s*=\s*(?:[\w.]+\s*\(\s*)*input\s*\(/)) return {k:'s',type:'io',text:'Ввести '+m[1].replace(/\s*,\s*/g,', ')};
+  if(/^input\s*\(/.test(t)) return {k:'s',type:'io',text:'Ввести'};
+  if(m=t.match(/^print\s*\((.*)\)$/)) return {k:'s',type:'io',text:('Вивести '+m[1].trim()).trim()};
+  return {k:'s',type:'proc',text:t};
+}
+function generate(tree){
+  const G={nodes:[],edges:[],seq:1},GAP=36;
+  const mk=(type,text)=>{const n={id:G.seq++,type,text,x:0,y:0};G.nodes.push(n);return n};
+  const edge=(from,to,port,label,lane)=>{const e={id:G.seq++,from,to,port,label:label||''};if(lane!=null)e.lane=lane;G.edges.push(e)};
+  const link=(exits,to,backLane)=>{for(const x of exits) edge(x.id,to,x.port,x.label,x.lane!=null?x.lane:(backLane!=null&&x.port==='b'?backLane:null))};
+  const head=s=>s.k==='if'||s.k==='while'?sizeOf('dec',s.c):s.k==='for'?sizeOf('loop',s.c):sizeOf(s.type,s.text);
+  const W=l=>l.reduce((m,s)=>Math.max(m,SW(s)),0);
+  function SW(s){
+    const h=head(s);
+    if(s.k==='if'){const M=Math.max(W(s.then),W(s.else));return 2*Math.max(M/2+30,h.w/2+30)+M}
+    if(s.k==='while'||s.k==='for') return Math.max(h.w,W(s.body))+120;
+    return h.w;
+  }
+  function LL(list,x,y){
+    let first=null,exits=null,yy=y;
+    for(const s of list){const r=LS(s,x,yy);if(first==null)first=r.first;if(exits)link(exits,r.first);exits=r.exits;yy=r.bottom+GAP}
+    return{first,exits:exits||[],bottom:list.length?yy-GAP:y};
+  }
+  function LS(s,x,y){
+    if(s.k==='if'){
+      const d=mk('dec',s.c),ds=sz(d);d.x=x;d.y=y+ds.h/2;
+      const M=Math.max(W(s.then),W(s.else)),off=Math.max(M/2+30,ds.w/2+30),by=y+ds.h+20;
+      let exits=[],bottom=y+ds.h;
+      for(const [list,port,lab,cx] of [[s.then,'l','так',x-off],[s.else,'r','ні',x+off]]){
+        if(list.length){const r=LL(list,cx,by);edge(d.id,r.first,port,lab);exits.push(...r.exits);bottom=Math.max(bottom,r.bottom)}
+        else exits.push({id:d.id,port,label:lab});
+      }
+      return{first:d.id,exits,bottom};
+    }
+    if(s.k==='while'||s.k==='for'){
+      const isFor=s.k==='for',d=mk(isFor?'loop':'dec',s.c),ds=sz(d);d.x=x;d.y=y+ds.h/2;
+      const lane=Math.max(ds.w,W(s.body))/2+30;let bottom=y+ds.h;
+      if(s.body.length){const r=LL(s.body,x,y+ds.h+36);edge(d.id,r.first,'b',isFor?'':'так');link(r.exits,d.id,-lane);bottom=r.bottom+30}
+      return{first:d.id,exits:[{id:d.id,port:'r',label:isFor?'':'ні',lane}],bottom};
+    }
+    const n=mk(s.type,s.text),ns=sz(n);n.x=x;n.y=y+ns.h/2;
+    return{first:n.id,exits:[{id:n.id,port:'b'}],bottom:y+ns.h};
+  }
+  const st=mk('term','Початок');st.y=22;
+  const r=LL(tree,0,44+GAP),en=mk('term','Кінець');
+  link([{id:st.id,port:'b'}],r.first);en.y=r.bottom+GAP+22;link(r.exits,en.id);
+  return G;
+}
+function build(){
+  const err=$('#codeErr');
+  try{const G=generate(parse($('#code').value));snap();S=G;sel=null;err.hidden=true;changed();fit();if(innerWidth<=900)setCode(false)}
+  catch(e){err.textContent=e.message;err.hidden=false}
+}
+$('#bBuild').onclick=build;
+const chips=$('#chips');
+EX.forEach(([name,code])=>{const b=document.createElement('button');b.className='chip';b.textContent=name;b.onclick=()=>{$('#code').value=code;$('#codeErr').hidden=true;save()};chips.appendChild(b)});
+$('#code').addEventListener('keydown',e=>{
+  if(e.key==='Tab'){e.preventDefault();const t=e.target,s=t.selectionStart;t.setRangeText('    ',s,t.selectionEnd,'end')}
+  else if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();build()}
+});
+$('#code').addEventListener('input',()=>{clearTimeout(window.__sv);window.__sv=setTimeout(save,500)});
+
+/* ---------- panels ---------- */
+function setCode(open){$('#codePanel').classList.toggle('closed',!open);$('#bCode').classList.toggle('on',open);$('#bCode').setAttribute('aria-expanded',open)}
+$('#bCode').onclick=()=>setCode($('#codePanel').classList.contains('closed'));
+$('#bCodeX').onclick=()=>setCode(false);
+function closeInfo(){$('#info').hidden=true;$('#bInfo').focus()}
+$('#bInfo').onclick=()=>{$('#info').hidden=false;$('#infoX').focus()};
+$('#infoX').onclick=closeInfo;
+$('#info').addEventListener('click',e=>{if(e.target.id==='info')closeInfo()});
+
+/* ---------- start ---------- */
+let saved=null;try{saved=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}
+$('#code').value=saved&&typeof saved.code==='string'?saved.code:EX[0][1];
+if(innerWidth<=900) setCode(false);
+function boot(){
+  cache=new Map();
+  if(saved&&saved.S&&Array.isArray(saved.S.nodes)&&saved.S.nodes.length){S=saved.S;render()}
+  else{S=generate(parse($('#code').value));render()}
+  fit();
+}
+(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(boot,boot);
+applyView();
+})();
+</script>
