@@ -63,14 +63,14 @@
 
   /* ---------- головна (hero) ---------- */
   .hero{
-    display:grid; grid-template-columns:1.1fr 1fr; gap:32px; align-items:center;
+    display:grid; grid-template-columns:1.25fr 1fr; gap:32px; align-items:center;
     max-width:1120px; margin:12px auto; padding:16px 24px 40px; min-height:72vh;
   }
   .hero h1{font-size:clamp(36px,6vw,60px); line-height:1.05; margin:0 0 14px; font-weight:900}
   .hero p.lead{font-size:clamp(17px,2.2vw,20px); line-height:1.5; margin:0 0 22px; max-width:30em}
   .hero-actions{display:flex; gap:12px}
   .hero-actions .btn{
-    flex:1 1 0; min-width:0; padding:12px 8px; font-size:16px; transform:none;
+    flex:1 1 0; min-width:0; padding:14px 12px; font-size:16px; transform:none;
     display:flex; align-items:center; justify-content:center; gap:6px;
     text-align:center; line-height:1.2; white-space:nowrap;
   }
@@ -455,6 +455,93 @@
         <path d="M290 190 Q320 120 360 190Z" fill="#f2c14e"/>
         <circle cx="220" cy="270" r="20" fill="#fffdf7"/>
         <circle cx="225" cy="270" r="9" fill="#3b3226"/>
+      </svg>` },
+    { name: 'Комп\'ютер', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+        <rect width="600" height="600" fill="#8fd3e8"/>
+        <rect x="100" y="90" width="400" height="270" rx="18" fill="#3b3226"/>
+        <rect x="120" y="110" width="360" height="220" rx="10" fill="#2c3e66"/>
+        <rect x="140" y="135" width="120" height="12" rx="6" fill="#3fa796"/>
+        <rect x="140" y="160" width="200" height="12" rx="6" fill="#f2c14e"/>
+        <rect x="160" y="185" width="150" height="12" rx="6" fill="#ef7d57"/>
+        <rect x="140" y="210" width="90" height="12" rx="6" fill="#5b8fd1"/>
+        <circle cx="430" cy="210" r="30" fill="#ef7d57"/>
+        <rect x="280" y="360" width="40" height="50" fill="#3b3226"/>
+        <rect x="210" y="405" width="180" height="22" rx="11" fill="#3b3226"/>
+        <rect x="150" y="450" width="300" height="50" rx="10" fill="#fffdf7"/>
+        <rect x="170" y="466" width="22" height="18" rx="4" fill="#e6dac3"/><rect x="202" y="466" width="22" height="18" rx="4" fill="#e6dac3"/>
+        <rect x="234" y="466" width="22" height="18" rx="4" fill="#e6dac3"/><rect x="266" y="466" width="22" height="18" rx="4" fill="#e6dac3"/>
+        <rect x="298" y="466" width="22" height="18" rx="4" fill="#e6dac3"/><rect x="330" y="466" width="22" height="18" rx="4" fill="#e6dac3"/>
+        <rect x="362" y="466" width="22" height="18" rx="4" fill="#e6dac3"/>
+        <ellipse cx="490" cy="470" rx="24" ry="34" fill="#fffdf7" stroke="#3b3226" stroke-width="3"/>
+        <path d="M0 520 Q150 500 300 520 T600 520 V600 H0Z" fill="#3fa796"/>
+      </svg>` },
+    { name: 'Фіфі', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+        <rect width="600" height="600" fill="#f6e19c"/>
+        <path d="M420 500 Q510 480 480 390" fill="none" stroke="#f6c6a6" stroke-width="28" stroke-linecap="round"/>
+        <ellipse cx="300" cy="470" rx="130" ry="90" fill="#f6c6a6"/>
+        <ellipse cx="250" cy="550" rx="35" ry="18" fill="#fffdf7"/>
+        <ellipse cx="350" cy="550" rx="35" ry="18" fill="#fffdf7"/>
+        <polygon points="190,230 205,120 290,205" fill="#f6c6a6"/>
+        <polygon points="410,230 395,120 310,205" fill="#f6c6a6"/>
+        <polygon points="205,205 210,150 255,195" fill="#ef7d57"/>
+        <polygon points="395,205 390,150 345,195" fill="#ef7d57"/>
+        <ellipse cx="300" cy="300" rx="120" ry="105" fill="#f6c6a6"/>
+        <path d="M300 200 V240 M270 205 L275 235 M330 205 L325 235" stroke="#ef7d57" stroke-width="12" stroke-linecap="round"/>
+        <circle cx="255" cy="300" r="18" fill="#3fa796"/>
+        <circle cx="345" cy="300" r="18" fill="#3fa796"/>
+        <ellipse cx="255" cy="300" rx="5" ry="14" fill="#3b3226"/>
+        <ellipse cx="345" cy="300" rx="5" ry="14" fill="#3b3226"/>
+        <polygon points="290,330 310,330 300,345" fill="#ef7d57"/>
+        <path d="M300 345 Q288 362 278 352 M300 345 Q312 362 322 352" fill="none" stroke="#3b3226" stroke-width="4" stroke-linecap="round"/>
+        <path d="M200 330 L140 320 M200 345 L140 350 M400 330 L460 320 M400 345 L460 350" stroke="#3b3226" stroke-width="3" stroke-linecap="round"/>
+      </svg>` },
+    { name: 'Робот', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+        <rect width="600" height="600" fill="#bddcf3"/>
+        <rect x="296" y="60" width="8" height="46" fill="#3b3226"/>
+        <circle cx="300" cy="55" r="12" fill="#ef7d57"/>
+        <rect x="200" y="100" width="200" height="150" rx="30" fill="#fffdf7"/>
+        <circle cx="250" cy="170" r="22" fill="#3fa796"/>
+        <circle cx="350" cy="170" r="22" fill="#3fa796"/>
+        <rect x="260" y="205" width="80" height="12" rx="6" fill="#3b3226"/>
+        <rect x="180" y="240" width="240" height="220" rx="24" fill="#bfe3cf"/>
+        <circle cx="300" cy="330" r="24" fill="#f2c14e"/>
+        <rect x="130" y="270" width="46" height="130" rx="20" fill="#5b8fd1"/>
+        <rect x="424" y="270" width="46" height="130" rx="20" fill="#5b8fd1"/>
+        <rect x="215" y="460" width="70" height="80" rx="18" fill="#5b8fd1"/>
+        <rect x="315" y="460" width="70" height="80" rx="18" fill="#5b8fd1"/>
+        <path d="M0 540 Q150 520 300 540 T600 540 V600 H0Z" fill="#3fa796"/>
+      </svg>` },
+    { name: 'Динозаврик', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+        <rect width="600" height="600" fill="#f6e19c"/>
+        <circle cx="500" cy="100" r="50" fill="#f2c14e"/>
+        <path d="M160 380 Q60 400 90 320" fill="none" stroke="#3fa796" stroke-width="40" stroke-linecap="round"/>
+        <ellipse cx="290" cy="360" rx="150" ry="90" fill="#3fa796"/>
+        <rect x="200" y="420" width="40" height="90" rx="12" fill="#3fa796"/>
+        <rect x="320" y="420" width="40" height="90" rx="12" fill="#3fa796"/>
+        <circle cx="420" cy="230" r="60" fill="#3fa796"/>
+        <rect x="440" y="215" width="80" height="40" rx="16" fill="#3fa796"/>
+        <polygon points="470,255 486,255 478,272" fill="#fffdf7"/>
+        <polygon points="440,255 456,255 448,270" fill="#fffdf7"/>
+        <circle cx="430" cy="210" r="13" fill="#fffdf7"/>
+        <circle cx="433" cy="210" r="7" fill="#3b3226"/>
+        <circle cx="250" cy="330" r="14" fill="#2f8c7b"/>
+        <circle cx="320" cy="350" r="12" fill="#2f8c7b"/>
+        <path d="M0 520 Q150 500 300 520 T600 520 V600 H0Z" fill="#ef7d57"/>
+      </svg>` },
+    { name: 'Замок', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+        <rect width="600" height="600" fill="#bddcf3"/>
+        <rect x="140" y="260" width="320" height="240" fill="#d5c7f1"/>
+        <rect x="110" y="200" width="80" height="300" fill="#d5c7f1"/>
+        <rect x="410" y="200" width="80" height="300" fill="#d5c7f1"/>
+        <polygon points="100,200 150,120 200,200" fill="#ef7d57"/>
+        <polygon points="400,200 450,120 500,200" fill="#ef7d57"/>
+        <rect x="240" y="150" width="120" height="140" fill="#d5c7f1"/>
+        <polygon points="230,150 300,60 370,150" fill="#3fa796"/>
+        <rect x="160" y="300" width="20" height="30" fill="#f2c14e"/>
+        <rect x="430" y="300" width="20" height="30" fill="#f2c14e"/>
+        <rect x="285" y="200" width="30" height="36" fill="#f2c14e"/>
+        <path d="M270 500 V420 a30 30 0 0 1 60 0 V500Z" fill="#3b3226"/>
+        <path d="M0 500 H600 V600 H0Z" fill="#3fa796"/>
       </svg>` }
   ];
   function buildPicks(){
