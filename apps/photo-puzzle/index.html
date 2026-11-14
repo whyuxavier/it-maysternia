@@ -69,7 +69,11 @@
   .hero h1{font-size:clamp(36px,6vw,60px); line-height:1.05; margin:0 0 14px; font-weight:900}
   .hero p.lead{font-size:clamp(17px,2.2vw,20px); line-height:1.5; margin:0 0 22px; max-width:30em}
   .hero-actions{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; max-width:620px}
-  .hero-actions .btn{width:100%; white-space:nowrap; text-align:center; transform:none}
+  .hero-actions .btn{
+    width:100%; padding:14px 10px; min-width:0; transform:none;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    text-align:center; line-height:1.2; white-space:normal;
+  }
   .hero-actions .btn:hover{transform:translateY(-2px)}
   .hint{font-size:14px; opacity:.7; margin-top:18px}
   .hero-art{display:grid; place-items:center}
@@ -186,9 +190,9 @@
       <h1>Зроби пазл зі свого фото!</h1>
       <p class="lead">Завантаж власне фото, зроби знімок або обери готову картинку й склади її по шматочках. Перетягуй шматочки мишкою, і коли шматочок буде поруч зі своїм місцем, він сам встане.</p>
       <div class="hero-actions">
-        <button class="btn primary" id="btnFile">📁 З комп'ютера</button>
-        <button class="btn teal" id="btnCam">📷 Знімок</button>
-        <button class="btn blue" id="btnBuiltin">🖼️ Готові картинки</button>
+        <button class="btn primary" id="btnFile"><span aria-hidden="true">📁</span><span>З комп'ютера</span></button>
+        <button class="btn teal" id="btnCam"><span aria-hidden="true">📷</span><span>Знімок</span></button>
+        <button class="btn blue" id="btnBuiltin"><span aria-hidden="true">🖼️</span><span>Готові картинки</span></button>
       </div>
     </div>
 
