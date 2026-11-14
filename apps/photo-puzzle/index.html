@@ -111,11 +111,14 @@
   .grid-ctrl:focus-visible{outline:3px solid var(--mustard); outline-offset:3px}
   #gridLabel{min-width:64px; text-align:center; font-variant-numeric:tabular-nums}
   .size-grid{
-    display:grid; grid-template-columns:repeat(32,1fr); gap:2px; width:min(88vw,420px); aspect-ratio:1;
+    position:relative; display:grid; grid-template-columns:repeat(12,1fr); width:min(88vw,380px); aspect-ratio:1;
     margin:14px auto 0; touch-action:none; user-select:none; cursor:pointer;
   }
-  .size-grid i{background:var(--slot); border-radius:2px; display:block}
-  .size-grid i.on{background:var(--coral)}
+  .size-grid i{background:var(--slot); box-shadow:inset 0 0 0 2px var(--card); display:block}
+  .size-box{
+    position:absolute; pointer-events:none; border:3px solid var(--coral); border-radius:10px;
+    background:color-mix(in srgb,var(--coral) 40%,transparent); transition:all .12s ease;
+  }
   #sizeInfo{font-size:28px; font-weight:900; text-align:center; margin:12px 0 0}
   .stage{
     position:relative; flex:1; min-height:380px; border-radius:24px;
@@ -707,29 +710,32 @@
     updateSoundBtn();
   });
 
-  // вибір розміру: сітка 32×32, підсвічуємо N×N під курсором/пальцем
+  // вибір розміру: поле 12×12, рамка росте від центру до країв
+  const MAX_N = 12, MIN_N = 3;
   const sizeGrid = $('#sizeGrid');
-  let sizeCells = '';
-  for (let r = 0; r < 32; r++) for (let c = 0; c < 32; c++) sizeCells += '<i data-r="' + r + '" data-c="' + c + '"></i>';
-  sizeGrid.innerHTML = sizeCells;
-  const cellEls = Array.from(sizeGrid.children);
+  sizeGrid.innerHTML = '<i></i>'.repeat(MAX_N * MAX_N);
+  const sizeBox = document.createElement('div');
+  sizeBox.className = 'size-box';
+  sizeGrid.appendChild(sizeBox);
   function previewSize(n){
     $('#sizeInfo').textContent = n + '×' + n;
-    cellEls.forEach(el => {
-      const r = +el.dataset.r, c = +el.dataset.c;
-      el.classList.toggle('on', r < n && c < n);
-    });
+    const p = n / MAX_N * 100, off = (MAX_N - n) / 2 / MAX_N * 100;
+    sizeBox.style.left = off + '%';
+    sizeBox.style.top = off + '%';
+    sizeBox.style.width = p + '%';
+    sizeBox.style.height = p + '%';
   }
+  // відстань від центру поля: чим далі від центру, тим більший розмір
   function sizeFromEvent(e){
-    const el = e.target.closest('i');
-    if (!el) return null;
-    const n = Math.max(3, +el.dataset.r + 1, +el.dataset.c + 1);
-    return n;
+    const r = sizeGrid.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width * MAX_N - MAX_N / 2;
+    const y = (e.clientY - r.top) / r.height * MAX_N - MAX_N / 2;
+    const d = Math.max(Math.abs(x), Math.abs(y));
+    return Math.min(MAX_N, Math.max(MIN_N, Math.round(d * 2)));
   }
-  sizeGrid.addEventListener('pointermove', e => { const n = sizeFromEvent(e); if (n) previewSize(n); });
+  sizeGrid.addEventListener('pointermove', e => previewSize(sizeFromEvent(e)));
   sizeGrid.addEventListener('pointerdown', e => {
     const n = sizeFromEvent(e);
-    if (!n) return;
     previewSize(n);
     setSize(n);
     $('#sizeDlg').close();
