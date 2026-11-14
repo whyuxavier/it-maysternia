@@ -101,11 +101,20 @@
     font-variant-numeric:tabular-nums; min-width:100px; justify-content:center;
   }
   .grid-ctrl{
-    display:flex; align-items:center; gap:10px; background:var(--card); border-radius:16px;
-    padding:8px 14px; box-shadow:var(--shadow); font-weight:800; font-size:20px;
+    display:flex; align-items:center; gap:10px; background:var(--card); border:0; border-radius:16px;
+    padding:8px 14px; box-shadow:var(--shadow); font:inherit; font-weight:800; font-size:20px; color:var(--ink);
+    cursor:pointer; transform:rotate(-0.6deg); transition:transform .12s ease;
   }
-  .grid-ctrl input{width:150px; accent-color:var(--coral); cursor:pointer}
+  .grid-ctrl:hover{transform:rotate(0deg) translateY(-2px)}
+  .grid-ctrl:focus-visible{outline:3px solid var(--mustard); outline-offset:3px}
   #gridLabel{min-width:64px; text-align:center; font-variant-numeric:tabular-nums}
+  .size-grid{
+    display:grid; grid-template-columns:repeat(32,1fr); gap:2px; width:min(88vw,420px); aspect-ratio:1;
+    margin:14px auto 0; touch-action:none; user-select:none; cursor:pointer;
+  }
+  .size-grid i{background:var(--slot); border-radius:2px; display:block}
+  .size-grid i.on{background:var(--coral)}
+  #sizeInfo{font-size:28px; font-weight:900; text-align:center; margin:12px 0 0}
   .stage{
     position:relative; flex:1; min-height:380px; border-radius:24px;
     background:var(--card); box-shadow:var(--shadow); overflow:hidden;
@@ -145,7 +154,6 @@
 
   @media (max-width:640px){
     .chip, .grid-ctrl{font-size:17px; min-width:0}
-    .grid-ctrl input{width:110px}
     #game{height:calc(100dvh - 70px)}
   }
 </style>
@@ -216,10 +224,10 @@
     <div class="hud">
       <div class="chip" title="Час"><span aria-hidden="true">⏱️</span><span id="timer">00:00</span></div>
       <div class="chip" title="Шматочки"><span aria-hidden="true">🧩</span><span id="count">0/9</span></div>
-      <label class="grid-ctrl" title="Розмір пазла">
+      <button class="grid-ctrl" id="sizeBtn" title="Розмір пазла" aria-label="Обрати розмір пазла">
+        <span aria-hidden="true">▦</span>
         <span id="gridLabel">3×3</span>
-        <input type="range" id="grid" min="3" max="32" value="3" aria-label="Розмір пазла">
-      </label>
+      </button>
       <button class="btn round" id="shuffleBtn" title="Перемішати" aria-label="Перемішати">🔀</button>
       <button class="btn round" id="previewBtn" title="Зразок" aria-label="Показати зразок"><img id="thumb" alt=""></button>
       <button class="btn round" id="soundBtn" title="Звук" aria-label="Звук"></button>
@@ -274,6 +282,14 @@
 </dialog>
 
 <!-- ПЕРЕМОГА -->
+<!-- РОЗМІР ПАЗЛА -->
+<dialog id="sizeDlg">
+  <h2>Скільки шматочків?</h2>
+  <div class="size-grid" id="sizeGrid"></div>
+  <p id="sizeInfo">3×3</p>
+  <div class="dlg-actions"><button class="btn" data-close>Закрити</button></div>
+</dialog>
+
 <dialog id="winDlg">
   <h2>Молодець! 🎉</h2>
   <p>Пазл складено за <b id="winTime">00:00</b></p>
@@ -689,11 +705,41 @@
     updateSoundBtn();
   });
 
-  const grid = $('#grid');
-  grid.addEventListener('input', () => { const v = +grid.value; $('#gridLabel').textContent = v + '×' + v; });
-  grid.addEventListener('change', () => {
-    state.N = +grid.value;
+  // вибір розміру: сітка 32×32, підсвічуємо N×N під курсором/пальцем
+  const sizeGrid = $('#sizeGrid');
+  let sizeCells = '';
+  for (let r = 0; r < 32; r++) for (let c = 0; c < 32; c++) sizeCells += '<i data-r="' + r + '" data-c="' + c + '"></i>';
+  sizeGrid.innerHTML = sizeCells;
+  const cellEls = Array.from(sizeGrid.children);
+  function previewSize(n){
+    $('#sizeInfo').textContent = n + '×' + n;
+    cellEls.forEach(el => {
+      const r = +el.dataset.r, c = +el.dataset.c;
+      el.classList.toggle('on', r < n && c < n);
+    });
+  }
+  function sizeFromEvent(e){
+    const el = e.target.closest('i');
+    if (!el) return null;
+    const n = Math.max(3, +el.dataset.r + 1, +el.dataset.c + 1);
+    return n;
+  }
+  sizeGrid.addEventListener('pointermove', e => { const n = sizeFromEvent(e); if (n) previewSize(n); });
+  sizeGrid.addEventListener('pointerdown', e => {
+    const n = sizeFromEvent(e);
+    if (!n) return;
+    previewSize(n);
+    setSize(n);
+    $('#sizeDlg').close();
+  });
+  function setSize(n){
+    state.N = n;
+    $('#gridLabel').textContent = n + '×' + n;
     if (state.src) newPuzzle();
+  }
+  $('#sizeBtn').addEventListener('click', () => {
+    previewSize(state.N);
+    $('#sizeDlg').showModal();
   });
 
   // закриття вікон: кнопки з data-close і клік поза вікном
