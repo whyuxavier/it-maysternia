@@ -162,9 +162,9 @@
     position:fixed; left:50%; bottom:24px; transform:translate(-50%,140%);
     background:var(--ink); color:#fff; padding:12px 20px; border-radius:14px;
     font-weight:700; box-shadow:var(--shadow); transition:transform .3s ease; z-index:50;
-    max-width:90vw; text-align:center;
+    max-width:90vw; text-align:center; visibility:hidden;
   }
-  #toast.show{transform:translate(-50%,0)}
+  #toast.show{transform:translate(-50%,0); visibility:visible}
 
   @media (max-width:640px){
     .chip, .grid-ctrl{font-size:17px; min-width:0}
@@ -200,6 +200,7 @@
     <div class="hero-art">
       <svg class="hero-svg" viewBox="0 0 400 320" role="img" aria-label="Пазл на дошці: шматочок переїжджає на порожнє місце, поруч курсор миші">
         <defs>
+          <filter id="ps" filterUnits="userSpaceOnUse" x="0" y="0" width="600" height="600"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#2a2018" flood-opacity=".38"/></filter>
           <!-- ракета: та сама сцена, що й готова картинка -->
           <g id="rocketScene">
             <rect width="600" height="600" fill="#2c3e66"/>
@@ -421,129 +422,176 @@
     img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
   }
 
-  // ---------- готові картинки (паперові ілюстрації) ----------
+  // ---------- готові картинки (паперова аплікація з шарами й тінями) ----------
+  const L = s => '<g filter="url(#ps)">' + s + '</g>';
+  const PS_FILTER = '<filter id="ps" filterUnits="userSpaceOnUse" x="0" y="0" width="600" height="600"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#2a2018" flood-opacity=".38"/></filter>';
+  const wrapArt = body => '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><defs>' + PS_FILTER +
+    '<filter id="pg" filterUnits="userSpaceOnUse" x="0" y="0" width="600" height="600"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .3  0 0 0 0 .25  0 0 0 0 .2  0 0 0 .13 0"/></filter></defs>' +
+    body + '<rect width="600" height="600" filter="url(#pg)"/></svg>';
+  const starP = (x, y, r, c) => `<path fill="${c}" d="M${x} ${y - r}Q${x} ${y} ${x + r} ${y}Q${x} ${y} ${x} ${y + r}Q${x} ${y} ${x - r} ${y}Q${x} ${y} ${x} ${y - r}Z"/>`;
+  const cloud = (x, y, s, c) => `<g transform="translate(${x} ${y}) scale(${s})" fill="${c}"><circle r="30"/><circle cx="38" cy="-16" r="38"/><circle cx="80" r="30"/><rect x="-30" width="140" height="30" rx="15"/></g>`;
+  const gear = (x, y, r, c, hole) => `<g transform="translate(${x} ${y})" fill="${c}">` +
+    [0, 45, 90, 135].map(a => `<rect x="${-r * 0.22}" y="${-r * 1.28}" width="${r * 0.44}" height="${r * 2.56}" rx="${r * 0.1}" transform="rotate(${a})"/>`).join('') +
+    `<circle r="${r}"/><circle r="${r * 0.38}" fill="${hole}"/></g>`;
+  const flower = (x, y, c) => `<path d="M${x} ${y}V${y + 46}" stroke="#4f9a5f" stroke-width="6" stroke-linecap="round"/>` +
+    [0, 72, 144, 216, 288].map(a => `<circle cx="${x}" cy="${y - 13}" r="10" fill="${c}" transform="rotate(${a} ${x} ${y})"/>`).join('') + `<circle cx="${x}" cy="${y}" r="8" fill="#f6d365"/>`;
+  const fan = (x, y, s, c, n) => `<g transform="translate(${x} ${y}) scale(${s})" fill="${c}">` +
+    Array.from({ length: n }, (_, i) => `<path d="M0 0Q34 -70 0 -170Q-34 -70 0 0Z" transform="rotate(${-64 + i * 128 / (n - 1)})"/>`).join('') + '</g>';
+  const win = (x, y) => `<rect x="${x - 18}" y="${y}" width="16" height="66" rx="3" fill="#4f7fc4"/><rect x="${x + 52}" y="${y}" width="16" height="66" rx="3" fill="#4f7fc4"/>` +
+    `<rect x="${x}" y="${y}" width="50" height="66" rx="4" fill="#fffdf7"/><rect x="${x + 6}" y="${y + 6}" width="38" height="54" fill="#a8d0ee"/>` +
+    `<path d="M${x + 25} ${y + 6}v54M${x + 6} ${y + 33}h38" stroke="#fffdf7" stroke-width="5"/><rect x="${x - 6}" y="${y + 66}" width="62" height="9" rx="3" fill="#c9a27a"/>`;
+  const merlons = (x, y, w, n, c) => { const mw = w / (2 * n - 1); let o = ''; for (let i = 0; i < n; i++) o += `<rect x="${x + i * 2 * mw}" y="${y}" width="${mw}" height="24" fill="${c}"/>`; return o; };
+  const arch = (x, y) => `<path d="M${x} ${y}v-24a11 11 0 0 1 22 0v24z" fill="#5a4636"/>`;
+  const wave = (y, c) => L(`<path fill="${c}" d="M0 ${y}Q75 ${y - 34} 150 ${y}T300 ${y}T450 ${y}T600 ${y}V600H0Z"/>`);
+  let scales = '';
+  for (let r = 0; r < 9; r++) for (let i = 0; i < 9; i++) scales += `<circle cx="${440 - i * 28 - (r % 2) * 14}" cy="${200 + r * 24}" r="17" fill="${(r + i) % 3 ? '#f6a33c' : '#f8ba55'}" stroke="#e0703a" stroke-width="3"/>`;
+  let keys = '';
+  for (let r = 0; r < 3; r++) for (let i = 0; i < 10; i++) if (!(r === 2 && i > 1 && i < 7)) keys += `<rect x="${143 + i * 25}" y="${480 + r * 22}" width="20" height="16" rx="3" fill="#c3cddb"/>`;
+  keys += '<rect x="193" y="524" width="120" height="16" rx="3" fill="#c3cddb"/>';
+
+  const ROCKET_BODY =
+    '<rect width="600" height="600" fill="#27345f"/>' +
+    L('<path fill="#f6e19c" d="M120 62A62 62 0 1 0 186 150A50 50 0 1 1 120 62Z"/>') +
+    L(starP(430, 90, 16, '#f6e19c') + starP(520, 170, 11, '#f6e19c') + starP(250, 60, 10, '#f6e19c') + starP(80, 260, 12, '#f6e19c') + starP(500, 330, 13, '#f6e19c') + starP(150, 380, 9, '#f6e19c')) +
+    '<g fill="#fffdf7"><circle cx="360" cy="150" r="3"/><circle cx="210" cy="210" r="3"/><circle cx="560" cy="70" r="3"/><circle cx="60" cy="150" r="3"/><circle cx="450" cy="250" r="3"/><circle cx="120" cy="320" r="3"/></g>' +
+    L('<g fill="#c7d2ea"><circle cx="60" cy="560" r="80"/><circle cx="190" cy="585" r="70"/><circle cx="420" cy="590" r="75"/><circle cx="550" cy="550" r="85"/></g>') +
+    L('<path fill="#f08a3c" d="M262 440Q300 600 338 440Z"/><path fill="#f6d365" d="M279 440Q300 535 321 440Z"/>') +
+    L('<path fill="#e0584a" d="M246 325Q188 378 184 455L252 422Z"/><path fill="#e0584a" d="M354 325Q412 378 416 455L348 422Z"/>') +
+    L('<path fill="#fffdf7" d="M300 88C372 160 374 330 350 432H250C226 330 228 160 300 88Z"/><path fill="#cfd8ea" d="M245 398H355L350 432H250Z"/>') +
+    L('<path fill="#e0584a" d="M300 88C332 120 349 160 357 196H243C251 160 268 120 300 88Z"/>') +
+    L('<circle cx="300" cy="275" r="46" fill="#e0584a"/>') +
+    L('<circle cx="300" cy="275" r="31" fill="#5b8fd1"/><circle cx="289" cy="264" r="10" fill="#a9cbf0"/>') +
+    L('<rect x="291" y="352" width="18" height="92" rx="9" fill="#e0584a"/>') +
+    L('<path fill="#6b7388" d="M262 432H338L328 456H272Z"/>') +
+    L('<g fill="#fffdf7"><circle cx="130" cy="600" r="70"/><circle cx="300" cy="620" r="80"/><circle cx="480" cy="605" r="70"/><circle cx="10" cy="610" r="60"/><circle cx="600" cy="620" r="60"/></g>');
+
   const BUILTIN = [
-    { name: 'Будиночок', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-        <rect width="600" height="600" fill="#bfe3f5"/>
-        <circle cx="480" cy="120" r="60" fill="#f2c14e"/>
-        <path d="M0 420 Q150 340 300 410 T600 400 V600 H0Z" fill="#3fa796"/>
-        <rect x="160" y="270" width="280" height="220" fill="#fffdf7"/>
-        <path d="M130 290 L300 150 L470 290 Z" fill="#ef7d57"/>
-        <rect x="270" y="360" width="60" height="130" fill="#5b8fd1"/>
-        <rect x="190" y="310" width="60" height="60" fill="#f2c14e"/>
-        <rect x="350" y="310" width="60" height="60" fill="#f2c14e"/>
-      </svg>` },
-    { name: 'Ракета', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-        <rect width="600" height="600" fill="#2c3e66"/>
-        <circle cx="80" cy="80" r="4" fill="#fffdf7"/><circle cx="200" cy="140" r="3" fill="#fffdf7"/>
-        <circle cx="520" cy="90" r="4" fill="#fffdf7"/><circle cx="460" cy="260" r="3" fill="#fffdf7"/>
-        <circle cx="120" cy="300" r="3" fill="#fffdf7"/><circle cx="540" cy="380" r="4" fill="#fffdf7"/>
-        <circle cx="120" cy="480" r="90" fill="#ef7d57"/>
-        <path d="M265 430 Q300 520 335 430Z" fill="#f2c14e"/>
-        <path d="M300 120 C360 180 370 330 350 430 L250 430 C230 330 240 180 300 120Z" fill="#fffdf7"/>
-        <path d="M250 360 L210 430 L250 430Z" fill="#ef7d57"/>
-        <path d="M350 360 L390 430 L350 430Z" fill="#ef7d57"/>
-        <circle cx="300" cy="260" r="40" fill="#5b8fd1"/>
-      </svg>` },
-    { name: 'Рибка', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-        <rect width="600" height="600" fill="#8fd3e8"/>
-        <path d="M0 420 Q75 380 150 420 T300 420 T450 420 T600 420 V600 H0Z" fill="#3fa796"/>
-        <circle cx="120" cy="150" r="14" fill="none" stroke="#fffdf7" stroke-width="4"/>
-        <circle cx="150" cy="95" r="9" fill="none" stroke="#fffdf7" stroke-width="4"/>
-        <path d="M450 290 L560 220 L560 360Z" fill="#f2c14e"/>
-        <ellipse cx="300" cy="290" rx="170" ry="110" fill="#ef7d57"/>
-        <path d="M290 190 Q320 120 360 190Z" fill="#f2c14e"/>
-        <circle cx="220" cy="270" r="20" fill="#fffdf7"/>
-        <circle cx="225" cy="270" r="9" fill="#3b3226"/>
-      </svg>` },
-    { name: 'Комп\'ютер', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-        <rect width="600" height="600" fill="#8fd3e8"/>
-        <rect x="100" y="90" width="400" height="270" rx="18" fill="#3b3226"/>
-        <rect x="120" y="110" width="360" height="220" rx="10" fill="#2c3e66"/>
-        <rect x="140" y="135" width="120" height="12" rx="6" fill="#3fa796"/>
-        <rect x="140" y="160" width="200" height="12" rx="6" fill="#f2c14e"/>
-        <rect x="160" y="185" width="150" height="12" rx="6" fill="#ef7d57"/>
-        <rect x="140" y="210" width="90" height="12" rx="6" fill="#5b8fd1"/>
-        <circle cx="430" cy="210" r="30" fill="#ef7d57"/>
-        <rect x="280" y="360" width="40" height="50" fill="#3b3226"/>
-        <rect x="210" y="405" width="180" height="22" rx="11" fill="#3b3226"/>
-        <rect x="150" y="450" width="300" height="50" rx="10" fill="#fffdf7"/>
-        <rect x="170" y="466" width="22" height="18" rx="4" fill="#e6dac3"/><rect x="202" y="466" width="22" height="18" rx="4" fill="#e6dac3"/>
-        <rect x="234" y="466" width="22" height="18" rx="4" fill="#e6dac3"/><rect x="266" y="466" width="22" height="18" rx="4" fill="#e6dac3"/>
-        <rect x="298" y="466" width="22" height="18" rx="4" fill="#e6dac3"/><rect x="330" y="466" width="22" height="18" rx="4" fill="#e6dac3"/>
-        <rect x="362" y="466" width="22" height="18" rx="4" fill="#e6dac3"/>
-        <ellipse cx="490" cy="470" rx="24" ry="34" fill="#fffdf7" stroke="#3b3226" stroke-width="3"/>
-        <path d="M0 520 Q150 500 300 520 T600 520 V600 H0Z" fill="#3fa796"/>
-      </svg>` },
-    { name: 'Фіфі', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-        <rect width="600" height="600" fill="#f6e19c"/>
-        <path d="M420 500 Q510 480 480 390" fill="none" stroke="#f6c6a6" stroke-width="28" stroke-linecap="round"/>
-        <ellipse cx="300" cy="470" rx="130" ry="90" fill="#f6c6a6"/>
-        <ellipse cx="250" cy="550" rx="35" ry="18" fill="#fffdf7"/>
-        <ellipse cx="350" cy="550" rx="35" ry="18" fill="#fffdf7"/>
-        <polygon points="190,230 205,120 290,205" fill="#f6c6a6"/>
-        <polygon points="410,230 395,120 310,205" fill="#f6c6a6"/>
-        <polygon points="205,205 210,150 255,195" fill="#ef7d57"/>
-        <polygon points="395,205 390,150 345,195" fill="#ef7d57"/>
-        <ellipse cx="300" cy="300" rx="120" ry="105" fill="#f6c6a6"/>
-        <path d="M300 200 V240 M270 205 L275 235 M330 205 L325 235" stroke="#ef7d57" stroke-width="12" stroke-linecap="round"/>
-        <circle cx="255" cy="300" r="18" fill="#3fa796"/>
-        <circle cx="345" cy="300" r="18" fill="#3fa796"/>
-        <ellipse cx="255" cy="300" rx="5" ry="14" fill="#3b3226"/>
-        <ellipse cx="345" cy="300" rx="5" ry="14" fill="#3b3226"/>
-        <polygon points="290,330 310,330 300,345" fill="#ef7d57"/>
-        <path d="M300 345 Q288 362 278 352 M300 345 Q312 362 322 352" fill="none" stroke="#3b3226" stroke-width="4" stroke-linecap="round"/>
-        <path d="M200 330 L140 320 M200 345 L140 350 M400 330 L460 320 M400 345 L460 350" stroke="#3b3226" stroke-width="3" stroke-linecap="round"/>
-      </svg>` },
-    { name: 'Робот', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-        <rect width="600" height="600" fill="#bddcf3"/>
-        <rect x="296" y="60" width="8" height="46" fill="#3b3226"/>
-        <circle cx="300" cy="55" r="12" fill="#ef7d57"/>
-        <rect x="200" y="100" width="200" height="150" rx="30" fill="#fffdf7"/>
-        <circle cx="250" cy="170" r="22" fill="#3fa796"/>
-        <circle cx="350" cy="170" r="22" fill="#3fa796"/>
-        <rect x="260" y="205" width="80" height="12" rx="6" fill="#3b3226"/>
-        <rect x="180" y="240" width="240" height="220" rx="24" fill="#bfe3cf"/>
-        <circle cx="300" cy="330" r="24" fill="#f2c14e"/>
-        <rect x="130" y="270" width="46" height="130" rx="20" fill="#5b8fd1"/>
-        <rect x="424" y="270" width="46" height="130" rx="20" fill="#5b8fd1"/>
-        <rect x="215" y="460" width="70" height="80" rx="18" fill="#5b8fd1"/>
-        <rect x="315" y="460" width="70" height="80" rx="18" fill="#5b8fd1"/>
-        <path d="M0 540 Q150 520 300 540 T600 540 V600 H0Z" fill="#3fa796"/>
-      </svg>` },
-    { name: 'Динозаврик', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-        <rect width="600" height="600" fill="#f6e19c"/>
-        <circle cx="500" cy="100" r="50" fill="#f2c14e"/>
-        <path d="M160 380 Q60 400 90 320" fill="none" stroke="#3fa796" stroke-width="40" stroke-linecap="round"/>
-        <ellipse cx="290" cy="360" rx="150" ry="90" fill="#3fa796"/>
-        <rect x="200" y="420" width="40" height="90" rx="12" fill="#3fa796"/>
-        <rect x="320" y="420" width="40" height="90" rx="12" fill="#3fa796"/>
-        <circle cx="420" cy="230" r="60" fill="#3fa796"/>
-        <rect x="440" y="215" width="80" height="40" rx="16" fill="#3fa796"/>
-        <polygon points="470,255 486,255 478,272" fill="#fffdf7"/>
-        <polygon points="440,255 456,255 448,270" fill="#fffdf7"/>
-        <circle cx="430" cy="210" r="13" fill="#fffdf7"/>
-        <circle cx="433" cy="210" r="7" fill="#3b3226"/>
-        <circle cx="250" cy="330" r="14" fill="#2f8c7b"/>
-        <circle cx="320" cy="350" r="12" fill="#2f8c7b"/>
-        <path d="M0 520 Q150 500 300 520 T600 520 V600 H0Z" fill="#ef7d57"/>
-      </svg>` },
-    { name: 'Замок', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-        <rect width="600" height="600" fill="#bddcf3"/>
-        <rect x="140" y="260" width="320" height="240" fill="#d5c7f1"/>
-        <rect x="110" y="200" width="80" height="300" fill="#d5c7f1"/>
-        <rect x="410" y="200" width="80" height="300" fill="#d5c7f1"/>
-        <polygon points="100,200 150,120 200,200" fill="#ef7d57"/>
-        <polygon points="400,200 450,120 500,200" fill="#ef7d57"/>
-        <rect x="240" y="150" width="120" height="140" fill="#d5c7f1"/>
-        <polygon points="230,150 300,60 370,150" fill="#3fa796"/>
-        <rect x="160" y="300" width="20" height="30" fill="#f2c14e"/>
-        <rect x="430" y="300" width="20" height="30" fill="#f2c14e"/>
-        <rect x="285" y="200" width="30" height="36" fill="#f2c14e"/>
-        <path d="M270 500 V420 a30 30 0 0 1 60 0 V500Z" fill="#3b3226"/>
-        <path d="M0 500 H600 V600 H0Z" fill="#3fa796"/>
-      </svg>` }
+    { name: 'Будиночок', body:
+      '<rect width="600" height="600" fill="#bfe3f5"/>' +
+      L('<circle cx="480" cy="105" r="62" fill="#f8dc7a"/>') + L('<circle cx="480" cy="105" r="44" fill="#f2c14e"/>') +
+      L(cloud(70, 130, 1, '#fffdf7')) + L(cloud(300, 80, .65, '#fffdf7')) +
+      L('<path fill="#9ed0a4" d="M0 430Q120 360 260 410T600 380V600H0Z"/>') +
+      L('<path fill="#6fb983" d="M0 485Q160 440 320 478T600 455V600H0Z"/>') +
+      L('<rect x="368" y="172" width="42" height="90" fill="#c9604a"/><rect x="361" y="162" width="56" height="18" rx="4" fill="#a94a38"/>') +
+      L('<path fill="#fbf1d9" d="M170 290L300 172L430 290V500H170Z"/>') +
+      L('<path fill="#e0584a" d="M132 296L300 144L468 296L442 320L300 192L158 320Z"/>') +
+      L('<circle cx="300" cy="252" r="24" fill="#fffdf7"/><circle cx="300" cy="252" r="16" fill="#a8d0ee"/><path d="M300 236v32M284 252h32" stroke="#fffdf7" stroke-width="4"/>') +
+      L(win(192, 330)) + L(win(358, 330)) +
+      L('<rect x="266" y="394" width="68" height="106" rx="6" fill="#7a4e33"/><rect x="273" y="401" width="54" height="99" rx="3" fill="#a8703f"/><rect x="281" y="410" width="38" height="34" rx="3" fill="#8f5c34"/><rect x="281" y="452" width="38" height="40" rx="3" fill="#8f5c34"/><circle cx="318" cy="450" r="5" fill="#f2c14e"/>') +
+      L('<rect x="254" y="496" width="92" height="14" rx="4" fill="#d9c6a0"/>') +
+      L('<path fill="#ead9b5" d="M262 600Q276 548 280 510H320Q328 548 352 600Z"/>') +
+      L('<g fill="#3f9a6a"><circle cx="150" cy="505" r="34"/><circle cx="190" cy="512" r="26"/><circle cx="452" cy="505" r="34"/><circle cx="412" cy="512" r="26"/></g>') +
+      L(flower(90, 520, '#ef7d57')) + L(flower(520, 530, '#fffdf7')) + L(flower(560, 505, '#e58fb0')) },
+    { name: 'Ракета', body: ROCKET_BODY },
+    { name: 'Рибка', body:
+      '<defs><clipPath id="fc"><ellipse cx="300" cy="300" rx="140" ry="95"/></clipPath></defs>' +
+      '<rect width="600" height="600" fill="#a5dff0"/>' +
+      wave(90, '#6cc6e4') + wave(210, '#3fa9d6') + wave(340, '#2a8dc4') +
+      '<g fill="none" stroke="#e6f6fb" stroke-width="5"><circle cx="110" cy="250" r="16"/><circle cx="140" cy="190" r="10"/><circle cx="96" cy="150" r="7"/><circle cx="500" cy="160" r="12"/><circle cx="525" cy="110" r="7"/></g>' +
+      L('<path d="M60 600Q30 520 62 460T56 330" fill="none" stroke="#3fa796" stroke-width="18" stroke-linecap="round"/>') +
+      L('<path d="M540 600Q575 530 545 470T556 370" fill="none" stroke="#57b98f" stroke-width="18" stroke-linecap="round"/>') +
+      L('<path d="M130 600V500M130 550Q95 530 96 480M130 530Q170 510 164 462M130 500Q118 470 136 440" fill="none" stroke="#f2c14e" stroke-width="18" stroke-linecap="round"/>') +
+      L('<path d="M455 600V490M455 545Q418 522 420 470M455 525Q496 500 490 450M455 490Q445 455 462 428" fill="none" stroke="#ee7f8c" stroke-width="18" stroke-linecap="round"/>') +
+      wave(540, '#1f73ab') +
+      L('<path fill="#f08a3c" d="M410 300L520 205Q494 300 520 395Z"/><path d="M440 285L500 240M446 300H500M440 315L500 360" stroke="#d96a2c" stroke-width="5" stroke-linecap="round"/>') +
+      L('<path fill="#f08a3c" d="M240 222Q300 135 390 232Z"/><path fill="#f08a3c" d="M270 386Q310 440 356 382Z"/>') +
+      L('<ellipse cx="300" cy="300" rx="140" ry="95" fill="#f6a33c"/><g clip-path="url(#fc)">' + scales + '</g>') +
+      L('<path fill="#f6d365" d="M160 300A140 95 0 0 1 250 211Q282 300 250 389A140 95 0 0 1 160 300Z"/>') +
+      L('<path fill="#e0703a" d="M296 318Q356 326 344 378Q306 372 296 318Z"/>') +
+      '<circle cx="212" cy="278" r="18" fill="#fffdf7"/><circle cx="216" cy="279" r="9" fill="#3b3226"/><circle cx="219" cy="275" r="3" fill="#fffdf7"/>' +
+      '<path d="M168 322Q183 332 197 322" fill="none" stroke="#b8571f" stroke-width="5" stroke-linecap="round"/>' },
+    { name: 'Комп\'ютер', body:
+      '<rect width="600" height="600" fill="#a9bfd2"/>' +
+      L('<rect x="40" y="60" width="110" height="80" rx="6" fill="#fffdf7"/><path fill="#6fb983" d="M48 132L80 96L100 116L118 100L142 132Z"/><circle cx="118" cy="84" r="9" fill="#f2c14e"/>') +
+      L('<rect y="440" width="600" height="160" fill="#4d586b"/>') +
+      L('<path fill="#c9604a" d="M34 392H98L90 442H42Z"/>') + L(fan(66, 396, .55, '#4f9a5f', 5)) +
+      L('<path fill="#6b7388" d="M268 348H332L344 412H256Z"/>') + L('<rect x="212" y="404" width="176" height="20" rx="10" fill="#8a93a5"/>') +
+      L('<rect x="106" y="86" width="388" height="270" rx="18" fill="#3a3f4b"/>') +
+      L('<rect x="124" y="104" width="352" height="214" rx="6" fill="#f2f5f9"/><path fill="#c9d3e0" d="M124 132V110a6 6 0 0 1 6-6H470a6 6 0 0 1 6 6V132Z"/>' +
+        '<circle cx="140" cy="118" r="5" fill="#e0584a"/><circle cx="156" cy="118" r="5" fill="#f2c14e"/><circle cx="172" cy="118" r="5" fill="#57b98f"/>' +
+        '<rect x="124" y="132" width="72" height="186" fill="#dde5ee"/><g fill="#a9b6c8"><rect x="136" y="148" width="48" height="8" rx="4"/><rect x="136" y="168" width="38" height="8" rx="4"/><rect x="136" y="188" width="44" height="8" rx="4"/><rect x="136" y="208" width="32" height="8" rx="4"/></g>' +
+        '<rect x="212" y="148" width="130" height="12" rx="6" fill="#5b8fd1"/><g fill="#b9c4d4"><rect x="212" y="174" width="150" height="9" rx="4"/><rect x="212" y="194" width="120" height="9" rx="4"/><rect x="212" y="214" width="140" height="9" rx="4"/><rect x="212" y="234" width="90" height="9" rx="4"/></g>' +
+        '<rect x="382" y="148" width="78" height="70" rx="6" fill="#bcd6f2"/><path fill="#5b8fd1" d="M388 212L410 184L424 198L438 180L454 212Z"/>' +
+        '<rect x="212" y="266" width="70" height="30" rx="8" fill="#ef7d57"/><rect x="292" y="266" width="70" height="30" rx="8" fill="#57b98f"/>') +
+      '<circle cx="300" cy="337" r="6" fill="#8a93a5"/>' +
+      L('<rect x="130" y="468" width="274" height="84" rx="10" fill="#f2f5f9"/>' + keys) +
+      L('<ellipse cx="462" cy="510" rx="27" ry="40" fill="#f2f5f9"/><path d="M462 472v30" stroke="#c3cddb" stroke-width="4" stroke-linecap="round"/>') +
+      L('<path d="M556 396a20 20 0 0 1 0 40" fill="none" stroke="#ef7d57" stroke-width="10"/><rect x="508" y="380" width="52" height="66" rx="8" fill="#ef7d57"/>') },
+    { name: 'Фіфі', body:
+      '<rect width="600" height="600" fill="#fbe9b8"/>' +
+      L('<circle cx="300" cy="300" r="250" fill="#fdf3d2"/>') +
+      L('<path fill="#b9dfa0" d="M0 525Q300 470 600 525V600H0Z"/>') +
+      L('<path d="M392 505Q505 505 488 400Q482 362 448 372" fill="none" stroke="#f2a868" stroke-width="36" stroke-linecap="round"/><path d="M478 470l30-8M488 432l30 0M472 392l22-18" stroke="#c9703a" stroke-width="10" stroke-linecap="round"/>') +
+      L('<path fill="#f2a868" d="M196 528Q186 356 300 348Q414 356 404 528Z"/><path d="M200 440Q222 447 240 440M198 482Q222 490 242 482M400 440Q378 447 360 440M402 482Q378 490 358 482" fill="none" stroke="#c9703a" stroke-width="11" stroke-linecap="round"/>') +
+      L('<path fill="#fff3e0" d="M250 528Q244 410 300 400Q356 410 350 528Z"/>') +
+      L('<ellipse cx="262" cy="530" rx="36" ry="21" fill="#fff3e0"/><ellipse cx="338" cy="530" rx="36" ry="21" fill="#fff3e0"/>') +
+      L('<path fill="#f2a868" d="M196 222L208 100L298 182Z"/><path fill="#f2a868" d="M404 222L392 100L302 182Z"/>') +
+      L('<path fill="#f6b8a8" d="M220 196L224 136L270 178Z"/><path fill="#f6b8a8" d="M380 196L376 136L330 178Z"/>') +
+      L('<ellipse cx="300" cy="270" rx="128" ry="106" fill="#f2a868"/><path d="M300 168V212M266 174L273 210M334 174L327 210M176 262H214M180 294H216M424 262H386M420 294H384" fill="none" stroke="#c9703a" stroke-width="12" stroke-linecap="round"/>') +
+      L('<ellipse cx="300" cy="318" rx="58" ry="42" fill="#fff3e0"/>') +
+      '<circle cx="248" cy="262" r="21" fill="#3fa796"/><circle cx="352" cy="262" r="21" fill="#3fa796"/><ellipse cx="248" cy="262" rx="7" ry="16" fill="#3b3226"/><ellipse cx="352" cy="262" rx="7" ry="16" fill="#3b3226"/><circle cx="254" cy="254" r="4" fill="#fffdf7"/><circle cx="358" cy="254" r="4" fill="#fffdf7"/>' +
+      '<path fill="#e0707a" d="M287 300H313L300 316Z"/><path d="M300 316Q286 338 272 326M300 316Q314 338 328 326" fill="none" stroke="#3b3226" stroke-width="4" stroke-linecap="round"/>' +
+      '<path d="M252 316L168 300M252 326L166 330M348 316L432 300M348 326L434 330" stroke="#3b3226" stroke-width="3" stroke-linecap="round"/>' +
+      L(flower(84, 506, '#ef7d57')) + L(flower(132, 524, '#fffdf7')) + L(flower(540, 512, '#e58fb0')) },
+    { name: 'Робот', body:
+      '<rect width="600" height="600" fill="#f3dcb8"/>' +
+      L('<rect y="500" width="600" height="100" fill="#a8774f"/>') +
+      L('<path d="M96 0V44" stroke="#3b3226" stroke-width="5"/><path fill="#3fa796" d="M50 96L96 40L142 96Z"/><circle cx="96" cy="100" r="13" fill="#f8dc7a"/>') +
+      L(gear(496, 120, 46, '#8a93a5', '#f3dcb8')) + L(gear(552, 206, 28, '#57b98f', '#f3dcb8')) +
+      L('<rect x="22" y="392" width="112" height="108" rx="6" fill="#c99a66"/><rect x="32" y="404" width="92" height="38" rx="4" fill="#dab07c"/><rect x="32" y="450" width="92" height="40" rx="4" fill="#dab07c"/><circle cx="78" cy="423" r="5" fill="#7a4e33"/><circle cx="78" cy="470" r="5" fill="#7a4e33"/>') +
+      L('<path fill="#8a93a5" d="M40 392V300a14 14 0 0 1 8-13v22h12v-22a14 14 0 0 1 8 13V392Z"/><rect x="88" y="296" width="14" height="96" rx="5" fill="#e0584a"/><path fill="#8a93a5" d="M86 296L95 262L104 296Z"/>') +
+      L('<path fill="#8a93a5" d="M486 500V420H530V400H574V500Z"/><rect x="498" y="436" width="20" height="50" fill="#f3dcb8"/>') +
+      L('<rect x="226" y="408" width="56" height="76" rx="10" fill="#3fa796"/><rect x="318" y="408" width="56" height="76" rx="10" fill="#3fa796"/>') +
+      L('<rect x="210" y="474" width="88" height="36" rx="14" fill="#e0584a"/><rect x="302" y="474" width="88" height="36" rx="14" fill="#e0584a"/>') +
+      L('<rect x="138" y="258" width="50" height="122" rx="24" fill="#3fa796"/><rect x="412" y="258" width="50" height="122" rx="24" fill="#3fa796"/>') +
+      L('<path fill="#e0584a" d="M139 392a24 24 0 1 1 48 0v14h-12v-12h-24v12h-12Z"/><path fill="#e0584a" d="M413 392a24 24 0 1 1 48 0v14h-12v-12h-24v12h-12Z"/>') +
+      L('<rect x="280" y="224" width="40" height="28" fill="#8a93a5"/>') +
+      L('<rect x="194" y="244" width="212" height="172" rx="22" fill="#5bb5d6"/>') +
+      L('<rect x="220" y="268" width="160" height="122" rx="12" fill="#eaf4f8"/>') +
+      L(gear(268, 334, 24, '#e0584a', '#eaf4f8')) + L(gear(326, 350, 18, '#f2c14e', '#eaf4f8')) +
+      '<circle cx="330" cy="290" r="8" fill="#57b98f"/><circle cx="354" cy="290" r="8" fill="#f2c14e"/><rect x="232" y="280" width="56" height="8" rx="4" fill="#b9c4d4"/>' +
+      L('<path d="M300 72V108" stroke="#3b3226" stroke-width="6"/><circle cx="300" cy="62" r="13" fill="#e0584a"/>') +
+      L('<rect x="194" y="142" width="24" height="48" rx="8" fill="#e0584a"/><rect x="382" y="142" width="24" height="48" rx="8" fill="#e0584a"/>') +
+      L('<rect x="212" y="104" width="176" height="126" rx="26" fill="#5bb5d6"/>') +
+      L('<circle cx="262" cy="158" r="25" fill="#fffdf7"/><circle cx="338" cy="158" r="25" fill="#fffdf7"/>') +
+      '<circle cx="262" cy="158" r="12" fill="#3b3226"/><circle cx="338" cy="158" r="12" fill="#3b3226"/><circle cx="266" cy="153" r="4" fill="#fffdf7"/><circle cx="342" cy="153" r="4" fill="#fffdf7"/>' +
+      '<path d="M264 198Q300 222 336 198" fill="none" stroke="#3b3226" stroke-width="7" stroke-linecap="round"/>' },
+    { name: 'Динозаврик', body:
+      '<rect width="600" height="600" fill="#d6ecc4"/>' +
+      L('<rect x="70" width="38" height="600" fill="#9a7a56"/><rect x="486" width="44" height="600" fill="#9a7a56"/><rect x="250" width="26" height="600" fill="#b08d66"/>') +
+      L(fan(40, 330, 1.1, '#7fbf7a', 6)) + L(fan(570, 300, 1.1, '#7fbf7a', 6)) +
+      L('<path fill="#4f9a5f" d="M0 0H600V120Q530 170 455 118Q380 180 300 120Q220 176 148 124Q70 172 0 126Z"/>') +
+      L('<path d="M180 120Q200 210 172 270M420 118Q404 190 430 240" fill="none" stroke="#3f8552" stroke-width="8" stroke-linecap="round"/>') +
+      L('<path fill="#8ccb84" d="M0 505Q300 452 600 505V600H0Z"/>') +
+      L('<path fill="#5fae6a" d="M196 424Q84 436 46 528Q136 506 226 484Z"/>') +
+      L('<rect x="214" y="440" width="46" height="96" rx="16" fill="#4f9a5f"/><rect x="332" y="440" width="46" height="96" rx="16" fill="#4f9a5f"/>') +
+      L('<ellipse cx="292" cy="408" rx="132" ry="82" fill="#6fbf73"/><path fill="#6fbf73" d="M352 386Q398 300 418 196Q424 160 456 160L474 204Q458 300 424 426Z"/>') +
+      L('<ellipse cx="472" cy="172" rx="54" ry="37" fill="#6fbf73"/>') +
+      L('<rect x="252" y="452" width="48" height="96" rx="16" fill="#6fbf73"/><rect x="368" y="452" width="48" height="96" rx="16" fill="#6fbf73"/>') +
+      '<g fill="#4f9a5f"><circle cx="248" cy="378" r="15"/><circle cx="300" cy="362" r="11"/><circle cx="336" cy="398" r="13"/><circle cx="272" cy="420" r="9"/><circle cx="210" cy="410" r="10"/><circle cx="412" cy="300" r="9"/><circle cx="426" cy="250" r="7"/><circle cx="400" cy="350" r="8"/></g>' +
+      '<g fill="#fffdf7"><rect x="258" y="536" width="10" height="12" rx="4"/><rect x="272" y="536" width="10" height="12" rx="4"/><rect x="374" y="536" width="10" height="12" rx="4"/><rect x="388" y="536" width="10" height="12" rx="4"/></g>' +
+      '<circle cx="486" cy="160" r="10" fill="#fffdf7"/><circle cx="489" cy="161" r="5" fill="#3b3226"/><circle cx="516" cy="166" r="3" fill="#3f8552"/>' +
+      '<path d="M482 190Q504 196 520 182" fill="none" stroke="#3f8552" stroke-width="5" stroke-linecap="round"/>' +
+      L(fan(40, 620, .75, '#2f7a4a', 6)) + L(fan(565, 625, .75, '#2f7a4a', 6)) },
+    { name: 'Замок', body:
+      '<rect width="600" height="600" fill="#9fd0ee"/>' +
+      L(cloud(50, 110, .9, '#fffdf7')) + L(cloud(420, 150, 1, '#fffdf7')) + L(cloud(250, 60, .5, '#fffdf7')) +
+      L('<path fill="#8ccb84" d="M0 470Q300 372 600 470V600H0Z"/>') +
+      L('<path d="M300 100V52" stroke="#5a4636" stroke-width="5"/><path fill="#f2c14e" d="M300 52L344 66L300 80Z"/>') +
+      L('<rect x="250" y="200" width="100" height="220" fill="#c9b79a"/>' + arch(289, 270) + '<path d="M262 300h22M316 330h22M266 370h22" stroke="#b3a085" stroke-width="5" stroke-linecap="round"/>') +
+      L('<path fill="#c9604a" d="M236 204L300 98L364 204Z"/>') +
+      L('<rect x="186" y="344" width="228" height="160" fill="#d9c9ad"/>' + merlons(186, 322, 228, 6, '#d9c9ad') + '<path d="M204 380h24M372 372h24M210 440h24M366 450h24M300 366h24" stroke="#bfae90" stroke-width="5" stroke-linecap="round"/>') +
+      L('<path d="M163 172V128M437 172V128" stroke="#5a4636" stroke-width="5"/><path fill="#5b8fd1" d="M163 128L200 140L163 152Z"/><path fill="#57b98f" d="M437 128L474 140L437 152Z"/>') +
+      L('<rect x="118" y="262" width="90" height="242" fill="#c9b79a"/><rect x="392" y="262" width="90" height="242" fill="#c9b79a"/>' + arch(152, 340) + arch(426, 340) +
+        '<path d="M130 390h22M174 430h22M404 400h22M448 440h22M134 470h22M444 300h22" stroke="#b3a085" stroke-width="5" stroke-linecap="round"/>') +
+      L('<path fill="#c9604a" d="M104 266L163 168L222 266Z"/><path fill="#c9604a" d="M378 266L437 168L496 266Z"/>') +
+      L('<path fill="#7a5a3c" d="M256 504V436a44 44 0 0 1 88 0V504Z"/>') +
+      L('<path fill="#5a4030" d="M266 504V438a34 34 0 0 1 68 0V504Z"/><path d="M300 406V504M283 412V504M317 412V504" stroke="#7a5a3c" stroke-width="4"/>') +
+      L('<path fill="#6fb983" d="M0 520Q150 478 300 506T600 496V600H0Z"/>') +
+      L('<path fill="#ead9b5" d="M258 600Q276 548 272 506H328Q326 548 350 600Z"/>') +
+      L('<g fill="#3f9a6a"><circle cx="70" cy="500" r="36"/><circle cx="112" cy="512" r="26"/><circle cx="540" cy="496" r="36"/><circle cx="498" cy="510" r="26"/></g>') }
   ];
+  BUILTIN.forEach(it => { it.svg = wrapArt(it.body); });
   function buildPicks(){
     const box = $('#picks');
     BUILTIN.forEach(item => {
@@ -889,6 +937,7 @@
   window.addEventListener('resize', () => { if (state.src) layout(false); });
 
   // ---------- старт ----------
+  document.getElementById('rocketScene').innerHTML = ROCKET_BODY;
   buildPicks();
   updateSoundBtn();
   updateSizeUI();
