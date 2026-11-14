@@ -367,6 +367,7 @@ const APPS = [
   {tab:'1-4',  title:'Клавіатурний пазл',            desc:'Збери клавіатуру з розсипаних клавіш',            type:'Гра',         art:'keys',      bg:'--sky',    repo:'key-puzzle', url:GH+'it-maysternia/key-puzzle/'},
   {tab:'1-4',  title:'Мій перший ПК',                desc:'Знайомство з частинами комп\'ютера',             type:'Тренажер',    art:'firstpc',   bg:'--sky',    repo:'my-first-pc', url:GH+'it-maysternia/my-first-pc/'},
   {tab:'1-4',  title:'Пікселька',                    desc:'Малюй піксельні картинки',                        type:'Редактор',    art:'pixel',     bg:'--lilac',  repo:'pixelka'},
+  {tab:'1-4',  title:'Пазл з твого фото',            desc:'Завантаж своє фото і склади його по шматочках',  type:'Гра',         art:'photopuzzle', bg:'--butter', repo:'photo-puzzle', url:GH+'it-maysternia/apps/photo-puzzle/'},
 
   {tab:'5-7',  title:'Айті Компас',                  desc:'Дізнайся свій рівень з інформатики',             type:'Діагностика', art:'compass',   bg:'--mint',   repo:'it-compass', url:GH+'it-maysternia/it-compass/'},
   {tab:'5-7',  title:'Keyboard Academy',             desc:'Вчимося друкувати наосліп',                      type:'Тренажер',    art:'academy',   bg:'--butter', repo:'keyboard-academy'},
@@ -447,6 +448,21 @@ const ART = {
         R('co',222,80,5,13,2.5,'opacity=".7"')+R('co',229,78,5,15,2.5,'opacity=".7"')+R('co',236,80,5,13,2.5,'opacity=".7"')+
         C('cr',230,128,13)+C('ink',217,108,4.5)+C('ink',243,108,4.5)+`<path class="co" d="M225 121h10l-5 6z"/>`)+
       `<path d="M84 52l-12-8M80 70H64M90 36l-6-14" class="st" style="stroke:var(--coral);stroke-width:3.5"/>`;
+  },
+  photopuzzle(){
+    const cols=['pe','mi','li','bu','co','sk','mi','pe'];
+    let cells='';
+    for(let r=0;r<3;r++)for(let c=0;c<3;c++){
+      const x=186+c*34, y=44+r*34;
+      if(r===2&&c===2){cells+=`<rect class="slot" x="${x}" y="${y}" width="32" height="32" rx="5"/>`;continue;}
+      cells+=R(cols[r*3+c],x+1,y+1,30,30,5);
+    }
+    return ground('mi')+
+      G(R('cr',34,28,136,150,10)+R('sk',48,42,108,100,6)+C('bu',120,72,13)+
+        `<path class="mi" d="M48 142L92 94L118 120L132 106L156 142Z"/>`+line(60,160,84,'li')+line(60,172,60,'li'))+
+      G(R('fr',178,36,118,118,8)+R('cr',184,42,106,106,4)+cells)+
+      G(R('li',0,0,30,30,5)+`<path class="ink" d="M0 0L0 16L4 12L7 18L9 17L6 11L11 11Z" transform="translate(16 8)"/>`,'translate(262 150) rotate(-8)')+
+      star(286,40,.6,'bu');
   },
   tangram(){
     const pc=(c,pts,t='')=>`<polygon class="${c}" points="${pts}"${t?` transform="${t}"`:''}/>`;

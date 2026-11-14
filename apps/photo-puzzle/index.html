@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Збери пазл</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23f4ecdd'/%3E%3Crect x='10' y='14' width='24' height='24' rx='5' fill='%23ef7d57'/%3E%3Ccircle cx='22' cy='10' r='5' fill='%23ef7d57'/%3E%3Crect x='30' y='28' width='24' height='24' rx='5' fill='%233fa796'/%3E%3Ccircle cx='54' cy='40' r='5' fill='%233fa796'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --paper:#f4ecdd; --card:#fffdf7; --ink:#3b3226;
+    --coral:#ef7d57; --teal:#3fa796; --mustard:#f2c14e; --blue:#5b8fd1;
+    --slot:#e6dac3;
+    --shadow:0 4px 0 rgba(59,50,38,.12), 0 10px 24px rgba(59,50,38,.14);
+  }
+  [hidden]{display:none !important}
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; background:var(--paper); color:var(--ink);
+    font-family:"Segoe UI", system-ui, -apple-system, Roboto, "Noto Sans", sans-serif;
+  }
+  /* фоновий паперовий малюнок-сітка, що згасає до країв */
+  body::before{
+    content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background-image:
+      linear-gradient(rgba(59,50,38,.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,50,38,.07) 1px, transparent 1px);
+    background-size:32px 32px;
+    -webkit-mask-image:radial-gradient(ellipse at center, #000 30%, transparent 75%);
+            mask-image:radial-gradient(ellipse at center, #000 30%, transparent 75%);
+  }
+
+  /* ---------- шапка ---------- */
+  header.top{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 18px;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-weight:800; font-size:22px}
+  .brand .logo{
+    display:inline-grid; place-items:center; width:42px; height:42px; border-radius:12px;
+    background:var(--mustard); box-shadow:var(--shadow); transform:rotate(-4deg); font-size:22px;
+  }
+  .top-actions{display:flex; gap:10px}
+
+  /* ---------- кнопки (паперові вирізки) ---------- */
+  .btn{
+    font:inherit; font-size:17px; font-weight:700; color:var(--ink);
+    background:var(--card); border:0; border-radius:16px; padding:12px 18px;
+    box-shadow:var(--shadow); cursor:pointer; transform:rotate(-0.6deg);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:rotate(0deg) translateY(-2px)}
+  .btn:active{transform:translateY(2px) scale(.98); box-shadow:0 1px 0 rgba(59,50,38,.12)}
+  .btn:focus-visible{outline:3px solid var(--mustard); outline-offset:3px}
+  .btn.primary{background:var(--coral); color:#fff}
+  .btn.teal{background:var(--teal); color:#fff}
+  .btn.blue{background:var(--blue); color:#fff}
+  .btn.round{
+    width:52px; height:52px; border-radius:50%; padding:0; font-size:22px;
+    display:inline-grid; place-items:center; transform:none;
+  }
+  .btn.round:hover{transform:translateY(-2px)}
+  .btn.round img{width:40px; height:40px; object-fit:cover; border-radius:50%}
+
+  /* ---------- головна (hero) ---------- */
+  .hero{
+    display:grid; grid-template-columns:1.1fr 1fr; gap:32px; align-items:center;
+    max-width:1120px; margin:12px auto; padding:16px 24px 40px; min-height:72vh;
+  }
+  .hero h1{font-size:clamp(36px,6vw,60px); line-height:1.05; margin:0 0 14px; font-weight:900}
+  .hero p.lead{font-size:clamp(17px,2.2vw,20px); line-height:1.5; margin:0 0 22px; max-width:30em}
+  .hero-actions{display:flex; flex-wrap:wrap; gap:14px}
+  .hint{font-size:14px; opacity:.7; margin-top:18px}
+  .hero-art{display:grid; place-items:center}
+  .hero-svg{width:100%; max-width:440px; height:auto; overflow:visible}
+  /* одноразова анімація при завантаженні: шматочок встає на місце */
+  .hand-move{animation:handMove 1.8s cubic-bezier(.5,0,.2,1) .4s both}
+  @keyframes handMove{from{transform:translate(0,0)} to{transform:translate(-100px,0)}}
+  @media (prefers-reduced-motion: reduce){
+    .hand-move{animation:none; transform:translate(-100px,0)}
+    *{transition:none !important}
+  }
+  @media (max-width:760px){
+    .hero{grid-template-columns:1fr; text-align:center; padding-top:4px; min-height:0}
+    .hero-actions{justify-content:center}
+    .hero-art{order:2}
+    .hero p.lead{margin-left:auto; margin-right:auto}
+  }
+
+  /* ---------- екран гри ---------- */
+  #game{
+    display:flex; flex-direction:column; gap:10px;
+    max-width:1200px; margin:0 auto; padding:0 12px 12px;
+    height:calc(100vh - 80px); height:calc(100dvh - 80px); min-height:460px;
+  }
+  .hud{
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:10px;
+  }
+  .chip{
+    display:flex; align-items:center; gap:8px; font-weight:800; font-size:20px;
+    background:var(--card); border-radius:16px; padding:8px 14px; box-shadow:var(--shadow);
+    font-variant-numeric:tabular-nums; min-width:100px; justify-content:center;
+  }
+  .grid-ctrl{
+    display:flex; align-items:center; gap:10px; background:var(--card); border-radius:16px;
+    padding:8px 14px; box-shadow:var(--shadow); font-weight:800; font-size:20px;
+  }
+  .grid-ctrl input{width:150px; accent-color:var(--coral); cursor:pointer}
+  #gridLabel{min-width:64px; text-align:center; font-variant-numeric:tabular-nums}
+  .stage{
+    position:relative; flex:1; min-height:380px; border-radius:24px;
+    background:var(--card); box-shadow:var(--shadow); overflow:hidden;
+  }
+  #board{position:absolute; inset:0; width:100%; height:100%; touch-action:none; cursor:grab}
+  #board:active{cursor:grabbing}
+
+  /* ---------- вікна ---------- */
+  dialog{
+    border:0; border-radius:24px; background:var(--card); color:var(--ink);
+    box-shadow:0 24px 60px rgba(0,0,0,.25); padding:26px; width:min(92vw,500px);
+  }
+  dialog::backdrop{background:rgba(59,50,38,.35)}
+  dialog h2{margin:0 0 10px; font-size:26px}
+  dialog h3{margin:18px 0 6px; font-size:18px}
+  dialog p, dialog li{line-height:1.5}
+  dialog ul{padding-left:20px; margin:6px 0}
+  dialog a{color:var(--blue); font-weight:700}
+  .dlg-actions{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:18px}
+  .picks{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+  .pick{
+    border:0; background:var(--paper); border-radius:18px; padding:8px; cursor:pointer;
+    box-shadow:var(--shadow); transform:rotate(-1deg);
+  }
+  .pick:nth-child(2n){transform:rotate(1.2deg)}
+  .pick img{width:100%; aspect-ratio:1; object-fit:cover; border-radius:12px; display:block}
+  video#cam{width:100%; border-radius:16px; background:#000; transform:scaleX(-1)}
+  .star{color:var(--mustard)}
+
+  #toast{
+    position:fixed; left:50%; bottom:24px; transform:translate(-50%,140%);
+    background:var(--ink); color:#fff; padding:12px 20px; border-radius:14px;
+    font-weight:700; box-shadow:var(--shadow); transition:transform .3s ease; z-index:50;
+    max-width:90vw; text-align:center;
+  }
+  #toast.show{transform:translate(-50%,0)}
+
+  @media (max-width:640px){
+    .chip, .grid-ctrl{font-size:17px; min-width:0}
+    .grid-ctrl input{width:110px}
+    #game{height:calc(100dvh - 70px)}
+  }
+</style>
+</head>
+<body data-view="home">
+
+<header class="top">
+  <div class="brand"><span class="logo" aria-hidden="true">🧩</span><span>Збери пазл</span></div>
+  <div class="top-actions">
+    <button id="backBtn" class="btn round" title="Назад" aria-label="Назад" hidden>←</button>
+    <button id="infoBtn" class="btn round" title="Про сайт" aria-label="Про сайт">i</button>
+  </div>
+</header>
+
+<main>
+  <!-- ГОЛОВНА -->
+  <section id="home" class="hero">
+    <div class="hero-text">
+      <h1>Зроби пазл зі свого фото!</h1>
+      <p class="lead">Завантаж власне фото, зроби знімок або обери готову картинку й склади її по шматочках. Перетягуй шматочки мишкою, і коли шматочок буде поруч зі своїм місцем, він сам встане.</p>
+      <div class="hero-actions">
+        <button class="btn primary" id="btnFile">📁 З комп'ютера</button>
+        <button class="btn teal" id="btnCam">📷 Знімок</button>
+        <button class="btn blue" id="btnBuiltin">🖼️ Готові картинки</button>
+      </div>
+    </div>
+
+    <div class="hero-art">
+      <svg class="hero-svg" viewBox="0 0 400 320" role="img" aria-label="Пазл на дошці: шматочок переїжджає на порожнє місце, поруч курсор миші">
+        <defs>
+          <!-- ракета: та сама сцена, що й готова картинка -->
+          <g id="rocketScene">
+            <rect width="600" height="600" fill="#2c3e66"/>
+            <circle cx="80" cy="80" r="4" fill="#fffdf7"/><circle cx="200" cy="140" r="3" fill="#fffdf7"/>
+            <circle cx="520" cy="90" r="4" fill="#fffdf7"/><circle cx="460" cy="260" r="3" fill="#fffdf7"/>
+            <circle cx="120" cy="300" r="3" fill="#fffdf7"/><circle cx="540" cy="380" r="4" fill="#fffdf7"/>
+            <circle cx="120" cy="480" r="90" fill="#ef7d57"/>
+            <path d="M265 430 Q300 520 335 430Z" fill="#f2c14e"/>
+            <path d="M300 120 C360 180 370 330 350 430 L250 430 C230 330 240 180 300 120Z" fill="#fffdf7"/>
+            <path d="M250 360 L210 430 L250 430Z" fill="#ef7d57"/>
+            <path d="M350 360 L390 430 L350 430Z" fill="#ef7d57"/>
+            <circle cx="300" cy="260" r="40" fill="#5b8fd1"/>
+          </g>
+        </defs>
+        <!-- дошка 3×3 з ракетою: вісім шматочків на місці -->
+        <rect x="40" y="50" width="210" height="210" rx="12" fill="#e6dac3"/>
+        <svg x="40" y="50" width="70" height="70" viewBox="0 0 200 200"><use href="#rocketScene"/></svg>
+        <svg x="110" y="50" width="70" height="70" viewBox="200 0 200 200"><use href="#rocketScene"/></svg>
+        <svg x="180" y="50" width="70" height="70" viewBox="400 0 200 200"><use href="#rocketScene"/></svg>
+        <svg x="40" y="120" width="70" height="70" viewBox="0 200 200 200"><use href="#rocketScene"/></svg>
+        <svg x="110" y="120" width="70" height="70" viewBox="200 200 200 200"><use href="#rocketScene"/></svg>
+        <svg x="180" y="120" width="70" height="70" viewBox="400 200 200 200"><use href="#rocketScene"/></svg>
+        <svg x="40" y="190" width="70" height="70" viewBox="0 400 200 200"><use href="#rocketScene"/></svg>
+        <svg x="110" y="190" width="70" height="70" viewBox="200 400 200 200"><use href="#rocketScene"/></svg>
+        <!-- порожній слот -->
+        <rect x="180" y="190" width="70" height="70" fill="none" stroke="#3b3226" stroke-opacity=".4" stroke-dasharray="6 6" stroke-width="2"/>
+        <!-- останній шматочок і курсор переїжджають на слот -->
+        <g class="hand-move">
+          <svg x="280" y="190" width="70" height="70" viewBox="400 400 200 200"><use href="#rocketScene"/></svg>
+          <path transform="translate(300 206)" d="M0 0 L0 18 L5 14 L8 21 L11 20 L8 13 L14 13 Z" fill="#3b3226" stroke="#fffdf7" stroke-width="1.5" stroke-linejoin="round"/>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ГРА -->
+  <section id="game" hidden>
+    <div class="hud">
+      <div class="chip" title="Час"><span aria-hidden="true">⏱️</span><span id="timer">00:00</span></div>
+      <div class="chip" title="Шматочки"><span aria-hidden="true">🧩</span><span id="count">0/9</span></div>
+      <label class="grid-ctrl" title="Розмір пазла">
+        <span id="gridLabel">3×3</span>
+        <input type="range" id="grid" min="3" max="32" value="3" aria-label="Розмір пазла">
+      </label>
+      <button class="btn round" id="shuffleBtn" title="Перемішати" aria-label="Перемішати">🔀</button>
+      <button class="btn round" id="previewBtn" title="Зразок" aria-label="Показати зразок"><img id="thumb" alt=""></button>
+      <button class="btn round" id="soundBtn" title="Звук" aria-label="Звук"></button>
+    </div>
+    <div class="stage" id="stage">
+      <canvas id="board" aria-label="Дошка пазла"></canvas>
+    </div>
+  </section>
+</main>
+
+<!-- ВІКНО [i] -->
+<dialog id="infoDlg">
+  <h2>Збери пазл</h2>
+  <p>Тренажер для дітей: перетягуй шматочки картинки на їхнє місце. Фото нікуди не надсилаються, усе працює прямо у твоєму браузері.</p>
+  <h3>Як грати</h3>
+  <ul>
+    <li>Обери картинку: з комп'ютера, знімок з камери або готову.</li>
+    <li>Повзунком обери розмір пазла, від 3×3 до 32×32.</li>
+    <li>Коли шматочок буде близько до свого місця, він сам встане.</li>
+  </ul>
+  <h3>Керування</h3>
+  <ul>
+    <li>🖱️ Мишка: натисни шматочок, тримай кнопку і перетягни.</li>
+    <li>👆 Планшет або телефон: торкнись шматочка і перетягни пальцем.</li>
+    <li>🔀 перемішує шматочки, 🔊 вмикає і вимикає звук.</li>
+  </ul>
+  <p><span class="star" aria-hidden="true">★</span> <a href="https://github.com/whyuxavier" target="_blank" rel="noopener">Наш GitHub</a></p>
+  <div class="dlg-actions"><button class="btn" value="close" form="">Закрити</button></div>
+</dialog>
+
+<!-- ГОТОВІ КАРТИНКИ -->
+<dialog id="pickDlg">
+  <h2>Обери картинку</h2>
+  <div class="picks" id="picks"></div>
+  <div class="dlg-actions"><button class="btn" data-close>Назад</button></div>
+</dialog>
+
+<!-- КАМЕРА -->
+<dialog id="camDlg">
+  <h2>Усміхнись!</h2>
+  <video id="cam" autoplay playsinline muted></video>
+  <div class="dlg-actions">
+    <button class="btn primary" id="snapBtn">📸 Знімок</button>
+    <button class="btn" data-close>Назад</button>
+  </div>
+</dialog>
+
+<!-- ЗРАЗОК -->
+<dialog id="previewDlg">
+  <img id="previewImg" alt="Зразок пазла" style="width:100%; border-radius:16px; display:block">
+  <div class="dlg-actions"><button class="btn" data-close>Закрити</button></div>
+</dialog>
+
+<!-- ПЕРЕМОГА -->
+<dialog id="winDlg">
+  <h2>Молодець! 🎉</h2>
+  <p>Пазл складено за <b id="winTime">00:00</b></p>
+  <div class="dlg-actions">
+    <button class="btn teal" id="againBtn">🔀 Ще раз</button>
+    <button class="btn blue" id="newBtn">🖼️ Інша картинка</button>
+  </div>
+</dialog>
+
+<input type="file" id="file" accept="image/*" hidden>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const canvas = $('#board');
+  const ctx = canvas.getContext('2d');
+
+  const state = {
+    src: null,            // квадратне джерело (canvas)
+    thumb: '',            // копія для зразка
+    N: 3,                 // розмір сітки
+    pieces: [],
+    placedCount: 0,
+    board: {x:0, y:0, s:0},
+    tray: {x:0, y:0, w:0, h:0},
+    cell: 0, W: 0, H: 0,
+    dragging: null, dragOff: {x:0, y:0},
+    elapsed: 0, startTime: null, timerId: null, done: false,
+    soundOn: localStorage.getItem('pz_sound') !== 'off'
+  };
+
+  // ---------- допоміжне ----------
+  const pad2 = n => String(n).padStart(2, '0');
+  const fmt = ms => { const s = Math.floor(ms / 1000); return pad2(Math.floor(s / 60)) + ':' + pad2(s % 60); };
+  function toast(msg){
+    const t = $('#toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  // ---------- звук ----------
+  let audioCtx = null;
+  function tone(freq, dur, when, type, vol){
+    if (!state.soundOn) return;
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const t = audioCtx.currentTime + when;
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(audioCtx.destination);
+    o.start(t); o.stop(t + dur + 0.02);
+  }
+  function playSound(name){
+    try{
+      if (name === 'pick') tone(520, 0.08, 0, 'triangle', 0.1);
+      if (name === 'snap'){ tone(660, 0.12, 0, 'sine', 0.18); tone(990, 0.14, 0.06, 'sine', 0.12); }
+      if (name === 'win') [523, 659, 784, 1046].forEach((f, i) => tone(f, 0.25, i * 0.13, 'triangle', 0.18));
+    }catch(e){}
+  }
+  const ICON_SOUND_ON = '<svg viewBox="0 0 24 24" width="24" height="24"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
+  const ICON_SOUND_OFF = '<svg viewBox="0 0 24 24" width="24" height="24"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+  function updateSoundBtn(){
+    const b = $('#soundBtn');
+    b.innerHTML = state.soundOn ? ICON_SOUND_ON : ICON_SOUND_OFF;
+    b.setAttribute('aria-pressed', String(state.soundOn));
+  }
+
+  // ---------- таймер ----------
+  function updateTimer(){ $('#timer').textContent = fmt(state.elapsed); }
+  function startTimer(){
+    if (state.startTime !== null || state.done) return;
+    state.startTime = performance.now() - state.elapsed;
+    state.timerId = setInterval(() => { state.elapsed = performance.now() - state.startTime; updateTimer(); }, 250);
+  }
+  function stopTimer(){
+    if (state.timerId) clearInterval(state.timerId);
+    if (state.startTime !== null) state.elapsed = performance.now() - state.startTime;
+    state.timerId = null; state.startTime = null;
+  }
+
+  // ---------- джерело картинки ----------
+  function loadSource(drawable, w, h){
+    const side = Math.min(w, h);
+    const sx = (w - side) / 2, sy = (h - side) / 2;
+    const size = Math.min(1024, side);
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    c.getContext('2d').drawImage(drawable, sx, sy, side, side, 0, 0, size, size);
+    state.src = c;
+    state.thumb = c.toDataURL('image/jpeg', 0.9);
+    showGame();
+    newPuzzle();
+  }
+  function fromFile(file){
+    if (!file || !file.type.startsWith('image/')) return toast('Це не картинка 🙂');
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => { loadSource(img, img.naturalWidth, img.naturalHeight); URL.revokeObjectURL(url); };
+    img.onerror = () => { URL.revokeObjectURL(url); toast('Не вдалося відкрити картинку'); };
+    img.src = url;
+  }
+  function fromBuiltin(svg){
+    const img = new Image();
+    img.onload = () => loadSource(img, 600, 600);
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  }
+
+  // ---------- готові картинки (паперові ілюстрації) ----------
+  const BUILTIN = [
+    { name: 'Будиночок', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+        <rect width="600" height="600" fill="#bfe3f5"/>
+        <circle cx="480" cy="120" r="60" fill="#f2c14e"/>
+        <path d="M0 420 Q150 340 300 410 T600 400 V600 H0Z" fill="#3fa796"/>
+        <rect x="160" y="270" width="280" height="220" fill="#fffdf7"/>
+        <path d="M130 290 L300 150 L470 290 Z" fill="#ef7d57"/>
+        <rect x="270" y="360" width="60" height="130" fill="#5b8fd1"/>
+        <rect x="190" y="310" width="60" height="60" fill="#f2c14e"/>
+        <rect x="350" y="310" width="60" height="60" fill="#f2c14e"/>
+      </svg>` },
+    { name: 'Ракета', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+        <rect width="600" height="600" fill="#2c3e66"/>
+        <circle cx="80" cy="80" r="4" fill="#fffdf7"/><circle cx="200" cy="140" r="3" fill="#fffdf7"/>
+        <circle cx="520" cy="90" r="4" fill="#fffdf7"/><circle cx="460" cy="260" r="3" fill="#fffdf7"/>
+        <circle cx="120" cy="300" r="3" fill="#fffdf7"/><circle cx="540" cy="380" r="4" fill="#fffdf7"/>
+        <circle cx="120" cy="480" r="90" fill="#ef7d57"/>
+        <path d="M265 430 Q300 520 335 430Z" fill="#f2c14e"/>
+        <path d="M300 120 C360 180 370 330 350 430 L250 430 C230 330 240 180 300 120Z" fill="#fffdf7"/>
+        <path d="M250 360 L210 430 L250 430Z" fill="#ef7d57"/>
+        <path d="M350 360 L390 430 L350 430Z" fill="#ef7d57"/>
+        <circle cx="300" cy="260" r="40" fill="#5b8fd1"/>
+      </svg>` },
+    { name: 'Рибка', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+        <rect width="600" height="600" fill="#8fd3e8"/>
+        <path d="M0 420 Q75 380 150 420 T300 420 T450 420 T600 420 V600 H0Z" fill="#3fa796"/>
+        <circle cx="120" cy="150" r="14" fill="none" stroke="#fffdf7" stroke-width="4"/>
+        <circle cx="150" cy="95" r="9" fill="none" stroke="#fffdf7" stroke-width="4"/>
+        <path d="M450 290 L560 220 L560 360Z" fill="#f2c14e"/>
+        <ellipse cx="300" cy="290" rx="170" ry="110" fill="#ef7d57"/>
+        <path d="M290 190 Q320 120 360 190Z" fill="#f2c14e"/>
+        <circle cx="220" cy="270" r="20" fill="#fffdf7"/>
+        <circle cx="225" cy="270" r="9" fill="#3b3226"/>
+      </svg>` }
+  ];
+  function buildPicks(){
+    const box = $('#picks');
+    BUILTIN.forEach(item => {
+      const b = document.createElement('button');
+      b.className = 'pick'; b.title = item.name; b.setAttribute('aria-label', item.name);
+      const img = new Image();
+      img.alt = item.name;
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(item.svg);
+      b.appendChild(img);
+      b.addEventListener('click', () => { $('#pickDlg').close(); fromBuiltin(item.svg); });
+      box.appendChild(b);
+    });
+  }
+
+  // ---------- камера ----------
+  let camStream = null;
+  async function openCamera(){
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return toast('Камера недоступна в цьому браузері');
+    try{
+      camStream = await navigator.mediaDevices.getUserMedia({ video: true });
+    }catch(e){
+      return toast('Немає доступу до камери');
+    }
+    $('#cam').srcObject = camStream;
+    $('#camDlg').showModal();
+  }
+  function closeCamera(){
+    if (camStream){ camStream.getTracks().forEach(t => t.stop()); camStream = null; }
+    $('#cam').srcObject = null;
+  }
+  function snap(){
+    const v = $('#cam');
+    if (!v.videoWidth) return toast('Камера ще не готова');
+    loadSource(v, v.videoWidth, v.videoHeight);
+    $('#camDlg').close();
+  }
+
+  // ---------- видимість екранів ----------
+  function showGame(){
+    document.body.dataset.view = 'game';
+    $('#home').hidden = true;
+    $('#game').hidden = false;
+    $('#backBtn').hidden = false;
+  }
+  function goHome(){
+    stopTimer();
+    state.src = null; state.pieces = []; state.dragging = null; state.done = false;
+    document.body.dataset.view = 'home';
+    $('#home').hidden = false;
+    $('#game').hidden = true;
+    $('#backBtn').hidden = true;
+  }
+
+  // ---------- пазл ----------
+  function newPuzzle(){
+    stopTimer();
+    state.elapsed = 0; state.done = false; state.placedCount = 0; state.dragging = null;
+    const N = state.N;
+    state.pieces = [];
+    for (let i = 0; i < N * N; i++){
+      state.pieces.push({ r: Math.floor(i / N), c: i % N, x: 0, y: 0, nx: 0, ny: 0, placed: false, anim: null });
+    }
+    layout(true);
+    updateHud(); updateTimer();
+  }
+  function layout(scatter){
+    const W = canvas.clientWidth, H = canvas.clientHeight;
+    if (!W || !H) return;
+    const pad = 12;
+    let b, t;
+    if (W >= H * 1.05){
+      // широкий екран: дошка зліва, шматочки справа
+      const s = Math.min(H - 2 * pad, W * 0.55);
+      b = { x: pad, y: (H - s) / 2, s };
+      const tx = b.x + s + pad * 2;
+      t = { x: tx, y: pad, w: W - tx - pad, h: H - 2 * pad };
+    } else {
+      // вузький екран (телефон): дошка зверху, шматочки знизу
+      const s = Math.min(W - 2 * pad, H * 0.58);
+      b = { x: (W - s) / 2, y: pad, s };
+      const ty = b.y + s + pad;
+      t = { x: pad, y: ty, w: W - 2 * pad, h: H - ty - pad };
+    }
+    state.board = b; state.tray = t; state.W = W; state.H = H;
+    state.cell = b.s / state.N;
+    const cell = state.cell;
+
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    for (const p of state.pieces){
+      if (p.placed){
+        p.x = b.x + p.c * cell; p.y = b.y + p.r * cell;
+      } else if (scatter){
+        p.x = t.x + Math.random() * Math.max(0, t.w - cell);
+        p.y = t.y + Math.random() * Math.max(0, t.h - cell);
+        p.nx = p.x / W; p.ny = p.y / H;
+      } else {
+        p.x = p.nx * W; p.y = p.ny * H;
+      }
+    }
+    requestRender();
+  }
+
+  let rafId = 0;
+  function requestRender(){ if (!rafId) rafId = requestAnimationFrame(render); }
+  function render(){
+    rafId = 0;
+    if (!state.src) return;
+    const { W, H } = state;
+    ctx.clearRect(0, 0, W, H);
+    drawBoard();
+
+    let animating = false;
+    for (const p of state.pieces){
+      if (!p.anim) continue;
+      p.x += (p.anim.x - p.x) * 0.25;
+      p.y += (p.anim.y - p.y) * 0.25;
+      if (Math.abs(p.anim.x - p.x) < 0.3 && Math.abs(p.anim.y - p.y) < 0.3){
+        p.x = p.anim.x; p.y = p.anim.y; p.anim = null;
+      } else animating = true;
+    }
+    for (const p of state.pieces) if (p.placed) drawPiece(p, false);
+    for (const p of state.pieces) if (!p.placed && p !== state.dragging) drawPiece(p, false);
+    if (state.dragging) drawPiece(state.dragging, true);
+
+    if (animating) requestRender();
+  }
+  function drawBoard(){
+    const b = state.board, cell = state.cell, N = state.N;
+    ctx.fillStyle = '#e6dac3';
+    ctx.fillRect(b.x - 4, b.y - 4, b.s + 8, b.s + 8);
+    ctx.save();
+    ctx.strokeStyle = 'rgba(59,50,38,0.2)';
+    ctx.setLineDash([6, 6]);
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let i = 0; i <= N; i++){
+      ctx.moveTo(b.x + i * cell, b.y); ctx.lineTo(b.x + i * cell, b.y + b.s);
+      ctx.moveTo(b.x, b.y + i * cell); ctx.lineTo(b.x + b.s, b.y + i * cell);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+  function drawPiece(p, lifted){
+    const cell = state.cell, N = state.N;
+    const sz = state.src.width / N;
+    ctx.save();
+    if (lifted){
+      ctx.shadowColor = 'rgba(59,50,38,0.35)';
+      ctx.shadowBlur = 14; ctx.shadowOffsetY = 6;
+    }
+    ctx.drawImage(state.src, p.c * sz, p.r * sz, sz, sz, p.x, p.y, cell, cell);
+    ctx.shadowColor = 'transparent';
+    // білий паперовий обрис
+    const lw = Math.max(1, cell * 0.03);
+    ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+    ctx.lineWidth = lw;
+    ctx.strokeRect(p.x + lw / 2, p.y + lw / 2, cell - lw, cell - lw);
+    ctx.restore();
+  }
+  function target(p){
+    return { x: state.board.x + p.c * state.cell, y: state.board.y + p.r * state.cell };
+  }
+  function pieceAt(x, y){
+    const cell = state.cell;
+    for (let i = state.pieces.length - 1; i >= 0; i--){
+      const p = state.pieces[i];
+      if (p.placed) continue;
+      if (x >= p.x && x <= p.x + cell && y >= p.y && y <= p.y + cell) return p;
+    }
+    return null;
+  }
+  function pos(e){
+    const r = canvas.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  }
+  function place(p){
+    const t = target(p);
+    p.placed = true;
+    p.anim = { x: t.x, y: t.y };
+    state.placedCount++;
+    playSound('snap');
+    updateHud();
+    if (state.placedCount === state.N * state.N) finish();
+    requestRender();
+  }
+  function finish(){
+    state.done = true;
+    stopTimer(); updateTimer();
+    playSound('win');
+    $('#winTime').textContent = fmt(state.elapsed);
+    setTimeout(() => $('#winDlg').showModal(), 700);
+  }
+  function updateHud(){
+    $('#count').textContent = state.placedCount + '/' + (state.N * state.N);
+    $('#thumb').src = state.thumb || '';
+  }
+
+  // ---------- мишка / дотик ----------
+  canvas.addEventListener('pointerdown', e => {
+    if (state.done || !state.src) return;
+    const { x, y } = pos(e);
+    const p = pieceAt(x, y);
+    if (!p) return;
+    canvas.setPointerCapture(e.pointerId);
+    p.anim = null;
+    state.dragging = p;
+    state.dragOff = { x: x - p.x, y: y - p.y };
+    // піднімаємо шматочок наверх
+    const i = state.pieces.indexOf(p);
+    state.pieces.splice(i, 1); state.pieces.push(p);
+    startTimer();
+    playSound('pick');
+    requestRender();
+  });
+  canvas.addEventListener('pointermove', e => {
+    const p = state.dragging;
+    if (!p) return;
+    const { x, y } = pos(e);
+    let nx = x - state.dragOff.x, ny = y - state.dragOff.y;
+    const t = target(p);
+    // магніт: поблизу свого місця шматочок притягується
+    if (Math.hypot(nx - t.x, ny - t.y) < state.cell * 0.6){
+      nx += (t.x - nx) * 0.3;
+      ny += (t.y - ny) * 0.3;
+    }
+    p.x = nx; p.y = ny;
+    requestRender();
+  });
+  function endDrag(){
+    const p = state.dragging;
+    if (!p) return;
+    state.dragging = null;
+    const t = target(p);
+    if (Math.hypot(p.x - t.x, p.y - t.y) < state.cell * 0.5){
+      place(p);
+    } else {
+      p.nx = p.x / state.W; p.ny = p.y / state.H;
+    }
+    requestRender();
+  }
+  canvas.addEventListener('pointerup', endDrag);
+  canvas.addEventListener('pointercancel', endDrag);
+
+  // ---------- кнопки ----------
+  $('#infoBtn').addEventListener('click', () => $('#infoDlg').showModal());
+  $('#btnFile').addEventListener('click', () => $('#file').click());
+  $('#file').addEventListener('change', e => {
+    fromFile(e.target.files[0]);
+    e.target.value = '';
+  });
+  $('#btnCam').addEventListener('click', openCamera);
+  $('#snapBtn').addEventListener('click', snap);
+  $('#btnBuiltin').addEventListener('click', () => $('#pickDlg').showModal());
+  $('#backBtn').addEventListener('click', goHome);
+  $('#shuffleBtn').addEventListener('click', () => { if (state.src) newPuzzle(); });
+  $('#previewBtn').addEventListener('click', () => {
+    $('#previewImg').src = state.thumb;
+    $('#previewDlg').showModal();
+  });
+  $('#againBtn').addEventListener('click', () => { $('#winDlg').close(); newPuzzle(); });
+  $('#newBtn').addEventListener('click', () => { $('#winDlg').close(); goHome(); });
+  $('#soundBtn').addEventListener('click', () => {
+    state.soundOn = !state.soundOn;
+    localStorage.setItem('pz_sound', state.soundOn ? 'on' : 'off');
+    updateSoundBtn();
+  });
+
+  const grid = $('#grid');
+  grid.addEventListener('input', () => { const v = +grid.value; $('#gridLabel').textContent = v + '×' + v; });
+  grid.addEventListener('change', () => {
+    state.N = +grid.value;
+    if (state.src) newPuzzle();
+  });
+
+  // закриття вікон: кнопки з data-close і клік поза вікном
+  document.querySelectorAll('dialog').forEach(d => {
+    d.addEventListener('click', e => { if (e.target === d || e.target.closest('[data-close]')) d.close(); });
+  });
+  $('#camDlg').addEventListener('close', closeCamera);
+
+  // ---------- перетягування файлу і вставка з буфера ----------
+  window.addEventListener('dragover', e => e.preventDefault());
+  window.addEventListener('drop', e => {
+    e.preventDefault();
+    const f = e.dataTransfer && e.dataTransfer.files[0];
+    if (f) fromFile(f);
+  });
+  window.addEventListener('paste', e => {
+    const items = Array.from((e.clipboardData && e.clipboardData.items) || []);
+    const it = items.find(i => i.type.startsWith('image/'));
+    if (it) fromFile(it.getAsFile());
+  });
+
+  window.addEventListener('resize', () => { if (state.src) layout(false); });
+
+  // ---------- старт ----------
+  buildPicks();
+  updateSoundBtn();
+  updateHud();
+})();
+</script>
+</body>
+</html>
