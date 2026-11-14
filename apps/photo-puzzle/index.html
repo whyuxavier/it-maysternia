@@ -110,6 +110,10 @@
   .grid-ctrl:hover{transform:rotate(0deg) translateY(-2px)}
   .grid-ctrl:focus-visible{outline:3px solid var(--mustard); outline-offset:3px}
   #gridLabel{min-width:64px; text-align:center; font-variant-numeric:tabular-nums}
+  .mini{position:relative; width:30px; height:30px; border-radius:6px; background:var(--slot); overflow:hidden; flex:none}
+  .mini-box{position:absolute; background:var(--coral); border-radius:3px}
+  .btn.round svg{width:26px; height:26px; display:block}
+  .btn.round.step:disabled{opacity:.4; cursor:default; transform:none}
   .size-grid{
     position:relative; display:grid; grid-template-columns:repeat(12,1fr); width:min(88vw,380px); aspect-ratio:1;
     margin:14px auto 0; touch-action:none; user-select:none; cursor:pointer;
@@ -168,7 +172,9 @@
 <header class="top">
   <div class="brand"><span class="logo" aria-hidden="true">🧩</span><span>Збери пазл</span></div>
   <div class="top-actions">
-    <button id="backBtn" class="btn round" title="Назад" aria-label="Назад" hidden>←</button>
+    <button id="backBtn" class="btn round" title="Назад" aria-label="Назад" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
     <button id="infoBtn" class="btn round" title="Про сайт" aria-label="Про сайт">i</button>
   </div>
 </header>
@@ -229,9 +235,15 @@
     <div class="hud">
       <div class="chip" title="Час"><span aria-hidden="true">⏱️</span><span id="timer">00:00</span></div>
       <div class="chip" title="Шматочки"><span aria-hidden="true">🧩</span><span id="count">0/9</span></div>
+      <button class="btn round step" id="minusBtn" title="Менше шматочків" aria-label="Менше шматочків">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+      </button>
       <button class="grid-ctrl" id="sizeBtn" title="Розмір пазла" aria-label="Обрати розмір пазла">
-        <span aria-hidden="true">▦</span>
+        <span class="mini" aria-hidden="true"><span class="mini-box"></span></span>
         <span id="gridLabel">3×3</span>
+      </button>
+      <button class="btn round step" id="plusBtn" title="Більше шматочків" aria-label="Більше шматочків">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
       </button>
       <button class="btn round" id="shuffleBtn" title="Перемішати" aria-label="Перемішати">🔀</button>
       <button class="btn round" id="previewBtn" title="Зразок" aria-label="Показати зразок"><img id="thumb" alt=""></button>
@@ -741,10 +753,23 @@
     $('#sizeDlg').close();
   });
   function setSize(n){
-    state.N = n;
-    $('#gridLabel').textContent = n + '×' + n;
+    state.N = Math.min(MAX_N, Math.max(MIN_N, n));
+    updateSizeUI();
     if (state.src) newPuzzle();
   }
+  // показує поточний розмір: підпис, міні-поле з рамкою й доступність кнопок ±
+  function updateSizeUI(){
+    const n = state.N;
+    $('#gridLabel').textContent = n + '×' + n;
+    const box = document.querySelector('#sizeBtn .mini-box');
+    const p = n / MAX_N * 100, off = (MAX_N - n) / 2 / MAX_N * 100;
+    box.style.left = off + '%'; box.style.top = off + '%';
+    box.style.width = p + '%'; box.style.height = p + '%';
+    $('#minusBtn').disabled = n <= MIN_N;
+    $('#plusBtn').disabled = n >= MAX_N;
+  }
+  $('#minusBtn').addEventListener('click', () => setSize(state.N - 1));
+  $('#plusBtn').addEventListener('click', () => setSize(state.N + 1));
   $('#sizeBtn').addEventListener('click', () => {
     previewSize(state.N);
     $('#sizeDlg').showModal();
@@ -774,6 +799,7 @@
   // ---------- старт ----------
   buildPicks();
   updateSoundBtn();
+  updateSizeUI();
   updateHud();
 })();
 </script>
