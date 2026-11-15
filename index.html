@@ -84,7 +84,7 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 8
 :root[data-theme="dark"] .plug .front{opacity:0;transform:scale(1.25);transition:transform .2s ease-out,opacity .12s .1s}
 :root[data-theme="dark"] .plug .side{opacity:1;transform:translate(0,3px) rotate(8deg);transition:opacity .1s .14s,transform .6s cubic-bezier(.3,1.6,.45,1) .14s}
 .plug:focus-visible,.ibtn:focus-visible,.btn:focus-visible,.tab:focus-visible,.card:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
-.ibtn{width:40px;height:40px;border-radius:14px;border:0;cursor:pointer;background:var(--lilac);color:var(--ink);font:800 18px Rubik,sans-serif;box-shadow:0 2px 0 var(--shadow)}
+.ibtn{display:none!important;width:40px;height:40px;border-radius:14px;border:0;cursor:pointer;background:var(--lilac);color:var(--ink);font:800 18px Rubik,sans-serif;box-shadow:0 2px 0 var(--shadow)}
 
 /* hero */
 .hero{position:relative;padding:56px 0 40px}
@@ -162,17 +162,16 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
 .mnav-sheet .dot{width:14px;height:14px;border-radius:5px;background:var(--dot);box-shadow:0 2px 0 var(--shadow);flex:none;transform:rotate(-8deg)}
 .mnav-sheet hr{border:0;border-top:2px dashed var(--line);margin:6px 8px}
 @keyframes sheetIn{from{opacity:0;transform:translateY(-10px) rotate(-2deg)}}
-@media (max-width:640px){
-  .ibtn{display:none}
-}
-.dnav{display:none;align-items:center;gap:4px;margin:0 16px;min-width:0}
-.dnav a{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:13px;color:var(--ink);font:700 15px Rubik,sans-serif;text-decoration:none;white-space:nowrap;transition:background .2s,transform .15s}
-.dnav a:hover{background:color-mix(in srgb,var(--dot) 35%,transparent);transform:translateY(-1px) rotate(-.6deg)}
+.dnav{display:none;align-items:center;gap:2px;margin:0 20px 0 14px;flex:none}
+.dnav .dsep{width:2px;height:22px;margin:0 4px;border-radius:2px;background:var(--line)}
+.dnav button{border:0;background:none;cursor:pointer}
+.dnav a,.dnav button{display:flex;align-items:center;gap:7px;padding:8px 10px;border-radius:13px;color:var(--ink);font:700 14.5px Rubik,sans-serif;text-decoration:none;white-space:nowrap;transition:background .2s,transform .15s}
+.dnav button:hover,.dnav a:hover{background:color-mix(in srgb,var(--dot) 35%,transparent);transform:translateY(-1px) rotate(-.6deg)}
 .dnav a[aria-current="true"]{background:color-mix(in srgb,var(--dot) 60%,transparent);box-shadow:0 2px 0 var(--shadow)}
 .dnav .dot{width:12px;height:12px;border-radius:4px;background:var(--dot);box-shadow:0 2px 0 var(--shadow);flex:none;transform:rotate(-8deg)}
-.dnav a:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
-@media (min-width:1180px){.dnav{display:flex}}
-@media (max-width:1179px){.burger{display:block}}
+.dnav button:focus-visible,.dnav a:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+@media (min-width:1280px){.dnav{display:flex}}
+@media (max-width:1279px){.burger{display:block}}
 
 @media (max-width:860px){
   .hero{padding:30px 0 20px}
@@ -776,9 +775,10 @@ info.addEventListener('click',e=>{if(e.target===info)info.close()});
 /* ===== Меню в шапці (комп'ютер) ===== */
 const dnav=document.getElementById('dnav');
 function renderDnav(){
-  dnav.innerHTML=TABS.map(t=>`<a href="#catalog" data-dtab="${t.id}" style="--dot:var(${t.color})"${t.id===current?' aria-current="true"':''}><span class="dot"></span>${t.label}</a>`).join('');
+  dnav.innerHTML=TABS.map(t=>`<a href="#catalog" data-dtab="${t.id}" style="--dot:var(${t.color})"${t.id===current?' aria-current="true"':''}><span class="dot"></span>${t.label}</a>`).join('')+
+    '<span class="dsep" aria-hidden="true"></span><button type="button" data-dinfo style="--dot:var(--lilac)"><span class="dot"></span>Про сайт</button>';
 }
-dnav.addEventListener('click',e=>{const a=e.target.closest('[data-dtab]');if(a)setTab(a.dataset.dtab)});
+dnav.addEventListener('click',e=>{const a=e.target.closest('[data-dtab]');if(a){setTab(a.dataset.dtab);return;}if(e.target.closest('[data-dinfo]'))info.showModal();});
 const _setTab=setTab; setTab=function(id){_setTab(id);renderDnav()};
 renderDnav();
 
@@ -800,7 +800,7 @@ mlist.addEventListener('click',e=>{
 });
 document.addEventListener('click',e=>{if(!mnav.hidden&&!e.target.closest('#mnav,#burger'))setMenu(false)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!mnav.hidden){setMenu(false);burger.focus();}});
-matchMedia("(min-width:1180px)").addEventListener('change',m=>{if(m.matches)setMenu(false)});
+matchMedia("(min-width:1280px)").addEventListener('change',m=>{if(m.matches)setMenu(false)});
 
 </script>
 </body>
