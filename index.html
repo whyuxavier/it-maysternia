@@ -62,7 +62,7 @@ a{color:inherit}
 /* header */
 header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);transition:background .4s}
 .bar{display:flex;align-items:center;justify-content:space-between;height:68px}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font:800 20px Rubik,sans-serif}
+.logo{white-space:nowrap;flex:none;display:flex;align-items:center;gap:10px;text-decoration:none;font:800 20px Rubik,sans-serif}
 .logo svg{width:38px;height:38px}
 .tools{display:flex;align-items:center;gap:10px}
 .plug{width:84px;height:44px;padding:0;border:0;background:var(--card);border-radius:14px;cursor:pointer;box-shadow:0 2px 0 var(--shadow),0 0 0 1px var(--line);overflow:hidden}
@@ -163,9 +163,17 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
 .mnav-sheet hr{border:0;border-top:2px dashed var(--line);margin:6px 8px}
 @keyframes sheetIn{from{opacity:0;transform:translateY(-10px) rotate(-2deg)}}
 @media (max-width:640px){
-  .burger{display:block}
   .ibtn{display:none}
 }
+.dnav{display:none;align-items:center;gap:4px;margin:0 16px;min-width:0}
+.dnav a{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:13px;color:var(--ink);font:700 15px Rubik,sans-serif;text-decoration:none;white-space:nowrap;transition:background .2s,transform .15s}
+.dnav a:hover{background:color-mix(in srgb,var(--dot) 35%,transparent);transform:translateY(-1px) rotate(-.6deg)}
+.dnav a[aria-current="true"]{background:color-mix(in srgb,var(--dot) 60%,transparent);box-shadow:0 2px 0 var(--shadow)}
+.dnav .dot{width:12px;height:12px;border-radius:4px;background:var(--dot);box-shadow:0 2px 0 var(--shadow);flex:none;transform:rotate(-8deg)}
+.dnav a:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+@media (min-width:1180px){.dnav{display:flex}}
+@media (max-width:1179px){.burger{display:block}}
+
 @media (max-width:860px){
   .hero{padding:30px 0 20px}
   .hero-grid{grid-template-columns:1fr;gap:26px}
@@ -201,6 +209,7 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
       <svg viewBox="0 0 64 64" aria-hidden="true"><rect class="sk" x="5" y="12" width="46" height="46" rx="12" transform="rotate(-9 28 35)"/><rect class="pe" x="13" y="6" width="46" height="46" rx="12" filter="url(#paper)"/><path d="M27 17v26l7-6 5 10 5-2.4-5-10h9.5z" fill="#3b3450"/></svg>
       <span>ІТ-Майстерня</span>
     </a>
+    <nav class="dnav" id="dnav" aria-label="Розділи"></nav>
     <div class="tools">
       <button class="plug" id="plug" type="button" aria-label="Перемкнути тему">
         <svg viewBox="0 0 84 44" aria-hidden="true">
@@ -763,6 +772,16 @@ document.getElementById('infoBtn').addEventListener('click',()=>info.showModal()
 document.getElementById('infoClose').addEventListener('click',()=>info.close());
 info.addEventListener('click',e=>{if(e.target===info)info.close()});
 
+
+/* ===== Меню в шапці (комп'ютер) ===== */
+const dnav=document.getElementById('dnav');
+function renderDnav(){
+  dnav.innerHTML=TABS.map(t=>`<a href="#catalog" data-dtab="${t.id}" style="--dot:var(${t.color})"${t.id===current?' aria-current="true"':''}><span class="dot"></span>${t.label}</a>`).join('');
+}
+dnav.addEventListener('click',e=>{const a=e.target.closest('[data-dtab]');if(a)setTab(a.dataset.dtab)});
+const _setTab=setTab; setTab=function(id){_setTab(id);renderDnav()};
+renderDnav();
+
 /* ===== Бургер-меню (смартфони) ===== */
 const burger=document.getElementById('burger'), mnav=document.getElementById('mnav'), mlist=document.getElementById('mnavList');
 function renderMenu(){
@@ -781,7 +800,7 @@ mlist.addEventListener('click',e=>{
 });
 document.addEventListener('click',e=>{if(!mnav.hidden&&!e.target.closest('#mnav,#burger'))setMenu(false)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!mnav.hidden){setMenu(false);burger.focus();}});
-matchMedia('(min-width:641px)').addEventListener('change',m=>{if(m.matches)setMenu(false)});
+matchMedia("(min-width:1180px)").addEventListener('change',m=>{if(m.matches)setMenu(false)});
 
 </script>
 </body>
