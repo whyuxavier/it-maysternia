@@ -12,7 +12,7 @@
 <style>
 html,body{margin:0}
 
-/* Layout: header → hero (text left, game-window illustration right) → toolbar → framed board. Every color comes from the active skin. */
+/* Layout: header → hero (title and buttons) → toolbar → framed board. Every color comes from the active skin. */
 :root{
   --display:"Unbounded", "Segoe UI", system-ui, sans-serif;
   --body:"Manrope", "Segoe UI", system-ui, sans-serif;
@@ -204,8 +204,8 @@ dialog::backdrop{background:rgba(8,10,14,.55)}
 .gh{justify-self:start}
 .gh .star{color:#f5b301}
 
-/* hero: text left, illustration right; stacks on phones */
-.hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:center;padding-block:18px 6px}
+/* hero: title, short text and three equal buttons */
+.hero{position:relative;padding-block:18px 6px}
 .hero::before{content:"";position:absolute;inset:-14px -16px -6px;z-index:-1;pointer-events:none;
   background-image:linear-gradient(var(--line) 1.5px, transparent 1.5px),linear-gradient(90deg, var(--line) 1.5px, transparent 1.5px);
   background-size:34px 34px;
@@ -213,28 +213,9 @@ dialog::backdrop{background:rgba(8,10,14,.55)}
           mask-image:radial-gradient(ellipse 70% 70% at 50% 50%, #000 10%, transparent 75%)}
 .hero h1{font:800 clamp(30px,5vw,44px)/1.05 var(--display);margin:0 0 10px}
 .hero p{margin:0 0 18px;color:var(--muted);max-width:40ch}
-.hero-btns{display:flex;flex-wrap:wrap;gap:10px}
-.hero-art{width:100%;max-width:360px;height:auto;justify-self:center;overflow:visible}
-.hero-art .h-frame{fill:var(--surface);stroke:var(--line);stroke-width:2}
-.hero-art .h-bar{fill:var(--accent)}
-.hero-art .h-fx{font:700 15px var(--mono);fill:var(--accent-ink)}
-.hero-art .h-cov{fill:var(--cov);stroke:var(--hi);stroke-width:1.5}
-.hero-art .h-rev{fill:var(--rev);stroke:var(--rev-line);stroke-width:1.2}
-.hero-art .h-num{font-family:var(--numfont);font-weight:var(--numweight);font-size:24px;fill:var(--n2);text-anchor:middle}
-.hero-art .h-hit{fill:var(--hit)}
-.hero-art .h-pole{fill:none;stroke:var(--ink);stroke-width:2}
-.hero-art .h-ink{fill:var(--ink)}
-.hero-art .h-accent{fill:var(--accent)}
-.hero-art .h-flame{fill:var(--accent-ink)}
-.hero-art .h-tag{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
-.hero-art .h-tagtext{font:800 13px var(--mono);fill:var(--ink);text-anchor:middle}
-.hero-art .h-open{transform-box:fill-box;transform-origin:center;animation:h-pop .6s cubic-bezier(.3,1.5,.5,1) .25s both}
-@keyframes h-pop{from{transform:scale(.3);opacity:0}}
-@media (prefers-reduced-motion:reduce){ .hero-art .h-open{animation:none} }
-@media (max-width:760px){
-  .hero{grid-template-columns:minmax(0,1fr)}
-  .hero-art{max-width:300px}
-}
+.hero-btns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;max-width:560px}
+.hero-btns .btn{justify-content:center;text-align:center;min-height:48px;padding:10px 12px;width:100%}
+@media (max-width:640px){.hero-btns{grid-template-columns:minmax(0,1fr)}}
 
 /* toolbar: mode switch + daily challenge with streak flame */
 .toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
@@ -304,33 +285,6 @@ dialog::backdrop{background:rgba(8,10,14,.55)}
         <button class="btn" id="heroDaily" type="button">Щоденний виклик</button>
       </div>
     </div>
-    <svg class="hero-art" viewBox="0 0 340 300" role="img" aria-label="Вікно сапера: формула =open(A4), відкрита клітинка з цифрою 2, прапорець і значок серії">
-      <rect class="h-frame" x="18" y="18" width="252" height="262" rx="14"/>
-      <rect class="h-bar" x="30" y="30" width="228" height="34" rx="9"/>
-      <text class="h-fx" x="42" y="52">fx  =open(A4)</text>
-      <g class="h-cov">
-        <rect x="124" y="84" width="40" height="40" rx="4"/><rect x="168" y="84" width="40" height="40" rx="4"/><rect x="212" y="84" width="40" height="40" rx="4"/>
-        <rect x="36" y="128" width="40" height="40" rx="4"/><rect x="80" y="128" width="40" height="40" rx="4"/><rect x="124" y="128" width="40" height="40" rx="4"/><rect x="168" y="128" width="40" height="40" rx="4"/><rect x="212" y="128" width="40" height="40" rx="4"/>
-        <rect x="36" y="172" width="40" height="40" rx="4"/><rect x="80" y="172" width="40" height="40" rx="4"/><rect x="124" y="172" width="40" height="40" rx="4"/><rect x="168" y="172" width="40" height="40" rx="4"/><rect x="212" y="172" width="40" height="40" rx="4"/>
-        <rect x="36" y="216" width="40" height="40" rx="4"/><rect x="80" y="216" width="40" height="40" rx="4"/><rect x="124" y="216" width="40" height="40" rx="4"/><rect x="168" y="216" width="40" height="40" rx="4"/><rect x="212" y="216" width="40" height="40" rx="4"/>
-        <rect x="36" y="84" width="40" height="40" rx="4"/>
-      </g>
-      <g class="h-open">
-        <rect class="h-rev" x="80" y="84" width="40" height="40" rx="4"/>
-        <text class="h-num" x="100" y="113">2</text>
-      </g>
-      <path class="h-pole" d="M188 178V200"/>
-      <path class="h-hit" d="M188 178L199 182L188 186Z"/>
-      <rect class="h-ink" x="181" y="199" width="14" height="3" rx="1"/>
-      <g>
-        <circle class="h-accent" cx="300" cy="62" r="26"/>
-        <path class="h-flame" d="M300 37c2 5 5 7 4 12 3-2 4-5 4-8 4 5 6 10 4 16-1 4-4 7-8 8-4-1-7-4-8-8-2-6 0-10 2-13 0 3 1 5 2 6-1-6 0-9 0-13z"/>
-      </g>
-      <rect class="h-tag" x="284" y="108" width="50" height="26" rx="8"/>
-      <text class="h-tagtext" x="309" y="126">9×9</text>
-      <circle class="h-ink" cx="309" cy="180" r="11"/>
-      <path class="h-pole" d="M309 164v32M293 180h32M298 169l22 22M320 169l-22 22"/>
-    </svg>
   </section>
 
   <main class="stage">
