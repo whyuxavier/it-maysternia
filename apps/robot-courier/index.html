@@ -121,7 +121,8 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 .blk{border-radius:14px;box-shadow:0 3px 0 var(--shadow)}
 .pb{touch-action:none}
 .blk>.bh{cursor:grab}
-.blk .ico{touch-action:none}
+.blk>.bh{touch-action:none}
+.blk.k-left>.bh .lbl::after,.blk.k-right>.bh .lbl::after{content:'⇄';margin-left:8px;opacity:.45;font-size:14px}
 .blk.dragging{opacity:.35}
 .ghost{position:fixed;z-index:100;pointer-events:none;opacity:.94;transform:rotate(-2deg);box-shadow:0 12px 26px rgba(0,0,0,.25);border-radius:14px;max-width:340px;margin:0}
 .ghost.del{opacity:.55;filter:grayscale(1)}
@@ -150,9 +151,6 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
 .close{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:12px;border:0;background:var(--bg2);font:700 20px Rubik;cursor:pointer}
 .gh{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:10px 16px;border-radius:14px;background:var(--butter);text-decoration:none;color:var(--ink);font-weight:800;box-shadow:0 3px 0 var(--shadow)}
 .gh svg{width:18px;height:18px}
-.legend{display:grid;gap:6px;margin-top:6px}
-.legend div{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--muted)}
-.legend .ico{width:26px;height:26px}
 .win{text-align:center}
 .win .stars{display:flex;justify-content:center;gap:8px;margin:12px 0}
 .win .stars svg{width:52px;height:52px}
@@ -290,21 +288,20 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
   <div class="dlg">
     <button class="close" type="button" data-close aria-label="Закрити">×</button>
     <h2 id="infoT">Робот-кур'єр</h2>
-    <p>Гра з алгоритмів: склади програму з блоків, щоб робот доставив посилки в будинки. Три розділи — лінійні алгоритми, цикли та розгалуження.</p>
+    <p>Склади програму з блоків, щоб робот доставив посилки.</p>
     <h3>Правила</h3>
     <ul>
-      <li>Натисни блок — він додасться в кінець програми або в обрану рамку. Або перетягни блок у потрібне місце.</li><li>Блоки в програмі теж можна перетягувати. Витягни блок за межі програми — і він видалиться.</li>
-      <li>Робот виконує блоки згори вниз. Повороти — відносно того, куди дивиться робот.</li>
-      <li>Врізатись у кущ не можна. Посилку доставлено, коли робот став на будинок.</li>
-      <li>У розділі «Умови» одна програма має спрацювати на обох мапах.</li>
-      <li>Зірки: 3 — коли програма не довша за найкоротшу, менше — якщо блоків більше.</li>
+      <li>Робот виконує блоки згори вниз.</li>
+      <li>Не врізайся в кущі.</li>
+      <li>Посилку доставлено, коли робот стоїть на будинку.</li>
+      <li>Менше блоків — більше зірок.</li>
     </ul>
-    <h3>Блоки</h3>
-    <div class="legend" id="legend"></div>
     <h3>Керування</h3>
     <ul>
-      <li>Миша: натискай або перетягуй блоки. На телефоні перетягуй блок за його значок.</li><li>«×» видаляє блок, «−/+» змінює кількість повторів.</li>
-      <li>Клавіатура: ↑ — крок, ← / → — поворот, Enter — запустити, Backspace — видалити останній блок.</li>
+      <li>Натисни або перетягни блок у програму.</li>
+      <li>Перетягуй блоки, щоб змінити порядок. Витягни за межі — видалиться.</li>
+      <li>Натисни на поворот у програмі — ліворуч ↔ праворуч.</li>
+      <li>Клавіатура: ↑ ← → додають блоки, Enter — запуск.</li>
     </ul>
     <a class="gh" href="https://github.com/whyuxavier/it-maysternia" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6L2.5 9.3l6.6-.8z"/></svg>GitHub</a>
   </div>
@@ -445,6 +442,12 @@ $('prog').addEventListener('click',e=>{
   if(t.dataset.inc||t.dataset.dec){pushHist();const id=+(t.dataset.inc||t.dataset.dec);const walk=list=>{for(const n of list){if(n.id===id){n.n=Math.max(2,Math.min(12,n.n+(t.dataset.inc?1:-1)));return}['body','then','else'].forEach(s=>n[s]&&walk(n[s]))}};walk(P);Sound.add();resetRun();renderProg();return}
   if(t.dataset.slot){const k=t.dataset.slot;target=k==='root'?null:{id:+k.split(':')[0],slot:k.split(':')[1]};renderProg()}
 });
+$('prog').addEventListener('click',e=>{
+  if(running||dragJust||e.target.closest('button'))return;
+  const bh=e.target.closest('.blk.k-left>.bh,.blk.k-right>.bh');if(!bh)return;
+  const n=nodeById(+bh.parentElement.dataset.id);if(!n)return;
+  pushHist();n.t=n.t==='left'?'right':'left';Sound.turn();resetRun();renderProg();
+});
 $('bClear').onclick=()=>{if(running||!P.length)return;pushHist();P=[];target=null;resetRun();renderProg()};
 $('bUndo').onclick=()=>{if(running||!history.length)return;P=JSON.parse(history.pop());fixUid();if(target&&!exists(target.id))target=null;resetRun();renderProg()};
 function fixUid(){const walk=list=>list.forEach(n=>{uid=Math.max(uid,n.id+1);['body','then','else'].forEach(s=>n[s]&&walk(n[s]))});walk(P)}
@@ -461,7 +464,6 @@ document.addEventListener('pointerdown',e=>{
   else{
     const bh=e.target.closest('.blk>.bh');
     if(!bh||e.target.closest('button'))return;
-    if(e.pointerType!=='mouse'&&!e.target.closest('.ico'))return;
     src={kind:'move',id:+bh.parentElement.dataset.id,el:bh.parentElement};
   }
   D={src,x0:e.clientX,y0:e.clientY,on:false,pid:e.pointerId,drop:null};
@@ -653,7 +655,6 @@ document.addEventListener('keydown',e=>{
 });
 
 /* ===================== [i] ===================== */
-$('legend').innerHTML=Object.keys(BLOCKS).map(k=>`<div><span class="ico k-${k}"><svg viewBox="0 0 24 24"><use href="#${BLOCKS[k].icon}"/></svg></span>${BLOCKS[k].lbl}</div>`).join('');
 const info=$('info');$('infoBtn').onclick=()=>info.showModal();
 info.addEventListener('click',e=>{if(e.target===info||e.target.closest('[data-close]'))info.close()});
 $('win').addEventListener('click',e=>{if(e.target===$('win'))$('win').close()});
