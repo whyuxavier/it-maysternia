@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Фішинг-детектор</title>
+<meta name="description" content="Гра-квест про безпеку в інтернеті: розпізнай фішинг в іграх, месенджерах, листах і на сайтах.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23bfe3ea'/%3E%3Cpath d='M32 4v22' stroke='%23233047' stroke-width='3'/%3E%3Cpath d='M32 26v8a7 7 0 0 1-14 0' fill='none' stroke='%23233047' stroke-width='4' stroke-linecap='round'/%3E%3Crect x='26' y='38' width='30' height='20' rx='4' fill='%23fffdf8'/%3E%3Cpath d='M27 40l14 10 14-10' fill='none' stroke='%23f08a7e' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&family=Rubik:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eef6f4; --bg2:#ddeeec; --ink:#233047; --muted:#5d6b80; --card:#fffdf8; --line:rgba(35,48,71,.13);
+  --water:#bfe3ea; --deep:#7fbccc; --coral:#f08a7e; --sand:#f6e3b4; --mint:#bfe6cf; --lilac:#d8ccf2; --peach:#f8cfb0;
+  --ok:#3f9d6e; --bad:#d4574a; --shadow:rgba(35,48,71,.2);
+  --hook:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='32' viewBox='0 0 28 32'%3E%3Cpath d='M14 1v14a6 6 0 0 1-12 0v-3' fill='none' stroke='%23233047' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M2 12l-1.5 4 4-1.5' fill='%23233047'/%3E%3C/svg%3E") 2 14, pointer;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+.prog:empty{display:none}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,sans-serif;line-height:1.45;min-height:100vh;overflow-x:hidden}
+h1,h2,h3{font-family:Rubik,Nunito,sans-serif;margin:0;line-height:1.15}
+button{font:inherit;color:inherit}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+.pp{fill:var(--card)} .wa{fill:var(--water)} .de{fill:var(--deep)} .co{fill:var(--coral)} .sa{fill:var(--sand)} .mi{fill:var(--mint)} .li{fill:var(--lilac)} .pe{fill:var(--peach)} .ink{fill:var(--ink)}
+.stk{fill:none;stroke:var(--ink);stroke-linecap:round;stroke-linejoin:round}
+
+/* header */
+header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:64px;gap:10px}
+.logo{display:flex;align-items:center;gap:10px;font:800 19px Rubik,sans-serif;background:none;border:0;cursor:pointer;padding:0;white-space:nowrap}
+.logo svg{width:36px;height:36px}
+.tools{display:flex;gap:8px}
+.ib{width:42px;height:42px;border-radius:14px;border:0;cursor:pointer;background:var(--card);box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);display:grid;place-items:center}
+.ib svg{width:22px;height:22px}
+.ib.i{background:var(--lilac);font:800 18px Rubik}
+.ib:focus-visible,.btn:focus-visible,.seg:focus-visible,.choice:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+
+/* screens */
+.screen{display:none}
+.screen.on{display:block;animation:fadeIn .25s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}}
+
+/* hero */
+.hero{position:relative;padding:44px 0 30px}
+.hero::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(circle at 10px 10px,color-mix(in srgb,var(--deep) 45%,transparent) 2px,transparent 2.5px),
+    repeating-linear-gradient(170deg,transparent 0 34px,color-mix(in srgb,var(--water) 70%,transparent) 34px 36px);
+  background-size:40px 40px,auto;
+  -webkit-mask-image:radial-gradient(ellipse 70% 75% at 62% 45%,#000 25%,transparent 78%);mask-image:radial-gradient(ellipse 70% 75% at 62% 45%,#000 25%,transparent 78%)}
+.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center}
+.hero h1{font-size:clamp(38px,5.6vw,62px);letter-spacing:-.02em}
+.hero h1 span{background:linear-gradient(transparent 62%,var(--sand) 62%);padding:0 .06em}
+.lead{font-size:clamp(17px,2vw,19px);color:var(--muted);margin:14px 0 20px;max-width:34ch}
+.fields{display:grid;grid-template-columns:1.6fr 1fr;gap:10px;max-width:440px;margin-bottom:18px}
+.fields label{display:flex;flex-direction:column;gap:4px;font-weight:800;font-size:14px}
+.fields input{font:600 16px Nunito;padding:12px 14px;border-radius:14px;border:0;background:var(--card);color:var(--ink);box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line)}
+.fields input:focus{outline:3px solid var(--deep)}
+.modes{display:grid;gap:10px;max-width:440px}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 18px;border-radius:16px;border:0;cursor:pointer;font:700 17px Nunito;background:var(--card);box-shadow:0 4px 0 var(--shadow),0 0 0 1px var(--line);transition:transform .15s;text-decoration:none;color:var(--ink)}
+.btn:hover{transform:translateY(-2px) rotate(-.5deg)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--shadow),0 0 0 1px var(--line)}
+.btn svg{width:24px;height:24px;flex:none}
+.btn.main{background:var(--coral);color:#2b1d22}
+.btn.mode{justify-content:flex-start;text-align:left}
+.btn.mode small{display:block;font-size:13px;font-weight:600;color:var(--muted)}
+.btn.mode.main small{color:#4a2b2b}
+.btn.ok{background:var(--mint)}
+.btn.bad{background:var(--coral)}
+.prog{font-size:13px;font-weight:800;margin-left:auto;background:color-mix(in srgb,var(--card) 70%,transparent);padding:2px 8px;border-radius:9px}
+.art{position:relative;justify-self:end;width:100%;max-width:520px}
+.art svg{width:100%;height:auto;display:block;overflow:visible}
+.chip{position:absolute;padding:6px 12px;border-radius:12px;background:var(--card);font:800 14px Nunito;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);white-space:nowrap;animation:pop .4s cubic-bezier(.4,1.6,.5,1) 1.2s both}
+.chip.c1{top:26%;right:-1%;transform:rotate(-4deg)}
+.chip.c2{top:44%;left:-2%;transform:rotate(5deg);animation-delay:1.3s}
+.chip.c3{bottom:4%;left:10%;transform:rotate(3deg);animation-delay:1.4s}
+@keyframes pop{from{opacity:0;scale:.6}}
+.hook-drop{animation:drop 1s cubic-bezier(.3,1.3,.5,1) both}
+@keyframes drop{from{transform:translateY(-140px)}}
+.fish-swim{animation:swimIn 1.2s cubic-bezier(.3,.9,.4,1) .5s both}
+@keyframes swimIn{from{transform:translateX(160px);opacity:0}}
+.bob{transform-box:fill-box;transform-origin:center}
+
+/* hidden fish */
+.egg{position:absolute;width:30px;height:20px;cursor:pointer;opacity:.55;z-index:3;border:0;background:none;padding:0}
+.egg svg{width:100%;height:100%}
+.egg:hover{opacity:1}
+.egg.got{display:none}
+
+/* game */
+.gwrap{position:relative;padding-top:22px;padding-bottom:50px}
+.ghead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.ghead h2{font-size:24px}
+.pill{padding:5px 12px;border-radius:12px;background:var(--card);font-weight:800;font-size:14px;box-shadow:0 2px 0 var(--shadow),0 0 0 1px var(--line)}
+.dots{display:flex;gap:6px;margin-left:auto}
+.dots i{width:12px;height:12px;border-radius:4px;background:var(--bg2);box-shadow:inset 0 0 0 1px var(--line)}
+.dots i.ok{background:var(--ok)} .dots i.bad{background:var(--bad)} .dots i.cur{background:var(--deep)}
+.stage{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:22px;align-items:start}
+.msgbox{position:relative}
+.panel{background:var(--card);border-radius:22px;padding:18px;box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line)}
+.hint{font-weight:800;margin:0 0 10px}
+.expl{font-size:16px}
+.expl .tag{display:inline-block;padding:3px 10px;border-radius:10px;font-weight:800;margin-bottom:8px}
+.tag.okt{background:var(--mint)} .tag.badt{background:color-mix(in srgb,var(--coral) 60%,var(--card))}
+.expl ul{margin:6px 0 0;padding-left:20px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.actions .btn{font-size:16px}
+.kbd{font-size:12px;color:var(--muted);margin-top:8px}
+
+/* message types */
+.m{background:var(--card);border-radius:20px;box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line);overflow:hidden;position:relative;transition:transform .3s}
+.m-top{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg2);font-weight:800}
+.ava{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;font:800 16px Rubik;flex:none;background:var(--lilac)}
+.m-body{padding:16px;font-size:17px}
+.bubble{background:color-mix(in srgb,var(--water) 55%,var(--card));padding:12px 14px;border-radius:4px 16px 16px 16px;display:inline-block;max-width:100%}
+.mail-h{padding:12px 16px;border-bottom:1px dashed var(--line);font-size:15px}
+.mail-h b{display:inline-block;width:62px;color:var(--muted)}
+.url{display:flex;align-items:center;gap:8px;margin:0;padding:10px 12px;background:var(--bg2)}
+.url .addr{flex:1;background:var(--card);border-radius:10px;padding:7px 12px;font:600 14px ui-monospace,Consolas,monospace;overflow-wrap:anywhere}
+.site-b{padding:16px}
+.site-b h3{font-size:20px;margin-bottom:8px}
+.fake-in{display:block;margin:8px 0;padding:10px 12px;border-radius:10px;background:var(--bg2);color:var(--muted);font-size:14px}
+.game-pop{background:linear-gradient(160deg,var(--lilac),var(--water))}
+.game-pop .m-body{text-align:center}
+.sms{border-radius:24px}
+.lnk{color:#2862b8;text-decoration:underline;cursor:var(--hook);overflow-wrap:anywhere}
+.seg{border-radius:6px;transition:background .2s}
+.finding .seg{cursor:pointer;background:color-mix(in srgb,var(--sand) 35%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--sand) 90%,var(--ink) 10%)}
+.finding .seg:hover{background:var(--sand)}
+.seg.hit{background:color-mix(in srgb,var(--ok) 30%,transparent)!important;box-shadow:0 0 0 2px var(--ok)!important}
+.seg.miss{animation:shake .35s}
+.seg.show{background:color-mix(in srgb,var(--coral) 35%,transparent);box-shadow:0 0 0 2px var(--coral)}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.m.yank{animation:yank .7s cubic-bezier(.3,1.5,.5,1)}
+@keyframes yank{30%{transform:translateY(-26px) rotate(-2deg)}}
+.fx{position:absolute;left:0;right:0;bottom:-6px;height:60px;pointer-events:none;z-index:5}
+.fx svg{position:absolute;width:70px;height:44px}
+.fx .fish{animation:eat 1.4s ease-in-out both}
+@keyframes eat{0%{left:-80px;opacity:0}15%{opacity:1}45%{left:42%}55%{left:44%;transform:scale(1.15)}100%{left:110%;opacity:0}}
+.fx .hk{left:50%;top:-30px;animation:hk .8s cubic-bezier(.3,1.5,.5,1) both}
+@keyframes hk{0%{transform:translateY(40px)}40%{transform:translateY(-30px)}100%{transform:translateY(-120px);opacity:0}}
+
+/* story */
+.phone{max-width:400px;margin:0 auto;background:var(--ink);padding:14px;border-radius:36px;box-shadow:0 8px 0 var(--shadow)}
+.screenp{background:var(--card);border-radius:26px;min-height:420px;overflow:hidden;display:flex;flex-direction:column}
+.p-top{padding:12px 16px;background:var(--bg2);font-weight:800;display:flex;align-items:center;gap:10px}
+.p-feed{padding:14px;flex:1;display:flex;flex-direction:column;gap:10px}
+.b-in{align-self:flex-start;background:color-mix(in srgb,var(--water) 55%,var(--card));padding:10px 13px;border-radius:4px 16px 16px 16px;max-width:88%}
+.b-out{align-self:flex-end;background:var(--mint);padding:10px 13px;border-radius:16px 4px 16px 16px;max-width:88%}
+.b-note{align-self:center;font-size:14px;color:var(--muted);text-align:center}
+.choices{display:grid;gap:8px;padding:12px;border-top:1px dashed var(--line)}
+.choice{text-align:left;border:0;border-radius:14px;padding:11px 13px;background:var(--bg2);cursor:pointer;font-weight:700}
+.choice:hover{background:var(--sand)}
+.story-side{max-width:400px;margin:14px auto 0}
+
+/* speed */
+.speed{max-width:520px;margin:0 auto;text-align:center}
+.timer{font:800 44px Rubik;margin:4px 0}
+.tbar{height:12px;border-radius:8px;background:var(--bg2);overflow:hidden;margin-bottom:14px}
+.tbar i{display:block;height:100%;background:var(--deep);width:100%;transition:width .2s linear}
+.scard{min-height:150px;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;padding:22px;touch-action:pan-y;user-select:none}
+.scard.l{animation:outL .25s ease-in both} .scard.r{animation:outR .25s ease-in both}
+@keyframes outL{to{transform:translateX(-140%) rotate(-12deg);opacity:0}}
+@keyframes outR{to{transform:translateX(140%) rotate(12deg);opacity:0}}
+.flash-ok{box-shadow:0 5px 0 var(--shadow),0 0 0 4px var(--ok)!important}
+.flash-bad{box-shadow:0 5px 0 var(--shadow),0 0 0 4px var(--bad)!important}
+
+/* report */
+.rep{max-width:760px;margin:0 auto}
+.grade{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.gnum{width:96px;height:96px;border-radius:28px;background:var(--sand);display:grid;place-items:center;font:800 46px Rubik;box-shadow:0 4px 0 var(--shadow);flex:none}
+.rank{font:800 22px Rubik}
+.chbars{display:grid;gap:8px;margin:16px 0}
+.chb{display:grid;grid-template-columns:150px 1fr 54px;gap:10px;align-items:center;font-weight:700}
+.chb .tr{height:14px;border-radius:8px;background:var(--bg2);overflow:hidden}
+.chb .tr i{display:block;height:100%;background:var(--ok)}
+.mist{display:grid;gap:8px;margin-top:10px}
+.mist div{padding:10px 12px;border-radius:12px;background:var(--bg2);font-size:15px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+
+/* chapter list */
+.chapters{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.chap{display:flex;flex-direction:column;gap:8px;text-align:left;border:0;cursor:pointer;background:var(--card);border-radius:20px;padding:14px;box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line);transition:transform .15s}
+.chap:hover{transform:translateY(-4px) rotate(-.5deg)}
+.chap .pic{height:110px;border-radius:14px;display:grid;place-items:center}
+.chap .pic svg{height:90px}
+.chap h3{font-size:19px}
+.chap small{color:var(--muted);font-weight:700}
+
+/* dialog */
+dialog{border:0;border-radius:22px;padding:0;max-width:460px;width:calc(100% - 28px);background:var(--card);color:var(--ink);box-shadow:0 6px 0 var(--shadow),0 30px 60px -20px rgba(0,0,0,.4)}
+dialog::backdrop{background:rgba(20,30,45,.45)}
+.dlg{padding:24px;position:relative;max-height:80vh;overflow:auto}
+.dlg h2{font-size:23px;margin-bottom:8px}
+.dlg h3{font-size:16px;margin:14px 0 6px}
+.dlg p,.dlg li{color:var(--muted);font-size:15px;margin:0}
+.dlg ul{margin:0;padding-left:20px}
+.x{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:12px;border:0;background:var(--bg2);font:700 20px Rubik;cursor:pointer}
+.gh{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:10px 16px;border-radius:14px;background:var(--sand);text-decoration:none;color:var(--ink);font-weight:800;box-shadow:0 3px 0 var(--shadow)}
+.gh svg{width:18px;height:18px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:14px;font-weight:700;z-index:60;opacity:0;transition:opacity .3s;pointer-events:none;max-width:calc(100% - 30px);text-align:center}
+.toast.on{opacity:1}
+
+@media (max-width:820px){
+  .hero{padding:24px 0 20px}
+  .hero-grid{grid-template-columns:1fr}
+  .art{justify-self:center;max-width:440px}
+  .stage{grid-template-columns:1fr}
+  .lead{max-width:none}
+}
+@media (max-width:480px){
+  .logo span{font-size:17px}
+  .fields{grid-template-columns:1fr 92px}
+  .chb{grid-template-columns:110px 1fr 46px;font-size:14px}
+  .m-body{font-size:16px}
+  .chip{font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <filter id="paper" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="2.5" stdDeviation="1.6" flood-color="#233047" flood-opacity=".25"/></filter>
+  <symbol id="fishS" viewBox="0 0 60 36"><path class="co" d="M6 18c8-12 26-14 38-4l10-8v24l-10-8c-12 10-30 8-38-4z"/><circle cx="18" cy="15" r="3" class="ink"/><path d="M28 10q4 8 0 16" class="stk" style="stroke-width:2;opacity:.4"/></symbol>
+  <symbol id="hookS" viewBox="0 0 40 60"><path d="M20 0v34a10 10 0 0 1-20 0v-6" class="stk" style="stroke-width:4"/><path d="M0 24l-2 8 7-4z" class="ink"/></symbol>
+</defs></svg>
+
+<header>
+  <div class="wrap bar">
+    <button class="logo" id="home" type="button" aria-label="На головну">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" class="wa"/><path d="M32 4v22" class="stk" style="stroke-width:3"/><path d="M32 26v8a7 7 0 0 1-14 0" class="stk" style="stroke-width:4"/><rect x="26" y="38" width="30" height="20" rx="4" class="pp"/><path d="M27 40l14 10 14-10" fill="none" style="stroke:var(--coral);stroke-width:3"/></svg>
+      <span>Фішинг-детектор</span>
+    </button>
+    <div class="tools">
+      <button class="ib" id="snd" type="button" aria-label="Звук"></button>
+      <button class="ib i" id="infoBtn" type="button" aria-label="Про гру">i</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- START -->
+<section class="screen on" id="s-start">
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1>Фішинг-<span>детектор</span></h1>
+        <p class="lead">Шахраї закидають вудки з повідомленнями. Не клюй — розпізнай підробку і переріж волосінь!</p>
+        <div class="fields">
+          <label>Ім'я та прізвище<input id="inName" autocomplete="off"></label>
+          <label>Клас<input id="inClass" autocomplete="off" maxlength="6"></label>
+        </div>
+        <div class="modes">
+          <button class="btn mode main" data-go="levels"><svg viewBox="0 0 24 24"><use href="#hookS"/></svg><span>Рівні<small>4 розділи з оцінкою</small></span><span class="prog" id="progLevels"></span></button>
+          <button class="btn mode" data-go="story"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3" class="ink"/><rect x="8" y="5" width="8" height="12" rx="1" class="wa"/></svg><span>Телефон Марка<small>Історія з вибором дій</small></span></button>
+          <button class="btn mode" data-go="speed"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="9" class="sa"/><path d="M12 13V8M10 2h4" class="stk" style="stroke-width:2.5"/></svg><span>60 секунд<small>Скільки підробок упіймаєш?</small></span><span class="prog" id="progSpeed"></span></button>
+        </div>
+      </div>
+      <div class="art">
+        <svg viewBox="0 0 520 440" role="img" aria-label="Вудка з гачком, на якому висить спам-лист, і рибка, що пропливає повз">
+          <g filter="url(#paper)">
+            <path class="wa" d="M30 150C90 110 170 140 250 126S420 100 500 140V420H30Z"/>
+            <path class="de" d="M30 300C110 270 200 300 280 288S430 262 500 290V420H30Z" opacity=".75"/>
+          </g>
+          <g filter="url(#paper)">
+            <path class="sa" d="M30 390C120 372 210 386 300 380S440 368 500 384V420H30Z"/>
+            <path class="mi" d="M72 388c-8-30 6-58 0-84M84 388c4-26-8-44 2-66" style="stroke:var(--mint);stroke-width:9;fill:none;stroke-linecap:round"/>
+            <path class="mi" d="M452 384c-6-24 8-40 0-62" style="stroke:var(--mint);stroke-width:9;fill:none;stroke-linecap:round"/>
+          </g>
+          <g filter="url(#paper)">
+            <path d="M120 40L380 8" style="stroke:var(--ink);stroke-width:9;stroke-linecap:round;fill:none"/>
+            <rect x="96" y="30" width="46" height="18" rx="6" transform="rotate(-7 119 39)" class="co"/>
+            <circle cx="132" cy="54" r="12" class="sa"/><circle cx="132" cy="54" r="4" class="ink"/>
+          </g>
+          <g class="hook-drop">
+            <path d="M380 8V236" style="stroke:var(--ink);stroke-width:2;fill:none" opacity=".7"/>
+            <g filter="url(#paper)"><circle cx="380" cy="150" r="9" class="co"/><path class="pp" d="M371 150a9 9 0 0 0 18 0z"/></g>
+            <path d="M380 236v20a14 14 0 0 1-28 0v-6" class="stk" style="stroke-width:5"/>
+            <g filter="url(#paper)" transform="rotate(-8 360 290)">
+              <rect x="312" y="262" width="98" height="64" rx="8" class="pp"/>
+              <path d="M314 266l48 32 46-32" fill="none" style="stroke:var(--coral);stroke-width:4;stroke-linejoin:round"/>
+              <rect x="360" y="244" width="58" height="24" rx="8" class="co"/>
+              <text x="389" y="261" text-anchor="middle" style="font:800 13px Rubik;fill:#fff">SPAM</text>
+            </g>
+          </g>
+          <g class="fish-swim" filter="url(#paper)">
+            <use href="#fishS" x="140" y="232" width="120" height="72"/>
+          </g>
+          <g filter="url(#paper)" opacity=".9">
+            <circle cx="300" cy="200" r="7" class="pp" opacity=".7"/><circle cx="312" cy="180" r="4.5" class="pp" opacity=".7"/><circle cx="296" cy="166" r="3" class="pp" opacity=".7"/>
+            <use href="#fishS" x="400" y="330" width="56" height="34" transform="scale(-1 1) translate(-856 0)" style="opacity:.8"/>
+          </g>
+        </svg>
+        <span class="chip c1">🎣 4 розділи</span>
+        <span class="chip c2">⏱ 60 секунд</span>
+        <span class="chip c3" id="chipRank">🐟 Ранг: Мальок</span>
+        <button class="egg" data-egg="hero" style="left:84%;top:78%" aria-label="Схована рибка"><svg viewBox="0 0 60 36"><use href="#fishS"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTERS -->
+<section class="screen" id="s-levels">
+  <div class="wrap gwrap">
+    <div class="ghead"><h2>Обери розділ</h2><span class="pill" id="lvTotal"></span></div>
+    <div class="chapters" id="chapters"></div>
+    <div class="row"><button class="btn main" id="toReport">Мій звіт і сертифікат</button></div>
+  </div>
+</section>
+
+<!-- PLAY -->
+<section class="screen" id="s-play">
+  <div class="wrap gwrap">
+    <div class="ghead"><h2 id="chTitle"></h2><span class="pill" id="chScore"></span><div class="dots" id="dots"></div></div>
+    <div class="stage">
+      <div class="msgbox" id="msgbox"></div>
+      <div>
+        <div class="panel" id="panel"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="screen" id="s-story">
+  <div class="wrap gwrap">
+    <div class="ghead"><h2>Телефон Марка</h2><span class="pill" id="stScore"></span></div>
+    <div class="phone"><div class="screenp"><div class="p-top"><span class="ava" id="stAva">?</span><span id="stWho"></span></div><div class="p-feed" id="stFeed"></div><div class="choices" id="stChoices"></div></div></div>
+    <div class="story-side panel" id="stNote" hidden></div>
+  </div>
+</section>
+
+<!-- SPEED -->
+<section class="screen" id="s-speed">
+  <div class="wrap gwrap">
+    <div class="speed">
+      <div class="ghead" style="justify-content:center"><span class="pill">Рахунок: <b id="spScore">0</b></span><span class="pill">Рекорд: <b id="spBest">0</b></span></div>
+      <div class="timer" id="spTime">60</div>
+      <div class="tbar"><i id="spBar"></i></div>
+      <div class="m scard" id="spCard"></div>
+      <div class="actions"><button class="btn bad" id="spFake">← Підробка</button><button class="btn ok" id="spReal">Справжнє →</button></div>
+      <p class="kbd">Свайп ліворуч / праворуч або стрілки ← →</p>
+      <div class="row" style="justify-content:center"><button class="btn main" id="spStart">Старт</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- REPORT -->
+<section class="screen" id="s-report">
+  <div class="wrap gwrap"><div class="rep panel" id="report"></div></div>
+</section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<dialog id="info" aria-labelledby="infoT">
+  <div class="dlg">
+    <button class="x" type="button" data-close aria-label="Закрити">×</button>
+    <h2 id="infoT">Фішинг-детектор</h2>
+    <p>Гра-квест про безпеку в інтернеті: шахраї «закидають вудки» з повідомленнями, а ти вчишся їх розпізнавати.</p>
+    <h3>Правила</h3>
+    <ul>
+      <li><b>Рівні:</b> 4 розділи по 6 повідомлень. Вирішуй, справжнє воно чи підробка. Якщо підробка — знайди підозрілу деталь (+бонус). У кінці — оцінка з 12, ранг і сертифікат.</li>
+      <li><b>Телефон Марка:</b> обирай, як Марко відповість шахраям. Від вибору залежить кінцівка.</li>
+      <li><b>60 секунд:</b> впіймай якнайбільше підробок за хвилину.</li>
+      <li>У грі сховано 6 рибок 🐟 — знайди всі й отримаєш секретний ранг.</li>
+      <li>Усі банки, ігри та служби в грі вигадані.</li>
+    </ul>
+    <h3>Керування</h3>
+    <ul>
+      <li>Миша або дотик: кнопки, тап на підозрілу деталь.</li>
+      <li>Клавіатура: ← Підробка, → Справжнє, Enter — далі.</li>
+      <li>«60 секунд» на телефоні: свайп ліворуч / праворуч.</li>
+    </ul>
+    <a class="gh" href="https://github.com/whyuxavier/it-maysternia" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6L2.5 9.3l6.6-.8z"/></svg>GitHub</a>
+  </div>
+</dialog>
+
+<script>
+"use strict";
+/* ===================== ДАНІ ===================== */
+// Сегмент: рядок — звичайний текст; {t:'текст', c:'чому підозріло'} — підозріла деталь; {t,l:1} — посилання
+const CH=[
+ {id:'game',title:'Ігрові шахраї',color:'--lilac',items:[
+  {k:'chat',from:'Адмін КіберКлеш ✔',ava:'А',fake:1,body:['Вітаю! Ти виграв ',{t:'10 000 гемів 💎',c:'Великий «подарунок» ні за що — класична наживка.'},'. Щоб отримати їх, ',{t:'надішли свій логін і пароль',c:'Справжні адміни ніколи не просять пароль. Його знаєш лише ти.'},' ',{t:'протягом 10 хвилин',c:'Шахраї квапять, щоб ти не встиг подумати.'},'.']},
+  {k:'game',from:'КіберКлеш',ava:'К',fake:0,body:['Сезон 7 почався! 🎉 Нові скіни вже в ігровому магазині. Гарної гри!'],why:'Звичайне повідомлення всередині гри: нічого не просить, немає посилань чи поспіху.'},
+  {k:'site',url:{t:'https://kiberklesh-free-gems.xyz',c:'Чужий домен: справжній сайт гри — kiberklesh.com, а не «free-gems.xyz».'},fake:1,title:'Генератор гемів 💎',body:['Введи нік і ',{t:'пароль від акаунта',c:'Жоден «генератор» не потребує пароля — його вкрадуть.'},' — і отримай ',{t:'99 999 гемів безкоштовно',c:'Гемів «з повітря» не буває, це наживка.'},'!'],fields:['Нік','Пароль']},
+  {k:'chat',from:'Максим (друг)',ava:'М',fake:1,body:['Глянь, тут роздають скіни 😱 ',{t:'bit.ly/sk1ns-free',c:'Коротке посилання ховає справжню адресу.',l:1},' — ',{t:'тільки увійди через акаунт гри',c:'Сторінка просить увійти — так крадуть акаунти. Акаунт друга теж могли зламати.'}]},
+  {k:'mail',from:'КіберКлеш <no-reply@kiberklesh.com>',subj:'Новий вхід в акаунт',fake:0,body:['Ми помітили вхід з пристрою Android (Київ). Якщо це ти — нічого не роби. Якщо ні — зміни пароль у налаштуваннях гри.'],why:'Офіційна адреса, немає посилань, радять самому зайти в налаштування гри. Так поводяться справжні сервіси.'},
+  {k:'chat',from:'ProSeller_77',ava:'P',fake:1,body:['Продам акаунт 80 рівня за 200 грн. ',{t:'Оплата лише на карту наперед',c:'Передоплата незнайомцю — гроші можуть просто зникнути.'},', ',{t:'без гаранта',c:'Без посередника ніхто не захистить покупця.'},'. ',{t:'Пиши швидко, бо купують',c:'Тиск часом — улюблений прийом шахраїв.'}]}
+ ]},
+ {id:'msg',title:'Месенджери',color:'--water',items:[
+  {k:'chat',from:{t:'Мама (новий номер)',c:'«Новий номер» — привід не довіряти. Подзвони мамі на старий.'},ava:'М',fake:1,body:['Привіт, телефон розбився, пишу з нового. ',{t:'Терміново скинь код з SMS',c:'Код з SMS — це ключ до твого акаунта. Нікому його не передавай.'},', який зараз прийде.']},
+  {k:'chat',from:'Даша',ava:'Д',fake:1,body:['Проголосуй за мою сестру в конкурсі малюнків 🙏 ',{t:'golos-konkurs.top',c:'Невідомий сайт на дивному домені.',l:1},' — ',{t:'треба підтвердити номер телефону',c:'Для голосування номер і код не потрібні — так крадуть месенджер.'}]},
+  {k:'chat',from:'Класна керівниця',ava:'К',fake:0,body:['Завтра екскурсія, збір о 8:30 біля школи. Не забудьте теплий одяг 🧣'],why:'Знайомий відправник, звичайна інформація, нічого не просить.'},
+  {k:'chat',from:'Підтримка «Чатик»',ava:'Ч',fake:1,body:[{t:'Ваш акаунт буде видалено через 24 години!',c:'Погрози й поспіх — ознака шахрайства.'},' Щоб зберегти його, перейдіть: ',{t:'chatyk-support.help/verify',c:'Месенджери не пишуть із «підтримки» в чаті з посиланнями на сторонні сайти.',l:1}]},
+  {k:'chat',from:'Незнайомець',ava:'?',fake:1,body:['Привіт! Ти класно малюєш 😊 ',{t:'Скинь свою адресу і номер школи',c:'Незнайомцям не можна давати особисті дані — адресу, школу, номер.'},' — ',{t:'я подарую набір фломастерів',c:'Подарунок від незнайомця — наживка. Розкажи про таке дорослим.'},'.']},
+  {k:'chat',from:'Оля',ava:'О',fake:0,body:['Ти вже зробив домашку з інформатики? Я застрягла на третьому завданні 😅'],why:'Звичайне повідомлення від знайомої, без посилань і прохань про дані.'}
+ ]},
+ {id:'mail',title:'Листи й SMS',color:'--sand',items:[
+  {k:'sms',from:'PoshtaLux',fake:1,body:['Ваша посилка затримана. ',{t:'Сплатіть 18 грн',c:'Маленька сума, щоб не насторожитись, — а насправді крадуть дані картки.'},' за доставку: ',{t:'poshtalux-pay.site',c:'Не офіційний сайт служби доставки (poshtalux.ua).',l:1}]},
+  {k:'sms',from:'ПоштаЛюкс',fake:0,body:['Посилка 2045 1877 0021 прибула у відділення №12. Зберігання безкоштовне 5 днів.'],why:'Тільки інформація: немає посилань, оплат і поспіху.'},
+  {k:'mail',from:{t:'МонеткаБанк <security@monetka-bank.support>',c:'Дивна адреса відправника: «.support» замість домену банку.'},subj:'Картку заблоковано!',fake:1,body:['Ваша картка заблокована! ',{t:'Підтвердіть номер картки і CVV-код',c:'CVV-код не просить жоден банк — ніколи.'},' за посиланням ',{t:'протягом 1 години',c:'Поспіх, щоб ти не встиг перевірити.'},'.']},
+  {k:'sms',from:'+380 99 *** ** 12',fake:1,body:[{t:'Вітаємо! Ваш номер виграв iPhone 17',c:'Ти не брав участі в розіграші — значить, і не виграв.'},' у розіграші. Для отримання ',{t:'сплатіть податок 499 грн',c:'Справжній виграш не вимагає оплати наперед.'},'.']},
+  {k:'mail',from:'Олімпіада «ІнфоЛев» <info@infolev.org.ua>',subj:'Реєстрацію підтверджено',fake:0,body:['Дякуємо за реєстрацію! Олімпіада відбудеться 20 грудня о 10:00. Нагадуємо: ніколи нікому не надсилайте свій пароль.'],why:'Очікуваний лист після реєстрації, нічого не просить, ще й нагадує про безпеку.'},
+  {k:'mail',from:{t:'Хмаринка Диск <alert@hmarynka.com.ua.login-check.ru>',c:'Справжній домен — останні частини адреси: тут це login-check.ru, а не hmarynka.'},subj:'Сховище заповнене',fake:1,body:['Ваше сховище заповнене на 100%. ',{t:'Увійдіть зараз, щоб не втратити всі фото',c:'Залякування втратою даних — щоб ти поспіхом увів пароль.'},'.']}
+ ]},
+ {id:'site',title:'Підроблені сайти',color:'--mint',items:[
+  {k:'site',url:{t:'https://monetka-bank.com.secure-login.top',c:'Насправді це сайт secure-login.top, а «monetka-bank» — лише маскування на початку.'},fake:1,title:'МонеткаБанк — вхід',body:['Для входу введіть ',{t:'номер картки, термін дії та CVV',c:'Для входу в банк CVV не потрібен — це крадіжка даних картки.'}],fields:['Номер картки','CVV']},
+  {k:'site',url:'https://kiberklesh.com/shop',fake:0,title:'Магазин КіберКлеш',body:['Набір скінів «Пірат» — 120 гемів. Купити можна лише всередині гри.'],why:'Правильна адреса, не просить ні пароль, ні картку.'},
+  {k:'site',url:{t:'http://hmarynka-disk.co',c:'«http» без «s» і дивний домен «.co» замість справжнього.'},fake:1,title:'Хмаринка — вхід',body:['Увійдіть через пошту: ',{t:'email і пароль від пошти',c:'Пароль від пошти — ключ до всіх акаунтів. Не вводь його на чужих сайтах.'}],fields:['Email','Пароль']},
+  {k:'site',url:{t:'https://kiberk1esh.com',c:'Підміна літер: «k1esh» з одиницею замість «l».'},fake:1,title:'Безкоштовний герой!',body:['Отримай легендарного героя — ',{t:'введи нік і пароль',c:'Подарунок за пароль — пастка.'},'.'],fields:['Нік','Пароль']},
+  {k:'site',url:'https://poshtalux.ua/track',fake:0,title:'Відстеження посилки',body:['Введіть номер посилки, щоб дізнатися, де вона зараз.'],fields:['Номер посилки'],why:'Офіційна адреса служби, просить лише номер посилки.'},
+  {k:'site',url:{t:'https://super-znyzhky-90.shop',c:'Невідомий магазин на одноразовому домені.'},fake:1,title:'Розпродаж!',body:[{t:'Кросівки за 199 грн замість 3999!',c:'Неймовірна знижка — наживка.'},' ',{t:'Лише сьогодні!',c:'Поспіх.'},' ',{t:'Оплата тільки карткою наперед',c:'Тільки передоплата — ризик втратити гроші.'}]}
+ ]}
+];
+
+const STORY=[
+ {who:'КіберКлеш Bot',ava:'К',msgs:['Марку, вітаємо! Ти виграв скін «Золотий дракон» 🐉','Щоб забрати, введи пароль тут: kiberklesh-gift.xyz'],
+  ch:[{t:'Ввести пароль — скін же!',p:0,f:'Ой! Акаунт Марка викрали за хвилину. Справжні боти ніколи не просять пароль.'},
+      {t:'Перевірити в самій грі, чи є подарунок',p:2,f:'Правильно! У грі подарунка немає — отже, це шахраї.'},
+      {t:'Відповісти «а ви точно справжні?»',p:1,f:'Шахраї скажуть «так». Краще перевіряти самому, а не питати їх.'}]},
+ {who:'Брат Артем (новий номер)',ava:'А',msgs:['Марк, це я, загубив телефон 😩','Позич 300 грн на карту, ввечері віддам. Тільки мамі не кажи!'],
+  ch:[{t:'Подзвонити Артему на старий номер',p:2,f:'Супер! Артем у школі, його телефон при ньому. Це був шахрай.'},
+      {t:'Скинути гроші — це ж брат',p:0,f:'Гроші зникли. «Новий номер» і «нікому не кажи» — тривожні дзвіночки.'},
+      {t:'Спитати, як звати їхнього кота',p:1,f:'Непогано, але відповідь можна знайти в соцмережах. Найнадійніше — подзвонити.'}]},
+ {who:'Невідомий номер',ava:'?',msgs:['Тобі прийшов код у SMS, я помилково вказав твій номер 🙏','Перешли, будь ласка, той код'],
+  ch:[{t:'Переслати — людина ж просить',p:0,f:'Через цей код шахрай увійшов у месенджер Марка й пише його друзям.'},
+      {t:'Нікому не надсилати і видалити SMS',p:2,f:'Так! Код із SMS — ключ до акаунта, його не передають нікому.'},
+      {t:'Попросити спершу назвати своє ім\'я',p:1,f:'Ім\'я шахрай вигадає. Код не можна віддавати за жодних умов.'}]},
+ {who:'Ліза з паралельного',ava:'Л',msgs:['Привіт! Проголосуй за мене в конкурсі 🥺','golos-konkurs.top — там треба ввести номер телефону'],
+  ch:[{t:'Спитати Лізу наживо в школі',p:2,f:'Ліза здивувалась: її акаунт зламали, і вона не писала. Ти її попередив!'},
+      {t:'Ввести номер, щоб допомогти',p:0,f:'Тепер Марку пише «служба безпеки» і просить код. Номер потрапив до шахраїв.'},
+      {t:'Проігнорувати',p:1,f:'Безпечно для тебе, але Лізу варто попередити, що її акаунт зламали.'}]},
+ {who:'Незнайомець',ava:'?',msgs:['Ти класно граєш! Давай дружити 😎','Скинь фото, де ти живеш, і в яку школу ходиш — передам подарунок'],
+  ch:[{t:'Не відповідати, заблокувати й розповісти батькам',p:2,f:'Найкраще рішення! Дорослі допоможуть, а незнайомець більше не напише.'},
+      {t:'Скинути, подарунок же',p:0,f:'Не можна! Адресу і школу не дають незнайомцям. Обов\'язково розкажи дорослим.'},
+      {t:'Відповісти, що не скажу',p:1,f:'Добре, що не сказав. Але таких людей краще одразу блокувати й розповідати дорослим.'}]}
+];
+const ENDINGS=[
+ {min:9,t:'🛡 Марко — справжній кібердетектив! Жоден гачок не спрацював.'},
+ {min:5,t:'🙂 Марко майже не попався, але кілька разів був на волосинці.'},
+ {min:0,t:'🎣 Шахраї наловили багато «риби» в телефоні Марка. Спробуй ще раз!'}
+];
+
+const SPEED=[
+ ['«Ти виграв 1000 гемів! Перейди за посиланням і введи пароль»',1],
+ ['«Завтра контрольна з математики, не забудь калькулятор»',0],
+ ['«Ваша картка заблокована, назвіть CVV-код»',1],
+ ['«Посилка прибула у відділення №3»',0],
+ ['«Сплатіть 9 грн, щоб отримати посилку: posylka-pay.top»',1],
+ ['«Привіт, це я з нового номера, скинь код з SMS»',1],
+ ['«Тренування перенесли на 16:00»',0],
+ ['«Акаунт буде видалено за 1 годину! Підтвердіть пароль»',1],
+ ['«Дякуємо за покупку в ігровому магазині»',0],
+ ['«Проголосуй за мене, введи номер телефону на сайті»',1],
+ ['«Новий вхід в акаунт. Якщо це не ти — зміни пароль у налаштуваннях»',0],
+ ['«iPhone за 500 грн, лише сьогодні, передоплата»',1],
+ ['«Нагадування: батьківські збори в четвер о 18:00»',0],
+ ['«Сайт kiberk1esh.com дарує героя за пароль»',1],
+ ['«Мама: купи, будь ласка, хліб дорогою додому»',0],
+ ['«Ти переміг у розіграші, в якому не брав участі»',1],
+ ['«Бібліотека: книжку треба повернути до п\'ятниці»',0],
+ ['«Служба підтримки просить фото паспорта батьків у чаті»',1],
+ ['«Друг: дивись, яке смішне відео з котом» (без посилань)',0],
+ ['«Генератор гемів: введи логін і пароль»',1],
+ ['«Оновлення гри доступне в офіційному магазині застосунків»',0],
+ ['«Незнайомець просить адресу, щоб надіслати подарунок»',1],
+ ['«Класний керівник: завтра форма спортивна»',0],
+ ['«Вас обрано! Отримайте 5000 грн, оплативши 99 грн комісії»',1],
+ ['«Розклад на тиждень оновлено в шкільному журналі»',0],
+ ['«bit.ly/free-sk1ns — забери скін, увійди через акаунт»',1],
+ ['«Сестра: я буду вдома о шостій»',0],
+ ['«Ваш акаунт зламано! Негайно перейдіть: secure-check.click»',1]
+];
+
+const RANKS=[[0,'Мальок','🐟'],[40,'Окунь','🐠'],[60,'Щука','🐊'],[80,'Кібердетектив','🕵️']];
+const SECRET=['Рибнагляд','🎣'];
+const EGGS=['hero','game','msg','mail','site','story'];
+const NAMES=['Леся Українка','Ігор Сікорський','Ліна Костенко','Сергій Корольов','Марія Приймаченко','Василь Стус','Іван Франко','Соломія Крушельницька','Олександр Довженко','Катерина Білокур','Микола Амосов','Валерій Лобановський'];
+
+/* ===================== ЗБЕРЕЖЕННЯ ===================== */
+const KEY='phishing-detector-v1';
+const S=load();
+function load(){
+  let d={};try{d=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+  return {name:d.name||'',cls:d.cls||'',snd:d.snd!==false,res:d.res&&typeof d.res==='object'?d.res:{},eggs:Array.isArray(d.eggs)?d.eggs:[],best:+d.best||0,story:+d.story||0};
+}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+/* ===================== ЗВУК ===================== */
+const Sound={ctx:null,
+  unlock(){if(!this.ctx){try{this.ctx=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(this.ctx&&this.ctx.state==='suspended')this.ctx.resume()},
+  tone(f,d=.12,type='sine',v=.08,f2=null,delay=0){
+    if(!S.snd||!this.ctx)return;const c=this.ctx,t=c.currentTime+delay,o=c.createOscillator(),g=c.createGain();
+    o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);
+    g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+.02);
+  },
+  ok(){this.tone(520,.12,'triangle');this.tone(780,.16,'triangle',.08,null,.1)},
+  bad(){this.tone(220,.25,'sawtooth',.05,110)},
+  splash(){this.tone(900,.18,'sine',.05,300)},
+  win(){[523,659,784,1046].forEach((f,i)=>this.tone(f,.18,'triangle',.07,null,i*.12))}
+};
+addEventListener('pointerdown',()=>Sound.unlock(),{once:false});
+const sndBtn=document.getElementById('snd');
+function drawSnd(){
+  sndBtn.innerHTML=S.snd?'<svg viewBox="0 0 24 24"><path class="ink" d="M3 9h4l5-4v14l-5-4H3z"/><path class="stk" style="stroke-width:2" d="M15 9a4 4 0 0 1 0 6M17.5 6.5a7.5 7.5 0 0 1 0 11"/></svg>'
+    :'<svg viewBox="0 0 24 24"><path class="ink" d="M3 9h4l5-4v14l-5-4H3z"/><path class="stk" style="stroke-width:2" d="M16 9l5 6M21 9l-5 6"/></svg>';
+  sndBtn.setAttribute('aria-pressed',String(S.snd));sndBtn.title=S.snd?'Звук увімкнено':'Звук вимкнено';
+}
+sndBtn.onclick=()=>{S.snd=!S.snd;persist();drawSnd();Sound.unlock();Sound.tone(660,.08)};
+drawSnd();
+
+/* ===================== УТИЛІТИ ===================== */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>e.classList.remove('on'),2200)}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+id));scrollTo(0,0);cur=id;if(id!=='speed')stopSpeed()}
+let cur='start';
+
+/* ===================== ПАСХАЛКИ-РИБКИ ===================== */
+function eggBtn(id,pos){return `<button class="egg${S.eggs.includes(id)?' got':''}" data-egg="${id}" style="${pos}" aria-label="Схована рибка"><svg viewBox="0 0 60 36"><use href="#fishS"/></svg></button>`}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.egg');if(!b)return;
+  const id=b.dataset.egg;if(!S.eggs.includes(id)){S.eggs.push(id);persist();}
+  b.classList.add('got');Sound.splash();
+  toast(S.eggs.length>=EGGS.length?'🎣 Усі 6 рибок знайдено! Секретний ранг «Рибнагляд» відкрито!':`🐟 Рибка знайдена: ${S.eggs.length} з ${EGGS.length}`);
+  updRank();
+});
+
+/* ===================== ОЦІНКА І РАНГ ===================== */
+const MAX=CH.reduce((s,c)=>s+c.items.reduce((a,i)=>a+1+(i.fake?.5:0),0),0);
+function totalPts(){return CH.reduce((s,c)=>s+(S.res[c.id]?S.res[c.id].pts:0),0)}
+function pct(){return Math.round(totalPts()/MAX*100)}
+function grade(){return Math.max(1,Math.round(totalPts()/MAX*12))}
+function allDone(){return CH.every(c=>S.res[c.id]&&S.res[c.id].done)}
+function rank(){
+  if(S.eggs.length>=EGGS.length&&pct()>=80)return SECRET;
+  let r=RANKS[0];for(const x of RANKS)if(pct()>=x[0])r=x;return [r[1],r[2]];
+}
+function updRank(){
+  const [n,ic]=rank();$('chipRank').textContent=`${ic} Ранг: ${n}`;
+  const done=CH.filter(c=>S.res[c.id]&&S.res[c.id].done).length;
+  $('progLevels').textContent=done?`${done}/4`:'';$('progSpeed').textContent=S.best?`🏆 ${S.best}`:'';
+}
+
+/* ===================== СТАРТ ===================== */
+const inName=$('inName'),inClass=$('inClass');
+inName.placeholder=NAMES[Math.floor(Math.random()*NAMES.length)];inClass.placeholder='7-А';
+inName.value=S.name;inClass.value=S.cls;
+inName.oninput=()=>{S.name=inName.value.trim();persist()};
+inClass.oninput=()=>{S.cls=inClass.value.trim();persist()};
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{
+  if(b.dataset.go==='levels'&&!S.name){inName.focus();toast('Впиши ім\'я та прізвище — вони будуть у звіті й сертифікаті');return}
+  ({levels:openLevels,story:startStory,speed:openSpeed})[b.dataset.go]();
+});
+$('home').onclick=()=>{show('start');updRank()};
+
+/* ===================== РОЗДІЛИ ===================== */
+const PIC={
+ game:'<svg viewBox="0 0 120 90"><rect x="18" y="22" width="84" height="46" rx="20" class="li"/><rect x="34" y="38" width="16" height="5" rx="2" class="ink"/><rect x="39.5" y="32.5" width="5" height="16" rx="2" class="ink"/><circle cx="80" cy="38" r="5" class="co"/><circle cx="90" cy="48" r="5" class="sa"/></svg>',
+ msg:'<svg viewBox="0 0 120 90"><rect x="14" y="14" width="70" height="40" rx="14" class="wa"/><path class="wa" d="M26 50l-6 14 18-10z"/><rect x="44" y="40" width="64" height="36" rx="14" class="mi"/><circle cx="62" cy="58" r="4" class="ink"/><circle cx="76" cy="58" r="4" class="ink"/><circle cx="90" cy="58" r="4" class="ink"/></svg>',
+ mail:'<svg viewBox="0 0 120 90"><rect x="16" y="20" width="88" height="56" rx="8" class="pp"/><path d="M18 24l42 30 42-30" fill="none" style="stroke:var(--coral);stroke-width:5;stroke-linejoin:round"/><circle cx="98" cy="22" r="12" class="co"/><text x="98" y="27" text-anchor="middle" style="font:800 14px Rubik;fill:#fff">!</text></svg>',
+ site:'<svg viewBox="0 0 120 90"><rect x="12" y="14" width="96" height="64" rx="10" class="pp"/><rect x="12" y="14" width="96" height="16" rx="8" class="mi"/><rect x="24" y="40" width="72" height="9" rx="4" class="wa"/><rect x="24" y="55" width="72" height="9" rx="4" class="wa"/><path d="M84 66v16a7 7 0 0 1-14 0" class="stk" style="stroke-width:4"/></svg>'
+};
+const EGGPOS={game:'right:6px;bottom:6px',msg:'left:8px;bottom:4px',mail:'right:10px;top:-14px',site:'left:46%;bottom:-6px'};
+function openLevels(){
+  show('levels');
+  $('lvTotal').textContent=`Бали: ${+totalPts().toFixed(1)} з ${MAX}`;
+  $('chapters').innerHTML=CH.map(c=>{
+    const r=S.res[c.id];const st=r&&r.done?`✅ ${+r.pts.toFixed(1)} з ${chMax(c)}`:(r?`Пройдено ${r.i||0} з 6`:'Ще не пройдено');
+    return `<button class="chap" data-ch="${c.id}"><div class="pic" style="background:color-mix(in srgb,var(${c.color}) 60%,var(--card))">${PIC[c.id]}</div><h3>${c.title}</h3><small>${st}</small></button>`;
+  }).join('');
+  $('chapters').querySelectorAll('.chap').forEach(b=>b.onclick=()=>startChapter(b.dataset.ch));
+}
+$('toReport').onclick=()=>{if(!Object.keys(S.res).length){toast('Спершу пройди хоча б один розділ');return}openReport()};
+function chMax(c){return c.items.reduce((a,i)=>a+1+(i.fake?.5:0),0)}
+
+/* ===================== ГРА ===================== */
+let G=null;
+function startChapter(id){
+  const c=CH.find(x=>x.id===id);
+  G={c,i:0,pts:0,log:[],phase:'verdict',tries:0};
+  S.res[id]={pts:0,i:0,done:false,log:[]};persist();
+  show('play');$('chTitle').textContent=c.title;renderItem();
+}
+function seg(x,wrap=true){
+  if(typeof x==='string')return `<span class="seg">${esc(x)}</span>`;
+  const cls='seg clue'+(x.l?' lnk':'');
+  return `<span class="${cls}" data-c="${esc(x.c)}" tabindex="-1">${esc(x.t)}</span>`;
+}
+function plain(x){return typeof x==='string'?x:x.t}
+function renderMsg(it){
+  const body=it.body.map(s=>seg(s)).join('');
+  if(it.k==='chat')return `<div class="m" id="mcard"><div class="m-top"><span class="ava">${esc(it.ava||'?')}</span>${seg(it.from)}</div><div class="m-body"><div class="bubble">${body}</div></div></div>`;
+  if(it.k==='game')return `<div class="m game-pop" id="mcard"><div class="m-top"><span class="ava" style="background:var(--sand)">🎮</span>${seg(it.from)}</div><div class="m-body">${body}</div></div>`;
+  if(it.k==='sms')return `<div class="m sms" id="mcard"><div class="m-top"><span class="ava" style="background:var(--mint)">✉</span>SMS · ${seg(it.from)}</div><div class="m-body">${body}</div></div>`;
+  if(it.k==='mail')return `<div class="m" id="mcard"><div class="mail-h"><b>Від:</b>${seg(it.from)}<br><b>Тема:</b><span class="seg">${esc(it.subj)}</span></div><div class="m-body">${body}</div></div>`;
+  if(it.k==='site'){
+    const url=typeof it.url==='string'?`<span class="seg">${esc(it.url)}</span>`:seg(it.url);
+    const f=(it.fields||[]).map(x=>`<span class="fake-in">${esc(x)}</span>`).join('');
+    return `<div class="m" id="mcard"><div class="url"><svg width="18" height="18" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2" class="ink"/><path d="M8 10V7a4 4 0 0 1 8 0v3" class="stk" style="stroke-width:2"/></svg><span class="addr">${url}</span></div><div class="site-b"><h3>${esc(it.title)}</h3><div>${body}</div>${f}</div></div>`;
+  }
+}
+function renderDots(){
+  $('dots').innerHTML=G.c.items.map((_,k)=>{const l=G.log[k];return `<i class="${l?(l.ok?'ok':'bad'):(k===G.i?'cur':'')}"></i>`}).join('');
+  $('chScore').textContent=`Бали: ${+G.pts.toFixed(1)}`;
+}
+function renderItem(){
+  const it=G.c.items[G.i];G.phase='verdict';G.tries=0;
+  $('msgbox').innerHTML=renderMsg(it)+'<div class="fx" id="fx"></div>'+eggBtn(G.c.id,EGGPOS[G.c.id]);
+  $('panel').innerHTML=`<p class="hint">Повідомлення ${G.i+1} з ${G.c.items.length}. Що це?</p>
+    <div class="actions"><button class="btn bad" id="bFake"><svg viewBox="0 0 24 24"><use href="#hookS"/></svg>Підробка</button><button class="btn ok" id="bReal"><svg viewBox="0 0 24 24"><path class="stk" style="stroke-width:3" d="M5 12l5 5 9-10"/></svg>Справжнє</button></div>
+    <p class="kbd">Клавіші: ← підробка, → справжнє</p>`;
+  $('bFake').onclick=()=>verdict(1);$('bReal').onclick=()=>verdict(0);
+  renderDots();
+}
+function fx(type){
+  const f=$('fx');if(!f)return;
+  f.innerHTML=type==='ok'?'<svg class="fish" viewBox="0 0 60 36"><use href="#fishS"/></svg>':'<svg class="hk" viewBox="0 0 40 60" style="width:30px;height:50px"><use href="#hookS"/></svg>';
+  if(type!=='ok')$('mcard').classList.add('yank');
+}
+function verdict(v){
+  if(G.phase!=='verdict')return;
+  const it=G.c.items[G.i],ok=v===it.fake;
+  if(ok){G.pts+=1;Sound.ok();fx('ok')}else{Sound.bad();fx('bad')}
+  G.log[G.i]={ok,clue:false};
+  if(ok&&it.fake){
+    G.phase='find';$('mcard').classList.add('finding');
+    $('panel').innerHTML=`<div class="expl"><span class="tag okt">Так, це підробка! +1</span></div><p class="hint">Тепер знайди підозрілу деталь — тапни на неї (+0,5).</p><div class="actions"><button class="btn" id="bSkip" style="grid-column:1/-1">Не знаю, покажи</button></div>`;
+    $('bSkip').onclick=()=>reveal(false);
+    $('mcard').querySelectorAll('.seg').forEach(s=>{s.tabIndex=0;s.onclick=()=>pick(s);s.onkeydown=e=>{if(e.key==='Enter')pick(s)}});
+  } else reveal(ok);
+  renderDots();save();
+}
+function pick(s){
+  if(G.phase!=='find')return;
+  if(s.classList.contains('clue')){
+    s.classList.add('hit');G.pts+=.5;G.log[G.i].clue=true;Sound.ok();
+    reveal(true,s);
+  } else {
+    G.tries++;s.classList.remove('miss');void s.offsetWidth;s.classList.add('miss');Sound.tone(260,.1,'square',.04);
+    if(G.tries>=2)reveal(true);
+  }
+}
+function reveal(ok,hit){
+  const it=G.c.items[G.i];G.phase='done';
+  const card=$('mcard');card.classList.remove('finding');
+  card.querySelectorAll('.seg').forEach(s=>{s.onclick=null;s.tabIndex=-1});
+  let html='';
+  if(it.fake){
+    card.querySelectorAll('.clue').forEach(s=>{if(!s.classList.contains('hit'))s.classList.add('show')});
+    const clues=[...card.querySelectorAll('.clue')].map(s=>`<li><b>${esc(s.textContent)}</b> — ${esc(s.dataset.c)}</li>`).join('');
+    html=G.log[G.i].ok?`<span class="tag okt">${G.log[G.i].clue?'Деталь знайдено! +0,5':'Підробку розпізнано'}</span>`:`<span class="tag badt">Це була підробка — гачок спрацював 🎣</span>`;
+    html+=`<p style="margin:6px 0 0"><b>Ознаки шахрайства:</b></p><ul>${clues}</ul>`;
+  } else {
+    html=(G.log[G.i].ok?`<span class="tag okt">Так, це справжнє повідомлення</span>`:`<span class="tag badt">Насправді це справжнє повідомлення</span>`)+`<p style="margin:6px 0 0">${esc(it.why||'')}</p>`;
+  }
+  const last=G.i===G.c.items.length-1;
+  $('panel').innerHTML=`<div class="expl">${html}</div><div class="actions"><button class="btn main" id="bNext" style="grid-column:1/-1">${last?'Завершити розділ':'Далі →'}</button></div>`;
+  $('bNext').onclick=next;$('bNext').focus({preventScroll:true});
+  renderDots();save();
+}
+function save(){S.res[G.c.id]={pts:G.pts,i:G.i+(G.phase==='done'?1:0),done:false,log:G.log.map((l,k)=>({...l,k}))};persist()}
+function next(){
+  if(G.i<G.c.items.length-1){G.i++;renderItem();return}
+  S.res[G.c.id].done=true;S.res[G.c.id].i=6;persist();Sound.win();
+  if(allDone())openReport();else{openLevels();toast(`Розділ «${G.c.title}» пройдено: ${+G.pts.toFixed(1)} з ${chMax(G.c)}`)}
+}
+
+/* ===================== ЗВІТ ===================== */
+function openReport(){
+  show('report');const [rn,ri]=rank();updRank();
+  const bars=CH.map(c=>{const r=S.res[c.id],p=r?r.pts:0,m=chMax(c);return `<div class="chb"><span>${c.title}</span><span class="tr"><i style="width:${Math.round(p/m*100)}%"></i></span><span>${+p.toFixed(1)}/${m}</span></div>`}).join('');
+  const mist=[];CH.forEach(c=>{const r=S.res[c.id];if(!r||!r.log)return;r.log.forEach(l=>{if(!l.ok){const it=c.items[l.k];const txt=it.k==='site'?plain(it.url):it.body.map(plain).join('');mist.push(`<div><b>${c.title}:</b> «${esc(txt.slice(0,90))}${txt.length>90?'…':''}» — це ${it.fake?'підробка':'насправді справжнє'}.</div>`)}})});
+  const full=allDone();
+  $('report').innerHTML=`<h2 style="font-size:26px;margin-bottom:12px">Звіт ${full?'':'(проміжний)'}</h2>
+    <div class="grade"><div class="gnum">${grade()}</div><div><div class="rank">${ri} ${rn}</div><div>${esc(S.name||'Учень')}${S.cls?', '+esc(S.cls):''}</div><div style="color:var(--muted);font-weight:700">Бали: ${+totalPts().toFixed(1)} з ${MAX} (${pct()}%) · Рибок: ${S.eggs.length}/${EGGS.length}</div></div></div>
+    <div class="chbars">${bars}</div>
+    <h3>Помилки</h3><div class="mist">${mist.length?mist.join(''):'<div>Жодної помилки! 🎉</div>'}</div>
+    <div class="row"><button class="btn main" id="bCert">Завантажити сертифікат</button><button class="btn" id="bCopy">Скопіювати звіт</button><button class="btn" id="bBack">До розділів</button></div>`;
+  $('bCert').onclick=cert;$('bBack').onclick=openLevels;
+  $('bCopy').onclick=()=>{
+    const t=`Фішинг-детектор — звіт\n${S.name}${S.cls?', '+S.cls:''}\nОцінка: ${grade()}/12 (${pct()}%), ранг: ${rn}\n`+CH.map(c=>{const r=S.res[c.id];return `${c.title}: ${r?+r.pts.toFixed(1):0}/${chMax(c)}`}).join('\n');
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Звіт скопійовано'),()=>toast('Не вдалося скопіювати'));
+  };
+  if(full)Sound.win();
+}
+function cert(){
+  const W=1600,H=1130,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+  const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  x.fillStyle=css('--bg');x.fillRect(0,0,W,H);
+  x.fillStyle=css('--water');x.beginPath();x.moveTo(0,820);x.bezierCurveTo(400,760,800,860,1200,800);x.bezierCurveTo(1400,770,1500,800,W,790);x.lineTo(W,H);x.lineTo(0,H);x.fill();
+  x.fillStyle=css('--deep');x.globalAlpha=.6;x.beginPath();x.moveTo(0,960);x.bezierCurveTo(500,910,900,1000,W,940);x.lineTo(W,H);x.lineTo(0,H);x.fill();x.globalAlpha=1;
+  x.fillStyle=css('--card');x.shadowColor='rgba(35,48,71,.25)';x.shadowBlur=24;x.shadowOffsetY=8;
+  const r=36;x.beginPath();x.roundRect?x.roundRect(120,90,W-240,H-260,r):x.rect(120,90,W-240,H-260);x.fill();x.shadowColor='transparent';
+  x.strokeStyle=css('--ink');x.lineWidth=6;x.lineCap='round';x.beginPath();x.moveTo(W-260,0);x.lineTo(W-260,140);x.arc(W-290,140,30,0,Math.PI);x.stroke();
+  x.fillStyle=css('--ink');x.textAlign='center';
+  x.font='800 44px Rubik, sans-serif';x.fillText('СЕРТИФІКАТ',W/2,250);
+  x.font='700 30px Nunito, sans-serif';x.fillStyle=css('--muted');x.fillText('гри «Фішинг-детектор»',W/2,300);
+  x.fillStyle=css('--ink');x.font='800 72px Rubik, sans-serif';x.fillText(S.name||'Учень',W/2,440);
+  x.font='700 32px Nunito, sans-serif';x.fillText((S.cls?S.cls+' клас · ':'')+'успішно навчився(лася) розпізнавати фішинг',W/2,500);
+  const [rn,ri]=rank();
+  x.font='800 56px Rubik, sans-serif';x.fillStyle=css('--coral');x.fillText(`${ri} ${rn}`.replace(/[^\p{L}\s]/gu,'').trim(),W/2,630);
+  x.font='700 30px Nunito, sans-serif';x.fillStyle=css('--ink');x.fillText(`Оцінка ${grade()} з 12 · ${pct()}% · рибок ${S.eggs.length}/${EGGS.length}`,W/2,700);
+  x.font='600 24px Nunito, sans-serif';x.fillStyle=css('--muted');x.fillText(new Date().toLocaleDateString('uk-UA'),W/2,780);
+  // рибка
+  const fish=(fx,fy,s)=>{x.save();x.translate(fx,fy);x.scale(s,s);x.fillStyle=css('--coral');x.beginPath();x.moveTo(6,18);x.bezierCurveTo(14,6,32,4,44,14);x.lineTo(54,6);x.lineTo(54,30);x.lineTo(44,22);x.bezierCurveTo(32,32,14,30,6,18);x.fill();x.fillStyle=css('--ink');x.beginPath();x.arc(18,15,3,0,7);x.fill();x.restore()};
+  fish(260,900,3);fish(1180,980,2.2);
+  const a=document.createElement('a');a.download=`sertyfikat-${(S.name||'uchen').replace(/\s+/g,'-')}.png`;a.href=c.toDataURL('image/png');a.click();
+  toast('Сертифікат завантажено');
+}
+
+/* ===================== ІСТОРІЯ ===================== */
+let ST=null;
+function startStory(){show('story');ST={i:0,pts:0};$('stNote').hidden=true;storyStep()}
+function storyStep(){
+  const s=STORY[ST.i];$('stWho').textContent=s.who;$('stAva').textContent=s.ava;
+  $('stScore').textContent=`Ситуація ${ST.i+1} з ${STORY.length}`;
+  const feed=$('stFeed');feed.innerHTML=(ST.i===STORY.length-1?eggBtn('story','right:12px;top:58px'):'');
+  s.msgs.forEach((m,k)=>setTimeout(()=>{const d=document.createElement('div');d.className='b-in';d.innerHTML=esc(m).replace(/([a-z0-9-]+\.(xyz|top))/g,'<span class="lnk">$1</span>');feed.appendChild(d);Sound.tone(880,.05,'sine',.03)},k*350));
+  const ch=[...s.ch].sort(()=>Math.random()-.5);
+  $('stChoices').innerHTML=ch.map((c,k)=>`<button class="choice" data-k="${s.ch.indexOf(c)}">${esc(c.t)}</button>`).join('');
+  $('stChoices').querySelectorAll('.choice').forEach(b=>b.onclick=()=>storyPick(+b.dataset.k));
+  $('stNote').hidden=true;
+}
+function storyPick(k){
+  const s=STORY[ST.i],c=s.ch[k];ST.pts+=c.p;
+  const feed=$('stFeed');const o=document.createElement('div');o.className='b-out';o.textContent=c.t;feed.appendChild(o);
+  const n=document.createElement('div');n.className='b-note';n.textContent=c.p===2?'✅ Чудовий вибір':c.p===1?'🤔 Можна краще':'🎣 Гачок спрацював';feed.appendChild(n);
+  c.p===2?Sound.ok():c.p===1?Sound.tone(440,.15):Sound.bad();
+  $('stChoices').innerHTML='';
+  const last=ST.i===STORY.length-1;
+  $('stNote').hidden=false;$('stNote').innerHTML=`<p class="expl" style="margin:0 0 12px">${esc(c.f)}</p><button class="btn main" id="stNext" style="width:100%">${last?'Кінцівка':'Далі →'}</button>`;
+  $('stNext').onclick=()=>{if(last)storyEnd();else{ST.i++;storyStep()}};$('stNext').focus({preventScroll:true});
+}
+function storyEnd(){
+  const e=ENDINGS.find(x=>ST.pts>=x.min);S.story=Math.max(S.story,ST.pts);persist();Sound.win();
+  $('stChoices').innerHTML='';$('stFeed').innerHTML=`<div class="b-note" style="font-size:18px;color:var(--ink);margin:auto 0"><b>${e.t}</b><br><br>Бали: ${ST.pts} з ${STORY.length*2}</div>`;
+  $('stNote').innerHTML=`<div class="row" style="margin:0"><button class="btn main" id="stAgain">Ще раз</button><button class="btn" id="stHome">На головну</button></div>`;
+  $('stAgain').onclick=startStory;$('stHome').onclick=()=>{show('start');updRank()};
+}
+
+/* ===================== 60 СЕКУНД ===================== */
+let SP=null;
+function openSpeed(){show('speed');$('spBest').textContent=S.best;$('spScore').textContent='0';$('spTime').textContent='60';$('spBar').style.width='100%';
+  $('spCard').innerHTML='Натисни «Старт» і сортуй повідомлення: підробка чи справжнє?';$('spStart').hidden=false;spBtns(false)}
+function spBtns(on){$('spFake').disabled=!on;$('spReal').disabled=!on}
+function startSpeed(){
+  SP={left:60,score:0,deck:[...SPEED].sort(()=>Math.random()-.5),k:0,t0:performance.now(),raf:0,busy:false};
+  $('spStart').hidden=true;spBtns(true);nextSpeed();
+  const tick=()=>{if(!SP)return;const el=60-(performance.now()-SP.t0)/1000;SP.left=Math.max(0,el);
+    $('spTime').textContent=Math.ceil(SP.left);$('spBar').style.width=(SP.left/60*100)+'%';
+    if(SP.left<=0){endSpeed();return}SP.raf=requestAnimationFrame(tick)};
+  SP.raf=requestAnimationFrame(tick);
+}
+function nextSpeed(){if(SP.k>=SP.deck.length){SP.deck.sort(()=>Math.random()-.5);SP.k=0}
+  const c=$('spCard');c.className='m scard';c.textContent=SP.deck[SP.k][0];SP.busy=false}
+function answerSpeed(v){
+  if(!SP||SP.busy)return;SP.busy=true;
+  const ok=v===SP.deck[SP.k][1],c=$('spCard');
+  if(ok){SP.score++;Sound.ok()}else{Sound.bad();SP.t0-=2000;toast('Помилка: −2 секунди')}
+  $('spScore').textContent=SP.score;c.classList.add(ok?'flash-ok':'flash-bad',v?'l':'r');
+  SP.k++;setTimeout(()=>{if(SP)nextSpeed()},260);
+}
+function endSpeed(){
+  cancelAnimationFrame(SP.raf);const sc=SP.score;SP=null;spBtns(false);
+  const rec=sc>S.best;if(rec){S.best=sc;persist();$('spBest').textContent=sc}
+  $('spCard').className='m scard';$('spCard').innerHTML=`${rec?'🏆 Новий рекорд!':'Час вийшов!'}<br>Упіймано: ${sc}`;
+  $('spStart').hidden=false;$('spStart').textContent='Ще раз';rec?Sound.win():Sound.tone(500,.2);updRank();
+}
+function stopSpeed(){if(SP){cancelAnimationFrame(SP.raf);SP=null}}
+$('spStart').onclick=startSpeed;$('spFake').onclick=()=>answerSpeed(1);$('spReal').onclick=()=>answerSpeed(0);
+(()=>{let x0=null;const c=$('spCard');
+  c.addEventListener('pointerdown',e=>{x0=e.clientX});
+  c.addEventListener('pointerup',e=>{if(x0===null)return;const dx=e.clientX-x0;x0=null;if(Math.abs(dx)>50)answerSpeed(dx<0?1:0)});
+})();
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&SP){endSpeed()}});
+
+/* ===================== КЛАВІАТУРА ===================== */
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT'||$('info').open)return;
+  if(cur==='play'&&G){
+    if(G.phase==='verdict'&&e.key==='ArrowLeft')verdict(1);
+    else if(G.phase==='verdict'&&e.key==='ArrowRight')verdict(0);
+  }
+  if(cur==='speed'&&SP){if(e.key==='ArrowLeft')answerSpeed(1);if(e.key==='ArrowRight')answerSpeed(0)}
+});
+
+/* ===================== [i] ===================== */
+const info=$('info');
+$('infoBtn').onclick=()=>info.showModal();
+info.addEventListener('click',e=>{if(e.target===info||e.target.closest('[data-close]'))info.close()});
+
+updRank();
+document.querySelector('.egg[data-egg="hero"]').classList.toggle('got',S.eggs.includes('hero'));
+</script>
+</body>
+</html>
