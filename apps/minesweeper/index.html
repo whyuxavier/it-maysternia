@@ -12,7 +12,7 @@
 <style>
 html,body{margin:0}
 
-/* Layout: header → hero (title and buttons) → toolbar → framed board. Every color comes from the active skin. */
+/* Layout: header → daily flame button → framed board (modes and settings in the ⚙ dialog). Every color comes from the active skin. */
 :root{
   --display:"Unbounded", "Segoe UI", system-ui, sans-serif;
   --body:"Manrope", "Segoe UI", system-ui, sans-serif;
@@ -212,26 +212,14 @@ dialog::backdrop{background:rgba(8,10,14,.55)}
 #sizeSeg{justify-self:start}
 #soundBtn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 
-/* hero: title, short text and three equal buttons */
-.hero{position:relative;padding-block:18px 6px}
-.hero::before{content:"";position:absolute;inset:-14px -16px -6px;z-index:-1;pointer-events:none;
-  background-image:linear-gradient(var(--line) 1.5px, transparent 1.5px),linear-gradient(90deg, var(--line) 1.5px, transparent 1.5px);
-  background-size:34px 34px;
-  -webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 50%, #000 10%, transparent 75%);
-          mask-image:radial-gradient(ellipse 70% 70% at 50% 50%, #000 10%, transparent 75%)}
-.hero h1{font:800 clamp(30px,5vw,44px)/1.05 var(--display);margin:0 0 10px}
-.hero p{margin:0 0 18px;color:var(--muted);max-width:40ch}
-.hero-btns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;max-width:560px}
-.hero-btns .btn{justify-content:center;text-align:center;min-height:48px;padding:10px 12px;width:100%}
-@media (max-width:640px){.hero-btns{grid-template-columns:minmax(0,1fr)}}
-
-/* toolbar: mode switch + daily challenge with streak flame */
-.toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+/* toolbar: daily challenge button with the streak flame */
+.toolbar{display:flex;justify-content:flex-end;margin-bottom:-4px}
 .daily-btn{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:700 15px/1 var(--mono);font-variant-numeric:tabular-nums;cursor:pointer}
 .daily-btn:hover{border-color:var(--accent)}
 .daily-btn[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 .daily-btn svg{width:20px;height:20px}
 .daily-btn[data-tier="0"] svg{color:var(--muted)}
+.daily-btn[data-lit="false"] svg{opacity:.55}
 .daily-btn[data-tier="1"] svg{color:#ffb02e}
 .daily-btn[data-tier="2"] svg{color:#ff7a1f}
 .daily-btn[data-tier="3"] svg{color:#ff3b3b;filter:drop-shadow(0 0 4px rgba(255,59,59,.6))}
@@ -280,24 +268,8 @@ dialog::backdrop{background:rgba(8,10,14,.55)}
     <button class="icon-btn info-btn" id="infoBtn" type="button" aria-label="Про гру, правила й керування" title="Про гру">[i]</button>
   </header>
 
-  <section class="hero" aria-labelledby="heroTitle">
-    <div class="hero-text">
-      <h1 id="heroTitle">Сапер</h1>
-      <p>Знайди всі міни, не відкривши жодної. Грай класично, введи команду як в Excel або пройди щоденний виклик.</p>
-      <div class="hero-btns">
-        <button class="btn primary" id="heroClassic" type="button">Класика</button>
-        <button class="btn" id="heroFormula" type="button">Формули</button>
-        <button class="btn" id="heroDaily" type="button">Щоденний виклик</button>
-      </div>
-    </div>
-  </section>
-
   <main class="stage">
     <div class="toolbar">
-      <div class="seg" id="playSeg" role="group" aria-label="Режим гри">
-        <button type="button" data-play="classic" aria-pressed="true">Класика</button>
-        <button type="button" data-play="formula" aria-pressed="false">Формули</button>
-      </div>
       <button class="daily-btn" id="dailyBtn" type="button" aria-pressed="false" data-tier="0">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c1 4 6 6.5 6 12a6 6 0 0 1-12 0c0-2.4 1.2-4.2 2.4-5.5.2 1.6 1 2.8 2.2 3.4C10 8.5 10.4 5.2 12 2z"/></svg>
         <span id="streakN">0</span>
@@ -328,6 +300,11 @@ dialog::backdrop{background:rgba(8,10,14,.55)}
 <dialog id="settings" aria-labelledby="settingsTitle">
   <div class="dlg">
     <header><h3 id="settingsTitle">Налаштування</h3><button class="icon-btn" id="closeSettings" type="button" aria-label="Закрити"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></header>
+    <h4>Режим</h4>
+    <div class="seg" id="playSeg" role="group" aria-label="Режим гри">
+      <button type="button" data-play="classic" aria-pressed="true">Класика</button>
+      <button type="button" data-play="formula" aria-pressed="false">Формули</button>
+    </div>
     <h4>Тема</h4>
     <div class="theme-grid" id="themeGrid" role="radiogroup" aria-label="Тема"></div>
     <h4>Розмір поля</h4>
@@ -348,8 +325,8 @@ dialog::backdrop{background:rgba(8,10,14,.55)}
     <h4>Режими</h4>
     <ul>
       <li><b>Класика</b> — клік відкриває, правий клік або довге натискання ставить прапорець.</li>
-      <li><b>Формули</b> — ходи пишуться в рядку формул: <kbd>open(A4)</kbd>, <kbd>flag(B2)</kbd>, <kbd>unflag(B2)</kbd>. Стовпці — літерами, рядки — цифрами. Поле мишею не відкривається.</li>
-      <li><b>Сьогодні</b> — однакове поле 16×16 для всіх на день. Вогник показує серію днів. Раз на тиждень пропущений день не обриває серію (заморозка).</li>
+      <li><b>Формули</b> (у налаштуваннях ⚙) — ходи пишуться в рядку формул: <kbd>open(A4)</kbd>, <kbd>flag(B2)</kbd>, <kbd>unflag(B2)</kbd>. Стовпці — літерами, рядки — цифрами. Поле мишею не відкривається.</li>
+      <li><b>Вогник</b> (кнопка над полем) — щоденний виклик: однакове поле 16×16 для всіх на день. Зіграйте, щоб запалити вогник. Серія росте лише від перемог; раз на тиждень пропущений день не обриває її (заморозка).</li>
     </ul>
     <h4>Керування</h4>
     <ul>
@@ -607,7 +584,7 @@ function hideBanner(){ $('#banner').hidden = true; }
 function reveal(i){
   if (game.over || game.flag[i]) return;
   if (game.open[i]) { chord(i); return; }
-  if (!game.started) { game.started = true; plant(i); startTimer(); }
+  if (!game.started) { game.started = true; plant(i); startTimer(); if (game.daily) markPlayed(); }
   if (game.mine[i]) { lose(i); return; }
   const stack = [i]; let count = 0;
   while (stack.length) {
@@ -676,7 +653,7 @@ function todayInfo(){
   return {key, num: dayNum(key), week: keyOf(mon)};
 }
 function streakState(){
-  const s = LS.get('streak', {n:0, last:null, frz:null}), t = todayInfo();
+  const s = LS.get('streak', {n:0, last:null, frz:null, played:null}), t = todayInfo();
   const gap = s.last ? t.num - dayNum(s.last) : Infinity;
   const frzReady = s.frz !== t.week;               // one freeze per calendar week (weeks start on Monday)
   let status = 'lost';
@@ -691,23 +668,29 @@ function dailyWin(){
   let n = 1, frz = st.s.frz;
   if (st.status === 'pending') n = st.s.n + 1;
   if (st.status === 'freeze') { n = st.s.n + 1; frz = st.t.week; }
-  LS.set('streak', {n, last: st.t.key, frz});
+  LS.set('streak', {...st.s, n, last: st.t.key, frz});
   return {n, badge: n === 7};
 }
-const STREAK_TEXT = {
-  done: 'сьогоднішній виклик пройдено',
-  pending: 'пройдіть сьогоднішній виклик, щоб серія не обірвалась',
-  freeze: 'серія збережеться заморозкою',
-  lost: 'серію перервано, почніть нову'
-};
+function markPlayed(){
+  const s = LS.get('streak', {n:0, last:null, frz:null, played:null}), t = todayInfo();
+  if (s.played === t.key) return;
+  LS.set('streak', {...s, played: t.key});
+  renderStreak();
+}
 function renderStreak(){
-  const st = streakState(), n = st.n;
-  const tier = n >= 30 ? 4 : n >= 14 ? 3 : n >= 7 ? 2 : n >= 3 ? 1 : 0;
+  const st = streakState(), t = todayInfo(), n = st.n;
+  const lit = st.s.played === t.key;                 // today's challenge was played (win or lose)
+  const tier = !lit ? 0 : n >= 30 ? 4 : n >= 14 ? 3 : n >= 7 ? 2 : n >= 3 ? 1 : 0;
   const btn = $('#dailyBtn');
   btn.dataset.tier = tier;
+  btn.dataset.lit = lit;
   $('#streakN').textContent = n;
-  const freeze = st.s.frz !== st.t.week ? 'заморозка доступна' : 'заморозку використано цього тижня';
-  btn.title = `Сьогодні: ${STREAK_TEXT[st.status]} · ${freeze}`;
+  let text;
+  if (!lit) text = 'Зіграйте сьогоднішній виклик, щоб запалити вогник';
+  else if (st.status === 'done') text = `Серія ${n} дн. — сьогоднішній виклик виграно`;
+  else text = 'Вогник горить. Виграйте сьогоднішній виклик, щоб продовжити серію';
+  if (st.status !== 'done' && st.s.frz !== t.week && st.status !== 'lost') text += ' (є заморозка)';
+  btn.title = text;
   $('.frame').classList.toggle('legend', n >= 30);
 }
 
@@ -871,16 +854,12 @@ window.addEventListener('resize', () => {
   if (diffKey === 'pro' && !game.started && was !== (dims().r > dims().c)) newGame(); else fit();
 });
 
-/* ---------- mode switching, daily, hero, formula input ---------- */
+/* ---------- mode switching, daily, formula input ---------- */
 function askSwitch(){ return !(game.started && !game.over) || window.confirm('Поточну партію буде скинуто. Продовжити?'); }
 function setPlay(p){ if (p === play || !askSwitch()) return; play = p; LS.set('play', p); newGame(); }
 function toggleDaily(){ if (!askSwitch()) return; daily = !daily; LS.set('daily', daily); newGame(); }
-function scrollToGame(){ document.querySelector('.toolbar').scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'start'}); }
 document.querySelectorAll('#playSeg button').forEach(b => b.addEventListener('click', () => setPlay(b.dataset.play)));
 $('#dailyBtn').addEventListener('click', toggleDaily);
-$('#heroClassic').addEventListener('click', () => { setPlay('classic'); scrollToGame(); });
-$('#heroFormula').addEventListener('click', () => { setPlay('formula'); scrollToGame(); });
-$('#heroDaily').addEventListener('click', () => { if (!daily) toggleDaily(); scrollToGame(); });
 fForm.addEventListener('submit', e => {
   e.preventDefault();
   const src = fInput.value.trim();
