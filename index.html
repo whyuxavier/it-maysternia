@@ -115,7 +115,7 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 8
 @keyframes pop{from{opacity:0;scale:.6}}
 
 /* catalog */
-.catalog{padding:30px 0 70px}
+.catalog{padding:30px 0 70px;scroll-margin-top:60px}
 .tabs{display:flex;flex-wrap:wrap;gap:8px;border-bottom:3px solid var(--line);margin-bottom:34px}
 .tab{position:relative;bottom:-3px;padding:12px 20px 10px;border:0;border-radius:16px 16px 0 0;cursor:pointer;font:700 16px Rubik,sans-serif;color:var(--ink);background:color-mix(in srgb,var(--tc) 45%,var(--bg));box-shadow:inset 0 -3px 0 var(--line);transition:transform .15s,background .2s}
 .tab:hover{transform:translateY(-2px)}
@@ -148,6 +148,24 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
 .gh svg{width:18px;height:18px}
 .ai{margin-top:14px!important;font-size:13px!important;opacity:.85}
 
+.burger{display:none;width:44px;height:40px;border:0;border-radius:14px;cursor:pointer;background:var(--peach);box-shadow:0 2px 0 var(--shadow);position:relative;padding:0}
+.burger span{position:absolute;left:12px;right:12px;height:3px;border-radius:2px;background:var(--ink);transition:transform .25s,opacity .2s,top .25s}
+.burger span:nth-child(1){top:12px}.burger span:nth-child(2){top:18.5px}.burger span:nth-child(3){top:25px}
+.burger[aria-expanded="true"] span:nth-child(1){top:18.5px;transform:rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){top:18.5px;transform:rotate(-45deg)}
+.burger:focus-visible,.mnav a:focus-visible,.mnav button:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+.mnav{position:absolute;left:0;right:0;top:100%;padding:8px 0 0}
+.mnav-sheet{background:var(--card);border-radius:20px;padding:10px;box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line),0 24px 40px -20px rgba(0,0,0,.35);transform:rotate(-.6deg);animation:sheetIn .25s cubic-bezier(.3,1.4,.5,1) both}
+.mnav-sheet a,.mnav-sheet button{display:flex;align-items:center;gap:12px;width:100%;padding:13px 12px;border:0;border-radius:14px;background:none;color:var(--ink);font:700 17px Rubik,sans-serif;text-decoration:none;text-align:left;cursor:pointer}
+.mnav-sheet a:hover,.mnav-sheet button:hover,.mnav-sheet a[aria-current="true"]{background:color-mix(in srgb,var(--dot) 40%,transparent)}
+.mnav-sheet .dot{width:14px;height:14px;border-radius:5px;background:var(--dot);box-shadow:0 2px 0 var(--shadow);flex:none;transform:rotate(-8deg)}
+.mnav-sheet hr{border:0;border-top:2px dashed var(--line);margin:6px 8px}
+@keyframes sheetIn{from{opacity:0;transform:translateY(-10px) rotate(-2deg)}}
+@media (max-width:640px){
+  .burger{display:block}
+  .ibtn{display:none}
+}
 @media (max-width:860px){
   .hero{padding:30px 0 20px}
   .hero-grid{grid-template-columns:1fr;gap:26px}
@@ -218,8 +236,12 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
         </svg>
       </button>
       <button class="ibtn" id="infoBtn" type="button" aria-label="Про сайт">i</button>
+      <button class="burger" id="burger" type="button" aria-label="Меню" aria-expanded="false" aria-controls="mnav"><span></span><span></span><span></span></button>
     </div>
   </div>
+  <nav class="mnav" id="mnav" aria-label="Розділи" hidden>
+    <div class="wrap"><div class="mnav-sheet" id="mnavList"></div></div>
+  </nav>
 </header>
 
 <main id="top">
@@ -740,6 +762,27 @@ const info=document.getElementById('info');
 document.getElementById('infoBtn').addEventListener('click',()=>info.showModal());
 document.getElementById('infoClose').addEventListener('click',()=>info.close());
 info.addEventListener('click',e=>{if(e.target===info)info.close()});
+
+/* ===== Бургер-меню (смартфони) ===== */
+const burger=document.getElementById('burger'), mnav=document.getElementById('mnav'), mlist=document.getElementById('mnavList');
+function renderMenu(){
+  mlist.innerHTML=TABS.map(t=>`<a href="#catalog" data-mtab="${t.id}" style="--dot:var(${t.color})"${t.id===current?' aria-current="true"':''}><span class="dot"></span>${t.label}</a>`).join('')+
+    '<hr><button type="button" data-minfo style="--dot:var(--lilac)"><span class="dot"></span>Про сайт</button>';
+}
+function setMenu(open){
+  burger.setAttribute('aria-expanded',String(open));
+  if(open){renderMenu();mnav.hidden=false;}else{mnav.hidden=true;}
+}
+burger.addEventListener('click',()=>setMenu(mnav.hidden));
+mlist.addEventListener('click',e=>{
+  const a=e.target.closest('[data-mtab]');
+  if(a){setTab(a.dataset.mtab);setMenu(false);return;}
+  if(e.target.closest('[data-minfo]')){setMenu(false);info.showModal();}
+});
+document.addEventListener('click',e=>{if(!mnav.hidden&&!e.target.closest('#mnav,#burger'))setMenu(false)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!mnav.hidden){setMenu(false);burger.focus();}});
+matchMedia('(min-width:641px)').addEventListener('change',m=>{if(m.matches)setMenu(false)});
+
 </script>
 </body>
 </html>
