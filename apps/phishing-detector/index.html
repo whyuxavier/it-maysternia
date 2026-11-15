@@ -151,8 +151,9 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 .b-out{align-self:flex-end;background:var(--mint);padding:10px 13px;border-radius:16px 4px 16px 16px;max-width:88%}
 .b-note{align-self:center;font-size:14px;color:var(--muted);text-align:center}
 .choices{display:grid;gap:8px;padding:12px;border-top:1px dashed var(--line)}
-.choice{text-align:left;border:0;border-radius:14px;padding:11px 13px;background:var(--bg2);cursor:pointer;font-weight:700}
-.choice:hover{background:var(--sand)}
+.choice{text-align:left;border:0;border-radius:14px;padding:11px 13px;background:color-mix(in srgb,var(--peach) 45%,var(--card));box-shadow:0 3px 0 color-mix(in srgb,var(--peach) 70%,var(--ink) 15%);cursor:pointer;font-weight:700;transition:transform .15s,background .15s}
+.choice:hover{background:var(--peach);transform:translateY(-1px)}
+.choice:active{transform:translateY(2px);box-shadow:none}
 .story-side{max-width:400px;margin:14px auto 0}
 
 /* speed */
