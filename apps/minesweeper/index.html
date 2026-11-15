@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Сапер на сім сезонів</title>
-<meta name="description" content="Сапер у браузері: 3 рівні складності та 7 тем — класика, осінь, Геловін, Різдво, нутрощі ПК, блоковий світ і кіберспорт.">
+<meta name="description" content="Сапер у браузері: 3 рівні складності, 7 тем, режим формул (open(A4)) і щоденний виклик із серією днів.">
 <link id="fav" rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23c0c0c0%22%2F%3E%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%227%22%20fill%3D%22%23111%22%2F%3E%3Cpath%20d%3D%22M16%206v20M6%2016h20M9%209l14%2014M23%209L9%2023%22%20stroke%3D%22%23111%22%20stroke-width%3D%222.4%22%2F%3E%3Crect%20x%3D%2212.5%22%20y%3D%2212.5%22%20width%3D%223%22%20height%3D%223%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -204,6 +204,65 @@ dialog::backdrop{background:rgba(8,10,14,.55)}
 .gh{justify-self:start}
 .gh .star{color:#f5b301}
 
+/* hero: text left, illustration right; stacks on phones */
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:center;padding-block:18px 6px}
+.hero::before{content:"";position:absolute;inset:-14px -16px -6px;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(var(--line) 1.5px, transparent 1.5px),linear-gradient(90deg, var(--line) 1.5px, transparent 1.5px);
+  background-size:34px 34px;
+  -webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 50%, #000 10%, transparent 75%);
+          mask-image:radial-gradient(ellipse 70% 70% at 50% 50%, #000 10%, transparent 75%)}
+.hero h1{font:800 clamp(30px,5vw,44px)/1.05 var(--display);margin:0 0 10px}
+.hero p{margin:0 0 18px;color:var(--muted);max-width:40ch}
+.hero-btns{display:flex;flex-wrap:wrap;gap:10px}
+.hero-art{width:100%;max-width:360px;height:auto;justify-self:center;overflow:visible}
+.hero-art .h-frame{fill:var(--surface);stroke:var(--line);stroke-width:2}
+.hero-art .h-bar{fill:var(--accent)}
+.hero-art .h-fx{font:700 15px var(--mono);fill:var(--accent-ink)}
+.hero-art .h-cov{fill:var(--cov);stroke:var(--hi);stroke-width:1.5}
+.hero-art .h-rev{fill:var(--rev);stroke:var(--rev-line);stroke-width:1.2}
+.hero-art .h-num{font-family:var(--numfont);font-weight:var(--numweight);font-size:24px;fill:var(--n2);text-anchor:middle}
+.hero-art .h-hit{fill:var(--hit)}
+.hero-art .h-pole{fill:none;stroke:var(--ink);stroke-width:2}
+.hero-art .h-ink{fill:var(--ink)}
+.hero-art .h-accent{fill:var(--accent)}
+.hero-art .h-flame{fill:var(--accent-ink)}
+.hero-art .h-tag{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.hero-art .h-tagtext{font:800 13px var(--mono);fill:var(--ink);text-anchor:middle}
+.hero-art .h-open{transform-box:fill-box;transform-origin:center;animation:h-pop .6s cubic-bezier(.3,1.5,.5,1) .25s both}
+@keyframes h-pop{from{transform:scale(.3);opacity:0}}
+@media (prefers-reduced-motion:reduce){ .hero-art .h-open{animation:none} }
+@media (max-width:760px){
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .hero-art{max-width:300px}
+}
+
+/* toolbar: mode switch + daily challenge with streak flame */
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.daily-btn{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:700 15px/1 var(--mono);font-variant-numeric:tabular-nums;cursor:pointer}
+.daily-btn:hover{border-color:var(--accent)}
+.daily-btn[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.daily-btn svg{width:20px;height:20px}
+.daily-btn[data-tier="0"] svg{color:var(--muted)}
+.daily-btn[data-tier="1"] svg{color:#ffb02e}
+.daily-btn[data-tier="2"] svg{color:#ff7a1f}
+.daily-btn[data-tier="3"] svg{color:#ff3b3b;filter:drop-shadow(0 0 4px rgba(255,59,59,.6))}
+.daily-btn[data-tier="4"] svg{color:#ffd447;filter:drop-shadow(0 0 6px rgba(255,212,71,.8))}
+.size-btn:disabled{opacity:.5;cursor:not-allowed}
+:root .frame.legend{box-shadow:0 0 0 3px #ffd447, 0 0 22px rgba(255,212,71,.45)}
+
+/* formula mode: formula bar, log, read-only board */
+.fbar{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border-radius:12px;background:var(--surface);border:1.5px solid var(--line);margin:0;min-width:0}
+.fbar .fx{font:800 15px/1 var(--mono);color:var(--accent)}
+.fbar input{flex:1 1 0;width:0;min-width:0;border:0;background:transparent;color:var(--ink);font:600 16px/1.2 var(--mono);padding:8px 2px;outline:none}
+.fbar input::placeholder{color:var(--muted);opacity:.7}
+.fbar button{flex:none;padding:8px 14px;border-radius:9px;border:0;background:var(--accent);color:var(--accent-ink);font:700 14px/1 var(--mono);cursor:pointer}
+.fbar button:disabled{opacity:.5;cursor:not-allowed}
+.flog{list-style:none;margin:0;padding:8px 12px;border-radius:12px;background:var(--surface);border:1.5px solid var(--line);max-height:124px;overflow:auto;display:grid;gap:3px;font:500 14px/1.45 var(--mono);width:100%;box-sizing:border-box}
+.flog li{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap}
+.flog .src{font-weight:700}
+.flog li.err{color:#d23b2a}
+.board.ro{pointer-events:none}
+
 @media (max-width:640px){
   .top .skins{order:3;width:100%;justify-content:space-between;margin:0}
   .top .brand{margin-right:auto}
@@ -235,7 +294,56 @@ dialog::backdrop{background:rgba(8,10,14,.55)}
     <button class="icon-btn info-btn" id="infoBtn" type="button" aria-label="Про гру, правила й керування" title="Про гру">[i]</button>
   </header>
 
+  <section class="hero" aria-labelledby="heroTitle">
+    <div class="hero-text">
+      <h1 id="heroTitle">Сапер</h1>
+      <p>Знайди всі міни, не відкривши жодної. Грай класично, введи команду як в Excel або пройди щоденний виклик.</p>
+      <div class="hero-btns">
+        <button class="btn primary" id="heroClassic" type="button">Класика</button>
+        <button class="btn" id="heroFormula" type="button">Формули</button>
+        <button class="btn" id="heroDaily" type="button">Щоденний виклик</button>
+      </div>
+    </div>
+    <svg class="hero-art" viewBox="0 0 340 300" role="img" aria-label="Вікно сапера: формула =open(A4), відкрита клітинка з цифрою 2, прапорець і значок серії">
+      <rect class="h-frame" x="18" y="18" width="252" height="262" rx="14"/>
+      <rect class="h-bar" x="30" y="30" width="228" height="34" rx="9"/>
+      <text class="h-fx" x="42" y="52">fx  =open(A4)</text>
+      <g class="h-cov">
+        <rect x="124" y="84" width="40" height="40" rx="4"/><rect x="168" y="84" width="40" height="40" rx="4"/><rect x="212" y="84" width="40" height="40" rx="4"/>
+        <rect x="36" y="128" width="40" height="40" rx="4"/><rect x="80" y="128" width="40" height="40" rx="4"/><rect x="124" y="128" width="40" height="40" rx="4"/><rect x="168" y="128" width="40" height="40" rx="4"/><rect x="212" y="128" width="40" height="40" rx="4"/>
+        <rect x="36" y="172" width="40" height="40" rx="4"/><rect x="80" y="172" width="40" height="40" rx="4"/><rect x="124" y="172" width="40" height="40" rx="4"/><rect x="168" y="172" width="40" height="40" rx="4"/><rect x="212" y="172" width="40" height="40" rx="4"/>
+        <rect x="36" y="216" width="40" height="40" rx="4"/><rect x="80" y="216" width="40" height="40" rx="4"/><rect x="124" y="216" width="40" height="40" rx="4"/><rect x="168" y="216" width="40" height="40" rx="4"/><rect x="212" y="216" width="40" height="40" rx="4"/>
+        <rect x="36" y="84" width="40" height="40" rx="4"/>
+      </g>
+      <g class="h-open">
+        <rect class="h-rev" x="80" y="84" width="40" height="40" rx="4"/>
+        <text class="h-num" x="100" y="113">2</text>
+      </g>
+      <path class="h-pole" d="M188 178V200"/>
+      <path class="h-hit" d="M188 178L199 182L188 186Z"/>
+      <rect class="h-ink" x="181" y="199" width="14" height="3" rx="1"/>
+      <g>
+        <circle class="h-accent" cx="300" cy="62" r="26"/>
+        <path class="h-flame" d="M300 37c2 5 5 7 4 12 3-2 4-5 4-8 4 5 6 10 4 16-1 4-4 7-8 8-4-1-7-4-8-8-2-6 0-10 2-13 0 3 1 5 2 6-1-6 0-9 0-13z"/>
+      </g>
+      <rect class="h-tag" x="284" y="108" width="50" height="26" rx="8"/>
+      <text class="h-tagtext" x="309" y="126">9×9</text>
+      <circle class="h-ink" cx="309" cy="180" r="11"/>
+      <path class="h-pole" d="M309 164v32M293 180h32M298 169l22 22M320 169l-22 22"/>
+    </svg>
+  </section>
+
   <main class="stage">
+    <div class="toolbar">
+      <div class="seg" id="playSeg" role="group" aria-label="Режим гри">
+        <button type="button" data-play="classic" aria-pressed="true">Класика</button>
+        <button type="button" data-play="formula" aria-pressed="false">Формули</button>
+      </div>
+      <button class="daily-btn" id="dailyBtn" type="button" aria-pressed="false" data-tier="0">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c1 4 6 6.5 6 12a6 6 0 0 1-12 0c0-2.4 1.2-4.2 2.4-5.5.2 1.6 1 2.8 2.2 3.4C10 8.5 10.4 5.2 12 2z"/></svg>
+        <span id="streakN">0</span>
+      </button>
+    </div>
     <div class="frame">
       <div class="status-bar">
         <div class="lcd" id="minesLeft" aria-label="Залишилось мін">010</div>
@@ -246,8 +354,14 @@ dialog::backdrop{background:rgba(8,10,14,.55)}
         </div>
         <div class="lcd" id="timer" aria-label="Час, секунди">000</div>
       </div>
+      <form class="fbar" id="fForm" hidden>
+        <span class="fx">fx</span>
+        <input id="fInput" type="text" placeholder="open(A4)" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" aria-label="Формула: команда з адресою клітинки">
+        <button type="submit">Ввід</button>
+      </form>
       <div class="board-wrap" id="wrap"><div class="board" id="board" tabindex="0" role="grid" aria-label="Ігрове поле"></div></div>
-      <div class="banner" id="banner" role="status" hidden><b id="bTitle"></b><span id="bText"></span><button class="btn primary" id="bAgain" type="button">Ще раз</button></div>
+      <ol class="flog" id="flog" aria-live="polite" hidden></ol>
+      <div class="banner" id="banner"role="status" hidden><b id="bTitle"></b><span id="bText"></span><button class="btn primary" id="bAgain" type="button">Ще раз</button></div>
     </div>
   </main>
 </div>
@@ -256,6 +370,12 @@ dialog::backdrop{background:rgba(8,10,14,.55)}
   <div class="dlg">
     <header><h3 id="infoTitle">Про гру</h3><button class="icon-btn" id="closeInfo" type="button" aria-label="Закрити"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></header>
     <p>Знайди всі міни, не відкривши жодної. Число на клітинці — скільки мін поруч.</p>
+    <h4>Режими</h4>
+    <ul>
+      <li><b>Класика</b> — клік відкриває, правий клік або довге натискання ставить прапорець.</li>
+      <li><b>Формули</b> — ходи пишуться в рядку формул: <kbd>open(A4)</kbd>, <kbd>flag(B2)</kbd>, <kbd>unflag(B2)</kbd>. Стовпці — літерами, рядки — цифрами. Поле мишею не відкривається.</li>
+      <li><b>Сьогодні</b> — однакове поле 16×16 для всіх на день. Вогник показує серію днів. Раз на тиждень пропущений день не обриває серію (заморозка).</li>
+    </ul>
     <h4>Керування</h4>
     <ul>
       <li>Клік — відкрити, правий клік — прапорець.</li>
@@ -362,6 +482,12 @@ let diffKey = LS.get('diff', 'easy');    if (!DIFFS[diffKey]) diffKey = 'easy';
 let numStyle = LS.get('nums', 'digits');
 let soundOn = LS.get('sound', true);
 let mode = 'open';
+let play = LS.get('play', 'classic'); if (play !== 'formula') play = 'classic';
+let daily = !!LS.get('daily', false);
+
+/* seeded RNG: the daily board is the same for everyone on the same day */
+function hashStr(s){ let h = 2166136261; for (const ch of s) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+function mulberry32(a){ return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
 /* ---------- sound (Web Audio, no files) ---------- */
 let ac = null;
@@ -417,14 +543,14 @@ function applySkin(first){
 const board = $('#board'), wrap = $('#wrap');
 const game = {};
 function dims(){
-  const d = DIFFS[diffKey];
+  const d = DIFFS[daily ? 'mid' : diffKey];
   const narrow = d.c > d.r && availW() < d.c * 21;
   return narrow ? {r:d.c, c:d.r, m:d.m} : {r:d.r, c:d.c, m:d.m};
 }
 function newGame(){
   stopTimer();
   const {r, c, m} = dims();
-  Object.assign(game, {r, c, m, n:r * c, mine:new Uint8Array(r * c), adj:new Uint8Array(r * c), open:new Uint8Array(r * c), flag:new Uint8Array(r * c),
+  Object.assign(game, {r, c, m, daily, seed: daily ? hashStr(todayInfo().key + ':mid') : 0, n:r * c, mine:new Uint8Array(r * c), adj:new Uint8Array(r * c), open:new Uint8Array(r * c), flag:new Uint8Array(r * c),
     started:false, over:false, won:false, opened:0, flags:0, time:0, hit:-1, cur:Math.floor(r / 2) * c + Math.floor(c / 2)});
   board.style.gridTemplateColumns = `repeat(${c}, var(--cell))`;
   board.setAttribute('aria-rowcount', r); board.setAttribute('aria-colcount', c);
@@ -434,9 +560,10 @@ function newGame(){
   game.cells = board.children;
   for (let i = 0; i < game.n; i++) paint(i);
   setFace('smile'); counters();
-  syncSize();
+  syncSize(); syncTools(); resetFormula();
   hideBanner();
   fit();
+  syncPlay();
 }
 function nb(i){
   const {r, c} = game, y = Math.floor(i / c), x = i % c, out = [];
@@ -448,16 +575,20 @@ function nb(i){
   return out;
 }
 function plant(safe){
+  // one shuffled order of cells; the first m are mines. If the first click hits
+  // a mine or its neighbours, those mines move to the next free cells in the order,
+  // so the daily board stays the same for everyone who clicks the same cell
+  const rnd = game.daily ? mulberry32(game.seed) : Math.random;
+  const order = [...Array(game.n).keys()];
+  for (let k = order.length - 1; k > 0; k--) { const j = Math.floor(rnd() * (k + 1)); [order[k], order[j]] = [order[j], order[k]]; }
   const ban = new Set([safe, ...nb(safe)]);
-  let pool = [];
-  for (let i = 0; i < game.n; i++) if (!ban.has(i)) pool.push(i);
-  if (pool.length < game.m) { pool = []; for (let i = 0; i < game.n; i++) if (i !== safe) pool.push(i); }
-  for (let k = 0; k < game.m; k++) {
-    const j = k + Math.floor(Math.random() * (pool.length - k));
-    [pool[k], pool[j]] = [pool[j], pool[k]];
-    game.mine[pool[k]] = 1;
+  const spare = order.slice(game.m).filter(i => !ban.has(i));
+  let s = 0;
+  for (const i of order.slice(0, game.m)) {
+    if (!ban.has(i)) game.mine[i] = 1;
+    else if (s < spare.length) game.mine[spare[s++]] = 1;
   }
-  for (let i = 0; i < game.n; i++) game.adj[i] = nb(i).reduce((s, j) => s + game.mine[j], 0);
+  for (let i = 0; i < game.n; i++) game.adj[i] = nb(i).reduce((t, j) => t + game.mine[j], 0);
 }
 function paint(i){
   const el = game.cells[i], sk = SKINS[skinKey];
@@ -541,17 +672,121 @@ function checkWin(){
   game.time = Math.max(1, Math.round((performance.now() - t0) / 1000));
   for (let k = 0; k < game.n; k++) if (game.mine[k] && !game.flag[k]) { game.flag[k] = 1; game.flags++; paint(k); }
   counters(); setFace('cool'); sfx('win');
-  const best = LS.get('best.' + diffKey, null);
+  const rk = 'best.' + recKey();
+  const best = LS.get(rk, null);
   const record = best === null || game.time < best;
-  if (record) LS.set('best.' + diffKey, game.time);
-  showBanner('Перемога!', `${game.time} с${record ? ' · рекорд' : ''}`);
-  showRecords();
+  if (record) LS.set(rk, game.time);
+  let extra = '';
+  if (game.daily) { const d = dailyWin(); extra = ` · серія ${d.n}` + (d.badge ? ' · значок' : ''); }
+  showBanner('Перемога!', `${game.time} с${record ? ' · рекорд' : ''}${extra}`);
+  showRecords(); renderStreak();
 }
+function recKey(){ return (daily ? 'daily' : diffKey) + (play === 'formula' ? '.f' : ''); }
 function showRecords(){
-  $('#records').innerHTML = Object.entries(DIFFS).map(([k, d]) => {
-    const b = LS.get('best.' + k, null);
-    return `<span>${d.name} (${d.r}×${d.c}) <b>${b === null ? '—' : b + ' с'}</b></span>`;
+  const suffix = play === 'formula' ? '.f' : '';
+  const rows = daily ? [['Сьогодні', 'daily', '16×16']] : Object.entries(DIFFS).map(([k, d]) => [d.name, k, `${d.r}×${d.c}`]);
+  $('#records').innerHTML = rows.map(([name, k, size]) => {
+    const b = LS.get('best.' + k + suffix, null);
+    return `<span>${name} (${size}) <b>${b === null ? '—' : b + ' с'}</b></span>`;
   }).join('');
+}
+
+/* ---------- daily challenge and streak ---------- */
+function keyOf(d){ return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function dayNum(k){ const [y, m, d] = k.split('-').map(Number); return Date.UTC(y, m - 1, d) / 864e5; }
+function todayInfo(){
+  const now = new Date(), dow = (now.getDay() + 6) % 7;
+  const mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() - dow);
+  const key = keyOf(now);
+  return {key, num: dayNum(key), week: keyOf(mon)};
+}
+function streakState(){
+  const s = LS.get('streak', {n:0, last:null, frz:null}), t = todayInfo();
+  const gap = s.last ? t.num - dayNum(s.last) : Infinity;
+  const frzReady = s.frz !== t.week;               // one freeze per calendar week (weeks start on Monday)
+  let status = 'lost';
+  if (gap === 0) status = 'done';
+  else if (gap === 1) status = 'pending';
+  else if (gap === 2 && frzReady) status = 'freeze';
+  return {n: status === 'lost' ? 0 : s.n, status, s, t};
+}
+function dailyWin(){
+  const st = streakState();
+  if (st.status === 'done') return {n: st.n, badge: false};
+  let n = 1, frz = st.s.frz;
+  if (st.status === 'pending') n = st.s.n + 1;
+  if (st.status === 'freeze') { n = st.s.n + 1; frz = st.t.week; }
+  LS.set('streak', {n, last: st.t.key, frz});
+  return {n, badge: n === 7};
+}
+const STREAK_TEXT = {
+  done: 'сьогоднішній виклик пройдено',
+  pending: 'пройдіть сьогоднішній виклик, щоб серія не обірвалась',
+  freeze: 'серія збережеться заморозкою',
+  lost: 'серію перервано, почніть нову'
+};
+function renderStreak(){
+  const st = streakState(), n = st.n;
+  const tier = n >= 30 ? 4 : n >= 14 ? 3 : n >= 7 ? 2 : n >= 3 ? 1 : 0;
+  const btn = $('#dailyBtn');
+  btn.dataset.tier = tier;
+  $('#streakN').textContent = n;
+  const freeze = st.s.frz !== st.t.week ? 'заморозка доступна' : 'заморозку використано цього тижня';
+  btn.title = `Сьогодні: ${STREAK_TEXT[st.status]} · ${freeze}`;
+  $('.frame').classList.toggle('legend', n >= 30);
+}
+
+/* ---------- formula mode ---------- */
+const fForm = $('#fForm'), fInput = $('#fInput'), flog = $('#flog');
+const FX = /^([A-Za-z]+)\(([A-Za-z]{1,2})(\d{1,3})\)$/;
+function runFormula(src){
+  const m = FX.exec(src.replace(/\s+/g, ''));
+  if (!m) return {err: '#ЗНАЧ! очікую щось на зразок open(A4)'};
+  const fn = m[1].toLowerCase();
+  if (!['open', 'flag', 'unflag'].includes(fn)) return {err: '#ІМ? невідома функція «' + m[1] + '»'};
+  const col = m[2].toUpperCase().split('').reduce((t, ch) => t * 26 + ch.charCodeAt(0) - 64, 0) - 1;
+  const row = Number(m[3]) - 1;
+  if (col < 0 || col >= game.c || row < 0 || row >= game.r) return {err: '#REF! такої клітинки на полі немає'};
+  const i = row * game.c + col;
+  if (fn === 'open') {
+    if (game.open[i]) return {err: '#ЗНАЧ! клітинка вже відкрита'};
+    if (game.flag[i]) return {err: '#ЗНАЧ! на клітинці стоїть прапорець'};
+    reveal(i);
+    if (game.mine[i]) return {text: 'міна! гру програно'};
+    return {text: game.adj[i] ? '→ ' + game.adj[i] : '→ порожньо'};
+  }
+  if (fn === 'flag') {
+    if (game.open[i]) return {err: '#ЗНАЧ! клітинка вже відкрита'};
+    if (game.flag[i]) return {err: '#ЗНАЧ! прапорець уже стоїть'};
+    toggleFlag(i); return {text: '→ прапорець'};
+  }
+  if (!game.flag[i]) return {err: '#ЗНАЧ! прапорця тут немає'};
+  toggleFlag(i); return {text: '→ прапорець знято'};
+}
+function resetFormula(){ flog.innerHTML = ''; fInput.value = ''; }
+function addLog(src, res){
+  const li = document.createElement('li');
+  li.className = res.err ? 'err' : 'ok';
+  const a = document.createElement('span'), b = document.createElement('span');
+  a.className = 'src'; a.textContent = src;
+  b.textContent = res.err || res.text;
+  li.append(a, b);
+  flog.append(li);
+  while (flog.children.length > 60) flog.firstElementChild.remove();
+  flog.scrollTop = flog.scrollHeight;
+}
+function syncPlay(){
+  const fo = play === 'formula';
+  fForm.hidden = !fo;
+  flog.hidden = !fo;
+  board.classList.toggle('ro', fo);
+  board.tabIndex = fo ? -1 : 0;
+  fInput.disabled = !!game.over;
+  fInput.placeholder = game.over ? 'гра завершена' : 'open(A4)';
+  fForm.querySelector('button').disabled = !!game.over;
+  syncSeg('#playSeg', 'play', play);
+  $('#dailyBtn').setAttribute('aria-pressed', daily);
+  renderStreak();
 }
 function availW(){
   const f = getComputedStyle($('.frame'));
@@ -571,6 +806,7 @@ function fit(){
 /* ---------- input ---------- */
 let press = null, lastType = 'mouse';
 board.addEventListener('pointerdown', e => {
+  if (play === 'formula') return;
   const el = e.target.closest('.cell'); if (!el) return;
   lastType = e.pointerType; board.classList.remove('kbd');
   ctx();
@@ -597,6 +833,7 @@ board.addEventListener('contextmenu', e => {
   const el = e.target.closest('.cell'); if (el) toggleFlag(+el.dataset.i);
 });
 board.addEventListener('keydown', e => {
+  if (play === 'formula') return;
   const k = e.key, {c, n} = game; let cur = game.cur;
   const moves = {ArrowLeft:-1, ArrowRight:1, ArrowUp:-c, ArrowDown:c};
   if (k in moves) {
@@ -609,6 +846,7 @@ board.addEventListener('keydown', e => {
   else if (k === 'f' || k === 'F' || k === 'а' || k === 'А') { board.classList.add('kbd'); toggleFlag(cur); }
 });
 document.addEventListener('keydown', e => {
+  if (e.target.closest && e.target.closest('input')) return;
   if ((e.key === 'r' || e.key === 'R' || e.key === 'к' || e.key === 'К') && !e.ctrlKey && !e.metaKey && !e.altKey && !$('#info').open) newGame();
 });
 $('#face').addEventListener('click', () => { ctx(); newGame(); });
@@ -627,6 +865,8 @@ function syncSize(){
   b.innerHTML = `<svg viewBox="0 0 18 18" aria-hidden="true" fill="currentColor"><rect x="1" y="1" width="7" height="7" rx="1.5"/><rect x="10" y="1" width="7" height="7" rx="1.5"/><rect x="1" y="10" width="7" height="7" rx="1.5"/><rect x="10" y="10" width="7" height="7" rx="1.5" opacity=".45"/></svg>${d.c}×${d.r}`;
   b.setAttribute('aria-label', `Розмір поля ${d.c}×${d.r}, ${DIFFS[diffKey].m} мін. Натисніть, щоб змінити`);
   b.title = `${DIFFS[diffKey].name} · ${DIFFS[diffKey].m} мін — натисніть, щоб змінити`;
+  b.disabled = daily;
+  if (daily) b.title = 'Щоденний виклик: поле 16×16 для всіх';
 }
 $('#sizeBtn').addEventListener('click', () => { diffKey = DKEYS[(DKEYS.indexOf(diffKey) + 1) % DKEYS.length]; LS.set('diff', diffKey); newGame(); });
 function syncTools(){
@@ -635,6 +875,7 @@ function syncTools(){
   n.innerHTML = numStyle === 'pips' ? '<span class="pip3"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>' : '<span class="dig">1</span>';
   n.setAttribute('aria-label', numStyle === 'pips' ? 'Підказки: точки' : 'Підказки: цифри');
   m.innerHTML = SKINS[skinKey].flag(); m.setAttribute('aria-pressed', mode === 'flag');
+  m.hidden = play === 'formula';
   m.setAttribute('aria-label', mode === 'flag' ? 'Режим прапорців увімкнено' : 'Режим прапорців вимкнено');
 }
 $('#numsBtn').addEventListener('click', () => { numStyle = numStyle === 'pips' ? 'digits' : 'pips'; LS.set('nums', numStyle); syncTools(); for (let i = 0; i < game.n; i++) paint(i); });
@@ -653,6 +894,27 @@ $('#info').addEventListener('click', e => { if (e.target === $('#info')) $('#inf
 window.addEventListener('resize', () => {
   const was = game.r > game.c;
   if (diffKey === 'pro' && !game.started && was !== (dims().r > dims().c)) newGame(); else fit();
+});
+
+/* ---------- mode switching, daily, hero, formula input ---------- */
+function askSwitch(){ return !(game.started && !game.over) || window.confirm('Поточну партію буде скинуто. Продовжити?'); }
+function setPlay(p){ if (p === play || !askSwitch()) return; play = p; LS.set('play', p); newGame(); }
+function toggleDaily(){ if (!askSwitch()) return; daily = !daily; LS.set('daily', daily); newGame(); }
+function scrollToGame(){ document.querySelector('.toolbar').scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'start'}); }
+document.querySelectorAll('#playSeg button').forEach(b => b.addEventListener('click', () => setPlay(b.dataset.play)));
+$('#dailyBtn').addEventListener('click', toggleDaily);
+$('#heroClassic').addEventListener('click', () => { setPlay('classic'); scrollToGame(); });
+$('#heroFormula').addEventListener('click', () => { setPlay('formula'); scrollToGame(); });
+$('#heroDaily').addEventListener('click', () => { if (!daily) toggleDaily(); scrollToGame(); });
+fForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const src = fInput.value.trim();
+  if (!src || game.over) return;
+  ctx();
+  const res = runFormula(src);
+  addLog(src, res);
+  if (!res.err) fInput.value = '';
+  syncPlay();
 });
 
 /* boot */
