@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Робот-кур'єр</title>
+<meta name="description" content="Гра з алгоритмів: склади програму з блоків, щоб робот доставив посилки. Лінійні алгоритми, цикли й розгалуження.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23bfe6cf'/%3E%3Crect x='14' y='18' width='36' height='32' rx='9' fill='%23bddcf3'/%3E%3Crect x='20' y='26' width='24' height='10' rx='5' fill='%23233047'/%3E%3Ccircle cx='27' cy='31' r='2.5' fill='%23fff'/%3E%3Ccircle cx='37' cy='31' r='2.5' fill='%23fff'/%3E%3Cpath d='M32 18V9' stroke='%23233047' stroke-width='3'/%3E%3Ccircle cx='32' cy='8' r='4' fill='%23ee9384'/%3E%3Crect x='24' y='42' width='16' height='12' rx='2' fill='%23f6e19c'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&family=Rubik:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f1e8; --bg2:#ebe4d6; --ink:#2f2a40; --muted:#6c6680; --card:#fffcf5; --line:rgba(47,42,64,.13);
+  --grass:#cfe9d6; --grass2:#bfe0c8; --hedge:#8fc7a1; --sky:#bddcf3; --butter:#f6e19c; --coral:#ee9384; --lilac:#d5c7f1; --peach:#f6c6a6; --mint:#bfe3cf;
+  --move:#9fcdf0; --turn:#cdbdf2; --loop:#f4d77c; --cond:#f2a99c;
+  --ok:#3f9d6e; --bad:#d4574a; --shadow:rgba(47,42,64,.2);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,sans-serif;line-height:1.45;min-height:100vh;overflow-x:hidden}
+h1,h2,h3{font-family:Rubik,Nunito,sans-serif;margin:0;line-height:1.15}
+button{font:inherit;color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+.pp{fill:var(--card)} .gr{fill:var(--grass)} .he{fill:var(--hedge)} .sk{fill:var(--sky)} .bu{fill:var(--butter)} .co{fill:var(--coral)} .li{fill:var(--lilac)} .pe{fill:var(--peach)} .mi{fill:var(--mint)} .ink{fill:var(--ink)}
+.stk{fill:none;stroke:var(--ink);stroke-linecap:round;stroke-linejoin:round}
+
+header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:64px;gap:10px}
+.logo{display:flex;align-items:center;gap:10px;font:800 19px Rubik,sans-serif;background:none;border:0;cursor:pointer;padding:0;white-space:nowrap}
+.logo svg{width:36px;height:36px}
+.tools{display:flex;gap:8px}
+.ib{width:42px;height:42px;border-radius:14px;border:0;cursor:pointer;background:var(--card);box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);display:grid;place-items:center}
+.ib svg{width:22px;height:22px}
+.ib.i{background:var(--lilac);font:800 18px Rubik}
+:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+
+.screen{display:none}
+.screen.on{display:block;animation:fadeIn .25s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}}
+
+/* hero */
+.hero{position:relative;padding:44px 0 30px}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;
+  -webkit-mask-image:radial-gradient(ellipse 70% 75% at 62% 45%,#000 25%,transparent 78%);mask-image:radial-gradient(ellipse 70% 75% at 62% 45%,#000 25%,transparent 78%)}
+.hero-grid{position:relative;display:grid;grid-template-columns:1fr 1.05fr;gap:28px;align-items:center}
+.hero h1{font-size:clamp(38px,5.6vw,62px);letter-spacing:-.02em}
+.hero h1 span{background:linear-gradient(transparent 62%,var(--butter) 62%);padding:0 .06em}
+.lead{font-size:clamp(17px,2vw,19px);color:var(--muted);margin:14px 0 22px;max-width:32ch}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:13px 20px;border-radius:16px;border:0;cursor:pointer;font:700 17px Nunito;background:var(--card);box-shadow:0 4px 0 var(--shadow),0 0 0 1px var(--line);transition:transform .15s}
+.btn:hover{transform:translateY(-2px) rotate(-.5deg)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--shadow),0 0 0 1px var(--line)}
+.btn svg{width:22px;height:22px;flex:none}
+.btn.main{background:var(--coral);color:#2b1d22}
+.btn.go{background:var(--mint)}
+.btn:disabled{opacity:.5;cursor:default;transform:none}
+.art{position:relative;justify-self:end;width:100%;max-width:540px}
+.art svg{width:100%;height:auto;display:block;overflow:visible}
+.chip{position:absolute;padding:6px 12px;border-radius:12px;background:var(--card);font:800 14px Nunito;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);white-space:nowrap;animation:pop .4s cubic-bezier(.4,1.6,.5,1) 2s both}
+.chip.c1{top:-2%;left:6%;transform:rotate(-4deg)}
+.chip.c2{top:38%;right:-2%;transform:rotate(5deg);animation-delay:2.1s}
+.chip.c3{bottom:2%;left:30%;transform:rotate(-2deg);animation-delay:2.2s}
+@keyframes pop{from{opacity:0;scale:.6}}
+.hero-bot{animation:heroRun 1.8s cubic-bezier(.5,0,.3,1) .3s both}
+@keyframes heroRun{0%{transform:translate(0,0)}45%{transform:translate(204px,0)}55%{transform:translate(204px,0)}100%{transform:translate(204px,68px)}}
+.hero-path{stroke-dasharray:6 9;animation:dash 1.8s linear .3s both}
+@keyframes dash{from{stroke-dashoffset:200}}
+.hero-check{animation:pop .4s cubic-bezier(.4,1.6,.5,1) 2.1s both;transform-box:fill-box;transform-origin:center}
+
+/* levels */
+.gwrap{padding-top:22px;padding-bottom:50px}
+.chap{margin-bottom:22px}
+.chap h2{font-size:22px;margin-bottom:4px}
+.chap p{color:var(--muted);margin:0 0 12px}
+.lvls{display:flex;flex-wrap:wrap;gap:12px}
+.lv{width:86px;height:86px;border-radius:20px;border:0;cursor:pointer;background:var(--card);box-shadow:0 4px 0 var(--shadow),0 0 0 1px var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font:800 24px Rubik;transition:transform .15s}
+.lv:hover{transform:translateY(-3px) rotate(-1deg)}
+.lv .st{display:flex;gap:2px}
+.lv .st svg{width:14px;height:14px}
+.lv.locked{opacity:.45;cursor:not-allowed}
+
+/* play */
+.phead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.phead h2{font-size:22px}
+.pill{padding:5px 12px;border-radius:12px;background:var(--card);font-weight:800;font-size:14px;box-shadow:0 2px 0 var(--shadow),0 0 0 1px var(--line)}
+.task{margin:0 0 14px;font-size:16px;max-width:70ch}
+.play{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+.mapcol{position:sticky;top:80px}
+.maptabs{display:flex;gap:8px;margin-bottom:8px}
+.maptabs button{border:0;border-radius:12px;padding:6px 12px;font-weight:800;cursor:pointer;background:var(--bg2)}
+.maptabs button[aria-pressed="true"]{background:var(--butter);box-shadow:0 2px 0 var(--shadow)}
+.maptabs .res{margin-left:4px}
+.mapbox{background:var(--card);border-radius:22px;padding:12px;box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line)}
+.mapbox svg{width:100%;height:auto;display:block;max-height:58vh}
+.bot{transition:transform .32s cubic-bezier(.4,.1,.3,1)}
+.bot.crash{animation:crash .4s}
+@keyframes crash{25%{translate:-5px 0}75%{translate:5px 0}}
+.runbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.runbar .btn{padding:11px 16px;font-size:16px}
+.msg{margin-top:10px;font-weight:700;min-height:24px}
+.msg.bad{color:var(--bad)} .msg.ok{color:var(--ok)}
+
+.codecol h3{font-size:16px;margin:0 0 8px;color:var(--muted)}
+.palette{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.pb{display:flex;align-items:center;gap:8px;padding:9px 13px 9px 9px;border-radius:14px;border:0;cursor:pointer;font:800 15px Nunito;box-shadow:0 3px 0 var(--shadow);transition:transform .12s}
+.pb:hover{transform:translateY(-2px)}
+.pb:active{transform:translateY(2px);box-shadow:0 1px 0 var(--shadow)}
+.ico{width:30px;height:30px;flex:none;border-radius:9px;background:rgba(255,255,255,.55);display:grid;place-items:center}
+.ico svg{width:22px;height:22px}
+.k-fwd{background:var(--move)} .k-left,.k-right{background:var(--turn)} .k-rep,.k-while{background:var(--loop)} .k-if{background:var(--cond)}
+
+.prog{background:var(--card);border-radius:22px;padding:14px;box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line);min-height:160px}
+.prog .count{font-size:13px;font-weight:800;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between}
+.list{display:flex;flex-direction:column;gap:6px;padding:6px;border-radius:14px;border:2px dashed transparent;min-height:44px}
+.list.target{border-color:var(--coral);background:color-mix(in srgb,var(--coral) 8%,transparent)}
+.slot{border:0;background:none;color:var(--muted);font-weight:800;font-size:13px;cursor:pointer;text-align:left;padding:6px 8px;border-radius:10px}
+.list.target>.slot{color:var(--bad)}
+.blk{border-radius:14px;box-shadow:0 3px 0 var(--shadow)}
+.bh{display:flex;align-items:center;gap:8px;padding:6px 8px;font-weight:800;font-size:15px}
+.bh .lbl{flex:1}
+.blk.cur{outline:3px solid var(--ink);outline-offset:1px}
+.blk.err{outline:3px solid var(--bad)}
+.x{width:28px;height:28px;border:0;border-radius:9px;background:rgba(255,255,255,.6);cursor:pointer;font:800 16px Rubik;flex:none}
+.num{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.6);border-radius:10px;padding:2px}
+.num button{width:26px;height:26px;border:0;border-radius:8px;background:var(--card);cursor:pointer;font:800 16px Rubik}
+.num b{min-width:22px;text-align:center}
+.inner{margin:0 8px 8px 22px;background:color-mix(in srgb,var(--card) 70%,transparent);border-radius:12px}
+.else-l{margin:0 8px 0 22px;font-weight:800;font-size:13px}
+.empty-hint{color:var(--muted);font-size:14px;padding:6px 8px}
+
+/* dialogs */
+dialog{border:0;border-radius:22px;padding:0;max-width:460px;width:calc(100% - 28px);background:var(--card);color:var(--ink);box-shadow:0 6px 0 var(--shadow),0 30px 60px -20px rgba(0,0,0,.4)}
+dialog::backdrop{background:rgba(30,25,45,.45)}
+.dlg{padding:24px;position:relative;max-height:82vh;overflow:auto}
+.dlg h2{font-size:23px;margin-bottom:8px}
+.dlg h3{font-size:16px;margin:14px 0 6px}
+.dlg p,.dlg li{color:var(--muted);font-size:15px;margin:0}
+.dlg ul{margin:0;padding-left:20px}
+.close{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:12px;border:0;background:var(--bg2);font:700 20px Rubik;cursor:pointer}
+.gh{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:10px 16px;border-radius:14px;background:var(--butter);text-decoration:none;color:var(--ink);font-weight:800;box-shadow:0 3px 0 var(--shadow)}
+.gh svg{width:18px;height:18px}
+.legend{display:grid;gap:6px;margin-top:6px}
+.legend div{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--muted)}
+.legend .ico{width:26px;height:26px}
+.win{text-align:center}
+.win .stars{display:flex;justify-content:center;gap:8px;margin:12px 0}
+.win .stars svg{width:52px;height:52px}
+.win .stars svg.on{animation:pop .4s cubic-bezier(.4,1.6,.5,1) both}
+.win .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+
+@media (max-width:860px){
+  .hero{padding:24px 0 20px}
+  .hero-grid{grid-template-columns:1fr}
+  .art{justify-self:center;max-width:460px}
+  .lead{max-width:none}
+  .play{grid-template-columns:1fr}
+  .mapcol{position:static}
+  .mapbox svg{max-height:none}
+}
+@media (max-width:480px){
+  .logo span{font-size:17px}
+  .pb{font-size:14px;padding:8px 10px 8px 8px}
+  .lv{width:72px;height:72px;font-size:20px}
+  .chip{font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <filter id="paper" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="2.5" stdDeviation="1.6" flood-color="#2f2a40" flood-opacity=".25"/></filter>
+  <!-- іконки блоків -->
+  <symbol id="i-fwd" viewBox="0 0 24 24"><path class="stk" style="stroke-width:3" d="M12 20V5M6 10l6-6 6 6"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path class="stk" style="stroke-width:3" d="M17 20v-7a5 5 0 0 0-5-5H5"/><path class="stk" style="stroke-width:3" d="M9 4L5 8l4 4"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path class="stk" style="stroke-width:3" d="M7 20v-7a5 5 0 0 1 5-5h7"/><path class="stk" style="stroke-width:3" d="M15 4l4 4-4 4"/></symbol>
+  <symbol id="i-rep" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M20 12a8 8 0 0 1-13.7 5.6M4 12A8 8 0 0 1 17.7 6.4"/><path class="stk" style="stroke-width:2.6" d="M18 2.5v4h-4M6 21.5v-4h4"/></symbol>
+  <symbol id="i-while" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M5 12a7 7 0 0 1 12-5l2 2"/><path class="stk" style="stroke-width:2.6" d="M19 4v5h-5"/><path class="ink" d="M8 21v-7l5-4 5 4v7z"/></symbol>
+  <symbol id="i-if" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M12 3l9 9-9 9-9-9z"/><rect x="8" y="9" width="8" height="6" rx="1" class="ink"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6L2.5 9.3l6.6-.8z"/></symbol>
+  <!-- робот (вид згори, дивиться вгору) -->
+  <symbol id="robot" viewBox="-30 -30 60 60">
+    <rect x="-20" y="-6" width="40" height="28" rx="10" fill="#f6c6a6"/>
+    <rect x="-13" y="2" width="26" height="18" rx="3" fill="#f6e19c" stroke="#c9a85a" stroke-width="1.5"/>
+    <path d="M-13 11h26M0 2v18" stroke="#c9a85a" stroke-width="1.5"/>
+    <rect x="-18" y="-24" width="36" height="24" rx="10" fill="#bddcf3"/>
+    <rect x="-13" y="-19" width="26" height="11" rx="5.5" fill="#2f2a40"/>
+    <circle cx="-6" cy="-13.5" r="3" fill="#fff"/><circle cx="6" cy="-13.5" r="3" fill="#fff"/>
+    <path d="M-6 -27l6-6 6 6z" fill="#ee9384"/>
+  </symbol>
+  <symbol id="house" viewBox="0 0 60 60">
+    <path d="M10 28L30 10l20 18z" fill="#ee9384"/>
+    <rect x="15" y="26" width="30" height="24" rx="2" fill="#fffcf5"/>
+    <rect x="26" y="35" width="9" height="15" rx="2" fill="#d5c7f1"/>
+    <rect x="18" y="31" width="6" height="6" rx="1" fill="#bddcf3"/>
+  </symbol>
+</defs></svg>
+
+<header>
+  <div class="wrap bar">
+    <button class="logo" id="home" type="button" aria-label="На головну">
+      <svg viewBox="-30 -36 60 66" aria-hidden="true"><use href="#robot" x="-30" y="-30" width="60" height="60"/></svg>
+      <span>Робот-кур'єр</span>
+    </button>
+    <div class="tools">
+      <button class="ib" id="snd" type="button" aria-label="Звук"></button>
+      <button class="ib i" id="infoBtn" type="button" aria-label="Про гру">i</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="screen on" id="s-start">
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1>Робот-<span>кур'єр</span></h1>
+        <p class="lead">Склади програму з блоків — і робот рознесе посилки по будинках. Від перших кроків до циклів і умов.</p>
+        <div class="btns">
+          <button class="btn main" id="bPlay"><svg viewBox="0 0 24 24"><path class="ink" d="M7 4l13 8-13 8z"/></svg><span id="bPlayT">Грати</span></button>
+          <button class="btn" id="bLevels"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2" class="ink"/><rect x="14" y="3" width="7" height="7" rx="2" class="ink"/><rect x="3" y="14" width="7" height="7" rx="2" class="ink"/><rect x="14" y="14" width="7" height="7" rx="2" class="ink"/></svg>Рівні</button>
+        </div>
+      </div>
+      <div class="art">
+        <svg viewBox="0 0 540 400" role="img" aria-label="Робот із посилкою їде клітинками до будинку">
+          <g filter="url(#paper)"><rect x="40" y="30" width="476" height="340" rx="26" class="gr"/></g>
+          <g opacity=".5">
+            <path d="M108 30v340M176 30v340M244 30v340M312 30v340M380 30v340M448 30v340M40 98h476M40 166h476M40 234h476M40 302h476" stroke="#9fcfae" stroke-width="2"/>
+          </g>
+          <g filter="url(#paper)">
+            <rect x="248" y="170" width="60" height="60" rx="10" class="he"/><rect x="384" y="170" width="60" height="60" rx="10" class="he"/>
+            <rect x="112" y="238" width="60" height="60" rx="10" class="he"/><rect x="44" y="306" width="60" height="60" rx="10" class="he"/>
+            <rect x="452" y="34" width="60" height="60" rx="10" class="he"/>
+          </g>
+          <path class="hero-path" d="M142 132H346V200" fill="none" stroke="#2f2a40" stroke-width="4" stroke-linecap="round"/>
+          <g filter="url(#paper)"><use href="#house" x="312" y="238" width="68" height="68"/></g>
+          <g class="hero-check"><circle cx="374" cy="246" r="15" fill="#3f9d6e"/><path d="M365 246l5 5 9-10" class="stk" style="stroke:#fff;stroke-width:3.5"/></g>
+          <g class="hero-bot"><g filter="url(#paper)"><use href="#robot" x="110" y="100" width="64" height="64" transform="rotate(90 142 132)"/></g></g>
+        </svg>
+        <span class="chip c1">13 рівнів</span>
+        <span class="chip c2">Цикли й умови</span>
+        <span class="chip c3" id="chipStars">0 з 39 зірок</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="screen" id="s-levels"><div class="wrap gwrap" id="levels"></div></section>
+
+<section class="screen" id="s-play">
+  <div class="wrap gwrap">
+    <div class="phead"><h2 id="lvTitle"></h2><span class="pill" id="lvStars"></span></div>
+    <p class="task" id="lvTask"></p>
+    <div class="play">
+      <div class="mapcol">
+        <div class="maptabs" id="mapTabs"></div>
+        <div class="mapbox" id="mapbox"></div>
+        <div class="runbar">
+          <button class="btn go" id="bRun"><svg viewBox="0 0 24 24"><path class="ink" d="M7 4l13 8-13 8z"/></svg>Запустити</button>
+          <button class="btn" id="bStep"><svg viewBox="0 0 24 24"><path class="ink" d="M5 4l10 8-10 8z"/><rect x="16" y="4" width="3.5" height="16" rx="1" class="ink"/></svg>Крок</button>
+          <button class="btn" id="bReset"><svg viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M4 12a8 8 0 1 0 3-6.2"/><path class="stk" style="stroke-width:2.6" d="M4 3v5h5"/></svg>Спочатку</button>
+          <button class="btn" id="bSpeed" title="Швидкість"><svg viewBox="0 0 24 24"><path class="ink" d="M3 5l8 7-8 7zM12 5l8 7-8 7z"/></svg><span id="speedT">×1</span></button>
+        </div>
+        <div class="msg" id="msg"></div>
+      </div>
+      <div class="codecol">
+        <h3>Блоки — натисни, щоб додати</h3>
+        <div class="palette" id="palette"></div>
+        <div class="prog"><div class="count"><span>Програма</span><span id="cnt"></span></div><div id="prog"></div></div>
+        <div class="runbar"><button class="btn" id="bClear"><svg viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.4" d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/></svg>Очистити</button><button class="btn" id="bUndo"><svg viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M9 14L4 9l5-5"/><path class="stk" style="stroke-width:2.6" d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Скасувати</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<dialog id="win"><div class="dlg win" id="winBody"></div></dialog>
+
+<dialog id="info" aria-labelledby="infoT">
+  <div class="dlg">
+    <button class="close" type="button" data-close aria-label="Закрити">×</button>
+    <h2 id="infoT">Робот-кур'єр</h2>
+    <p>Гра з алгоритмів: склади програму з блоків, щоб робот доставив посилки в будинки. Три розділи — лінійні алгоритми, цикли та розгалуження.</p>
+    <h3>Правила</h3>
+    <ul>
+      <li>Натисни блок у палітрі — він додасться в кінець програми або в обрану рамку циклу чи умови.</li>
+      <li>Робот виконує блоки згори вниз. Повороти — відносно того, куди дивиться робот.</li>
+      <li>Врізатись у кущ не можна. Посилку доставлено, коли робот став на будинок.</li>
+      <li>У розділі «Умови» одна програма має спрацювати на обох мапах.</li>
+      <li>Зірки: 3 — коли програма не довша за найкоротшу, менше — якщо блоків більше.</li>
+    </ul>
+    <h3>Блоки</h3>
+    <div class="legend" id="legend"></div>
+    <h3>Керування</h3>
+    <ul>
+      <li>Миша або дотик: натискай блоки, «×» видаляє, «−/+» змінює кількість повторів.</li>
+      <li>Клавіатура: ↑ — крок, ← / → — поворот, Enter — запустити, Backspace — видалити останній блок.</li>
+    </ul>
+    <a class="gh" href="https://github.com/whyuxavier/it-maysternia" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6L2.5 9.3l6.6-.8z"/></svg>GitHub</a>
+  </div>
+</dialog>
+
+<script>
+"use strict";
+/* ===================== БЛОКИ ===================== */
+const BLOCKS={
+  fwd:{lbl:'Крок вперед',icon:'i-fwd'},
+  left:{lbl:'Поворот ліворуч',icon:'i-left'},
+  right:{lbl:'Поворот праворуч',icon:'i-right'},
+  rep:{lbl:'Повторити',icon:'i-rep'},
+  while:{lbl:'Повторювати, поки не вдома',icon:'i-while'},
+  if:{lbl:'Якщо попереду кущ',icon:'i-if'}
+};
+const ico=k=>`<span class="ico"><svg viewBox="0 0 24 24"><use href="#${BLOCKS[k].icon}"/></svg></span>`;
+
+/* ===================== РІВНІ =====================
+   Мапа: '.' трава, '#' кущ, 'H' будинок, робот: '>' '<' '^' 'v' (куди дивиться). best — найкоротша програма (кількість блоків). */
+const CHAPTERS=[
+ {title:'Лінійні алгоритми',sub:'Команди виконуються одна за одною.',blocks:['fwd','left','right'],levels:[
+  {name:'Перша доставка',task:'Додай три блоки «Крок вперед» і натисни «Запустити».',best:3,maps:[['>..H']]},
+  {name:'Перший поворот',task:'Поворот змінює напрямок, але робот лишається на місці.',best:5,maps:[['>.#','..H']]},
+  {name:'Униз і праворуч',task:'Подумай, куди дивитиметься робот після повороту ліворуч.',best:6,maps:[['v...','.##.','...H']]},
+  {name:'Дві посилки',task:'Доставиш обидві — рівень пройдено.',best:7,maps:[['>.H.','##.#','...H']]},
+  {name:'Лабіринт',task:'Обійди кущі. Можна запускати по одному кроку кнопкою «Крок».',best:12,maps:[['>.#H','.#..','...#']]}
+ ]},
+ {title:'Цикли',sub:'Блок «Повторити» виконує вкладені команди кілька разів.',blocks:['fwd','left','right','rep'],levels:[
+  {name:'Довга дорога',task:'Вісім кроків поспіль? Поклади «Крок» у «Повторити» і вистав 8.',best:2,maps:[['>.......H']]},
+  {name:'Сходинки',task:'Знайди, яка частина шляху повторюється.',best:5,maps:[['>.##','#..#','##..','###H']]},
+  {name:'Високі сходи',task:'Повторення + ще один крок у кінці.',best:6,maps:[['>.####','#..###','##..##','###..#','####.H']]},
+  {name:'Навколо ставка',task:'Три будинки по кутах. Спробуй цикл усередині циклу.',best:4,maps:[['>...H','.###.','.###.','.###.','H...H']]}
+ ]},
+ {title:'Умови',sub:'Одна програма має спрацювати на обох мапах — мапи різні!',blocks:['fwd','left','right','rep','while','if'],levels:[
+  {name:'Різна довжина',task:'Скільки кроків — невідомо. «Повторювати, поки не вдома» допоможе.',best:2,maps:[['>...H'],['>......H']]},
+  {name:'Поворот праворуч',task:'Кущ десь попереду. Якщо кущ — повертай праворуч, інакше — крок.',best:4,maps:[['>..#','##.#','##H#'],['>....#','####.#','####.#','####H#']]},
+  {name:'Поворот ліворуч',task:'Тепер дорога звертає ліворуч.',best:4,maps:[['##H#','##.#','>..#'],['####H#','####.#','####.#','>....#']]},
+  {name:'Равлик',task:'Дорога закручується. Твоя програма з умовою впорається?',best:4,maps:[['>...#','###.#','#H..#','#####'],['>.....#','#####.#','#####.#','#H....#','#######']]}
+ ]}
+];
+const LEVELS=[];CHAPTERS.forEach((c,ci)=>c.levels.forEach((l,li)=>LEVELS.push({...l,ci,num:LEVELS.length+1,blocks:c.blocks})));
+
+/* ===================== ЗБЕРЕЖЕННЯ ===================== */
+const KEY='robot-courier-v1';
+const S=(()=>{let d={};try{d=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+  return {snd:d.snd!==false,stars:d.stars&&typeof d.stars==='object'?d.stars:{},speed:[1,2,3].includes(d.speed)?d.speed:1,progs:d.progs&&typeof d.progs==='object'?d.progs:{}}})();
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+/* ===================== ЗВУК ===================== */
+const Sound={ctx:null,
+  unlock(){if(!this.ctx){try{this.ctx=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(this.ctx&&this.ctx.state==='suspended')this.ctx.resume()},
+  tone(f,d=.1,type='sine',v=.07,f2=null,delay=0){if(!S.snd||!this.ctx)return;const c=this.ctx,t=c.currentTime+delay,o=c.createOscillator(),g=c.createGain();
+    o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+.02)},
+  step(){this.tone(330,.06,'triangle',.05)},turn(){this.tone(500,.06,'sine',.04,420)},add(){this.tone(700,.05,'sine',.04)},
+  deliver(){this.tone(660,.1,'triangle');this.tone(990,.14,'triangle',.07,null,.08)},
+  crash(){this.tone(160,.25,'sawtooth',.05,90)},
+  win(){[523,659,784,1046].forEach((f,i)=>this.tone(f,.16,'triangle',.07,null,i*.11))}
+};
+addEventListener('pointerdown',()=>Sound.unlock());
+const $=id=>document.getElementById(id);
+const sndBtn=$('snd');
+function drawSnd(){sndBtn.innerHTML=S.snd?'<svg viewBox="0 0 24 24"><path class="ink" d="M3 9h4l5-4v14l-5-4H3z"/><path class="stk" style="stroke-width:2" d="M15 9a4 4 0 0 1 0 6M17.5 6.5a7.5 7.5 0 0 1 0 11"/></svg>':'<svg viewBox="0 0 24 24"><path class="ink" d="M3 9h4l5-4v14l-5-4H3z"/><path class="stk" style="stroke-width:2" d="M16 9l5 6M21 9l-5 6"/></svg>';
+  sndBtn.setAttribute('aria-pressed',String(S.snd));sndBtn.title=S.snd?'Звук увімкнено':'Звук вимкнено'}
+sndBtn.onclick=()=>{S.snd=!S.snd;persist();drawSnd();Sound.unlock();Sound.add()};drawSnd();
+
+/* ===================== ЕКРАНИ ===================== */
+let cur='start';
+function show(id){stop();document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+id));cur=id;scrollTo(0,0)}
+const totalStars=()=>Object.values(S.stars).reduce((a,b)=>a+b,0);
+const unlocked=n=>n===1||S.stars[n-1]>0||S.stars[n]>0;
+function updHome(){
+  $('chipStars').textContent=`${totalStars()} з ${LEVELS.length*3} зірок`;
+  $('bPlayT').textContent=totalStars()?'Продовжити':'Грати';
+}
+$('home').onclick=()=>{show('start');updHome()};
+$('bPlay').onclick=()=>{const n=LEVELS.find(l=>!S.stars[l.num]);openLevel(n?n.num:LEVELS.length)};
+$('bLevels').onclick=openLevels;
+const starSvg=on=>`<svg viewBox="0 0 24 24" style="fill:${on?'#f2b632':'var(--bg2)'}"><use href="#i-star"/></svg>`;
+function openLevels(){
+  show('levels');
+  $('levels').innerHTML=CHAPTERS.map((c,ci)=>`<div class="chap"><h2>${ci+1}. ${c.title}</h2><p>${c.sub}</p><div class="lvls">${
+    LEVELS.filter(l=>l.ci===ci).map(l=>{const st=S.stars[l.num]||0,ok=unlocked(l.num);
+      return `<button class="lv${ok?'':' locked'}" data-n="${l.num}" ${ok?'':'aria-disabled="true"'} title="${l.name}">${l.num}<span class="st">${[1,2,3].map(i=>starSvg(i<=st)).join('')}</span></button>`}).join('')}</div></div>`).join('');
+  $('levels').querySelectorAll('.lv').forEach(b=>b.onclick=()=>{const n=+b.dataset.n;if(!unlocked(n)){toastMsg('Спершу пройди попередній рівень');return}openLevel(n)});
+}
+function toastMsg(t){const m=$('msg');if(cur==='play'){m.textContent=t;m.className='msg'}else alert(t)}
+
+/* ===================== ПРОГРАМА ===================== */
+let L=null,P=[],target=null,history=[],uid=1;
+const mk=t=>{const n={id:uid++,t};if(t==='rep'){n.n=3;n.body=[]}if(t==='while')n.body=[];if(t==='if'){n.then=[];n.else=[]}return n};
+function count(list){return list.reduce((a,n)=>a+1+(n.body?count(n.body):0)+(n.then?count(n.then)+count(n.else):0),0)}
+function findList(tg){
+  if(!tg)return P;
+  const walk=list=>{for(const n of list){if(n.id===tg.id)return n[tg.slot];for(const s of ['body','then','else'])if(n[s]){const r=walk(n[s]);if(r)return r}}return null};
+  return walk(P)||P;
+}
+function removeNode(id){
+  const walk=list=>{const i=list.findIndex(n=>n.id===id);if(i>=0){list.splice(i,1);return true}return list.some(n=>['body','then','else'].some(s=>n[s]&&walk(n[s])))};
+  walk(P);
+  if(target&&!exists(target.id))target=null;
+}
+function exists(id){const walk=list=>list.some(n=>n.id===id||['body','then','else'].some(s=>n[s]&&walk(n[s])));return walk(P)}
+const snap=()=>JSON.stringify(P);
+function pushHist(){history.push(snap());if(history.length>60)history.shift()}
+function addBlock(t){
+  if(running)return;pushHist();
+  const n=mk(t);findList(target).push(n);
+  if(n.body)target={id:n.id,slot:'body'};else if(n.then)target={id:n.id,slot:'then'};
+  Sound.add();resetRun();renderProg();
+}
+function renderList(list,tg){
+  const isT=(tg===null&&target===null)||(tg&&target&&tg.id===target.id&&tg.slot===target.slot);
+  const key=tg?`${tg.id}:${tg.slot}`:'root';
+  return `<div class="list${isT?' target':''}" data-list="${key}">${list.map(renderNode).join('')}<button class="slot" data-slot="${key}">${isT?'▸ нові блоки потраплять сюди':'+ додавати сюди'}</button></div>`;
+}
+function renderNode(n){
+  const b=BLOCKS[n.t];
+  let head=`<div class="bh">${ico(n.t)}<span class="lbl">${n.t==='rep'?'Повторити':b.lbl}</span>`;
+  if(n.t==='rep')head+=`<span class="num"><button data-dec="${n.id}" aria-label="Менше">−</button><b>${n.n}</b><button data-inc="${n.id}" aria-label="Більше">+</button></span><span style="font-weight:800">рази</span>`;
+  head+=`<button class="x" data-del="${n.id}" aria-label="Видалити">×</button></div>`;
+  let inner='';
+  if(n.body)inner=`<div class="inner">${renderList(n.body,{id:n.id,slot:'body'})}</div>`;
+  if(n.then)inner=`<div class="inner">${renderList(n.then,{id:n.id,slot:'then'})}</div><div class="else-l">інакше</div><div class="inner">${renderList(n.else,{id:n.id,slot:'else'})}</div>`;
+  return `<div class="blk k-${n.t}" data-id="${n.id}">${head}${inner}</div>`;
+}
+function renderProg(){
+  const c=count(P);
+  $('prog').innerHTML=P.length?renderList(P,null):`<div class="empty-hint">Тут з'явиться програма. Натискай блоки вгорі.</div>`+renderList(P,null);
+  $('cnt').textContent=`Блоків: ${c} · найкраще: ${L.best}`;
+  S.progs[L.num]=P;persist();
+}
+$('prog').addEventListener('click',e=>{
+  if(running)return;
+  const t=e.target.closest('button');if(!t)return;
+  if(t.dataset.del){pushHist();removeNode(+t.dataset.del);Sound.turn();resetRun();renderProg();return}
+  if(t.dataset.inc||t.dataset.dec){pushHist();const id=+(t.dataset.inc||t.dataset.dec);const walk=list=>{for(const n of list){if(n.id===id){n.n=Math.max(2,Math.min(12,n.n+(t.dataset.inc?1:-1)));return}['body','then','else'].forEach(s=>n[s]&&walk(n[s]))}};walk(P);Sound.add();resetRun();renderProg();return}
+  if(t.dataset.slot){const k=t.dataset.slot;target=k==='root'?null:{id:+k.split(':')[0],slot:k.split(':')[1]};renderProg()}
+});
+$('bClear').onclick=()=>{if(running||!P.length)return;pushHist();P=[];target=null;resetRun();renderProg()};
+$('bUndo').onclick=()=>{if(running||!history.length)return;P=JSON.parse(history.pop());fixUid();if(target&&!exists(target.id))target=null;resetRun();renderProg()};
+function fixUid(){const walk=list=>list.forEach(n=>{uid=Math.max(uid,n.id+1);['body','then','else'].forEach(s=>n[s]&&walk(n[s]))});walk(P)}
+
+/* ===================== СВІТ ===================== */
+const CELL=60,DX=[0,1,0,-1],DY=[-1,0,1,0];
+function parse(rows){
+  const w=Math.max(...rows.map(r=>r.length)),h=rows.length,grid=[],houses=[];let bot=null;
+  rows.forEach((r,y)=>{grid.push([]);for(let x=0;x<w;x++){const ch=r[x]||'#';
+    if('^>v<'.includes(ch)){bot={x,y,d:'^>v<'.indexOf(ch)};grid[y].push('.')}
+    else{grid[y].push(ch==='H'?'.':ch);if(ch==='H')houses.push({x,y,done:false})}}});
+  return {w,h,grid,houses,bot,rot:bot.d*90};
+}
+let worlds=[],mapIdx=0;
+function wall(W,x,y){return x<0||y<0||x>=W.w||y>=W.h||W.grid[y][x]==='#'}
+function drawMap(W){
+  let s=`<svg viewBox="-6 -6 ${W.w*CELL+12} ${W.h*CELL+12}" role="img" aria-label="Мапа рівня">`;
+  s+=`<rect x="-4" y="-4" width="${W.w*CELL+8}" height="${W.h*CELL+8}" rx="16" class="gr"/>`;
+  for(let y=0;y<W.h;y++)for(let x=0;x<W.w;x++){
+    if((x+y)%2)s+=`<rect x="${x*CELL}" y="${y*CELL}" width="${CELL}" height="${CELL}" fill="var(--grass2)" opacity=".55"/>`;
+  }
+  for(let y=0;y<W.h;y++)for(let x=0;x<W.w;x++)if(W.grid[y][x]==='#'){
+    const cx=x*CELL,cy=y*CELL;
+    s+=`<g filter="url(#paper)"><rect x="${cx+4}" y="${cy+4}" width="${CELL-8}" height="${CELL-8}" rx="14" class="he"/><circle cx="${cx+20}" cy="${cy+22}" r="8" fill="#7ab98e"/><circle cx="${cx+38}" cy="${cy+36}" r="9" fill="#7ab98e"/></g>`;
+  }
+  W.houses.forEach((h,i)=>{s+=`<g filter="url(#paper)" id="h${i}"><use href="#house" x="${h.x*CELL}" y="${h.y*CELL}" width="${CELL}" height="${CELL}"/></g><g id="hc${i}" ${h.done?'':'style="display:none"'}><circle cx="${h.x*CELL+48}" cy="${h.y*CELL+12}" r="10" fill="#3f9d6e"/><path d="M${h.x*CELL+43} ${h.y*CELL+12}l4 4 7-8" class="stk" style="stroke:#fff;stroke-width:3"/></g>`});
+  s+=`<g class="bot" id="bot" style="transform:translate(${W.bot.x*CELL+CELL/2}px,${W.bot.y*CELL+CELL/2}px) rotate(${W.rot}deg)"><g filter="url(#paper)"><use href="#robot" x="-27" y="-27" width="54" height="54"/></g></g>`;
+  return s+'</svg>';
+}
+function renderMap(){
+  $('mapbox').innerHTML=drawMap(worlds[mapIdx]);
+  const multi=worlds.length>1;
+  $('mapTabs').hidden=!multi;
+  if(multi)$('mapTabs').innerHTML=worlds.map((w,i)=>`<button data-m="${i}" aria-pressed="${i===mapIdx}">Мапа ${i+1}<span class="res">${w.res==='ok'?'✓':w.res==='bad'?'✗':''}</span></button>`).join('');
+}
+$('mapTabs').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b||running)return;mapIdx=+b.dataset.m;renderMap()});
+function botEl(){return $('bot')}
+function placeBot(W){const b=botEl();if(b)b.style.transform=`translate(${W.bot.x*CELL+CELL/2}px,${W.bot.y*CELL+CELL/2}px) rotate(${W.rot}deg)`}
+
+/* ===================== ВИКОНАННЯ ===================== */
+let running=false,gen=null,timer=null,stepping=false,stepsDone=0,seen=new Set();
+const LIMIT=150;
+function* exec(list,W){for(const n of list)yield* run(n,W)}
+function* run(n,W){
+  if(n.t==='rep'){for(let i=0;i<n.n;i++)yield* exec(n.body,W);return}
+  if(n.t==='while'){while(!onHouse(W)){yield {n,act:'check'};yield* exec(n.body,W)}return}
+  if(n.t==='if'){yield {n,act:'check'};const f=wall(W,W.bot.x+DX[W.bot.d],W.bot.y+DY[W.bot.d]);yield* exec(f?n.then:n.else,W);return}
+  yield {n,act:n.t};
+}
+const onHouse=W=>W.houses.some(h=>h.x===W.bot.x&&h.y===W.bot.y);
+const allDone=W=>W.houses.every(h=>h.done);
+function hl(id,cls='cur'){document.querySelectorAll('.blk.cur,.blk.err').forEach(b=>b.classList.remove('cur','err'));if(id){const b=document.querySelector(`.blk[data-id="${id}"]`);if(b)b.classList.add(cls)}}
+function setMsg(t,c=''){const m=$('msg');m.textContent=t;m.className='msg '+c}
+function resetWorlds(){worlds=L.maps.map(parse);}
+function resetRun(){stop();resetWorlds();mapIdx=Math.min(mapIdx,worlds.length-1);renderMap();hl(null);setMsg('')}
+function stop(){running=false;clearTimeout(timer);gen=null;stepping=false;setBtns()}
+function setBtns(){const r=running&&!stepping;$('bRun').disabled=r;['bClear','bUndo'].forEach(i=>$(i).disabled=running)}
+function begin(){
+  if(!P.length){setMsg('Спершу додай блоки в програму','bad');return false}
+  const mb=$('mapbox').getBoundingClientRect();if(mb.top<64||mb.bottom>innerHeight)$('mapbox').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'center'});
+  resetWorlds();mapIdx=0;renderMap();stepsDone=0;
+  gen=exec(P,worlds[0]);seen=new Set();running=true;setBtns();return true;
+}
+const delay=()=>[0,380,220,120][S.speed];
+function tick(){
+  const W=worlds[mapIdx];
+  const r=gen.next();
+  if(r.done){
+    if(allDone(W))return mapDone(true);
+    hl(null);return fail(W.houses.length>1?'Програма закінчилась, а не всі посилки доставлено':'Програма закінчилась, а посилку не доставлено');
+  }
+  const {n,act}=r.value;hl(n.id);
+  if(++stepsDone>LIMIT)return fail('Робот ходить по колу — програма ніколи не закінчиться');
+  if(act==='check'&&n.t==='while'){const k=`${n.id}|${W.bot.x},${W.bot.y},${W.bot.d}|${W.houses.filter(h=>h.done).length}`;if(seen.has(k))return fail('Робот ходить по колу — програма ніколи не закінчиться');seen.add(k)}
+  if(act==='fwd'){
+    const nx=W.bot.x+DX[W.bot.d],ny=W.bot.y+DY[W.bot.d];
+    if(wall(W,nx,ny)){hl(n.id,'err');const b=botEl();b.classList.remove('crash');void b.getBBox();b.classList.add('crash');Sound.crash();return fail('Бум! Попереду кущ або край мапи')}
+    W.bot.x=nx;W.bot.y=ny;placeBot(W);Sound.step();
+    const h=W.houses.find(h=>h.x===nx&&h.y===ny&&!h.done);
+    if(h){h.done=true;const i=W.houses.indexOf(h);setTimeout(()=>{const c=$('hc'+i);if(c)c.style.display=''},delay()*.8);Sound.deliver();
+      if(allDone(W)&&worlds.length===1){return void(timer=setTimeout(()=>mapDone(true),delay()+150))}}
+  } else if(act==='left'||act==='right'){
+    W.bot.d=(W.bot.d+(act==='left'?3:1))%4;W.rot+=act==='left'?-90:90;placeBot(W);Sound.turn();
+  }
+  if(!stepping)timer=setTimeout(tick,act==='check'?delay()*.45:delay());
+}
+function mapDone(){
+  const W=worlds[mapIdx];W.res='ok';
+  if(mapIdx<worlds.length-1){
+    renderMap();setMsg(`Мапа ${mapIdx+1} — успіх! Перевіряю на мапі ${mapIdx+2}…`,'ok');
+    mapIdx++;timer=setTimeout(()=>{renderMap();gen=exec(P,worlds[mapIdx]);stepsDone=0;seen=new Set();if(!stepping)tick()},700);return;
+  }
+  renderMap();hl(null);running=false;stepping=false;setBtns();win();
+}
+function fail(t){W_res('bad');running=false;stepping=false;setBtns();setMsg((worlds.length>1?`Мапа ${mapIdx+1}: `:'')+t,'bad');}
+function W_res(r){worlds[mapIdx].res=r;const tabs=$('mapTabs');if(!tabs.hidden){const s=tabs.querySelector(`[data-m="${mapIdx}"] .res`);if(s)s.textContent=r==='ok'?'✓':'✗'}}
+$('bRun').onclick=()=>{if(running&&stepping){stepping=false;setBtns();tick();return}if(running)return;if(begin()){setMsg('');tick()}};
+$('bStep').onclick=()=>{if(!running){if(!begin())return;stepping=true;setBtns();setMsg('Покроковий режим: натискай «Крок»');}stepping=true;setBtns();clearTimeout(timer);tick()};
+$('bReset').onclick=()=>resetRun();
+$('bSpeed').onclick=()=>{S.speed=S.speed%3+1;persist();$('speedT').textContent='×'+S.speed};
+
+/* ===================== ПЕРЕМОГА ===================== */
+function starsFor(c){return c<=L.best?3:c<=L.best+2?2:1}
+function win(){
+  const c=count(P),st=starsFor(c),prev=S.stars[L.num]||0;
+  if(st>prev)S.stars[L.num]=st;persist();Sound.win();setMsg('Усі посилки доставлено!','ok');
+  const next=LEVELS[L.num];
+  $('winBody').innerHTML=`<h2>Посилки доставлено!</h2><div class="stars">${[1,2,3].map(i=>`<svg viewBox="0 0 24 24" class="${i<=st?'on':''}" style="fill:${i<=st?'#f2b632':'var(--bg2)'};animation-delay:${i*.15}s"><use href="#i-star"/></svg>`).join('')}</div>
+    <p>Блоків у програмі: <b>${c}</b>. ${st<3?`Найкоротша програма — ${L.best} ${L.best<5?'блоки':'блоків'}. Спробуєш скоротити?`:'Найкоротша програма — супер!'}</p>
+    <div class="row">${next?`<button class="btn main" id="wNext">Наступний рівень</button>`:`<button class="btn main" id="wAll">До рівнів</button>`}<button class="btn" id="wAgain">Ще раз</button></div>`;
+  const d=$('win');d.showModal();
+  if(next)$('wNext').onclick=()=>{d.close();openLevel(next.num)};else $('wAll').onclick=()=>{d.close();openLevels()};
+  $('wAgain').onclick=()=>{d.close();resetRun()};
+}
+
+/* ===================== ВІДКРИТИ РІВЕНЬ ===================== */
+function openLevel(n){
+  show('play');L=LEVELS[n-1];history=[];target=null;mapIdx=0;
+  P=Array.isArray(S.progs[n])?S.progs[n]:[];fixUid();
+  $('lvTitle').textContent=`${L.num}. ${L.name}`;$('lvTask').textContent=L.task;
+  $('lvStars').innerHTML=`${CHAPTERS[L.ci].title}`;
+  $('palette').innerHTML=L.blocks.map(k=>`<button class="pb k-${k}" data-add="${k}">${ico(k)}${BLOCKS[k].lbl}</button>`).join('');
+  $('palette').querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addBlock(b.dataset.add));
+  $('speedT').textContent='×'+S.speed;
+  resetRun();renderProg();
+}
+
+/* ===================== КЛАВІАТУРА ===================== */
+document.addEventListener('keydown',e=>{
+  if(cur!=='play'||$('info').open||$('win').open||e.target.tagName==='INPUT')return;
+  const has=k=>L.blocks.includes(k);
+  if(e.key==='ArrowUp'&&has('fwd')){e.preventDefault();addBlock('fwd')}
+  else if(e.key==='ArrowLeft'){e.preventDefault();addBlock('left')}
+  else if(e.key==='ArrowRight'){e.preventDefault();addBlock('right')}
+  else if(e.key==='Enter'&&e.target.tagName!=='BUTTON'){e.preventDefault();$('bRun').click()}
+  else if(e.key==='Backspace'){e.preventDefault();if(running)return;const l=findList(target);if(l.length){pushHist();l.pop();resetRun();renderProg()}}
+});
+
+/* ===================== [i] ===================== */
+$('legend').innerHTML=Object.keys(BLOCKS).map(k=>`<div><span class="ico k-${k}"><svg viewBox="0 0 24 24"><use href="#${BLOCKS[k].icon}"/></svg></span>${BLOCKS[k].lbl}</div>`).join('');
+const info=$('info');$('infoBtn').onclick=()=>info.showModal();
+info.addEventListener('click',e=>{if(e.target===info||e.target.closest('[data-close]'))info.close()});
+$('win').addEventListener('click',e=>{if(e.target===$('win'))$('win').close()});
+
+updHome();
+</script>
+</body>
+</html>
