@@ -254,7 +254,7 @@ dialog::backdrop{background:rgba(20,30,45,.45)}
         </div>
         <div class="modes">
           <button class="btn mode main" data-go="levels"><svg viewBox="0 0 24 24"><use href="#hookS"/></svg><span>Рівні<small>4 розділи з оцінкою</small></span><span class="prog" id="progLevels"></span></button>
-          <button class="btn mode" data-go="story"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3" class="ink"/><rect x="8" y="5" width="8" height="12" rx="1" class="wa"/></svg><span>Телефон Марка<small>Історія з вибором дій</small></span></button>
+          <button class="btn mode" data-go="story"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3" class="ink"/><rect x="8" y="5" width="8" height="12" rx="1" class="wa"/></svg><span><span class="heroPhone">Телефон Марка</span><small>Історія з вибором дій</small></span></button>
           <button class="btn mode" data-go="speed"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="9" class="sa"/><path d="M12 13V8M10 2h4" class="stk" style="stroke-width:2.5"/></svg><span>60 секунд<small>Скільки підробок упіймаєш?</small></span><span class="prog" id="progSpeed"></span></button>
         </div>
       </div>
@@ -327,7 +327,7 @@ dialog::backdrop{background:rgba(20,30,45,.45)}
 <!-- STORY -->
 <section class="screen" id="s-story">
   <div class="wrap gwrap">
-    <div class="ghead"><h2>Телефон Марка</h2><span class="pill" id="stScore"></span></div>
+    <div class="ghead"><h2 class="heroPhone">Телефон Марка</h2><span class="pill" id="stScore"></span></div>
     <div class="phone"><div class="screenp"><div class="p-top"><span class="ava" id="stAva">?</span><span id="stWho"></span></div><div class="p-feed" id="stFeed"></div><div class="choices" id="stChoices"></div></div></div>
     <div class="story-side panel" id="stNote" hidden></div>
   </div>
@@ -364,7 +364,7 @@ dialog::backdrop{background:rgba(20,30,45,.45)}
     <h3>Правила</h3>
     <ul>
       <li><b>Рівні:</b> 4 розділи по 6 повідомлень. Вирішуй, справжнє воно чи підробка. Якщо підробка — знайди підозрілу деталь (+бонус). У кінці — оцінка з 12, ранг і сертифікат.</li>
-      <li><b>Телефон Марка:</b> обирай, як Марко відповість шахраям. Від вибору залежить кінцівка.</li>
+      <li><b>Телефон героя:</b> обирай, як герой відповість шахраям. Герой — це ти: гра підставить твоє ім'я (якщо його немає в списку — буде Марк). Від вибору залежить кінцівка.</li>
       <li><b>60 секунд:</b> впіймай якнайбільше підробок за хвилину.</li>
       <li>У грі сховано 6 рибок 🐟 — знайди всі й отримаєш секретний ранг.</li>
       <li>Усі банки, ігри та служби в грі вигадані.</li>
@@ -419,32 +419,146 @@ const CH=[
 ];
 
 const STORY=[
- {who:'КіберКлеш Bot',ava:'К',msgs:['Марку, вітаємо! Ти виграв скін «Золотий дракон» 🐉','Щоб забрати, введи пароль тут: kiberklesh-gift.xyz'],
-  ch:[{t:'Ввести пароль — скін же!',p:0,f:'Ой! Акаунт Марка викрали за хвилину. Справжні боти ніколи не просять пароль.'},
+ {who:'КіберКлеш Bot',ava:'К',msgs:['{V}, вітаємо! Ти виграв скін «Золотий дракон» 🐉','Щоб забрати, введи пароль тут: kiberklesh-gift.xyz'],
+  ch:[{t:'Ввести пароль — скін же!',p:0,f:'Ой! Акаунт {G} викрали за хвилину. Справжні боти ніколи не просять пароль.'},
       {t:'Перевірити в самій грі, чи є подарунок',p:2,f:'Правильно! У грі подарунка немає — отже, це шахраї.'},
       {t:'Відповісти «а ви точно справжні?»',p:1,f:'Шахраї скажуть «так». Краще перевіряти самому, а не питати їх.'}]},
- {who:'Брат Артем (новий номер)',ava:'А',msgs:['Марк, це я, загубив телефон 😩','Позич 300 грн на карту, ввечері віддам. Тільки мамі не кажи!'],
-  ch:[{t:'Подзвонити Артему на старий номер',p:2,f:'Супер! Артем у школі, його телефон при ньому. Це був шахрай.'},
+ {who:'{SIB} (новий номер)',ava:'{SIBA}',msgs:['{V}, це я, загубив телефон 😩','Позич 300 грн на карту, ввечері віддам. Тільки мамі не кажи!'],
+  ch:[{t:'Подзвонити Артему на старий номер',p:2,f:'Супер! {SIBN} у школі, його телефон при ньому. Це був шахрай.'},
       {t:'Скинути гроші — це ж брат',p:0,f:'Гроші зникли. «Новий номер» і «нікому не кажи» — тривожні дзвіночки.'},
       {t:'Спитати, як звати їхнього кота',p:1,f:'Непогано, але відповідь можна знайти в соцмережах. Найнадійніше — подзвонити.'}]},
  {who:'Невідомий номер',ava:'?',msgs:['Тобі прийшов код у SMS, я помилково вказав твій номер 🙏','Перешли, будь ласка, той код'],
-  ch:[{t:'Переслати — людина ж просить',p:0,f:'Через цей код шахрай увійшов у месенджер Марка й пише його друзям.'},
+  ch:[{t:'Переслати — людина ж просить',p:0,f:'Через цей код шахрай увійшов у месенджер {G} й пише [його|її] друзям.'},
       {t:'Нікому не надсилати і видалити SMS',p:2,f:'Так! Код із SMS — ключ до акаунта, його не передають нікому.'},
       {t:'Попросити спершу назвати своє ім\'я',p:1,f:'Ім\'я шахрай вигадає. Код не можна віддавати за жодних умов.'}]},
  {who:'Ліза з паралельного',ava:'Л',msgs:['Привіт! Проголосуй за мене в конкурсі 🥺','golos-konkurs.top — там треба ввести номер телефону'],
-  ch:[{t:'Спитати Лізу наживо в школі',p:2,f:'Ліза здивувалась: її акаунт зламали, і вона не писала. Ти її попередив!'},
-      {t:'Ввести номер, щоб допомогти',p:0,f:'Тепер Марку пише «служба безпеки» і просить код. Номер потрапив до шахраїв.'},
+  ch:[{t:'Спитати Лізу наживо в школі',p:2,f:'Ліза здивувалась: її акаунт зламали, і вона не писала. Ти її [попередив|попередила]!'},
+      {t:'Ввести номер, щоб допомогти',p:0,f:'Тепер {D} пише «служба безпеки» і просить код. Номер потрапив до шахраїв.'},
       {t:'Проігнорувати',p:1,f:'Безпечно для тебе, але Лізу варто попередити, що її акаунт зламали.'}]},
  {who:'Незнайомець',ava:'?',msgs:['Ти класно граєш! Давай дружити 😎','Скинь фото, де ти живеш, і в яку школу ходиш — передам подарунок'],
   ch:[{t:'Не відповідати, заблокувати й розповісти батькам',p:2,f:'Найкраще рішення! Дорослі допоможуть, а незнайомець більше не напише.'},
       {t:'Скинути, подарунок же',p:0,f:'Не можна! Адресу і школу не дають незнайомцям. Обов\'язково розкажи дорослим.'},
-      {t:'Відповісти, що не скажу',p:1,f:'Добре, що не сказав. Але таких людей краще одразу блокувати й розповідати дорослим.'}]}
+      {t:'Відповісти, що не [скажу|скажу]',p:1,f:'Добре, що не [сказав|сказала]. Але таких людей краще одразу блокувати й розповідати дорослим.'}]}
 ];
 const ENDINGS=[
- {min:9,t:'🛡 Марко — справжній кібердетектив! Жоден гачок не спрацював.'},
- {min:5,t:'🙂 Марко майже не попався, але кілька разів був на волосинці.'},
- {min:0,t:'🎣 Шахраї наловили багато «риби» в телефоні Марка. Спробуй ще раз!'}
+ {min:9,t:'🛡 {N} — [справжній кібердетектив|справжня кібердетективка]! Жоден гачок не спрацював.'},
+ {min:5,t:'🙂 {N} майже не [попався|попалася], але кілька разів [був|була] на волосинці.'},
+ {min:0,t:'🎣 Шахраї наловили багато «риби» в телефоні {G}. Спробуй ще раз!'}
 ];
+
+
+/* ===================== ІМЕНА =====================
+   Найпоширеніші імена: називний | родовий | давальний | кличний | рід (m/f).
+   Якщо імені учня тут немає — героєм буде Марк. Додати ім'я: допиши рядок у тому ж форматі. */
+const NAME_DB=`
+Олександр|Олександра|Олександрові|Олександре|m
+Максим|Максима|Максимові|Максиме|m
+Макс|Макса|Максові|Максе|m
+Артем|Артема|Артемові|Артеме|m
+Дмитро|Дмитра|Дмитрові|Дмитре|m
+Діма|Діми|Дімі|Дімо|m
+Назар|Назара|Назарові|Назаре|m
+Андрій|Андрія|Андрієві|Андрію|m
+Микита|Микити|Микиті|Микито|m
+Нікіта|Нікіти|Нікіті|Нікіто|m
+Іван|Івана|Іванові|Іване|m
+Матвій|Матвія|Матвієві|Матвію|m
+Данило|Данила|Данилові|Даниле|m
+Богдан|Богдана|Богданові|Богдане|m
+Марк|Марка|Маркові|Марку|m
+Марко|Марка|Маркові|Марку|m
+Тимофій|Тимофія|Тимофієві|Тимофію|m
+Владислав|Владислава|Владиславові|Владиславе|m
+Влад|Влада|Владові|Владе|m
+Михайло|Михайла|Михайлові|Михайле|m
+Денис|Дениса|Денисові|Денисе|m
+Ярослав|Ярослава|Ярославові|Ярославе|m
+Кирило|Кирила|Кирилові|Кириле|m
+Захар|Захара|Захарові|Захаре|m
+Євген|Євгена|Євгенові|Євгене|m
+Роман|Романа|Романові|Романе|m
+Остап|Остапа|Остапові|Остапе|m
+Тарас|Тараса|Тарасові|Тарасе|m
+Святослав|Святослава|Святославові|Святославе|m
+Давид|Давида|Давидові|Давиде|m
+Ілля|Іллі|Іллі|Ілле|m
+Степан|Степана|Степанові|Степане|m
+Сергій|Сергія|Сергієві|Сергію|m
+Павло|Павла|Павлові|Павле|m
+Антон|Антона|Антонові|Антоне|m
+Олексій|Олексія|Олексієві|Олексію|m
+Юрій|Юрія|Юрієві|Юрію|m
+Ростислав|Ростислава|Ростиславові|Ростиславе|m
+Тимур|Тимура|Тимурові|Тимуре|m
+Арсеній|Арсенія|Арсенієві|Арсенію|m
+Олег|Олега|Олегові|Олегу|m
+Вадим|Вадима|Вадимові|Вадиме|m
+Віктор|Віктора|Вікторові|Вікторе|m
+Єгор|Єгора|Єгорові|Єгоре|m
+Платон|Платона|Платонові|Платоне|m
+Лев|Лева|Левові|Леве|m
+Анастасія|Анастасії|Анастасії|Анастасіє|f
+Настя|Насті|Насті|Насте|f
+Софія|Софії|Софії|Софіє|f
+Соня|Соні|Соні|Соню|f
+Марія|Марії|Марії|Маріє|f
+Маша|Маші|Маші|Машо|f
+Анна|Анни|Анні|Анно|f
+Аня|Ані|Ані|Аню|f
+Вікторія|Вікторії|Вікторії|Вікторіє|f
+Віка|Віки|Віці|Віко|f
+Дарія|Дарії|Дарії|Даріє|f
+Дарина|Дарини|Дарині|Дарино|f
+Даша|Даші|Даші|Дашо|f
+Єлизавета|Єлизавети|Єлизаветі|Єлизавето|f
+Ліза|Лізи|Лізі|Лізо|f
+Злата|Злати|Златі|Злато|f
+Поліна|Поліни|Поліні|Поліно|f
+Катерина|Катерини|Катерині|Катерино|f
+Катя|Каті|Каті|Катю|f
+Олександра|Олександри|Олександрі|Олександро|f
+Аліна|Аліни|Аліні|Аліно|f
+Ангеліна|Ангеліни|Ангеліні|Ангеліно|f
+Мілана|Мілани|Мілані|Мілано|f
+Соломія|Соломії|Соломії|Соломіє|f
+Ірина|Ірини|Ірині|Ірино|f
+Юлія|Юлії|Юлії|Юліє|f
+Ольга|Ольги|Ользі|Ольго|f
+Валерія|Валерії|Валерії|Валеріє|f
+Діана|Діани|Діані|Діано|f
+Христина|Христини|Христині|Христино|f
+Вероніка|Вероніки|Вероніці|Вероніко|f
+Емілія|Емілії|Емілії|Еміліє|f
+Василина|Василини|Василині|Василино|f
+Олена|Олени|Олені|Олено|f
+Яна|Яни|Яні|Яно|f
+Кіра|Кіри|Кірі|Кіро|f
+Аліса|Аліси|Алісі|Алісо|f
+Ева|Еви|Еві|Ево|f
+Уляна|Уляни|Уляні|Уляно|f
+Мирослава|Мирослави|Мирославі|Мирославо|f
+Ксенія|Ксенії|Ксенії|Ксеніє|f
+Тетяна|Тетяни|Тетяні|Тетяно|f
+Надія|Надії|Надії|Надіє|f
+Оксана|Оксани|Оксані|Оксано|f
+Каріна|Каріни|Каріні|Каріно|f
+Маргарита|Маргарити|Маргариті|Маргарито|f
+Таїсія|Таїсії|Таїсії|Таїсіє|f
+Марта|Марти|Марті|Марто|f
+Стефанія|Стефанії|Стефанії|Стефаніє|f`.trim().split('\n').map(l=>{const [n,g,d,v,x]=l.split('|');return {n,g,d,v,f:x==='f'}});
+const DEF_HERO=NAME_DB.find(x=>x.n==='Марк');
+function hero(){
+  const toks=String(S.name||'').toLowerCase().replace(/[’ʼ`]/g,"'").split(/[\s,.-]+/);
+  for(const t of toks){const h=NAME_DB.find(x=>x.n.toLowerCase()===t);if(h)return h}
+  return DEF_HERO;
+}
+function tpl(str){
+  const h=hero(),sib=h.n==='Артем'?'Богдан':'Артем';
+  return str.replace(/\{SIBA\}/g,sib[0]).replace(/\{SIBN\}/g,sib).replace(/\{SIB\}/g,'Брат '+sib)
+    .replace(/\{N\}/g,h.n).replace(/\{G\}/g,h.g).replace(/\{D\}/g,h.d).replace(/\{V\}/g,h.v)
+    .replace(/\[([^|\]]*)\|([^\]]*)\]/g,(m,a,b)=>h.f?b:a);
+}
+function updHero(){document.querySelectorAll('.heroPhone').forEach(e=>e.textContent='Телефон '+hero().g)}
 
 const SPEED=[
  ['«Ти виграв 1000 гемів! Перейди за посиланням і введи пароль»',1],
@@ -551,7 +665,7 @@ function updRank(){
 const inName=$('inName'),inClass=$('inClass');
 inName.placeholder=NAMES[Math.floor(Math.random()*NAMES.length)];inClass.placeholder='7-А';
 inName.value=S.name;inClass.value=S.cls;
-inName.oninput=()=>{S.name=inName.value.trim();persist()};
+inName.oninput=()=>{S.name=inName.value.trim();persist();updHero()};
 inClass.oninput=()=>{S.cls=inClass.value.trim();persist()};
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{
   if(b.dataset.go==='levels'&&!S.name){inName.focus();toast('Впиши ім\'я та прізвище — вони будуть у звіті й сертифікаті');return}
@@ -702,7 +816,7 @@ function cert(){
   x.font='800 44px Rubik, sans-serif';x.fillText('СЕРТИФІКАТ',W/2,250);
   x.font='700 30px Nunito, sans-serif';x.fillStyle=css('--muted');x.fillText('гри «Фішинг-детектор»',W/2,300);
   x.fillStyle=css('--ink');x.font='800 72px Rubik, sans-serif';x.fillText(S.name||'Учень',W/2,440);
-  x.font='700 32px Nunito, sans-serif';x.fillText((S.cls?S.cls+' клас · ':'')+'успішно навчився(лася) розпізнавати фішинг',W/2,500);
+  x.font='700 32px Nunito, sans-serif';x.fillText((S.cls?S.cls+' клас · ':'')+(hero()!==DEF_HERO||/марк/i.test(S.name)?(hero().f?'успішно навчилася':'успішно навчився'):'успішно навчився(лася)')+' розпізнавати фішинг',W/2,500);
   const [rn,ri]=rank();
   x.font='800 56px Rubik, sans-serif';x.fillStyle=css('--coral');x.fillText(`${ri} ${rn}`.replace(/[^\p{L}\s]/gu,'').trim(),W/2,630);
   x.font='700 30px Nunito, sans-serif';x.fillStyle=css('--ink');x.fillText(`Оцінка ${grade()} з 12 · ${pct()}% · рибок ${S.eggs.length}/${EGGS.length}`,W/2,700);
@@ -718,28 +832,28 @@ function cert(){
 let ST=null;
 function startStory(){show('story');ST={i:0,pts:0};$('stNote').hidden=true;storyStep()}
 function storyStep(){
-  const s=STORY[ST.i];$('stWho').textContent=s.who;$('stAva').textContent=s.ava;
+  const s=STORY[ST.i];$('stWho').textContent=tpl(s.who);$('stAva').textContent=tpl(s.ava);
   $('stScore').textContent=`Ситуація ${ST.i+1} з ${STORY.length}`;
   const feed=$('stFeed');feed.innerHTML=(ST.i===STORY.length-1?eggBtn('story','right:12px;top:58px'):'');
-  s.msgs.forEach((m,k)=>setTimeout(()=>{const d=document.createElement('div');d.className='b-in';d.innerHTML=esc(m).replace(/([a-z0-9-]+\.(xyz|top))/g,'<span class="lnk">$1</span>');feed.appendChild(d);Sound.tone(880,.05,'sine',.03)},k*350));
+  s.msgs.forEach((m,k)=>setTimeout(()=>{const d=document.createElement('div');d.className='b-in';d.innerHTML=esc(tpl(m)).replace(/([a-z0-9-]+\.(xyz|top))/g,'<span class="lnk">$1</span>');feed.appendChild(d);Sound.tone(880,.05,'sine',.03)},k*350));
   const ch=[...s.ch].sort(()=>Math.random()-.5);
-  $('stChoices').innerHTML=ch.map((c,k)=>`<button class="choice" data-k="${s.ch.indexOf(c)}">${esc(c.t)}</button>`).join('');
+  $('stChoices').innerHTML=ch.map((c,k)=>`<button class="choice" data-k="${s.ch.indexOf(c)}">${esc(tpl(c.t))}</button>`).join('');
   $('stChoices').querySelectorAll('.choice').forEach(b=>b.onclick=()=>storyPick(+b.dataset.k));
   $('stNote').hidden=true;
 }
 function storyPick(k){
   const s=STORY[ST.i],c=s.ch[k];ST.pts+=c.p;
-  const feed=$('stFeed');const o=document.createElement('div');o.className='b-out';o.textContent=c.t;feed.appendChild(o);
+  const feed=$('stFeed');const o=document.createElement('div');o.className='b-out';o.textContent=tpl(c.t);feed.appendChild(o);
   const n=document.createElement('div');n.className='b-note';n.textContent=c.p===2?'✅ Чудовий вибір':c.p===1?'🤔 Можна краще':'🎣 Гачок спрацював';feed.appendChild(n);
   c.p===2?Sound.ok():c.p===1?Sound.tone(440,.15):Sound.bad();
   $('stChoices').innerHTML='';
   const last=ST.i===STORY.length-1;
-  $('stNote').hidden=false;$('stNote').innerHTML=`<p class="expl" style="margin:0 0 12px">${esc(c.f)}</p><button class="btn main" id="stNext" style="width:100%">${last?'Кінцівка':'Далі →'}</button>`;
+  $('stNote').hidden=false;$('stNote').innerHTML=`<p class="expl" style="margin:0 0 12px">${esc(tpl(c.f))}</p><button class="btn main" id="stNext" style="width:100%">${last?'Кінцівка':'Далі →'}</button>`;
   $('stNext').onclick=()=>{if(last)storyEnd();else{ST.i++;storyStep()}};$('stNext').focus({preventScroll:true});
 }
 function storyEnd(){
   const e=ENDINGS.find(x=>ST.pts>=x.min);S.story=Math.max(S.story,ST.pts);persist();Sound.win();
-  $('stChoices').innerHTML='';$('stFeed').innerHTML=`<div class="b-note" style="font-size:18px;color:var(--ink);margin:auto 0"><b>${e.t}</b><br><br>Бали: ${ST.pts} з ${STORY.length*2}</div>`;
+  $('stChoices').innerHTML='';$('stFeed').innerHTML=`<div class="b-note" style="font-size:18px;color:var(--ink);margin:auto 0"><b>${esc(tpl(e.t))}</b><br><br>Бали: ${ST.pts} з ${STORY.length*2}</div>`;
   $('stNote').innerHTML=`<div class="row" style="margin:0"><button class="btn main" id="stAgain">Ще раз</button><button class="btn" id="stHome">На головну</button></div>`;
   $('stAgain').onclick=startStory;$('stHome').onclick=()=>{show('start');updRank()};
 }
@@ -795,7 +909,7 @@ const info=$('info');
 $('infoBtn').onclick=()=>info.showModal();
 info.addEventListener('click',e=>{if(e.target===info||e.target.closest('[data-close]'))info.close()});
 
-updRank();
+updRank();updHero();
 document.querySelector('.egg[data-egg="hero"]').classList.toggle('got',S.eggs.includes('hero'));
 </script>
 </body>
