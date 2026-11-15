@@ -119,6 +119,14 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 .slot{border:0;background:none;color:var(--muted);font-weight:800;font-size:13px;cursor:pointer;text-align:left;padding:6px 8px;border-radius:10px}
 .list.target>.slot{color:var(--bad)}
 .blk{border-radius:14px;box-shadow:0 3px 0 var(--shadow)}
+.pb{touch-action:none}
+.blk>.bh{cursor:grab}
+.blk .ico{touch-action:none}
+.blk.dragging{opacity:.35}
+.ghost{position:fixed;z-index:100;pointer-events:none;opacity:.94;transform:rotate(-2deg);box-shadow:0 12px 26px rgba(0,0,0,.25);border-radius:14px;max-width:340px;margin:0}
+.ghost.del{opacity:.55;filter:grayscale(1)}
+.dropline{height:6px;border-radius:3px;background:var(--coral);margin:0 4px;flex:none}
+body.dragging-now,body.dragging-now *{cursor:grabbing!important;user-select:none}
 .bh{display:flex;align-items:center;gap:8px;padding:6px 8px;font-weight:800;font-size:15px}
 .bh .lbl{flex:1}
 .blk.cur{outline:3px solid var(--ink);outline-offset:1px}
@@ -266,7 +274,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
         <div class="msg" id="msg"></div>
       </div>
       <div class="codecol">
-        <h3>Блоки — натисни, щоб додати</h3>
+        <h3>Натисни або перетягни блок у програму</h3>
         <div class="palette" id="palette"></div>
         <div class="prog"><div class="count"><span>Програма</span><span id="cnt"></span></div><div id="prog"></div></div>
         <div class="runbar"><button class="btn" id="bClear"><svg viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.4" d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/></svg>Очистити</button><button class="btn" id="bUndo"><svg viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M9 14L4 9l5-5"/><path class="stk" style="stroke-width:2.6" d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Скасувати</button></div>
@@ -285,7 +293,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
     <p>Гра з алгоритмів: склади програму з блоків, щоб робот доставив посилки в будинки. Три розділи — лінійні алгоритми, цикли та розгалуження.</p>
     <h3>Правила</h3>
     <ul>
-      <li>Натисни блок у палітрі — він додасться в кінець програми або в обрану рамку циклу чи умови.</li>
+      <li>Натисни блок — він додасться в кінець програми або в обрану рамку. Або перетягни блок у потрібне місце.</li><li>Блоки в програмі теж можна перетягувати. Витягни блок за межі програми — і він видалиться.</li>
       <li>Робот виконує блоки згори вниз. Повороти — відносно того, куди дивиться робот.</li>
       <li>Врізатись у кущ не можна. Посилку доставлено, коли робот став на будинок.</li>
       <li>У розділі «Умови» одна програма має спрацювати на обох мапах.</li>
@@ -295,7 +303,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
     <div class="legend" id="legend"></div>
     <h3>Керування</h3>
     <ul>
-      <li>Миша або дотик: натискай блоки, «×» видаляє, «−/+» змінює кількість повторів.</li>
+      <li>Миша: натискай або перетягуй блоки. На телефоні перетягуй блок за його значок.</li><li>«×» видаляє блок, «−/+» змінює кількість повторів.</li>
       <li>Клавіатура: ↑ — крок, ← / → — поворот, Enter — запустити, Backspace — видалити останній блок.</li>
     </ul>
     <a class="gh" href="https://github.com/whyuxavier/it-maysternia" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6L2.5 9.3l6.6-.8z"/></svg>GitHub</a>
@@ -426,7 +434,7 @@ function renderNode(n){
 }
 function renderProg(){
   const c=count(P);
-  $('prog').innerHTML=P.length?renderList(P,null):`<div class="empty-hint">Тут з'явиться програма. Натискай блоки вгорі.</div>`+renderList(P,null);
+  $('prog').innerHTML=P.length?renderList(P,null):`<div class="empty-hint">Тут з'явиться програма. Натискай або перетягуй блоки сюди.</div>`+renderList(P,null);
   $('cnt').textContent=`Блоків: ${c} · найкраще: ${L.best}`;
   S.progs[L.num]=P;persist();
 }
@@ -440,6 +448,75 @@ $('prog').addEventListener('click',e=>{
 $('bClear').onclick=()=>{if(running||!P.length)return;pushHist();P=[];target=null;resetRun();renderProg()};
 $('bUndo').onclick=()=>{if(running||!history.length)return;P=JSON.parse(history.pop());fixUid();if(target&&!exists(target.id))target=null;resetRun();renderProg()};
 function fixUid(){const walk=list=>list.forEach(n=>{uid=Math.max(uid,n.id+1);['body','then','else'].forEach(s=>n[s]&&walk(n[s]))});walk(P)}
+
+/* ===================== ПЕРЕТЯГУВАННЯ ===================== */
+let D=null,dragJust=false;
+function nodeById(id){let r=null;const w=l=>l.some(n=>{if(n.id===id){r=n;return true}return ['body','then','else'].some(s=>n[s]&&w(n[s]))});w(P);return r}
+function keyList(k){if(k==='root')return P;const [id,slot]=k.split(':');const n=nodeById(+id);return n?n[slot]:null}
+function insideNode(rootId,id){const r=nodeById(rootId);if(!r)return false;let f=false;const w=l=>l.forEach(n=>{if(n.id===id)f=true;['body','then','else'].forEach(s=>n[s]&&w(n[s]))});['body','then','else'].forEach(s=>r[s]&&w(r[s]));return f}
+document.addEventListener('pointerdown',e=>{
+  if(cur!=='play'||running||e.button>0)return;
+  const pb=e.target.closest('.pb');let src=null;
+  if(pb)src={kind:'new',t:pb.dataset.add,el:pb};
+  else{
+    const bh=e.target.closest('.blk>.bh');
+    if(!bh||e.target.closest('button'))return;
+    if(e.pointerType!=='mouse'&&!e.target.closest('.ico'))return;
+    src={kind:'move',id:+bh.parentElement.dataset.id,el:bh.parentElement};
+  }
+  D={src,x0:e.clientX,y0:e.clientY,on:false,pid:e.pointerId,drop:null};
+});
+document.addEventListener('pointermove',e=>{
+  if(!D||e.pointerId!==D.pid)return;
+  if(!D.on){if(Math.hypot(e.clientX-D.x0,e.clientY-D.y0)<7)return;startDrag()}
+  e.preventDefault();moveDrag(e);
+},{passive:false});
+document.addEventListener('pointerup',e=>{if(!D||e.pointerId!==D.pid)return;if(D.on)endDrag(true);D=null});
+document.addEventListener('pointercancel',()=>{if(D&&D.on)endDrag(false);D=null});
+function startDrag(){
+  D.on=true;const src=D.src,r=src.el.getBoundingClientRect();
+  const g=(src.kind==='new'?src.el:src.el.querySelector('.bh')).cloneNode(true);
+  g.classList.add('ghost');if(src.kind==='move')g.classList.add('k-'+nodeById(src.id).t);
+  g.style.width=Math.min(r.width,340)+'px';
+  D.offX=Math.min(D.x0-r.left,40);D.offY=Math.min(D.y0-r.top,24);
+  document.body.appendChild(g);D.ghost=g;
+  D.line=document.createElement('div');D.line.className='dropline';
+  if(src.kind==='move')src.el.classList.add('dragging');
+  document.body.classList.add('dragging-now');
+  if(src.kind==='move')setMsg('Відпусти поза програмою — і блок видалиться');
+}
+function moveDrag(e){
+  const g=D.ghost;g.style.left=(e.clientX-D.offX)+'px';g.style.top=(e.clientY-D.offY)+'px';
+  if(e.clientY<70)scrollBy(0,-14);else if(e.clientY>innerHeight-50)scrollBy(0,14);
+  const el=document.elementFromPoint(e.clientX,e.clientY);
+  D.overProg=!!(el&&el.closest('.prog'));
+  let list=el&&el.closest('#prog .list');
+  if(!list&&el&&el.closest('.prog'))list=$('prog').querySelector('.list[data-list="root"]');
+  if(list&&D.src.kind==='move'){const k=list.dataset.list;if(k!=='root'){const id=+k.split(':')[0];if(id===D.src.id||insideNode(D.src.id,id))list=null}}
+  D.line.remove();
+  if(!list){D.drop=null;g.classList.toggle('del',D.src.kind==='move'&&!D.overProg);return}
+  g.classList.remove('del');
+  const kids=[...list.children].filter(c=>c.classList.contains('blk')&&c!==D.src.el);
+  let idx=kids.findIndex(c=>{const r=c.getBoundingClientRect();return e.clientY<r.top+r.height/2});
+  if(idx<0)idx=kids.length;
+  list.insertBefore(D.line,idx<kids.length?kids[idx]:list.querySelector(':scope>.slot'));
+  D.drop={key:list.dataset.list,idx};
+}
+function endDrag(apply){
+  D.ghost.remove();D.line.remove();document.body.classList.remove('dragging-now');
+  if(D.src.kind==='move')D.src.el.classList.remove('dragging');
+  dragJust=true;setTimeout(()=>dragJust=false,0);setMsg('');
+  if(!apply)return;
+  if(D.drop){
+    pushHist();let n;
+    if(D.src.kind==='new')n=mk(D.src.t);else{n=nodeById(D.src.id);removeNode(D.src.id)}
+    const list=keyList(D.drop.key)||P;list.splice(Math.min(D.drop.idx,list.length),0,n);
+    if(D.src.kind==='new'){if(n.body)target={id:n.id,slot:'body'};else if(n.then)target={id:n.id,slot:'then'}}
+    Sound.add();resetRun();renderProg();
+  } else if(D.src.kind==='move'&&!D.overProg){
+    pushHist();removeNode(D.src.id);Sound.turn();resetRun();renderProg();
+  }
+}
 
 /* ===================== СВІТ ===================== */
 const CELL=60,DX=[0,1,0,-1],DY=[-1,0,1,0];
@@ -559,7 +636,7 @@ function openLevel(n){
   $('lvTitle').textContent=`${L.num}. ${L.name}`;$('lvTask').textContent=L.task;
   $('lvStars').innerHTML=`${CHAPTERS[L.ci].title}`;
   $('palette').innerHTML=L.blocks.map(k=>`<button class="pb k-${k}" data-add="${k}">${ico(k)}${BLOCKS[k].lbl}</button>`).join('');
-  $('palette').querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addBlock(b.dataset.add));
+  $('palette').querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{if(dragJust)return;addBlock(b.dataset.add)});
   $('speedT').textContent='×'+S.speed;
   resetRun();renderProg();
 }
