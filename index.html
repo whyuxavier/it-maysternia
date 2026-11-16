@@ -170,7 +170,29 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
 .dnav a[aria-current="true"]{background:color-mix(in srgb,var(--dot) 60%,transparent);box-shadow:0 2px 0 var(--shadow)}
 .dnav .dot{width:12px;height:12px;border-radius:4px;background:var(--dot);box-shadow:0 2px 0 var(--shadow);flex:none;transform:rotate(-8deg)}
 .dnav button:focus-visible,.dnav a:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
-.ibtn{display:block}
+.burger{display:block!important}
+.newdot{position:absolute;top:-3px;right:-3px;width:12px;height:12px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 3px var(--bg)}
+.mnav .wrap{display:flex;justify-content:flex-end}
+.mnav-sheet{width:250px}
+.newtag{margin-left:auto;padding:2px 8px;border-radius:9px;background:var(--coral);color:#2e2638;font:800 12px Nunito,sans-serif}
+/* прихована сторінка оновлень (#updates) */
+.updates{display:none;padding:30px 0 70px}
+body.upd .updates{display:block}
+body.upd .hero,body.upd .catalog{display:none}
+.uhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+.uhead h2{font-size:clamp(28px,4vw,40px)}
+.uday{display:grid;grid-template-columns:150px 1fr;gap:18px;padding:18px 0;border-top:2px dashed var(--line)}
+.udate{font:800 17px Rubik,sans-serif;padding-top:6px;white-space:nowrap}
+.udate small{display:block;font:700 13px Nunito,sans-serif;color:var(--muted)}
+.uitems{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.uitem{display:flex;gap:14px;align-items:center;padding:10px;border-radius:18px;background:var(--card);text-decoration:none;color:var(--ink);box-shadow:0 4px 0 var(--shadow),0 0 0 1px var(--line);transition:transform .15s}
+.uitem:hover{transform:translateY(-2px) rotate(-.4deg)}
+.uitem .pic{width:112px;flex:none;border-radius:12px;overflow:hidden;background:var(--cbg)}
+.uitem .pic svg{display:block;width:100%;height:auto}
+.uitem h3{font-size:17px;margin:0 0 3px}
+.uitem p{margin:0;color:var(--muted);font-size:14px;line-height:1.35}
+.ubadge{display:inline-block;margin-top:6px;padding:2px 9px;border-radius:9px;font:800 12px Nunito,sans-serif;color:#2e2638}
+@media (max-width:600px){.uday{grid-template-columns:1fr;gap:10px}.uitems{grid-template-columns:1fr}}
 /* бічна навігація каталогу (комп'ютер) */
 .cat-layout{display:block}
 .side{display:none}
@@ -199,7 +221,7 @@ body.home .catalog,body:not(.home) .hero{display:none}
 body.home .hero{min-height:calc(100vh - 140px);min-height:calc(100svh - 140px);display:flex;align-items:center}
 body.home .hero-grid{width:100%}
 
-@media (max-width:1279px){.burger{display:block}}
+
 
 @media (max-width:860px){
   .hero{padding:30px 0 20px}
@@ -270,9 +292,15 @@ body.home .hero-grid{width:100%}
           </g>
         </svg>
       </button>
-      <button class="ibtn" id="infoBtn" type="button" aria-label="Про сайт">i</button>
+      <button class="burger" id="menuBtn" type="button" aria-label="Меню" aria-expanded="false" aria-controls="mnav"><span></span><span></span><span></span><i class="newdot" id="newDot" hidden></i></button>
     </div>
   </div>
+  <nav class="mnav" id="mnav" aria-label="Меню" hidden>
+    <div class="wrap"><div class="mnav-sheet">
+      <button type="button" id="mAbout" style="--dot:var(--lilac)"><span class="dot"></span>Про сайт</button>
+      <a href="#updates" id="mUpd" style="--dot:var(--mint)"><span class="dot"></span>Оновлення<span class="newtag" id="newTag" hidden>нове</span></a>
+    </div></div>
+  </nav>
 </header>
 
 <main id="top">
@@ -357,8 +385,14 @@ body.home .hero-grid{width:100%}
       </div>
     </div>
   </section>
-</main>
 
+  <section class="updates" id="updates">
+    <div class="wrap">
+      <div class="uhead"><h2>Оновлення</h2><a class="btn" href="#1-4">До каталогу</a></div>
+      <div id="updList"></div>
+    </div>
+  </section>
+</main>
 <footer>ІТ-Майстерня · 2026</footer>
 
 <dialog id="info" aria-labelledby="infoTitle">
@@ -824,7 +858,7 @@ syncPlug();
 
 /* ===== Вікно [i] ===== */
 const info=document.getElementById('info');
-document.getElementById('infoBtn').addEventListener('click',()=>info.showModal());
+
 document.getElementById('infoClose').addEventListener('click',()=>info.close());
 info.addEventListener('click',e=>{if(e.target===info)info.close()});
 
@@ -845,15 +879,51 @@ function renderSide(){
 const _setTab=setTab; setTab=function(id){_setTab(id);renderSide()};
 renderSide();
 
-/* ===== Маршрути: головна (#) і каталог (#1-4, #5-7, #8-11, #games, #teacher) ===== */
+/* ===== Оновлення (прихована сторінка #updates) =====
+   Новий запис додавай ЗВЕРХУ: дата, що зроблено (new — новий ресурс, upd — оновлення), назви карток як у APPS. */
+const UPDATES=[
+  {date:'2026-11-16', items:[{t:'Рандомайзер класу', k:'new', n:'Колесо імен з голосовим введенням, команди й таймер: бомба, Різдво, Геловін'}]},
+  {date:'2026-11-15', items:[{t:'Робот-кур\'єр', k:'new', n:'Алгоритми з блоків, цикли й умови, генератор вигляду робота'},
+                             {t:'Фішинг-детектор', k:'new', n:'Справжнє чи підробка: листи, SMS, сайти й історія «Телефон друга»'},
+                             {t:'Сапер', k:'upd', n:'Теми, режим формул і щоденний виклик'}]},
+  {date:'2026-11-14', items:[{t:'Пазл з твого фото', k:'new', n:'Завантаж фото й склади пазл до 12×12'}]},
+  {date:'2026-11-12', items:[{t:'WordShaker', k:'new'},{t:'Кібертурнір', k:'new'},{t:'Блок-схеми', k:'new'},{t:'Мій перший ПК', k:'new'},{t:'AI Invaders', k:'new'},{t:'Block Puzzle', k:'new'}]},
+  {date:'2026-11-11', items:[{t:'Танграм', k:'new'}]},
+];
+const MONTHS=['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня'];
+function renderUpdates(){
+  document.getElementById('updList').innerHTML=UPDATES.map(u=>{
+    const d=new Date(u.date+'T12:00:00');
+    return `<div class="uday"><div class="udate">${d.getDate()} ${MONTHS[d.getMonth()]}<small>${d.getFullYear()}</small></div><div class="uitems">${u.items.map(it=>{
+      const a=APPS.find(x=>x.title===it.t)||{title:it.t,desc:'',bg:'--bg2',art:'default',tab:''};
+      const tab=TABS.find(t=>t.id===a.tab);
+      return `<a class="uitem" href="${a.url||GH+a.repo+'/'}" target="_blank" rel="noopener" style="--cbg:var(${a.bg})"><div class="pic"><svg viewBox="0 0 320 200" aria-hidden="true">${(ART[a.art]||ART.default)()}</svg></div>
+        <div><h3>${a.title}</h3><p>${it.n||a.desc}</p><span class="ubadge" style="background:var(${it.k==='new'?'--mint':'--butter'})">${it.k==='new'?'Нове':'Оновлено'}</span>${tab?` <span class="ubadge" style="background:color-mix(in srgb,var(${tab.color}) 60%,transparent)">${tab.label}</span>`:''}</div></a>`}).join('')}</div></div>`}).join('');
+}
+const LATEST=UPDATES[0].date;
+function seenUpd(){try{return localStorage.getItem('itm-upd')||''}catch(e){return''}}
+function markNew(){const fresh=seenUpd()<LATEST;document.getElementById('newDot').hidden=!fresh;document.getElementById('newTag').hidden=!fresh}
+
+/* ===== Меню (три рисочки) ===== */
+const menuBtn=document.getElementById('menuBtn'), mnav=document.getElementById('mnav');
+function setMenu(open){menuBtn.setAttribute('aria-expanded',String(open));mnav.hidden=!open}
+menuBtn.addEventListener('click',()=>setMenu(mnav.hidden));
+document.getElementById('mAbout').addEventListener('click',()=>{setMenu(false);info.showModal()});
+document.getElementById('mUpd').addEventListener('click',()=>setMenu(false));
+document.addEventListener('click',e=>{if(!mnav.hidden&&!e.target.closest('#mnav,#menuBtn'))setMenu(false)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!mnav.hidden){setMenu(false);menuBtn.focus()}});
+
+/* ===== Маршрути: головна (#), каталог (#1-4 … #teacher), оновлення (#updates) ===== */
 function route(){
-  const id=location.hash.slice(1);
-  if(TABS.some(t=>t.id===id)){document.body.classList.remove('home');setTab(id)}
-  else document.body.classList.add('home');
+  const id=location.hash.slice(1),b=document.body;
+  b.classList.remove('home','upd');
+  if(id==='updates'){b.classList.add('upd');renderUpdates();try{localStorage.setItem('itm-upd',LATEST)}catch(e){}markNew()}
+  else if(TABS.some(t=>t.id===id))setTab(id);
+  else b.classList.add('home');
   window.scrollTo({top:0,behavior:'instant'});
 }
 addEventListener('hashchange',route);
-route();
+markNew();route();
 
 </script>
 </body>
