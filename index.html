@@ -9,11 +9,11 @@
 <meta name="keywords" content="ІТ-Майстерня, Олександр Васильович, Мрочко, інформатика, навчальні ігри, квести, тренажер клавіатури, Python, НУШ">
 <meta property="og:type" content="website">
 <meta property="og:title" content="ІТ-Майстерня з Олександром Васильовичем">
-<meta property="og:description" content="Навчальні ігри, квести, тренажери й курси з інформатики для 1–11 класу.">
+<meta property="og:description" content="Навчальні ігри, квести, тренажери й курси з інформатики для 1–12 класу.">
 <meta property="og:url" content="https://whyuxavier.github.io/it-maysternia/">
 <meta property="og:locale" content="uk_UA">
 <link rel="canonical" href="https://whyuxavier.github.io/it-maysternia/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"ІТ-Майстерня з Олександром Васильовичем","url":"https://whyuxavier.github.io/it-maysternia/","inLanguage":"uk","description":"Навчальні ігри, квести, тренажери й курси з інформатики для 1–11 класу.","author":{"@type":"Person","name":"Олександр Васильович Мрочко","jobTitle":"Вчитель інформатики","sameAs":["https://github.com/whyuxavier"]}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"ІТ-Майстерня з Олександром Васильовичем","url":"https://whyuxavier.github.io/it-maysternia/","inLanguage":"uk","description":"Навчальні ігри, квести, тренажери й курси з інформатики для 1–12 класу.","author":{"@type":"Person","name":"Олександр Васильович Мрочко","jobTitle":"Вчитель інформатики","sameAs":["https://github.com/whyuxavier"]}}</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='5' y='12' width='46' height='46' rx='12' fill='%23bddcf3' transform='rotate(-9 28 35)'/%3E%3Crect x='13' y='6' width='46' height='46' rx='12' fill='%23f6c6a6'/%3E%3Cpath d='M27 17v26l7-6 5 10 5-2.4-5-10h9.5z' fill='%233b3450'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -289,6 +289,8 @@ body.home .hero-grid{width:100%}
   .mnav-sheet{width:min(320px,calc(100vw - 32px));max-height:calc(100vh - 90px);overflow:auto}
   .mcur{display:block;font-size:24px;margin:0 0 12px}
 }
+#snow{position:fixed;inset:0;z-index:0;pointer-events:none}
+main,header,footer{position:relative;z-index:1}
 </style>
 </head>
 <body class="home">
@@ -353,13 +355,14 @@ body.home .hero-grid{width:100%}
   </nav>
 </header>
 
+<div id="snow" hidden></div>
 <main id="top">
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
         <h1>ІТ-<span>Майстерня</span></h1>
         <div class="by">з Олександром Васильовичем</div>
-        <p>Навчальні ігри, квести й тренажери з інформатики для 1–11 класу.</p>
+        <p>Навчальні ігри, квести й тренажери з інформатики для 1–12 класу.</p>
         <div class="btns">
           <a class="btn main" href="#all">Обрати клас</a>
           <a class="btn" href="#teacher">Для вчителя</a>
@@ -1129,6 +1132,18 @@ route();
 
 document.querySelector('.btns .btn.main').setAttribute('href','#all');
 
+
+/* ===== Сніг: лише на головній, лише в темній темі й лише взимку (snow.js вантажиться тільки тоді) ===== */
+(()=>{const el=document.getElementById('snow');let snow=null,loading=false;
+  const winter=()=>{if(/[?&]season=winter/.test(location.search))return true;const d=new Date(),m=d.getMonth();return m===11||m===0||m===1||(m===10&&d.getDate()>=25)};
+  function check(){
+    const on=document.body.classList.contains('home')&&document.documentElement.getAttribute('data-theme')==='dark'&&winter();
+    if(on){el.hidden=false;if(snow){snow.wake();return}if(loading)return;loading=true;
+      import('./snow.js').then(m=>{loading=false;snow=m.mount(el,{alpha:.75});check()}).catch(()=>{loading=false;el.hidden=true})}
+    else if(snow){snow.destroy();snow=null;el.hidden=true}else el.hidden=true}
+  new MutationObserver(check).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  new MutationObserver(check).observe(document.body,{attributes:true,attributeFilter:['class']});
+  check()})();
 </script>
 </body>
 </html>
