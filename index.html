@@ -232,6 +232,21 @@ body.teach .tmode{display:inline-flex}
 .tip h4{display:flex;align-items:center;gap:7px;margin:16px 0 4px;font:800 15px Rubik,sans-serif}
 .tip p{margin:0;line-height:1.5}
 .tip .open{margin-top:18px}
+/* налаштування */
+#setDlg{max-width:440px}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:16px;padding:14px;border-radius:16px;background:var(--bg)}
+.srow b{display:block;font:800 16px Rubik,sans-serif}
+.srow small{color:var(--muted);font-size:14px}
+.sw{flex:none;position:relative;width:54px;height:32px;border:0;border-radius:20px;cursor:pointer;background:var(--bg2);box-shadow:inset 0 0 0 1px var(--line)}
+.sw i{position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:var(--card);box-shadow:0 2px 0 var(--shadow);transition:left .2s}
+.sw[aria-checked="true"]{background:var(--lilac)}
+.sw[aria-checked="true"] i{left:26px}
+.scode{margin-top:14px}
+.scode label{display:block;font:800 14px Nunito,sans-serif;margin-bottom:6px}
+.srow2{display:flex;gap:8px}
+.srow2 input{flex:1;min-width:0;padding:11px 13px;border-radius:13px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:700 16px Nunito,sans-serif}
+.srow2 .btn{padding:11px 16px;font-size:15px}
+.dlg .serr{margin:8px 0 0;color:#c4574b;font-weight:700;font-size:14px}
 /* сторінка маршрутів */
 .route{padding:22px;border-radius:24px;background:var(--card);box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line);border-top:10px solid var(--dot)}
 .route+.route{margin-top:28px}
@@ -418,6 +433,7 @@ main,footer{position:relative;z-index:1}
       <div class="side mside" id="mside"></div><hr class="mhr">
       <button type="button" id="mAbout" style="--dot:var(--lilac)"><span class="dot"></span>Про сайт</button>
       <a href="#updates" id="mUpd" style="--dot:var(--mint)"><span class="dot"></span>Оновлення<span class="newtag" id="newTag" hidden>нове</span></a>
+      <button type="button" id="mSet" style="--dot:var(--butter)"><span class="dot"></span>Налаштування</button>
     </div></div>
   </nav>
 </header>
@@ -532,6 +548,13 @@ main,footer{position:relative;z-index:1}
 </main>
 <footer>ІТ-Майстерня · 2026</footer>
 
+<dialog id="setDlg" aria-labelledby="setT"><div class="dlg">
+  <button class="x" type="button" data-x aria-label="Закрити">×</button>
+  <h2 id="setT">Налаштування</h2>
+  <div class="srow"><div><b>Режим вчителя</b><small>Поради «Як на уроці» біля кожного ресурсу</small></div>
+    <button type="button" class="sw" id="swTeach" role="switch" aria-checked="false" aria-label="Режим вчителя"><i></i></button></div>
+  <form class="scode" id="sCode" hidden><label for="tCode">Код вчителя</label><div class="srow2"><input id="tCode" type="password" autocomplete="off" required><button class="btn main" type="submit">Увімкнути</button></div><p class="serr" id="sErr" hidden>Код не підходить</p></form>
+</div></dialog>
 <dialog id="tipDlg" aria-labelledby="tipT"><div class="dlg tip" id="tipBody"></div></dialog>
 <dialog id="info" aria-labelledby="infoTitle">
   <div class="dlg">
@@ -1076,10 +1099,19 @@ const TIPS={
  'Кібертурнір':['Турнірна сітка для шкільних змагань.','Позакласні заходи.','Внесіть команди й ведіть сітку на проєкторі.','—'],
 };
 const BULB='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>';
+/* Код для ввімкнення режиму вчителя в «Налаштуваннях» — зміни на свій */
+const TEACH_CODE='майстер';
 let TEACH=false;try{TEACH=localStorage.getItem('itm-teacher')==='1'}catch(e){}
 function setTeach(on){TEACH=on;try{on?localStorage.setItem('itm-teacher','1'):localStorage.removeItem('itm-teacher')}catch(e){}document.body.classList.toggle('teach',on)}
 function teachHash(){if(location.hash==='#vchytel'){setTeach(true);history.replaceState(null,'','#all');return true}return false}
 document.getElementById('tExit').addEventListener('click',()=>{setTeach(false);route()});
+const setDlg=document.getElementById('setDlg'),swT=document.getElementById('swTeach'),sCode=document.getElementById('sCode');
+function syncSet(){swT.setAttribute('aria-checked',String(TEACH));sCode.hidden=true;document.getElementById('sErr').hidden=true;document.getElementById('tCode').value=''}
+document.getElementById('mSet').addEventListener('click',()=>{setMenu(false);syncSet();setDlg.showModal()});
+setDlg.addEventListener('click',e=>{if(e.target===setDlg||e.target.closest('[data-x]'))setDlg.close()});
+swT.addEventListener('click',()=>{if(TEACH){setTeach(false);syncSet();route()}else{sCode.hidden=false;document.getElementById('tCode').focus()}});
+sCode.addEventListener('submit',e=>{e.preventDefault();const v=document.getElementById('tCode').value.trim().toLowerCase();
+  if(v===TEACH_CODE){setTeach(true);syncSet();setDlg.close();route()}else{document.getElementById('sErr').hidden=false}});
 const tipDlg=document.getElementById('tipDlg');
 tipDlg.addEventListener('click',e=>{if(e.target===tipDlg||e.target.closest('[data-x]'))tipDlg.close()});
 document.addEventListener('click',e=>{const b=e.target.closest('.tbtn');if(!b)return;const a=appBy(b.dataset.tip),t=TIPS[a.title];
