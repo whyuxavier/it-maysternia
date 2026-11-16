@@ -1042,22 +1042,22 @@ const META={
  'Пікселька':{t:'create',g:[1,7],f:'editor'},
  'MOUSE RACER':{t:'first',g:[1,7],f:'egame'},
  'Айті Компас':{t:'pc',g:[5,7],f:'quest'},
- 'Keyboard Academy':{t:'first',g:[5,11],f:'trainer'},
+ 'Keyboard Academy':{t:'first',g:[5,12],f:'trainer'},
  'Робот-кур\'єр':{t:'algo',g:[5,7],f:'egame'},
  'Блок-схеми':{t:'algo',g:[5,7],f:'editor'},
- 'Фішинг-детектор':{t:'data',g:[5,11],f:'quest'},
- 'Інформатичний Еліас':{fun:1,g:[5,11]},
- 'SERVER ROOM':{t:'pc',g:[7,11],f:'egame'},
+ 'Фішинг-детектор':{t:'data',g:[5,12],f:'quest'},
+ 'Інформатичний Еліас':{fun:1,g:[5,12]},
+ 'SERVER ROOM':{fun:1,g:[7,12]},
  'Python з нуля':{course:1,g:[8,9],mods:'Модулі для 8 і 9 класу'},
- 'Веб-програмування':{course:1,g:[10,11],mods:'12 уроків: HTML, CSS, JavaScript'},
+ 'Веб-програмування':{course:1,g:[10,12],mods:'12 уроків: HTML, CSS, JavaScript'},
  'Квест: Python, 8 клас':{t:'algo',g:[8,8],f:'quest'},
  'Квест: Python, 9 клас':{t:'algo',g:[9,9],f:'quest'},
- 'Баг-шторм':{t:'algo',g:[8,11],f:'egame'},
+ 'Баг-шторм':{t:'algo',g:[8,12],f:'egame'},
  'Місія «Документ»':{t:'data',g:[9,9],f:'quest'},
  'Місія «Інтернет речей»':{t:'pc',g:[9,9],f:'quest'},
- 'Excel Tournament':{t:'data',g:[8,11],f:'quest'},
+ 'Excel Tournament':{t:'data',g:[8,12],f:'quest'},
  'Місія «Аналітик даних»':{t:'data',g:[10,10],f:'quest'},
- 'Ghost in HTML':{t:'algo',g:[10,11],f:'quest'},
+ 'Ghost in HTML':{t:'algo',g:[10,12],f:'quest'},
  'Танграм':{fun:1},'Намалюй коло':{fun:1},'Block Puzzle':{fun:1},'Сапер':{fun:1},'WordShaker':{fun:1},'AI Invaders':{fun:1},
  'Рандомайзер класу':{teacher:1},'Генератор QR-кодів':{teacher:1},'Кібертурнір':{teacher:1},
 };
@@ -1071,7 +1071,7 @@ const TOPICS=[
 const FMT_TAG={quest:'Квест',trainer:'Тренажер',egame:'Гра',editor:'Редактор'};
 const CLASSES={'1-4':[1,4],'5-8':[5,8],'9-12':[9,12]};
 /* нові картки: можна вказати прямо в APPS поля t (тема), g:[від,до] (класи), course:1, fun:1 (гра для перерви), teacher:1 */
-const TAB_G={'1-4':[1,4],'5-7':[5,7],'8-11':[8,11]};
+const TAB_G={'1-4':[1,4],'5-7':[5,7],'8-11':[8,12]};
 const ITEMS=[];APPS.forEach(a=>{if(ITEMS.some(x=>x.title===a.title))return;const it=Object.assign({},a,META[a.title]||{});
   if(!it.t&&!it.course&&!it.fun&&!it.teacher){if(a.tab==='games')it.fun=1;else if(a.tab==='teacher')it.teacher=1;else{it.t='pc';it.g=it.g||TAB_G[a.tab]||[1,11]}}
   if(!it.f)it.f=({'Гра':'egame','Квест':'quest','Тренажер':'trainer','Редактор':'editor'})[a.type]||'quest';
