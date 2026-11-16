@@ -233,6 +233,13 @@ body.teach .tmode{display:inline-flex}
 .tip p{margin:0;line-height:1.5}
 .tip .open{margin-top:18px}
 /* учні на цьому комп'ютері */
+/* кнопка учня в меню */
+.mwho{display:flex;align-items:center;gap:10px;width:100%;border:0;cursor:pointer;padding:8px 10px;border-radius:14px;background:none;color:var(--ink);font:800 15px Rubik,sans-serif;text-align:left}
+.mwho:hover{background:color-mix(in srgb,var(--mint) 35%,transparent)}
+.mwho .av{flex:none;width:32px;height:32px;border-radius:11px;display:grid;place-items:center;background:var(--butter);font:800 14px Rubik,sans-serif;color:#2e2638}
+.mwho .av svg{width:18px;height:18px;fill:currentColor}
+.mwho.in .av{background:var(--mint)}
+.mwho small{display:block;font:700 12.5px Nunito,sans-serif;color:var(--muted)}
 .whob{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;padding:5px 12px 5px 5px;border-radius:15px;background:var(--card);color:var(--ink);font:800 14.5px Nunito,sans-serif;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);max-width:200px}
 .whob:hover{transform:translateY(-2px)}
 .whob .av,.pbtn .av{flex:none;width:32px;height:32px;border-radius:11px;display:grid;place-items:center;background:var(--butter);font:800 14px Rubik,sans-serif;color:#2e2638}
@@ -417,7 +424,6 @@ main,footer{position:relative;z-index:1}
       <span>ІТ-Майстерня</span>
     </a>
         <div class="tools">
-      <button class="whob" id="whoBtn" type="button" aria-label="Учень"><span class="av" id="whoAv"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4 21c1-4.5 4.4-6.5 8-6.5s7 2 8 6.5z"/></svg></span><span class="nm" id="whoNm">Увійти</span></button>
       <button class="tmode" id="tExit" type="button" title="Вимкнути режим вчителя"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Режим вчителя</span></button>
       <button class="plug" id="plug" type="button" aria-label="Перемкнути тему">
         <svg viewBox="0 0 84 44" aria-hidden="true">
@@ -457,6 +463,7 @@ main,footer{position:relative;z-index:1}
   </div>
   <nav class="mnav" id="mnav" aria-label="Меню" hidden>
     <div class="wrap"><div class="mnav-sheet">
+      <button type="button" class="mwho" id="whoBtn" style="--dot:var(--mint)"><span class="av" id="whoAv"></span><span class="nm" id="whoNm">Увійти</span></button><hr class="mhr">
       <div class="side mside" id="mside"></div><hr class="mhr">
       <button type="button" id="mAbout" style="--dot:var(--lilac)"><span class="dot"></span>Про сайт</button>
       <a href="#updates" id="mUpd" style="--dot:var(--mint)"><span class="dot"></span>Оновлення<span class="newtag" id="newTag" hidden>нове</span></a>
@@ -1221,7 +1228,7 @@ function swapStore(to){
 function login(id){swapStore(id);ME=id;RDONE=PROF[id].done;const b=bandOf(PROF[id].cls);if(b){AGE=b;try{localStorage.setItem('itm-age',AGE)}catch(e){}}saveR();syncWho();route()}
 function logout(){swapStore('');ME=null;RDONE=GUEST;saveR();syncWho();route()}
 function syncWho(){const p=ME&&PROF[ME],b=document.getElementById('whoBtn');b.classList.toggle('in',!!p);
-  document.getElementById('whoNm').textContent=p?p.name.split(/\s+/)[0]:'Увійти';
+  document.getElementById('whoNm').innerHTML=p?`${esc(p.name)}<small>${esc(p.cls)} · змінити</small>`:'Увійти';
   document.getElementById('whoAv').innerHTML=p?esc(initials(p.name)):'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4 21c1-4.5 4.4-6.5 8-6.5s7 2 8 6.5z"/></svg>';
   b.title=p?`${p.name}, ${p.cls} — змінити учня`:'Увійти'}
 const whoDlg=document.getElementById('whoDlg');
@@ -1231,7 +1238,7 @@ function openWho(){const ids=Object.keys(PROF).sort((a,b)=>(PROF[b].t||0)-(PROF[
   document.getElementById('pFormT').textContent=ids.length?'Мене тут немає':'Я тут уперше';
   document.getElementById('pName').placeholder='Наприклад, '+NAMES[Math.floor(Math.random()*NAMES.length)];
   document.getElementById('pOut').hidden=!ME;whoDlg.showModal()}
-document.getElementById('whoBtn').addEventListener('click',openWho);
+document.getElementById('whoBtn').addEventListener('click',()=>{setMenu(false);openWho()});
 whoDlg.addEventListener('click',e=>{if(e.target===whoDlg||e.target.closest('[data-x]'))return whoDlg.close();
   const p=e.target.closest('[data-pid]');if(p){PROF[p.dataset.pid].t=Date.now();whoDlg.close();login(p.dataset.pid)}});
 document.getElementById('pOut').addEventListener('click',()=>{whoDlg.close();logout()});
