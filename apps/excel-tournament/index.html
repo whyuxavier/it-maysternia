@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0a0a0a">
+<meta name="theme-color" content="#24212e">
 <title>Excel Tournament</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect x=%272%27 y=%272%27 width=%2728%27 height=%2728%27 rx=%276%27 fill=%27%23141414%27 stroke=%27%237c9cff%27 stroke-width=%272%27/%3E%3Cpath d=%27M2 12h28M2 21h28M12 2v28%27 stroke=%27%232a2a2a%27 stroke-width=%271.5%27 fill=%27none%27/%3E%3Crect x=%2713%27 y=%2722%27 width=%2717%27 height=%278%27 fill=%27%234ade80%27/%3E%3Crect x=%2713%27 y=%2713%27 width=%2717%27 height=%277%27 fill=%27%237c9cff%27 fill-opacity=%27.35%27/%3E%3C/svg%3E">
-<style>
-:root{--bg:#0a0a0a;--s1:#141414;--s2:#1c1c1c;--bd:#2a2a2a;--tx:#ececec;--mt:#8d8d8d;--ac:#7c9cff;--ok:#4ade80;--er:#f87171;--r:12px}
+<style data-pw="light">
+:root{--bg:#f9f8fa;--s1:#efeef3;--s2:#e8e6ee;--bd:#dad8e4;--tx:#3b3450;--mt:#6f6787;--ac:#bddcf3;--ok:#bfe3cf;--er:#eba497;--r:12px}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 button{font:inherit;color:inherit;cursor:pointer}
@@ -19,25 +19,25 @@ main{max-width:1080px;margin:0 auto;padding:20px}
 svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
 h1{font-size:clamp(26px,5vw,38px);margin:0 0 8px;line-height:1.15}
 h2{font-size:20px;margin:0 0 6px}h3{margin:0 0 6px}
-.mt{color:var(--mt)}.g{color:var(--ok)}.r{color:var(--er)}
+.mt{color:var(--mt)}.g{color:var(--ok-tx)}.r{color:var(--er-tx)}
 .hero{padding:24px 0}.hero p{max-width:62ch;color:var(--mt)}
 .row{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
 .btn{border:1px solid var(--bd);background:var(--s2);border-radius:10px;padding:9px 16px;transition:border-color .15s,background .15s}
 .btn:hover{border-color:var(--ac)}
-.btn.pri{background:var(--ac);color:#0a0a0a;border-color:var(--ac);font-weight:600}
+.btn.pri{background:var(--ac);color:#f9f8fa;border-color:var(--ac);font-weight:600}
 .btn.pri:hover{filter:brightness(1.1)}
-.btn.dng{border-color:#5b2626;color:var(--er)}
+.btn.dng{border-color:#e7c6c6;color:var(--er-tx)}
 .btn.sm{padding:5px 12px;font-size:14px}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .stats,.cards{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin:14px 0}
 .card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px}
-.card .tag{display:flex;gap:8px;align-items:center;color:var(--ac);margin-bottom:8px}
+.card .tag{display:flex;gap:8px;align-items:center;color:var(--ac-tx);margin-bottom:8px}
 .card p{margin:4px 0}.card .btn{margin-top:10px}
 .cards .card{display:flex;flex-direction:column}.cards .card>.btn{margin-top:auto;align-self:flex-start}.cards .card>p:nth-last-of-type(1){margin-bottom:14px}
 .lk{opacity:.6}
 .ach{display:flex;flex-wrap:wrap;gap:8px}
 .ach span{border:1px solid var(--bd);border-radius:8px;padding:4px 10px;font-size:14px;color:var(--mt)}
-.ach span.on{color:var(--ok);border-color:#1f5a35}
+.ach span.on{color:var(--ok-tx);border-color:#c8ead5}
 .qh{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
 .tm{font-variant-numeric:tabular-nums;font-weight:700;font-size:20px}
 .bar{height:6px;background:var(--s2);border-radius:9px;overflow:hidden;margin-bottom:14px}.bar i{display:block;height:100%;background:var(--ac)}
@@ -46,31 +46,31 @@ h2{font-size:20px;margin:0 0 6px}h3{margin:0 0 6px}
 .qt table{border-collapse:collapse;border:1px solid var(--bd);border-radius:8px;background:var(--s1)}
 .qt th{background:var(--s2);color:var(--mt);font-weight:500;font-size:13px;padding:4px 10px;border:1px solid var(--bd);min-width:34px}
 .qt td{border:1px solid var(--bd);min-width:112px;height:36px;padding:2px 12px;white-space:nowrap;font-variant-numeric:tabular-nums}
-.qt td.n{text-align:right}.qt td.f{font:14px ui-monospace,Consolas,monospace;color:var(--ac)}
-.qt td.as{background:#4ade8014;box-shadow:inset 0 0 0 2px var(--ok)}
-.qt td.as code{font:14px ui-monospace,Consolas,monospace;color:var(--ac);margin-right:8px}
-.qt td.as b{color:var(--ok);font-size:18px}
+.qt td.n{text-align:right}.qt td.f{font:14px ui-monospace,Consolas,monospace;color:var(--ac-tx)}
+.qt td.as{background:rgba(191,227,207,0.078);box-shadow:inset 0 0 0 2px var(--ok)}
+.qt td.as code{font:14px ui-monospace,Consolas,monospace;color:var(--ac-tx);margin-right:8px}
+.qt td.as b{color:var(--ok-tx);font-size:18px}
 @media (max-width:520px){.qt td{min-width:60px;padding:2px 7px}.qt th{padding:4px 6px;min-width:26px}.qt td.f,.qt td.as code{font-size:12px}.qt td.as code{margin-right:5px}}
 .opts{display:grid;gap:10px;margin:14px 0}
 .opt{text-align:left;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:11px 14px}
 .opt:hover:not(:disabled){border-color:var(--ac)}
-.opt.ok{border-color:var(--ok);background:#12301f}.opt.er{border-color:var(--er);background:#321616}
+.opt.ok{border-color:var(--ok);background:#e0f3e8}.opt.er{border-color:var(--er);background:#f1dfdf}
 .ahead{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start}
 .ahead p{margin:0;max-width:70ch}.hud{text-align:right}
 .fbar{display:flex;gap:8px;margin:12px 0 8px}
 .fbar span{min-width:52px;text-align:center;background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:6px}
 .fbar input{flex:1;min-width:0;background:var(--s1);border:1px solid var(--bd);border-radius:8px;color:var(--tx);padding:6px 10px;font:15px ui-monospace,Consolas,monospace}
 .sw{overflow:auto;border:1px solid var(--bd);border-radius:var(--r);background:var(--s1);outline:none;max-width:100%}
-.sw.ok{border-color:var(--ok);box-shadow:0 0 0 3px #4ade8033}
+.sw.ok{border-color:var(--ok);box-shadow:0 0 0 3px rgba(60,56,72,0.2)}
 #g{border-collapse:collapse;user-select:none;-webkit-user-select:none}
 #g th{background:var(--s2);color:var(--mt);font-weight:500;font-size:13px;padding:5px 8px;border:1px solid var(--bd);min-width:34px}
 #g td{position:relative;border:1px solid var(--bd);min-width:104px;height:34px;padding:2px 8px;white-space:nowrap}
 #g td.n{text-align:right;font-variant-numeric:tabular-nums}
-#g td.lk{background:#101010;opacity:1;color:#c9c9c9}
-#g td.sel{background:#7c9cff24}
+#g td.lk{background:#f3f2f6;opacity:1;color:#6f6787}
+#g td.sel{background:rgba(189,220,243,0.141)}
 #g td.act{box-shadow:inset 0 0 0 2px var(--ac)}
-#g td.fp{box-shadow:inset 0 0 0 2px #7c9cff88;background:#7c9cff12}
-#g td.e{color:var(--er)}
+#g td.fp{box-shadow:inset 0 0 0 2px rgba(60,56,72,0.533);background:rgba(189,220,243,0.071)}
+#g td.e{color:var(--er-tx)}
 #g tr.sp td,#g tr.sp th{pointer-events:none}
 .fh{position:absolute;right:-5px;bottom:-5px;width:10px;height:10px;background:var(--ac);border:2px solid var(--s1);border-radius:2px;cursor:crosshair;touch-action:none;z-index:2}
 .fh::after{content:"";position:absolute;inset:-10px}
@@ -81,28 +81,131 @@ h2{font-size:20px;margin:0 0 6px}h3{margin:0 0 6px}
 table.rs{width:100%;border-collapse:collapse}
 .rs td{padding:8px 4px;border-bottom:1px solid var(--bd)}.rs td:last-child{text-align:right}
 dialog{background:var(--s1);color:var(--tx);border:1px solid var(--bd);border-radius:var(--r);max-width:380px}
-dialog::backdrop{background:#000a}
-.opt.sl{border-color:var(--ac);background:#7c9cff33;box-shadow:inset 0 0 0 1px var(--ac)}
-#g td.sv{color:var(--ac);background:#7c9cff14}
-.nav{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 14px}.btn.dn{border-color:var(--ac);color:var(--ac);background:#7c9cff1a}
+dialog::backdrop{background:rgba(255,255,255,0.667)}
+.opt.sl{border-color:var(--ac);background:rgba(189,220,243,0.2);box-shadow:inset 0 0 0 1px var(--ac)}
+#g td.sv{color:var(--ac-tx);background:rgba(189,220,243,0.078)}
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 14px}.btn.dn{border-color:var(--ac);color:var(--ac-tx);background:rgba(189,220,243,0.102)}
 .cp{margin-top:12px}.cp select,.cp input{background:var(--s1);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:6px 10px;font:inherit;min-width:0}
-.hh{display:flex;align-items:center;gap:12px}.hero{padding:8px 0}.ib{padding:6px;line-height:0}dialog a{color:var(--ac)}dialog ul{padding-left:20px}
+.hh{display:flex;align-items:center;gap:12px}.hero{padding:8px 0}.ib{padding:6px;line-height:0}dialog a{color:var(--ac-tx)}dialog ul{padding-left:20px}
 .hr{display:flex;align-items:center;gap:8px}a.btn{text-decoration:none;display:inline-flex;align-items:center}
 /* hero */
 .hx{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:28px;align-items:center;padding:16px 0 8px}
-.hx::before{content:"";position:absolute;inset:-20px -20px 0;background-image:linear-gradient(var(--bd) 1px,transparent 1px),linear-gradient(90deg,var(--bd) 1px,transparent 1px);background-size:44px 28px;opacity:.4;-webkit-mask-image:radial-gradient(ellipse 70% 80% at 72% 45%,#000,transparent 75%);mask-image:radial-gradient(ellipse 70% 80% at 72% 45%,#000,transparent 75%);pointer-events:none}
+.hx::before{content:"";position:absolute;inset:-20px -20px 0;background-image:linear-gradient(var(--bd) 1px,transparent 1px),linear-gradient(90deg,var(--bd) 1px,transparent 1px);background-size:44px 28px;opacity:.4;-webkit-mask-image:radial-gradient(ellipse 70% 80% at 72% 45%,#ffffff,transparent 75%);mask-image:radial-gradient(ellipse 70% 80% at 72% 45%,#ffffff,transparent 75%);pointer-events:none}
 .hx>*{position:relative}
 .hx h1{font-size:clamp(30px,6vw,46px);letter-spacing:.02em}
 .hx p{margin:0 0 6px}
 .hv{width:100%;max-width:470px;height:auto;justify-self:end}
 .hv .w{fill:var(--s1);stroke:var(--bd)}.hv .f{fill:var(--s2);stroke:var(--bd)}.hv .ln{stroke:var(--bd);fill:none}
 .hv text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:13px;fill:var(--tx)}
-.hv .m{fill:var(--mt)}.hv .mo{font-family:ui-monospace,Consolas,monospace}.hv .b{font-weight:700}.hv .gn{fill:var(--ok)}
+.hv .m{fill:var(--mt)}.hv .mo{font-family:ui-monospace,Consolas,monospace}.hv .b{font-weight:700}.hv .gn{fill:var(--ok-tx)}
 .hv .cv{fill:var(--s2);transform:translateX(100px);animation:hvt .9s steps(11,end) .3s backwards}
-.hv .rg{fill:#7c9cff1f;stroke:var(--ac);stroke-width:1.5;stroke-dasharray:4 3;animation:hvf .3s ease-out 1.25s backwards}
+.hv .rg{fill:rgba(42,63,126,0.122);stroke:var(--ac);stroke-width:1.5;stroke-dasharray:4 3;animation:hvf .3s ease-out 1.25s backwards}
 .hv .tt{animation:hvf .35s ease-out 1.5s backwards}
-.hv .br{fill:var(--ac);transform-box:fill-box;transform-origin:50% 100%;animation:hvg .5s ease-out backwards}
-.hv .chip{fill:var(--s2);stroke:var(--ac)}.hv .chip+text{fill:var(--ac)}
+.hv .br{fill:var(--ac-tx);transform-box:fill-box;transform-origin:50% 100%;animation:hvg .5s ease-out backwards}
+.hv .chip{fill:var(--s2);stroke:var(--ac)}.hv .chip+text{fill:var(--ac-tx)}
+@keyframes hvt{from{transform:translateX(0)}}
+@keyframes hvf{from{opacity:0}}
+@keyframes hvg{from{transform:scaleY(0)}}
+@media (max-width:760px){.hx{grid-template-columns:1fr}.hv{justify-self:center}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:600px){main{padding:14px}.hud{text-align:left}#g td{min-width:84px}}
+</style><style data-pw="dark">
+:root{--bg:#282431;--s1:#2f2a3a;--s2:#352f41;--bd:#3f384d;--tx:#ece8f5;--mt:#a9a2bd;--ac:#bddcf3;--ok:#bfe3cf;--er:#eba497;--r:12px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--bd);background:var(--s1)}
+.brand{display:flex;gap:8px;align-items:center;background:none;border:0;font-weight:700;letter-spacing:.02em;padding:4px}
+.chip{font-size:14px;border:1px solid var(--bd);border-radius:99px;padding:3px 12px;color:var(--mt);background:var(--s2)}
+main{max-width:1080px;margin:0 auto;padding:20px}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+h1{font-size:clamp(26px,5vw,38px);margin:0 0 8px;line-height:1.15}
+h2{font-size:20px;margin:0 0 6px}h3{margin:0 0 6px}
+.mt{color:var(--mt)}.g{color:var(--ok-tx)}.r{color:var(--er-tx)}
+.hero{padding:24px 0}.hero p{max-width:62ch;color:var(--mt)}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.btn{border:1px solid var(--bd);background:var(--s2);border-radius:10px;padding:9px 16px;transition:border-color .15s,background .15s}
+.btn:hover{border-color:var(--ac)}
+.btn.pri{background:var(--ac);color:#282431;border-color:var(--ac);font-weight:600}
+.btn.pri:hover{filter:brightness(1.1)}
+.btn.dng{border-color:#5f3d3d;color:var(--er-tx)}
+.btn.sm{padding:5px 12px;font-size:14px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.stats,.cards{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin:14px 0}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px}
+.card .tag{display:flex;gap:8px;align-items:center;color:var(--ac-tx);margin-bottom:8px}
+.card p{margin:4px 0}.card .btn{margin-top:10px}
+.cards .card{display:flex;flex-direction:column}.cards .card>.btn{margin-top:auto;align-self:flex-start}.cards .card>p:nth-last-of-type(1){margin-bottom:14px}
+.lk{opacity:.6}
+.ach{display:flex;flex-wrap:wrap;gap:8px}
+.ach span{border:1px solid var(--bd);border-radius:8px;padding:4px 10px;font-size:14px;color:var(--mt)}
+.ach span.on{color:var(--ok-tx);border-color:#3b5c47}
+.qh{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.tm{font-variant-numeric:tabular-nums;font-weight:700;font-size:20px}
+.bar{height:6px;background:var(--s2);border-radius:9px;overflow:hidden;margin-bottom:14px}.bar i{display:block;height:100%;background:var(--ac)}
+.q h2{font-size:21px}
+.qt{overflow:auto;max-width:100%;margin:12px 0 4px}
+.qt table{border-collapse:collapse;border:1px solid var(--bd);border-radius:8px;background:var(--s1)}
+.qt th{background:var(--s2);color:var(--mt);font-weight:500;font-size:13px;padding:4px 10px;border:1px solid var(--bd);min-width:34px}
+.qt td{border:1px solid var(--bd);min-width:112px;height:36px;padding:2px 12px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.qt td.n{text-align:right}.qt td.f{font:14px ui-monospace,Consolas,monospace;color:var(--ac-tx)}
+.qt td.as{background:rgba(191,227,207,0.078);box-shadow:inset 0 0 0 2px var(--ok)}
+.qt td.as code{font:14px ui-monospace,Consolas,monospace;color:var(--ac-tx);margin-right:8px}
+.qt td.as b{color:var(--ok-tx);font-size:18px}
+@media (max-width:520px){.qt td{min-width:60px;padding:2px 7px}.qt th{padding:4px 6px;min-width:26px}.qt td.f,.qt td.as code{font-size:12px}.qt td.as code{margin-right:5px}}
+.opts{display:grid;gap:10px;margin:14px 0}
+.opt{text-align:left;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:11px 14px}
+.opt:hover:not(:disabled){border-color:var(--ac)}
+.opt.ok{border-color:var(--ok);background:#2c4436}.opt.er{border-color:var(--er);background:#472d2d}
+.ahead{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.ahead p{margin:0;max-width:70ch}.hud{text-align:right}
+.fbar{display:flex;gap:8px;margin:12px 0 8px}
+.fbar span{min-width:52px;text-align:center;background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:6px}
+.fbar input{flex:1;min-width:0;background:var(--s1);border:1px solid var(--bd);border-radius:8px;color:var(--tx);padding:6px 10px;font:15px ui-monospace,Consolas,monospace}
+.sw{overflow:auto;border:1px solid var(--bd);border-radius:var(--r);background:var(--s1);outline:none;max-width:100%}
+.sw.ok{border-color:var(--ok);box-shadow:0 0 0 3px rgba(8,6,14,0.2)}
+#g{border-collapse:collapse;user-select:none;-webkit-user-select:none}
+#g th{background:var(--s2);color:var(--mt);font-weight:500;font-size:13px;padding:5px 8px;border:1px solid var(--bd);min-width:34px}
+#g td{position:relative;border:1px solid var(--bd);min-width:104px;height:34px;padding:2px 8px;white-space:nowrap}
+#g td.n{text-align:right;font-variant-numeric:tabular-nums}
+#g td.lk{background:#2c2837;opacity:1;color:#a9a2bd}
+#g td.sel{background:rgba(189,220,243,0.141)}
+#g td.act{box-shadow:inset 0 0 0 2px var(--ac)}
+#g td.fp{box-shadow:inset 0 0 0 2px rgba(8,6,14,0.4);background:rgba(189,220,243,0.071)}
+#g td.e{color:var(--er-tx)}
+#g tr.sp td,#g tr.sp th{pointer-events:none}
+.fh{position:absolute;right:-5px;bottom:-5px;width:10px;height:10px;background:var(--ac);border:2px solid var(--s1);border-radius:2px;cursor:crosshair;touch-action:none;z-index:2}
+.fh::after{content:"";position:absolute;inset:-10px}
+.win{margin-top:14px;background:var(--s1);border:1px solid var(--ok);border-radius:var(--r);padding:16px;animation:pop .35s ease-out}
+.win.bad{border-color:var(--er)}
+.win .big{font-size:34px;font-weight:700;font-variant-numeric:tabular-nums}
+@keyframes pop{from{transform:scale(.97);opacity:0}}
+table.rs{width:100%;border-collapse:collapse}
+.rs td{padding:8px 4px;border-bottom:1px solid var(--bd)}.rs td:last-child{text-align:right}
+dialog{background:var(--s1);color:var(--tx);border:1px solid var(--bd);border-radius:var(--r);max-width:380px}
+dialog::backdrop{background:rgba(33,29,41,0.667)}
+.opt.sl{border-color:var(--ac);background:rgba(189,220,243,0.2);box-shadow:inset 0 0 0 1px var(--ac)}
+#g td.sv{color:var(--ac-tx);background:rgba(189,220,243,0.078)}
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 14px}.btn.dn{border-color:var(--ac);color:var(--ac-tx);background:rgba(189,220,243,0.102)}
+.cp{margin-top:12px}.cp select,.cp input{background:var(--s1);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:6px 10px;font:inherit;min-width:0}
+.hh{display:flex;align-items:center;gap:12px}.hero{padding:8px 0}.ib{padding:6px;line-height:0}dialog a{color:var(--ac-tx)}dialog ul{padding-left:20px}
+.hr{display:flex;align-items:center;gap:8px}a.btn{text-decoration:none;display:inline-flex;align-items:center}
+/* hero */
+.hx{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:28px;align-items:center;padding:16px 0 8px}
+.hx::before{content:"";position:absolute;inset:-20px -20px 0;background-image:linear-gradient(var(--bd) 1px,transparent 1px),linear-gradient(90deg,var(--bd) 1px,transparent 1px);background-size:44px 28px;opacity:.4;-webkit-mask-image:radial-gradient(ellipse 70% 80% at 72% 45%,#211d29,transparent 75%);mask-image:radial-gradient(ellipse 70% 80% at 72% 45%,#211d29,transparent 75%);pointer-events:none}
+.hx>*{position:relative}
+.hx h1{font-size:clamp(30px,6vw,46px);letter-spacing:.02em}
+.hx p{margin:0 0 6px}
+.hv{width:100%;max-width:470px;height:auto;justify-self:end}
+.hv .w{fill:var(--s1);stroke:var(--bd)}.hv .f{fill:var(--s2);stroke:var(--bd)}.hv .ln{stroke:var(--bd);fill:none}
+.hv text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:13px;fill:var(--tx)}
+.hv .m{fill:var(--mt)}.hv .mo{font-family:ui-monospace,Consolas,monospace}.hv .b{font-weight:700}.hv .gn{fill:var(--ok-tx)}
+.hv .cv{fill:var(--s2);transform:translateX(100px);animation:hvt .9s steps(11,end) .3s backwards}
+.hv .rg{fill:rgba(189,220,243,0.122);stroke:var(--ac);stroke-width:1.5;stroke-dasharray:4 3;animation:hvf .3s ease-out 1.25s backwards}
+.hv .tt{animation:hvf .35s ease-out 1.5s backwards}
+.hv .br{fill:var(--ac-tx);transform-box:fill-box;transform-origin:50% 100%;animation:hvg .5s ease-out backwards}
+.hv .chip{fill:var(--s2);stroke:var(--ac)}.hv .chip+text{fill:var(--ac-tx)}
 @keyframes hvt{from{transform:translateX(0)}}
 @keyframes hvf{from{opacity:0}}
 @keyframes hvg{from{transform:scaleY(0)}}
@@ -110,6 +213,73 @@ dialog::backdrop{background:#000a}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media (max-width:600px){main{padding:14px}.hud{text-align:left}#g td{min-width:84px}}
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&family=Rubik:wght@600;700;800&display=swap" rel="stylesheet">
+<style id="paper-core">
+/* ===== Паперова майстерня: спільний стиль квестів ІТ-Майстерні ===== */
+:root{--pw-ink:#3b3450;--pw-muted:#6f6787;--pw-card:#fbfbfa;--pw-line:rgba(59,52,80,.12);--pw-shadow:rgba(60,56,72,.18);--pw-coral:#eba497;--pw-lilac:#d5c7f1;--pw-mint:#bfe3cf;--pw-sky:#bddcf3;--pw-butter:#f6e19c;--pw-peach:#f6c6a6;color-scheme:light}
+html[data-theme=dark]{--pw-ink:#ece8f5;--pw-muted:#a9a2bd;--pw-card:#2e2a3b;--pw-line:rgba(236,232,245,.1);--pw-shadow:rgba(8,6,14,.45);color-scheme:dark;background:#24212e}
+html{background:#eef3fb}
+html[data-theme=dark] body{background-color:#24212e;background-image:radial-gradient(circle at 8% 10%,rgba(255,180,160,.12) 0,transparent 32%),radial-gradient(circle at 92% 12%,rgba(150,200,255,.12) 0,transparent 34%),radial-gradient(circle at 85% 95%,rgba(190,160,255,.12) 0,transparent 32%),radial-gradient(circle at 10% 92%,rgba(150,230,190,.12) 0,transparent 30%)}
+html body{min-height:100vh;background-color:#eef3fb;background-image:radial-gradient(circle at 8% 10%,#ffe3dc 0,transparent 32%),radial-gradient(circle at 92% 12%,#d9ecff 0,transparent 34%),radial-gradient(circle at 85% 95%,#e6dcff 0,transparent 32%),radial-gradient(circle at 10% 92%,#d8f6e6 0,transparent 30%);background-attachment:fixed;color:var(--pw-ink);font-family:Nunito,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:Rubik,Nunito,sans-serif;letter-spacing:0;color:var(--pw-ink)}
+h1{font-weight:800}
+code,kbd,pre,.mono{font-family:ui-monospace,Consolas,monospace}
+.card,.panel{background:var(--pw-card);border:0;border-radius:22px;box-shadow:0 5px 0 var(--pw-shadow),0 0 0 1px var(--pw-line)}
+.card:before{display:none}
+.btn{border:0;border-radius:16px;padding:13px 20px;font:700 17px/1.2 Nunito,sans-serif;background:var(--pw-coral);color:var(--pw-ink);box-shadow:0 4px 0 var(--pw-shadow),0 0 0 1px var(--pw-line);transition:transform .15s,box-shadow .15s;filter:none}
+.btn:hover{transform:translateY(-2px);filter:none}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--pw-shadow),0 0 0 1px var(--pw-line)}
+.btn.secondary,.btn.ghost,.btn.sec,.btn.alt{background:var(--pw-card);color:var(--pw-ink)}
+.btn:disabled,.btn[disabled]{opacity:.55;transform:none}
+input,select,textarea{background:#fff;border:1px solid rgba(59,52,80,.2);border-radius:12px;color:var(--pw-ink);font-family:Nunito,sans-serif}
+input::placeholder,textarea::placeholder{color:#9a93ad}
+input:focus,select:focus,textarea:focus{outline:3px solid var(--pw-lilac);outline-offset:1px;border-color:#9d8fd0}
+.ib-info{width:42px;height:42px;border:0;border-radius:14px;background:var(--pw-lilac);color:var(--pw-ink);font:800 19px/1 Rubik,sans-serif;box-shadow:0 3px 0 var(--pw-shadow),0 0 0 1px var(--pw-line)}
+.ib-info:hover{transform:translateY(-2px)}
+.info-dlg{background:var(--pw-card);color:var(--pw-ink);border:0;border-radius:22px;box-shadow:0 20px 50px rgba(30,25,45,.25)}
+.info-dlg::backdrop{background:rgba(30,25,45,.45)}
+.info-dlg h2{color:var(--pw-ink)}
+.info-dlg .gh{background:var(--pw-coral);color:var(--pw-ink);border-radius:14px;box-shadow:0 3px 0 var(--pw-shadow)}
+.info-dlg .x{border:0;background:var(--pw-line);color:var(--pw-ink)}
+::selection{background:var(--pw-lilac)}
+html[data-theme=dark] .btn{color:#3b3450}
+html[data-theme=dark] .btn.secondary,html[data-theme=dark] .btn.ghost,html[data-theme=dark] .btn.sec,html[data-theme=dark] .btn.alt{background:#3a3549;color:var(--pw-ink)}
+html[data-theme=dark] input,html[data-theme=dark] select,html[data-theme=dark] textarea{background:#25212f;border-color:rgba(236,232,245,.16)}
+html[data-theme=dark] input::placeholder,html[data-theme=dark] textarea::placeholder{color:#7d7691}
+html[data-theme=dark] .ib-info{color:#3b3450}
+html[data-theme=dark] .info-dlg .gh{color:#3b3450}
+.pw-theme{position:fixed;right:62px;top:12px;z-index:60;width:42px;height:42px;display:grid;place-items:center;border:0;border-radius:14px;cursor:pointer;background:var(--pw-card);color:var(--pw-ink);box-shadow:0 3px 0 var(--pw-shadow),0 0 0 1px var(--pw-line);transition:transform .15s}
+.pw-theme:hover{transform:translateY(-2px)}
+.pw-theme svg{width:22px;height:22px;fill:currentColor;stroke:currentColor;stroke-width:0}
+.pw-theme .sun path{fill:none;stroke-width:2.4;stroke-linecap:round}
+html[data-theme=dark] .pw-theme .moon{display:none}
+html:not([data-theme=dark]) .pw-theme .sun{display:none}
+@media print{.pw-theme{display:none}}
+.pw-theme.inl{position:static;width:38px;height:38px;border-radius:12px;flex:none}
+.pw-theme.inl svg{width:19px;height:19px}
+/* Excel Tournament: звичайна кнопка — паперова, головна — коралова */
+html .btn{background:var(--pw-card);color:var(--pw-ink);border-radius:14px;padding:10px 17px;font-size:16px}
+html[data-theme=dark] .btn{background:#3a3549;color:var(--pw-ink)}
+html .btn.pri,html[data-theme=dark] .btn.pri{background:var(--pw-coral);color:#3b3450}
+html .btn.dng{color:#c4574b}
+html[data-theme=dark] .btn.dng{color:#f0a097}
+html .btn.sm{padding:6px 12px;font-size:14px}
+html .btn.dn{background:var(--pw-lilac);color:#3b3450}
+html .btn.ib,html[data-theme=dark] .btn.ib{width:38px;height:38px;padding:0;display:grid;place-items:center;background:var(--pw-lilac);color:#3b3450;border-radius:12px}
+.top{background:transparent;backdrop-filter:blur(8px)}
+.hr{display:flex;align-items:center;gap:8px}
+dialog{background:var(--pw-card);color:var(--pw-ink);border:0;border-radius:22px;box-shadow:0 20px 50px rgba(30,25,45,.25)}
+dialog::backdrop{background:rgba(30,25,45,.45)}
+</style>
+<style data-pw="light">:root{--ac-tx:#2a3f7e;--ok-tx:#2a7e49;--er-tx:#7e2a2a;--pc0:#f9f8fa;--pc1:#6f6787;--pc2:#3b3450;--pc3:#bddcf3;--pc4:#6b82c7;}</style><style data-pw="dark">:root{--ac-tx:#bddcf3;--ok-tx:#bfe3cf;--er-tx:#eba497;--pc0:#282431;--pc1:#a9a2bd;--pc2:#ece8f5;--pc3:#bddcf3;--pc4:#7288ca;}</style>
+<script>/* тема квестів: темна за замовчуванням, спільна для всіх квестів ІТ-Майстерні */
+(function(){var t='dark';try{t=localStorage.getItem('pw-theme')||'dark'}catch(e){}
+window.pwTheme=function(n){t=n;document.documentElement.setAttribute('data-theme',n);document.querySelectorAll('style[data-pw]').forEach(function(s){s.media=s.getAttribute('data-pw')===n?'all':'not all'});var m=document.querySelector('meta[name=theme-color]');if(m)m.content=n==='dark'?'#24212e':'#eef3fb';try{localStorage.setItem('pw-theme',n)}catch(e){}};
+pwTheme(t);
+document.addEventListener('DOMContentLoaded',function(){pwTheme(t);var b=document.createElement('button');b.type='button';b.className='pw-theme';b.setAttribute('aria-label','Змінити тему');b.title='Світла / темна тема';
+b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path class="moon" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/><g class="sun"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.8v2.6M12 19.6v2.6M1.8 12h2.6M19.6 12h2.6M4.8 4.8l1.8 1.8M17.4 17.4l1.8 1.8M4.8 19.2l1.8-1.8M17.4 6.6l1.8-1.8"/></g></svg>';
+b.onclick=function(){pwTheme(t==='dark'?'light':'dark')};var ib=document.querySelector('#infoBtn,#ib,.ib-info');if(ib&&getComputedStyle(ib).position!=='fixed'){b.classList.add('inl');ib.parentNode.insertBefore(b,ib)}else document.body.appendChild(b)})})();
+</script>
 </head>
 <body>
 <header class="top"><button class="brand" data-a="home"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg>EXCEL TOURNAMENT</button><div class="hr"><span class="chip" id="rk"></span><button class="btn sm ib" id="ib" data-a="info" aria-label="Про турнір" title="Про турнір" hidden><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></button></div></header>
@@ -298,7 +468,7 @@ function home(){
   clean();$('#ib').hidden=false;$('#rk').textContent='Ранг: '+RANKS[S.rank||0];
   const done=Object.entries(S.done);
   const M=[['bolt','Тренування','Уся база запитань і завдань без обмеження часу, з підказками та поясненнями.','Усі теми, необмежені повтори','Без ліміту','prac'],['target','Турнір','Випадкові запитання й практичні завдання, бали за швидкість, ранги та досягнення.','Знання, формули, швидкість','≈ 15 хв','tour'],['grid','Тестування','Контрольна робота на 30 хвилин з оцінкою за 12-бальною шкалою.','Теорія й практика, без підказок','30 хв','asm']];
-  app.innerHTML=`<section class="hero hx"><div><h1>EXCEL TOURNAMENT</h1><p>Формули, автозаповнення, сортування — усе в справжній таблиці. Тренуйся, набирай бали й підвищуй ранг.</p><div class="row"><button class="btn pri" data-a="tour">Почати турнір</button><button class="btn" data-a="prac">Тренування</button></div></div><svg class="hv" viewBox="0 0 440 294" aria-hidden="true" focusable="false"><rect class="w" x="10" y="14" width="420" height="250" rx="14"/><circle cx="30" cy="34" r="4" fill="var(--bd)"/><circle cx="46" cy="34" r="4" fill="var(--bd)"/><circle cx="62" cy="34" r="4" fill="var(--bd)"/><text class="m" x="80" y="38" style="font-size:12px">Результати.xlsx</text><rect class="f" x="22" y="52" width="36" height="26" rx="6"/><text class="m mo" x="40" y="69" text-anchor="middle" style="font-style:italic">fx</text><rect class="f" x="64" y="52" width="346" height="26" rx="6"/><text class="mo" x="74" y="70">=SUM(B2:B4)</text><clipPath id="hvc"><rect x="66" y="54" width="342" height="22" rx="4"/></clipPath><g clip-path="url(#hvc)"><rect class="cv" x="70" y="54" width="110" height="22"/></g><rect class="f" x="22" y="90" width="230" height="22"/><rect class="f" x="22" y="112" width="24" height="140"/><text class="m" x="34" y="131" text-anchor="middle" style="font-size:12px">1</text><text class="m" x="34" y="159" text-anchor="middle" style="font-size:12px">2</text><text class="m" x="34" y="187" text-anchor="middle" style="font-size:12px">3</text><text class="m" x="34" y="215" text-anchor="middle" style="font-size:12px">4</text><text class="m" x="34" y="243" text-anchor="middle" style="font-size:12px">5</text><text class="m" x="106" y="105" text-anchor="middle" style="font-size:12px">A</text><text class="m" x="213" y="105" text-anchor="middle" style="font-size:12px">B</text><path class="ln" d="M22 90H252"/><path class="ln" d="M22 112H252"/><path class="ln" d="M22 140H252"/><path class="ln" d="M22 168H252"/><path class="ln" d="M22 196H252"/><path class="ln" d="M22 224H252"/><path class="ln" d="M22 252H252"/><path class="ln" d="M22 90V252"/><path class="ln" d="M46 90V252"/><path class="ln" d="M174 90V252"/><path class="ln" d="M252 90V252"/><text class="b" x="54" y="131">Тема</text><text class="b" x="244" y="131" text-anchor="end">Бали</text><text x="54" y="159">Формули</text><text x="244" y="159" text-anchor="end">8</text><text x="54" y="187">Автозаповнення</text><text x="244" y="187" text-anchor="end">6</text><text x="54" y="215">Сортування</text><text x="244" y="215" text-anchor="end">5</text><text class="b" x="54" y="243">Разом</text><rect class="rg" x="174" y="140" width="78" height="84"/><g class="tt"><rect x="174" y="224" width="78" height="28" fill="none" stroke="var(--ok)" stroke-width="2"/><text class="b gn" x="244" y="243" text-anchor="end">19</text><rect x="248" y="248" width="8" height="8" rx="2" fill="var(--ok)" stroke="var(--s1)" stroke-width="2"/></g><path class="ln" d="M268 240H410"/><rect class="br" x="276" y="144" width="28" height="96" rx="4" style="animation-delay:1.3s;opacity:1.00"/><text class="m mo" x="290" y="256" text-anchor="middle" style="font-size:10px">B2</text><rect class="br" x="318" y="168" width="28" height="72" rx="4" style="animation-delay:1.4s;opacity:0.78"/><text class="m mo" x="332" y="256" text-anchor="middle" style="font-size:10px">B3</text><rect class="br" x="360" y="180" width="28" height="60" rx="4" style="animation-delay:1.5s;opacity:0.56"/><text class="m mo" x="374" y="256" text-anchor="middle" style="font-size:10px">B4</text><g transform="rotate(5 362 14)"><rect class="chip" x="330" y="2" width="64" height="24" rx="12"/><text class="mo" x="362" y="18" text-anchor="middle" style="font-size:12px">=IF()</text></g><g transform="rotate(-4 70 274)"><rect class="chip" x="16" y="262" width="108" height="24" rx="12"/><text class="mo" x="70" y="278" text-anchor="middle" style="font-size:12px">=VLOOKUP()</text></g><circle cx="416" cy="270" r="20" fill="var(--ac)"/><path transform="translate(404 258)" d="M12 3l2.7 5.9 6.3.7-4.7 4.3 1.3 6.3L12 17l-5.6 3.2 1.3-6.3L3 9.6l6.3-.7z" fill="#0a0a0a"/></svg></section>
+  app.innerHTML=`<section class="hero hx"><div><h1>EXCEL TOURNAMENT</h1><p>Формули, автозаповнення, сортування — усе в справжній таблиці. Тренуйся, набирай бали й підвищуй ранг.</p><div class="row"><button class="btn pri" data-a="tour">Почати турнір</button><button class="btn" data-a="prac">Тренування</button></div></div><svg class="hv" viewBox="0 0 440 294" aria-hidden="true" focusable="false"><rect class="w" x="10" y="14" width="420" height="250" rx="14"/><circle cx="30" cy="34" r="4" fill="var(--bd)"/><circle cx="46" cy="34" r="4" fill="var(--bd)"/><circle cx="62" cy="34" r="4" fill="var(--bd)"/><text class="m" x="80" y="38" style="font-size:12px">Результати.xlsx</text><rect class="f" x="22" y="52" width="36" height="26" rx="6"/><text class="m mo" x="40" y="69" text-anchor="middle" style="font-style:italic">fx</text><rect class="f" x="64" y="52" width="346" height="26" rx="6"/><text class="mo" x="74" y="70">=SUM(B2:B4)</text><clipPath id="hvc"><rect x="66" y="54" width="342" height="22" rx="4"/></clipPath><g clip-path="url(#hvc)"><rect class="cv" x="70" y="54" width="110" height="22"/></g><rect class="f" x="22" y="90" width="230" height="22"/><rect class="f" x="22" y="112" width="24" height="140"/><text class="m" x="34" y="131" text-anchor="middle" style="font-size:12px">1</text><text class="m" x="34" y="159" text-anchor="middle" style="font-size:12px">2</text><text class="m" x="34" y="187" text-anchor="middle" style="font-size:12px">3</text><text class="m" x="34" y="215" text-anchor="middle" style="font-size:12px">4</text><text class="m" x="34" y="243" text-anchor="middle" style="font-size:12px">5</text><text class="m" x="106" y="105" text-anchor="middle" style="font-size:12px">A</text><text class="m" x="213" y="105" text-anchor="middle" style="font-size:12px">B</text><path class="ln" d="M22 90H252"/><path class="ln" d="M22 112H252"/><path class="ln" d="M22 140H252"/><path class="ln" d="M22 168H252"/><path class="ln" d="M22 196H252"/><path class="ln" d="M22 224H252"/><path class="ln" d="M22 252H252"/><path class="ln" d="M22 90V252"/><path class="ln" d="M46 90V252"/><path class="ln" d="M174 90V252"/><path class="ln" d="M252 90V252"/><text class="b" x="54" y="131">Тема</text><text class="b" x="244" y="131" text-anchor="end">Бали</text><text x="54" y="159">Формули</text><text x="244" y="159" text-anchor="end">8</text><text x="54" y="187">Автозаповнення</text><text x="244" y="187" text-anchor="end">6</text><text x="54" y="215">Сортування</text><text x="244" y="215" text-anchor="end">5</text><text class="b" x="54" y="243">Разом</text><rect class="rg" x="174" y="140" width="78" height="84"/><g class="tt"><rect x="174" y="224" width="78" height="28" fill="none" stroke="var(--ok)" stroke-width="2"/><text class="b gn" x="244" y="243" text-anchor="end">19</text><rect x="248" y="248" width="8" height="8" rx="2" fill="var(--ok)" stroke="var(--s1)" stroke-width="2"/></g><path class="ln" d="M268 240H410"/><rect class="br" x="276" y="144" width="28" height="96" rx="4" style="animation-delay:1.3s;opacity:1.00"/><text class="m mo" x="290" y="256" text-anchor="middle" style="font-size:10px">B2</text><rect class="br" x="318" y="168" width="28" height="72" rx="4" style="animation-delay:1.4s;opacity:0.78"/><text class="m mo" x="332" y="256" text-anchor="middle" style="font-size:10px">B3</text><rect class="br" x="360" y="180" width="28" height="60" rx="4" style="animation-delay:1.5s;opacity:0.56"/><text class="m mo" x="374" y="256" text-anchor="middle" style="font-size:10px">B4</text><g transform="rotate(5 362 14)"><rect class="chip" x="330" y="2" width="64" height="24" rx="12"/><text class="mo" x="362" y="18" text-anchor="middle" style="font-size:12px">=IF()</text></g><g transform="rotate(-4 70 274)"><rect class="chip" x="16" y="262" width="108" height="24" rx="12"/><text class="mo" x="70" y="278" text-anchor="middle" style="font-size:12px">=VLOOKUP()</text></g><circle cx="416" cy="270" r="20" fill="var(--ac)"/><path transform="translate(404 258)" d="M12 3l2.7 5.9 6.3.7-4.7 4.3 1.3 6.3L12 17l-5.6 3.2 1.3-6.3L3 9.6l6.3-.7z" style="fill:var(--pc0)" /></svg></section>
   <div class="stats"><div class="card"><div class="mt">Поточний ранг</div><h2>${RANKS[S.rank||0]}</h2></div>
   <div class="card"><div class="mt">Найкращий результат</div><h2>${S.best?`${S.best.pts} з ${S.best.max} балів`:'Ще немає'}</h2></div>
   <div class="card"><div class="mt">Пройдені завдання арени</div>${done.length?done.map(([k,v])=>`<div>${CH[k].n}: ${v.p} б · ${fmtT(v.t)}</div>`).join(''):'<div>Поки що жодного</div>'}</div></div>
@@ -495,16 +665,16 @@ function arena(id,next,pr,opt){
     const sv=$('#csv'),ty=(raw['#type']||'').toUpperCase(),esc=x=>String(x).replace(/[<&>]/g,'');
     const rg=x=>{const m=/^([A-Z])(\d+):([A-Z])(\d+)$/.exec((x||'').toUpperCase().replace(/\s/g,''));if(!m||m[1]!==m[3]||+m[4]<+m[2])return null;const o=[];for(let r=+m[2];r<=+m[4];r++)o.push(m[1]+r);return o.length<=20?o:null};
     const L=rg(raw['#labels']),V=rg(raw['#values']),g=calc(raw);
-    if(!ty||!L||!V||L.length!==V.length){sv.innerHTML='<text x="10" y="20" fill="#8d8d8d" font-size="13">Вкажи тип, підписи та значення</text>';return}
+    if(!ty||!L||!V||L.length!==V.length){sv.innerHTML='<text x="10" y="20"  font-size="13" style="fill:var(--pc1)">Вкажи тип, підписи та значення</text>';return}
     const vals=V.map(k=>{const v=g(k);return typeof v==='number'&&v>0?v:0}),labs=L.map(k=>esc(fmt(g(k)))),mx=Math.max(...vals,1),n=vals.length,C=['#7c9cff','#4ade80','#fbbf24','#f87171','#a78bfa','#22d3ee','#fb923c'];
     let h='';
     if(ty==='PIE'){
       const tot=vals.reduce((x,y)=>x+y,0)||1;let ang=-Math.PI/2;
-      vals.forEach((v,i)=>{const a2=ang+v/tot*2*Math.PI,x1=100+80*Math.cos(ang),y1=100+80*Math.sin(ang),x2=100+80*Math.cos(a2),y2=100+80*Math.sin(a2);h+=`<path d="M100 100L${x1} ${y1}A80 80 0 ${v/tot>.5?1:0} 1 ${x2} ${y2}Z" fill="${C[i%7]}"/><text x="195" y="${22+i*16}" fill="#ececec" font-size="12"><tspan fill="${C[i%7]}">■</tspan> ${labs[i]}</text>`;ang=a2});
+      vals.forEach((v,i)=>{const a2=ang+v/tot*2*Math.PI,x1=100+80*Math.cos(ang),y1=100+80*Math.sin(ang),x2=100+80*Math.cos(a2),y2=100+80*Math.sin(a2);h+=`<path d="M100 100L${x1} ${y1}A80 80 0 ${v/tot>.5?1:0} 1 ${x2} ${y2}Z" fill="${C[i%7]}"/><text x="195" y="${22+i*16}"  font-size="12" style="fill:var(--pc2)"><tspan fill="${C[i%7]}">■</tspan> ${labs[i]}</text>`;ang=a2});
     }else{
       const w=340/n;
-      vals.forEach((v,i)=>{const y=170-v/mx*150;if(ty==='BAR')h+=`<rect x="${10+i*w+w*.15}" y="${y}" width="${w*.7}" height="${170-y}" fill="#7c9cff"/>`;h+=`<text x="${10+i*w+w/2}" y="188" fill="#8d8d8d" font-size="11" text-anchor="middle">${labs[i]}</text>`});
-      if(ty==='LINE')h+=`<polyline fill="none" stroke="#7c9cff" stroke-width="2.5" points="${vals.map((v,i)=>`${10+i*w+w/2},${170-v/mx*150}`).join(' ')}"/>`;
+      vals.forEach((v,i)=>{const y=170-v/mx*150;if(ty==='BAR')h+=`<rect x="${10+i*w+w*.15}" y="${y}" width="${w*.7}" height="${170-y}" style="fill:var(--pc3)" />`;h+=`<text x="${10+i*w+w/2}" y="188"  font-size="11" text-anchor="middle" style="fill:var(--pc1)">${labs[i]}</text>`});
+      if(ty==='LINE')h+=`<polyline fill="none"  stroke-width="2.5" points="${vals.map((v,i)=>`${10+i*w+w/2},${170-v/mx*150}`).join(' ')}" style="stroke:var(--pc4)"/>`;
     }
     sv.innerHTML=h;
   }
