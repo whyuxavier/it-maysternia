@@ -1036,12 +1036,12 @@ const ICX={"Category":"<g transform=\"translate(2 2)\"><path d=\"M2.539,0H5.924A
 /* t — тема, g — класи [від,до], f — формат, course — окремий курс */
 const META={
  'Тренажер мишки та клавіатури':{t:'first',g:[1,4],f:'trainer'},
- 'Мій перший ПК':{t:'pc',g:[1,4],f:'trainer'},
+ 'Мій перший ПК':{t:'first',g:[1,4],f:'trainer',o:1},
  'Пазл з твого фото':{t:'create',g:[1,4],f:'egame'},
  'Клавіатурний пазл':{t:'first',g:[1,4],f:'egame'},
  'Пікселька':{t:'create',g:[1,7],f:'editor'},
  'MOUSE RACER':{t:'first',g:[1,7],f:'egame'},
- 'Айті Компас':{t:'pc',g:[5,7],f:'quest'},
+ 'Айті Компас':{teacher:1,o:1},
  'Keyboard Academy':{t:'first',g:[5,12],f:'trainer'},
  'Робот-кур\'єр':{t:'algo',g:[5,7],f:'egame'},
  'Блок-схеми':{t:'algo',g:[5,7],f:'editor'},
@@ -1054,7 +1054,7 @@ const META={
  'Квест: Python, 9 клас':{t:'algo',g:[9,9],f:'quest'},
  'Баг-шторм':{t:'algo',g:[8,12],f:'egame'},
  'Місія «Документ»':{t:'data',g:[9,9],f:'quest'},
- 'Місія «Інтернет речей»':{t:'pc',g:[9,9],f:'quest'},
+ 'Місія «Інтернет речей»':{t:'data',g:[9,9],f:'quest'},
  'Excel Tournament':{t:'data',g:[8,12],f:'quest'},
  'Місія «Аналітик даних»':{t:'data',g:[10,10],f:'quest'},
  'Ghost in HTML':{t:'algo',g:[10,12],f:'quest'},
@@ -1078,11 +1078,11 @@ const ITEMS=[];APPS.forEach(a=>{if(ITEMS.some(x=>x.title===a.title))return;const
   ITEMS.push(it)});
 const fits=(it,id)=>{const g=CLASSES[id];return it.g&&it.g[0]<=g[1]&&it.g[1]>=g[0]};
 const grades=it=>it.g[0]===it.g[1]?it.g[0]+' клас':it.g[0]+'–'+it.g[1]+' клас';
-const byAge=(a,b)=>a.g[0]-b.g[0]||a.g[1]-b.g[1];
+const byAge=(a,b)=>a.g[0]-b.g[0]||a.g[1]-b.g[1]||(a.o||0)-(b.o||0);
 TABS.length=0;[
  {id:'courses',label:'Курси',color:'--lilac',ic:'Document'},
  {id:'all',label:'Усе одразу',color:'--sky',ic:'Category'},
- ...TOPICS,
+ ...TOPICS.filter(t=>ITEMS.some(a=>a.t===t.id)), /* порожні теми не показуємо */
  {id:'games',label:'Ігри для перерви',color:'--coral',ic:'Game'},
  {id:'teacher',label:'Для вчителя',color:'--butter',ic:'Work'},
 ].forEach(n=>{TABS.push(n);SIDE_IC[n.id]=ICX[n.ic]});
@@ -1108,7 +1108,7 @@ renderGrid=function(){
   if(id==='courses'){renderAge(false);const cs=ITEMS.filter(a=>a.course).sort(byAge);
     html=`<div class="sec"><div class="clist">${cs.map(course).join('')}<div class="ccard soon"><div class="txt"><span class="kicker">Незабаром</span><h3>Нові курси</h3><p>Тут з'являтимуться курси з інших тем.</p></div></div></div></div>`}
   else if(id==='games'){renderAge(false);html=section('Ігри для перерви','Game','--coral',ITEMS.filter(a=>a.fun))}
-  else if(id==='teacher'){renderAge(false);html=section('Для вчителя','Work','--butter',ITEMS.filter(a=>a.teacher))}
+  else if(id==='teacher'){renderAge(false);html=section('Для вчителя','Work','--butter',ITEMS.filter(a=>a.teacher).sort((a,b)=>(a.o||0)-(b.o||0)))}
   else{renderAge(true);
     const tps=id==='all'?TOPICS:TOPICS.filter(t=>t.id===id);
     html+=tps.map(t=>section(t.label,t.ic,t.color,ITEMS.filter(a=>a.t===t.id&&fitA(a)).sort(byAge))).join('');
