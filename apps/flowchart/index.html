@@ -8,7 +8,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%236f8ad6'/%3E%3Crect x='9' y='4' width='14' height='6' rx='3' fill='%238fd1bd'/%3E%3Cpath d='M16 10v3' stroke='%23fff' stroke-width='1.6'/%3E%3Cpath d='M16 13l7 6-7 6-7-6z' fill='%23f0c96a'/%3E%3Cpath d='M23 19h3v8' stroke='%23fff' stroke-width='1.6' fill='none'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Unbounded:wght@600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&family=Rubik:wght@600;700;800&display=swap">
 <style>
 /* Layout: header strip · palette rail (left) · graph-paper canvas */
 :root{
@@ -17,9 +17,9 @@
   --accent:#6f8ad6; --accent-soft:rgba(111,138,214,.13); --on-accent:#ffffff; --danger:#d0566a;
   --gold:#d9aa3c; --mint:#8fd1bd;
   --node-ink:#23242e; --f-term:#dcf1ea; --f-proc:#e3e9f8; --f-io:#ebe5f8; --f-dec:#f8ecd0; --f-loop:#f7dfe3;
-  --font-ui:"Manrope","Segoe UI",system-ui,sans-serif;
-  --font-brand:"Unbounded","Manrope","Segoe UI",sans-serif;
-  --font-code:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --font-ui:"Nunito","Segoe UI",system-ui,sans-serif;
+  --font-brand:"Rubik","Nunito","Segoe UI",sans-serif;
+  --font-code:ui-monospace,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --paper:#1b1d23; --grid:rgba(143,166,238,.07); --grid2:rgba(143,166,238,.13);
@@ -204,6 +204,7 @@ kbd{font:500 12px var(--font-code);padding:1px 5px;border:1px solid var(--line);
       <li><kbd>Delete</kbd> — видалити, <kbd>Ctrl</kbd>+<kbd>Z</kbd> — скасувати, коліщатко — масштаб.</li>
       <li>«Приклади» — готові схеми, з яких можна почати.</li>
     </ul>
+    <a class="gh" href="https://github.com/whyuxavier/it-maysternia" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.6.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg>GitHub<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z"/></svg></a>
     <p class="ai">Створено з використанням ШІ.</p>
   </div>
 </div>
@@ -214,8 +215,8 @@ const $=s=>document.querySelector(s);
 const svg=$('#svg'),world=$('#world'),gE=$('#gE'),gN=$('#gN'),gT=$('#gT'),stage=$('#stage'),editor=$('#editor');
 const OUT={term:['b'],proc:['b'],io:['b'],dec:['b','l','r'],loop:['b','r']};
 const KEY='blok-skhema-5klas';
-const LIVE={ink:'var(--ink)',nodeInk:'var(--node-ink)',paper:'var(--paper)',accent:'var(--accent)',term:'var(--f-term)',proc:'var(--f-proc)',io:'var(--f-io)',dec:'var(--f-dec)',loop:'var(--f-loop)',font:'Manrope,"Segoe UI",system-ui,sans-serif'};
-const LIGHT={ink:'#23242e',nodeInk:'#23242e',paper:'#ffffff',accent:'#6f8ad6',term:'#dcf1ea',proc:'#e3e9f8',io:'#ebe5f8',dec:'#f8ecd0',loop:'#f7dfe3',font:'Manrope,Arial,sans-serif'};
+const LIVE={ink:'var(--ink)',nodeInk:'var(--node-ink)',paper:'var(--paper)',accent:'var(--accent)',term:'var(--f-term)',proc:'var(--f-proc)',io:'var(--f-io)',dec:'var(--f-dec)',loop:'var(--f-loop)',font:'Nunito,"Segoe UI",system-ui,sans-serif'};
+const LIGHT={ink:'#23242e',nodeInk:'#23242e',paper:'#ffffff',accent:'#6f8ad6',term:'#dcf1ea',proc:'#e3e9f8',io:'#ebe5f8',dec:'#f8ecd0',loop:'#f7dfe3',font:'Nunito,Arial,sans-serif'};
 
 let S={nodes:[],edges:[],seq:1};
 let view={x:0,y:0,k:1};
@@ -227,7 +228,7 @@ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 
 /* ---------- sizes ---------- */
 const meas=document.createElement('canvas').getContext('2d');
-const FONT='600 14px Manrope, "Segoe UI", system-ui, sans-serif';
+const FONT='600 14px Nunito, "Segoe UI", system-ui, sans-serif';
 let cache=new Map();
 function wrap(text,maxW){
   meas.font=FONT; const out=[];
@@ -316,7 +317,7 @@ function markup(C,live){
     const P=route(e); if(!P) continue;
     const d=pathD(P),on=live&&sel&&sel.kind==='edge'&&sel.id===e.id,col=on?C.accent:C.ink,suf=live?'':'X';
     E+=`<g class="edge" data-eid="${e.id}">${live?`<path class="hit" d="${d}"/>`:''}<path d="${d}" style="fill:none;stroke:${col};stroke-width:${on?2.6:1.8}px;stroke-linejoin:round;stroke-linecap:round" marker-end="url(#${on?'arS':'ar'}${suf})"/>`;
-    if(e.label){const lp=labelPos(e,P);meas.font='700 12.5px Manrope, "Segoe UI", sans-serif';const tw=meas.measureText(e.label).width,w=Math.ceil(tw+14),h=20,x0=lp.a==='end'?lp.x-w:lp.x,y0=lp.y-h/2-4,lc=/^ні$/i.test(e.label)?C.loop:/^так$/i.test(e.label)?C.term:C.proc;
+    if(e.label){const lp=labelPos(e,P);meas.font='700 12.5px Nunito, "Segoe UI", sans-serif';const tw=meas.measureText(e.label).width,w=Math.ceil(tw+14),h=20,x0=lp.a==='end'?lp.x-w:lp.x,y0=lp.y-h/2-4,lc=/^ні$/i.test(e.label)?C.loop:/^так$/i.test(e.label)?C.term:C.proc;
       E+=`<rect x="${x0}" y="${y0}" width="${w}" height="${h}" rx="10" style="fill:${lc};stroke:${on?C.accent:C.nodeInk};stroke-width:1.2px"/><text x="${x0+w/2}" y="${y0+h/2}" dy="0.35em" text-anchor="middle" style="font:700 12.5px ${C.font};fill:${C.nodeInk}">${esc(e.label)}</text>`}
     E+='</g>';
   }
