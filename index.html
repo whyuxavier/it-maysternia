@@ -432,6 +432,7 @@ const APPS = [
   {tab:'games',title:'SERVER ROOM',                  desc:'Полагодь серверну разом з професором',           type:'Гра',         art:'server',    bg:'--lilac',  repo:'server-room'},
   {tab:'games',title:'Баг-шторм',                    desc:'Виправ помилки, поки падають вікна',             type:'Гра',         art:'bugs',      bg:'--coral',  repo:'bug-storm'},
 
+  {tab:'teacher', title:'Рандомайзер класу',         desc:'Колесо імен, команди й таймер для уроку',        type:'Інструмент',  art:'randomizer',bg:'--mint',   repo:'class-randomizer', url:GH+'it-maysternia/apps/class-randomizer/'},
   {tab:'teacher', title:'Генератор QR-кодів',        desc:'QR-код для посилання на весь екран',             type:'Інструмент',  art:'qr',        bg:'--butter', repo:'qr-creator'},
   {tab:'teacher', title:'Кібертурнір',               desc:'Турнірна сітка для шкільних змагань',            type:'Інструмент',  art:'cyber',     bg:'--lilac',  repo:'cyber-tournament'},
 ];
@@ -567,6 +568,16 @@ const ART = {
       R('cr',94,48,132,124,4,'opacity=".55"'))+G(t)+
       G(R('cr',0,0,46,28,6)+`<text class="kl" x="23" y="15" style="font-size:12px">3:00</text>`,'translate(250 120) rotate(8)')+
       star(52,58,.8);
+  },
+  randomizer(){
+    const cx=120,cy=104,r=74,cl=['co','bu','mi','sk','li','pe'];let w='';
+    cl.forEach((c,i)=>{const a0=i/6*Math.PI*2-Math.PI/2,a1=(i+1)/6*Math.PI*2-Math.PI/2,p=(a)=>`${(cx+r*Math.cos(a)).toFixed(1)} ${(cy+r*Math.sin(a)).toFixed(1)}`;
+      w+=`<path class="${c}" d="M${cx} ${cy}L${p(a0)}A${r} ${r} 0 0 1 ${p(a1)}Z"/>`+R('cr',cx+28,cy-3,36,6,3,`opacity=".75" transform="rotate(${(a0+a1)/2*180/Math.PI} ${cx} ${cy})"`);});
+    return G(C('cr',cx,cy,r+6))+G(w)+G(C('cr',cx,cy,13)+`<circle cx="${cx}" cy="${cy}" r="13" fill="none" class="st" style="stroke-width:3.5"/>`)+
+      G(`<path class="ink" d="M108 14h24l-12 22z"/>`)+
+      G(R('cr',0,0,78,30,8)+`<text class="kl" x="39" y="16" style="font-size:13px">Олена</text>`,'translate(214 34) rotate(6)')+
+      G(C('cr',258,138,30)+`<path d="M258 116a22 22 0 1 1-21 15" fill="none" style="stroke:var(--mint);stroke-width:6;stroke-linecap:round"/>`+R('ink',252,102,12,6,2)+`<path d="M258 138v-13" class="st" style="stroke-width:3.5"/>`+C('ink',258,138,3))+
+      star(206,96,.55,'bu');
   },
   cyber(){
     const slot=(x,y,c)=>R(c,x,y,58,18,5)+R('cr',x+8,y+6,30,6,3);
