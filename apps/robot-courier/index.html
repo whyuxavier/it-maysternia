@@ -82,14 +82,9 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 @keyframes spin{to{transform:rotate(180deg)}}
 .howto{display:grid;gap:8px}
 .howto>div{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
-.pb.mini{color:var(--ink);display:inline-flex;padding:4px 10px 4px 4px;font-size:13px;cursor:default;box-shadow:0 2px 0 var(--shadow);border-radius:11px;gap:6px}
-.pb.mini .ico{width:24px;height:24px}
-.pb.mini .ico svg{width:17px;height:17px}
 .howto2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .howto2 figure{margin:0;background:var(--bg);border-radius:14px;padding:8px;text-align:center}
 .howto2 svg{width:100%;height:auto;display:block}
-.howto2 figure:last-child{grid-column:1/-1;display:flex;align-items:center;gap:10px;text-align:left}
-.howto2 figure:last-child svg{width:150px;flex:none}
 .howto2 figcaption{font-size:13px;font-weight:700;color:var(--muted);line-height:1.3;margin-top:4px}
 #info{max-width:520px}
 .cr-msg{min-height:20px;font-weight:700;font-size:14px;margin:4px 0 0;color:var(--muted)}
@@ -133,11 +128,11 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 .lv.locked{opacity:.45;cursor:not-allowed}
 
 /* play */
-.phead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.phead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
 .phead h2{font-size:22px}
 .pill{padding:5px 12px;border-radius:12px;background:var(--card);font-weight:800;font-size:14px;box-shadow:0 2px 0 var(--shadow),0 0 0 1px var(--line)}
-.task{margin:0 0 14px;font-size:16px;max-width:70ch}
-.play{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+.task{margin:0 0 14px;font-size:16px;max-width:80ch}
+.play{display:grid;grid-template-columns:196px minmax(0,1.15fr) minmax(300px,1fr);gap:16px;align-items:start}
 .mapcol{position:sticky;top:80px}
 .maptabs{display:flex;gap:8px;margin-bottom:8px}
 .maptabs button{border:0;border-radius:12px;padding:6px 12px;font-weight:800;cursor:pointer;background:var(--bg2)}
@@ -153,43 +148,97 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 .runbar .btn{padding:11px 16px;font-size:16px}
 .msg{margin-top:10px;font-weight:700;min-height:24px}
 .msg.bad{color:var(--bad)} .msg.ok{color:var(--ok)}
+.colh{display:flex;align-items:center;gap:8px;min-height:38px;margin-bottom:8px}
+.colh h3{font-size:15px;color:var(--muted);flex:1}
+.btn.sm{padding:7px 11px;font-size:14px;border-radius:12px;gap:6px;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line)}
+.btn.sm svg{width:18px;height:18px}
 
-.codecol h3{font-size:16px;margin:0 0 8px;color:var(--muted)}
-.palette{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.pb{display:flex;align-items:center;gap:8px;padding:9px 13px 9px 9px;border-radius:14px;border:0;cursor:pointer;font:800 15px Nunito;box-shadow:0 3px 0 var(--shadow);transition:transform .12s}
-.pb:hover{transform:translateY(-2px)}
-.pb:active{transform:translateY(2px);box-shadow:0 1px 0 var(--shadow)}
-.ico{width:30px;height:30px;flex:none;border-radius:9px;background:rgba(255,255,255,.55);display:grid;place-items:center}
-.ico svg{width:22px;height:22px}
-.k-fwd{background:var(--move)} .k-left,.k-right{background:var(--turn)} .k-rep,.k-while{background:var(--loop)} .k-if{background:var(--cond)}
+/* палітра */
+.palcol{position:sticky;top:80px}
+.palette{background:var(--card);border-radius:22px;padding:12px 10px 14px 12px;box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line);max-height:calc(100vh - 150px);overflow:auto;transition:background .15s}
+.palette.trash{background:color-mix(in srgb,var(--bad) 12%,var(--card));outline:3px dashed var(--bad);outline-offset:-7px}
+.cat+.cat{margin-top:14px}
+.cat h4{display:flex;align-items:center;gap:7px;margin:0 0 9px;font:800 12px Rubik,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.cat h4 i{width:11px;height:11px;border-radius:4px;flex:none}
+.pbl{display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+.lockn{display:flex;gap:7px;align-items:center;padding:8px 10px;border-radius:12px;background:var(--bg2);font-size:13px;font-weight:700;color:var(--muted);line-height:1.25}
+.lockn svg,.blk.locked .ico svg{width:16px;height:16px;flex:none}
+.cat.locked h4{opacity:.55}
 
-.prog{background:var(--card);border-radius:22px;padding:14px;box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line);min-height:160px}
-.prog .count{font-size:13px;font-weight:800;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between}
-.list{display:flex;flex-direction:column;gap:6px;padding:6px;border-radius:14px;border:2px dashed transparent;min-height:44px}
-.list.target{border-color:var(--coral);background:color-mix(in srgb,var(--coral) 8%,transparent)}
-.slot{border:0;background:none;color:var(--muted);font-weight:800;font-size:13px;cursor:pointer;text-align:left;padding:6px 8px;border-radius:10px}
-.list.target>.slot{color:var(--bad)}
-.blk{border-radius:14px;box-shadow:0 3px 0 var(--shadow)}
-.pb{touch-action:none}
-.blk>.bh{cursor:grab}
-.blk>.bh{touch-action:none}
-.blk.k-left>.bh .lbl::after,.blk.k-right>.bh .lbl::after{content:'⇄';margin-left:8px;opacity:.45;font-size:14px}
-.blk.dragging{opacity:.35}
-.ghost{position:fixed;z-index:100;pointer-events:none;opacity:.94;transform:rotate(-2deg);box-shadow:0 12px 26px rgba(0,0,0,.25);border-radius:14px;max-width:340px;margin:0}
-.ghost.del{opacity:.55;filter:grayscale(1)}
-.dropline{height:6px;border-radius:3px;background:var(--coral);margin:0 4px;flex:none}
-body.dragging-now,body.dragging-now *{cursor:grabbing!important;user-select:none}
-.bh{display:flex;align-items:center;gap:8px;padding:6px 8px;font-weight:800;font-size:15px}
+/* полотно й пазли */
+.ws{position:relative;min-height:460px;border-radius:22px;background-color:var(--card);background-image:radial-gradient(circle,rgba(47,42,64,.17) 1.3px,transparent 1.7px);background-size:22px 22px;background-position:5px 5px;box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line);overflow-x:auto;overflow-y:hidden}
+.wsempty{position:absolute;left:24px;top:92px;right:16px;color:var(--muted);font-weight:700;font-size:15px;pointer-events:none;display:flex;gap:8px;align-items:center}
+.wsempty svg{width:22px;height:22px;flex:none}
+.stack{position:absolute;filter:drop-shadow(0 2px 0 var(--shadow))}
+.stack.loose{opacity:.62}
+.stack.loose:hover{opacity:.85}
+.hat{position:relative;display:flex;align-items:center;gap:8px;width:max-content;min-width:170px;padding:12px 16px 9px 10px;background:var(--mint);border-radius:22px 22px 6px 6px;font:800 15px Rubik,sans-serif;cursor:default}
+.hat svg{width:22px;height:22px}
+.hat::after,.blk::after,.mouth::before{content:"";position:absolute;width:24px;height:7px;background:var(--k);clip-path:polygon(0 0,100% 0,19px 100%,5px 100%);z-index:1;pointer-events:none}
+.hat::after{--k:var(--mint);left:14px;bottom:-7px}
+.blk{--k:var(--move);position:relative;display:block;width:max-content;min-width:132px;color:var(--ink)}
+.blk::after{left:14px;bottom:-7px}
+.k-left,.k-right{--k:var(--turn)} .k-rep,.k-while{--k:var(--loop)} .k-if{--k:var(--cond)}
+.blk.locked{--k:#dedbe7;color:var(--muted)}
+.bh,.mid,.foot{display:flex;align-items:center;background:var(--k);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='7'%3E%3Cpath d='M0 0h24l-5 7H5z'/%3E%3C/svg%3E") var(--nx,14px) 0/24px 7px no-repeat,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='7'%3E%3Cpath d='M0 0h24l-5 7H5z'/%3E%3C/svg%3E") var(--nx,14px) 0/24px 7px no-repeat,linear-gradient(#000 0 0);mask-composite:exclude}
+.bh{gap:8px;min-height:44px;padding:9px 12px 7px 7px;border-radius:9px;font-weight:800;font-size:15px;white-space:nowrap}
 .bh .lbl{flex:1}
-.blk.cur{outline:3px solid var(--ink);outline-offset:1px}
-.blk.err{outline:3px solid var(--bad)}
-.x{width:28px;height:28px;border:0;border-radius:9px;background:rgba(255,255,255,.6);cursor:pointer;font:800 16px Rubik;flex:none}
-.num{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.6);border-radius:10px;padding:2px}
+.c>.bh{border-radius:9px 9px 9px 0}
+.mouth{position:relative;display:flex}
+.mouth::before{left:32px;top:0}
+.arm{width:18px;flex:none;background:var(--k)}
+.mouth>.list{min-height:30px;min-width:96px}
+.mid,.foot{--nx:32px}
+.mid{min-height:30px;padding:7px 12px 3px 24px;border-radius:0 9px 9px 0;font-weight:800;font-size:13px}
+.foot{height:20px;border-radius:0 9px 9px 9px}
+.list{display:flex;flex-direction:column;align-items:flex-start;position:relative}
+.list.target::after{content:"";position:absolute;left:-14px;bottom:4px;width:11px;height:11px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 2px var(--card)}
+.ico{width:28px;height:28px;flex:none;border-radius:9px;background:rgba(255,255,255,.55);display:grid;place-items:center}
+.ico svg{width:20px;height:20px}
+.ws .bh,.ws .mid,.ws .foot,.ws .arm,.palette .blk:not(.locked){cursor:grab;touch-action:none}
+.blk.k-left>.bh .lbl::after,.blk.k-right>.bh .lbl::after{content:'⇄';margin-left:8px;opacity:.45;font-size:14px}
+.palette .blk.k-left>.bh .lbl::after,.palette .blk.k-right>.bh .lbl::after{content:none}
+.num{display:flex;align-items:center;gap:3px;background:rgba(255,255,255,.6);border-radius:10px;padding:2px}
 .num button{width:26px;height:26px;border:0;border-radius:8px;background:var(--card);cursor:pointer;font:800 16px Rubik}
-.num b{min-width:22px;text-align:center}
-.inner{margin:0 8px 8px 22px;background:color-mix(in srgb,var(--card) 70%,transparent);border-radius:12px}
-.else-l{margin:0 8px 0 22px;font-weight:800;font-size:13px}
-.empty-hint{color:var(--muted);font-size:14px;padding:6px 8px}
+.num b{min-width:20px;text-align:center}
+.blk.cur>.bh{box-shadow:inset 0 0 0 3px var(--ink)}
+.blk.err>.bh{box-shadow:inset 0 0 0 3px var(--bad)}
+button.blk{border:0;padding:0;background:none;font:inherit;text-align:left}
+button.blk:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+.palette .blk{min-width:0}
+.palette .bh{font-size:14px;min-height:40px;padding:8px 10px 6px 6px}
+.palette .ico{width:25px;height:25px}
+.palette .ico svg{width:18px;height:18px}
+.palette .mouth>.list{min-height:16px;min-width:40px}
+.palette .mid{min-height:24px;padding-top:5px}
+.palette .foot{height:14px}
+.blk.mini{display:inline-block;min-width:0;filter:drop-shadow(0 2px 0 var(--shadow))}
+.blk.mini .bh{font-size:13px;min-height:34px;padding:7px 10px 5px 5px}
+.blk.mini .ico{width:22px;height:22px}
+.blk.mini .ico svg{width:16px;height:16px}
+.ghost{position:fixed;z-index:100;pointer-events:none;margin:0;transform:rotate(-2deg);filter:drop-shadow(0 12px 14px rgba(0,0,0,.22))}
+.ghost.del{opacity:.5;filter:grayscale(1)}
+.snapline{position:fixed;z-index:99;height:6px;width:80px;border-radius:3px;background:var(--coral);pointer-events:none;box-shadow:0 0 0 2px var(--card)}
+body.dragging-now,body.dragging-now *{cursor:grabbing!important;user-select:none;-webkit-user-select:none}
+
+/* керування */
+.ib.ctl{width:auto;padding:0 14px;gap:8px;display:flex;align-items:center;background:var(--lilac);font:800 15px Rubik,sans-serif}
+#info{max-width:540px}
+.ctlbot{display:flex;align-items:center;gap:14px;width:100%;border:0;cursor:pointer;text-align:left;padding:10px 14px 10px 10px;border-radius:18px;background:var(--bg);box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);transition:transform .15s}
+.ctlbot:hover{transform:translateY(-2px)}
+.ctlbot .cb-av{width:62px;height:62px;border-radius:16px;background:var(--grass);display:grid;place-items:center;flex:none}
+.ctlbot .cb-av svg{width:40px;height:auto;overflow:visible}
+.ctlbot b{display:block;font:800 17px Rubik,sans-serif}
+.ctlbot small{color:var(--muted);font-size:14px}
+.ctlbot>svg{width:22px;height:22px;margin-left:auto;flex:none}
+.seg{display:flex;gap:6px;background:var(--bg2);border-radius:14px;padding:4px}
+.seg button{flex:1;border:0;border-radius:11px;padding:8px 6px;background:none;cursor:pointer;font:800 15px Nunito;display:flex;align-items:center;justify-content:center;gap:6px}
+.seg button svg{width:18px;height:18px}
+.seg button[aria-pressed="true"]{background:var(--card);box-shadow:0 2px 0 var(--shadow)}
+.dlg details{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+.dlg summary{cursor:pointer;font:800 16px Rubik,sans-serif}
 
 /* dialogs */
 dialog{border:0;border-radius:22px;padding:0;max-width:460px;width:calc(100% - 28px);background:var(--card);color:var(--ink);box-shadow:0 6px 0 var(--shadow),0 30px 60px -20px rgba(0,0,0,.4)}
@@ -208,6 +257,23 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
 .win .stars svg.on{animation:pop .4s cubic-bezier(.4,1.6,.5,1) both}
 .win .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
 
+@media (max-width:1080px){
+  .play{grid-template-columns:186px minmax(0,1fr)}
+  .mapcol{grid-column:1/-1;order:-1;position:static}
+  .mapbox svg{max-height:46vh}
+}
+@media (max-width:640px){
+  .play{grid-template-columns:minmax(0,1fr)}
+  .palcol{position:static}
+  .palcol .colh{display:none}
+  .palette{max-height:none;display:flex;gap:18px;overflow-x:auto;align-items:flex-start;padding-bottom:16px}
+  .cat{flex:none}
+  .cat+.cat{margin-top:0}
+  .lockn{max-width:150px}
+  .ib.ctl span{display:none}
+  .ib.ctl{width:42px;padding:0;justify-content:center}
+  .colh .btn.sm span{display:none}
+}
 @media (max-width:860px){
   .creator{grid-template-columns:1fr}
   .cr-stage{max-width:150px;justify-self:center;width:100%}
@@ -215,9 +281,6 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
   .hero-grid{grid-template-columns:1fr}
   .art{justify-self:center;max-width:460px}
   .lead{max-width:none}
-  .play{grid-template-columns:1fr}
-  .mapcol{position:static}
-  .mapbox svg{max-height:none}
 }
 @media (max-width:480px){
   .gpill{padding:5px 8px;font-size:14px}
@@ -225,7 +288,6 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
   .cr-row:first-child .cr-ch{gap:12px 3px}
   .dlg{padding:20px 16px}
   .logo span{font-size:17px}
-  .pb{font-size:14px;padding:8px 10px 8px 8px}
   .lv{width:72px;height:72px;font-size:20px}
   .chip{font-size:12px}
 }
@@ -243,6 +305,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
   <symbol id="i-while" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M5 12a7 7 0 0 1 12-5l2 2"/><path class="stk" style="stroke-width:2.6" d="M19 4v5h-5"/><path class="ink" d="M8 21v-7l5-4 5 4v7z"/></symbol>
   <symbol id="i-if" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M12 3l9 9-9 9-9-9z"/><rect x="8" y="9" width="8" height="6" rx="1" class="ink"/></symbol>
   <symbol id="i-gear" viewBox="0 0 24 24"><g fill="#9aa3b5" stroke="#6f7790" stroke-width=".8"><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(0 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(45 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(90 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(135 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(180 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(225 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(270 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(315 12 12)"/><circle cx="12" cy="12" r="7.6"/></g><circle cx="12" cy="12" r="3" fill="#fffcf5"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M8 11V8a4 4 0 0 1 8 0v3"/><rect x="5" y="11" width="14" height="10" rx="3" class="ink"/></symbol>
   <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6L2.5 9.3l6.6-.8z"/></symbol>
   <!-- робот (вид згори, дивиться вгору) -->
   <symbol id="house" viewBox="0 0 60 60">
@@ -262,7 +325,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
     <div class="tools">
       <button class="gpill" id="gearPill" type="button" title="Мій робот" aria-label="Шестерні — відкрити налаштування робота"><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg><b id="gearN">0</b></button>
       <button class="ib" id="snd" type="button" aria-label="Звук"></button>
-      <button class="ib i" id="infoBtn" type="button" aria-label="Про гру">i</button>
+      <button class="ib ctl" id="infoBtn" type="button" aria-label="Керування" title="Керування"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="stk" style="stroke-width:2.4" d="M4 7h9M18 7h2M4 17h3M12 17h8"/><circle cx="15.5" cy="7" r="2.6" class="ink"/><circle cx="9.5" cy="17" r="2.6" class="ink"/></svg><span>Керування</span></button>
     </div>
   </div>
 </header>
@@ -289,7 +352,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
             <g class="h-check"><circle cx="470" cy="160" r="18" fill="#3f9d6e"/><path d="M461 160l6 6 11-12" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>
           </svg>
           <button class="hbot" id="heroBotBtn" type="button" aria-label="Налаштувати вигляд робота"><svg viewBox="-46 -76 92 134" id="heroBot" filter="url(#paper)"></svg></button>
-          <button class="btn hcust" id="bCustom" type="button"><svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="3" class="ink"/><circle cx="16" cy="9" r="3" class="ink"/><circle cx="12" cy="16" r="3" class="ink"/></svg>Налаштувати робота</button>
+          <button class="btn hcust" id="bCustom" type="button"><svg viewBox="0 0 24 24"><rect x="11" y="2.5" width="2" height="4" class="ink"/><circle cx="12" cy="3" r="2" class="ink"/><rect x="4" y="6.5" width="16" height="13" rx="4.5" class="ink"/><rect x="1.5" y="10.5" width="2.5" height="5" rx="1.2" class="ink"/><rect x="20" y="10.5" width="2.5" height="5" rx="1.2" class="ink"/><circle cx="9" cy="12.3" r="1.9" fill="#fff"/><circle cx="15" cy="12.3" r="1.9" fill="#fff"/><rect x="9" y="15.6" width="6" height="1.7" rx=".85" fill="#fff"/></svg>Налаштувати робота</button>
         </div>
         <button class="chip c1" id="chipGears" type="button">0 шестерень</button>
         <span class="chip c3" id="chipStars">0 з 39 зірок</span>
@@ -305,6 +368,17 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
     <div class="phead"><h2 id="lvTitle"></h2><span class="pill" id="lvStars"></span></div>
     <p class="task" id="lvTask"></p>
     <div class="play">
+      <div class="palcol">
+        <div class="colh"><h3>Команди</h3></div>
+        <div class="palette" id="palette"></div>
+      </div>
+      <div class="wscol">
+        <div class="colh"><h3 id="cnt"></h3>
+          <button class="btn sm" id="bUndo" title="Скасувати"><svg viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M9 14L4 9l5-5"/><path class="stk" style="stroke-width:2.6" d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg><span>Скасувати</span></button>
+          <button class="btn sm" id="bClear" title="Очистити"><svg viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.4" d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/></svg><span>Очистити</span></button>
+        </div>
+        <div class="ws" id="ws"></div>
+      </div>
       <div class="mapcol">
         <div class="maptabs" id="mapTabs"></div>
         <div class="mapbox" id="mapbox"></div>
@@ -312,15 +386,8 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
           <button class="btn go" id="bRun"><svg viewBox="0 0 24 24"><path class="ink" d="M7 4l13 8-13 8z"/></svg>Запустити</button>
           <button class="btn" id="bStep"><svg viewBox="0 0 24 24"><path class="ink" d="M5 4l10 8-10 8z"/><rect x="16" y="4" width="3.5" height="16" rx="1" class="ink"/></svg>Крок</button>
           <button class="btn" id="bReset"><svg viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M4 12a8 8 0 1 0 3-6.2"/><path class="stk" style="stroke-width:2.6" d="M4 3v5h5"/></svg>Спочатку</button>
-          <button class="btn" id="bSpeed" title="Швидкість"><svg viewBox="0 0 24 24"><path class="ink" d="M3 5l8 7-8 7zM12 5l8 7-8 7z"/></svg><span id="speedT">×1</span></button>
         </div>
         <div class="msg" id="msg"></div>
-      </div>
-      <div class="codecol">
-        <h3>Натисни або перетягни блок у програму</h3>
-        <div class="palette" id="palette"></div>
-        <div class="prog"><div class="count"><span>Програма</span><span id="cnt"></span></div><div id="prog"></div></div>
-        <div class="runbar"><button class="btn" id="bClear"><svg viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.4" d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/></svg>Очистити</button><button class="btn" id="bUndo"><svg viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M9 14L4 9l5-5"/><path class="stk" style="stroke-width:2.6" d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Скасувати</button></div>
       </div>
     </div>
   </div>
@@ -345,33 +412,44 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
 <dialog id="info" aria-labelledby="infoT">
   <div class="dlg">
     <button class="close" type="button" data-close aria-label="Закрити">×</button>
-    <h2 id="infoT">Робот-кур'єр</h2>
-    <p>Склади програму з блоків — і твій робот рознесе посилки. Проходь рівні, збирай шестерні й відкривай для робота нові деталі та кольори.</p>
-    <h3>Правила</h3>
-    <ul>
-      <li>Блоки виконуються згори вниз.</li>
-      <li>Посилку доставлено, коли робот стоїть на будинку. Кущі й каміння не можна проїхати.</li>
-      <li>Менше блоків — більше зірок і шестерень.</li>
-    </ul>
-    <h3>Команди</h3>
-    <div class="howto">
-      <div><span class="pb k-fwd mini"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-fwd"/></svg></span>Крок вперед</span><span>на 1 клітинку</span></div>
-      <div><span class="pb k-left mini"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-left"/></svg></span>Ліворуч</span><span class="pb k-right mini"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-right"/></svg></span>Праворуч</span><span>поворот на місці</span></div>
-      <div><span class="pb k-rep mini"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-rep"/></svg></span>Повторити 3</span><span>кілька разів</span></div>
-      <div><span class="pb k-while mini"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-while"/></svg></span>Поки не вдома</span><span>повторює, доки не дійде</span></div>
-      <div><span class="pb k-if mini"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-if"/></svg></span>Якщо кущ</span><span>перевіряє, що попереду</span></div>
+    <h2 id="infoT">Керування</h2>
+    <button class="ctlbot" id="ctlBot" type="button"><span class="cb-av"><svg viewBox="-46 -76 92 134" id="ctlBotSvg" filter="url(#paper)"></svg></span><span><b>Мій робот</b><small>Колір, голова, очі, колеса — за шестерні</small></span><svg viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M9 5l7 7-7 7"/></svg></button>
+    <h3>Швидкість робота</h3>
+    <div class="seg" id="speedSeg">
+      <button type="button" data-s="1"><svg viewBox="0 0 24 24"><path class="ink" d="M6 5l12 7-12 7z"/></svg>Повільно</button>
+      <button type="button" data-s="2"><svg viewBox="0 0 24 24"><path class="ink" d="M2 5l9 7-9 7zM12 5l9 7-9 7z"/></svg>Звичайно</button>
+      <button type="button" data-s="3"><svg viewBox="0 0 24 24"><path class="ink" d="M1 6l7 6-7 6zM8.5 6l7 6-7 6zM16 6l7 6-7 6z"/></svg>Швидко</button>
     </div>
-    <h3>Як керувати</h3>
+    <h3>Як складати програму</h3>
     <div class="howto2">
-      <figure><svg viewBox="0 0 120 70" aria-hidden="true"><rect x="6" y="8" width="50" height="16" rx="5" fill="var(--move)"/><rect x="62" y="30" width="52" height="34" rx="8" fill="none" stroke="var(--coral)" stroke-width="2" stroke-dasharray="4 3"/><rect x="66" y="40" width="44" height="14" rx="5" fill="var(--move)" opacity=".5"/><path d="M40 22q14 4 30 18" class="stk" style="stroke-width:2.5" stroke-dasharray="3 4"/><path d="M66 34l5 7 2-8z" class="ink"/><path d="M44 28l9 22 4-8 8 7 3-3-8-7 8-3z" fill="#fff" stroke="#2f2a40" stroke-width="2" stroke-linejoin="round"/></svg><figcaption>Натисни або перетягни блок у програму</figcaption></figure>
-      <figure><svg viewBox="0 0 120 70" aria-hidden="true"><rect x="10" y="12" width="44" height="14" rx="5" fill="var(--turn)"/><rect x="10" y="32" width="44" height="14" rx="5" fill="var(--move)"/><rect x="66" y="20" width="44" height="14" rx="5" fill="var(--turn)" opacity=".5" transform="rotate(-8 88 27)"/><path d="M56 20q6 -8 12 -2" class="stk" style="stroke-width:2.5" stroke-dasharray="3 4"/><g transform="translate(78 42)"><path d="M2 6h16M6 6V3h8v3M4 6l1.5 14h9L16 6" class="stk" style="stroke-width:2.2"/></g></svg><figcaption>Тягни, щоб переставити. За межі — видалиться</figcaption></figure>
+      <figure><svg viewBox="0 0 120 70" aria-hidden="true"><rect x="4" y="8" width="34" height="54" rx="6" class="pp" stroke="#2f2a40" stroke-opacity=".2"/><rect x="8" y="14" width="26" height="10" rx="3" fill="var(--move)"/><rect x="8" y="30" width="26" height="10" rx="3" fill="var(--turn)"/><rect x="62" y="20" width="44" height="12" rx="3" fill="var(--mint)"/><rect x="62" y="32" width="44" height="12" rx="3" fill="var(--move)"/><path d="M30 20q18 -6 30 16" class="stk" style="stroke-width:2.5" stroke-dasharray="3 4"/><path d="M66 44h44" stroke="var(--coral)" stroke-width="3" stroke-linecap="round"/></svg><figcaption>Перетягни блок із команд під «Коли старт»</figcaption></figure>
+      <figure><svg viewBox="0 0 120 70" aria-hidden="true"><path d="M22 6h14l4 6h12l4-6h42v20H56l-4 6H40l-4-6H22z" fill="var(--move)"/><path d="M22 42h14l4 6h12l4-6h42v20H22z" fill="var(--turn)"/><path d="M104 30v8M100 34l4-4 4 4" class="stk" style="stroke-width:2.4"/></svg><figcaption>Виступ і виїмка — блоки зчіплюються, як пазл</figcaption></figure>
+      <figure><svg viewBox="0 0 120 70" aria-hidden="true"><rect x="10" y="14" width="44" height="14" rx="4" fill="var(--move)"/><rect x="10" y="28" width="44" height="14" rx="4" fill="var(--turn)"/><rect x="10" y="42" width="44" height="14" rx="4" fill="var(--move)"/><g opacity=".55" transform="translate(52 -4) rotate(-6 30 40)"><rect x="10" y="28" width="44" height="14" rx="4" fill="var(--turn)"/><rect x="10" y="42" width="44" height="14" rx="4" fill="var(--move)"/></g></svg><figcaption>Тягнеш блок — разом із ним їдуть усі нижчі</figcaption></figure>
+      <figure><svg viewBox="0 0 120 70" aria-hidden="true"><rect x="4" y="8" width="40" height="54" rx="6" fill="color-mix(in srgb,var(--bad) 14%,#fff)" stroke="var(--bad)" stroke-width="2" stroke-dasharray="4 3"/><path d="M16 26h16M20 26v-3h8v3M18 26l1 14h10l1-14" class="stk" style="stroke-width:2"/><rect x="66" y="22" width="44" height="14" rx="4" fill="var(--turn)" opacity=".5" transform="rotate(-8 88 29)"/><path d="M64 34q-8 2-14 0" class="stk" style="stroke-width:2.5" stroke-dasharray="3 4"/></svg><figcaption>Поверни блок на панель команд — видалиться</figcaption></figure>
       <figure><svg viewBox="0 0 120 70" aria-hidden="true"><rect x="6" y="24" width="44" height="22" rx="6" fill="var(--turn)"/><path d="M22 41v-6a5 5 0 0 0-5-5h-6" class="stk" style="stroke-width:2.4"/><path d="M14 27l-3 3 3 3" class="stk" style="stroke-width:2.4"/><path d="M54 30h12M62 26l4 4-4 4M66 40H54M58 36l-4 4 4 4" class="stk" style="stroke-width:2.4"/><rect x="70" y="24" width="44" height="22" rx="6" fill="var(--turn)"/><path d="M86 41v-6a5 5 0 0 1 5-5h6" class="stk" style="stroke-width:2.4"/><path d="M94 27l3 3-3 3" class="stk" style="stroke-width:2.4"/></svg><figcaption>Натисни на поворот — він зміниться</figcaption></figure>
       <figure><svg viewBox="0 0 120 70" aria-hidden="true"><g font-family="Rubik" font-weight="800" font-size="13" text-anchor="middle"><rect x="40" y="22" width="26" height="24" rx="5" class="pp" stroke="#2f2a40" stroke-width="1.8"/><text x="53" y="39">↑</text><rect x="10" y="34" width="26" height="24" rx="5" class="pp" stroke="#2f2a40" stroke-width="1.8"/><text x="23" y="51">←</text><rect x="70" y="34" width="26" height="24" rx="5" class="pp" stroke="#2f2a40" stroke-width="1.8"/><text x="83" y="51">→</text><rect x="74" y="6" width="40" height="24" rx="5" fill="var(--mint)" stroke="#2f2a40" stroke-width="1.8"/><text x="94" y="23" font-size="10">Enter</text></g></svg><figcaption>Стрілки додають блоки, Enter — запуск</figcaption></figure>
-      <figure><svg viewBox="0 0 120 70" aria-hidden="true"><rect x="6" y="18" width="58" height="30" rx="10" class="pp" stroke="#2f2a40" stroke-opacity=".15"/><g transform="translate(11 22) scale(.92)"><use href="#i-gear" width="24" height="24"/></g><text x="38" y="39" font-family="Rubik" font-weight="800" font-size="15">35</text><path d="M68 30h10M74 26l4 4-4 4" class="stk" style="stroke-width:2.4"/><g transform="translate(96 40) scale(.24)"></g></svg><figcaption>Натисни на шестерні — налаштуй робота</figcaption></figure>
     </div>
+    <h3>Команди</h3>
+    <div class="howto">
+      <div><span class="blk mini k-fwd"><span class="bh"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-fwd"/></svg></span>Крок вперед</span></span><span>на 1 клітинку</span></div>
+      <div><span class="blk mini k-left"><span class="bh"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-left"/></svg></span>Ліворуч</span></span><span class="blk mini k-right"><span class="bh"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-right"/></svg></span>Праворуч</span></span><span>поворот на місці</span></div>
+      <div><span class="blk mini k-rep"><span class="bh"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-rep"/></svg></span>Повторити 3</span></span><span>кілька разів</span></div>
+      <div><span class="blk mini k-while"><span class="bh"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-while"/></svg></span>Поки не вдома</span></span><span>повторює, доки не дійде</span></div>
+      <div><span class="blk mini k-if"><span class="bh"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-if"/></svg></span>Якщо кущ</span></span><span>перевіряє, що попереду</span></div>
+    </div>
+    <details>
+      <summary>Про гру й правила</summary>
+      <p style="margin-top:8px">Склади програму з блоків — і твій робот рознесе посилки. Проходь рівні, збирай шестерні й відкривай для робота нові деталі та кольори. Нові групи команд відкриваються з новими розділами.</p>
+      <ul style="margin-top:8px">
+        <li>Виконуються лише блоки, приєднані до «Коли старт», — згори вниз.</li>
+        <li>Посилку доставлено, коли робот стоїть на будинку. Кущі й каміння не можна проїхати.</li>
+        <li>Менше блоків — більше зірок і шестерень.</li>
+      </ul>
+    </details>
     <a class="gh" href="https://github.com/whyuxavier/it-maysternia" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6L2.5 9.3l6.6-.8z"/></svg>GitHub</a>
   </div>
 </dialog>
+
 
 <script>
 "use strict";
@@ -380,9 +458,9 @@ const BLOCKS={
   fwd:{lbl:'Крок вперед',icon:'i-fwd'},
   left:{lbl:'Поворот ліворуч',icon:'i-left'},
   right:{lbl:'Поворот праворуч',icon:'i-right'},
-  rep:{lbl:'Повторити',icon:'i-rep'},
-  while:{lbl:'Повторювати, поки не вдома',icon:'i-while'},
-  if:{lbl:'Якщо попереду кущ',icon:'i-if'}
+  rep:{lbl:'Повторити',pl:'Повторити',icon:'i-rep'},
+  while:{lbl:'Повторювати, поки не вдома',pl:'Поки не вдома',icon:'i-while'},
+  if:{lbl:'Якщо попереду кущ',pl:'Якщо кущ',icon:'i-if'}
 };
 const ico=k=>`<span class="ico"><svg viewBox="0 0 24 24"><use href="#${BLOCKS[k].icon}"/></svg></span>`;
 
@@ -414,7 +492,7 @@ const LEVELS=[];CHAPTERS.forEach((c,ci)=>c.levels.forEach((l,li)=>LEVELS.push({.
 /* ===================== ЗБЕРЕЖЕННЯ ===================== */
 const KEY='robot-courier-v1';
 const S=(()=>{let d={};try{d=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
-  return {owned:Array.isArray(d.owned)?d.owned:null,spent:+d.spent||0,robot:d.robot&&typeof d.robot==='object'?d.robot:null,snd:d.snd!==false,stars:d.stars&&typeof d.stars==='object'?d.stars:{},speed:[1,2,3].includes(d.speed)?d.speed:1,progs:d.progs&&typeof d.progs==='object'?d.progs:{}}})();
+  return {owned:Array.isArray(d.owned)?d.owned:null,spent:+d.spent||0,robot:d.robot&&typeof d.robot==='object'?d.robot:null,snd:d.snd!==false,stars:d.stars&&typeof d.stars==='object'?d.stars:{},speed:[1,2,3].includes(d.speed)?d.speed:1,progs:d.progs&&typeof d.progs==='object'?d.progs:{},loose:d.loose&&typeof d.loose==='object'?d.loose:{}}})();
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 
 /* ===================== ЗВУК ===================== */
@@ -536,21 +614,19 @@ function openLevels(){
 function toastMsg(t){const m=$('msg');if(cur==='play'){m.textContent=t;m.className='msg'}else alert(t)}
 
 /* ===================== ПРОГРАМА ===================== */
-let L=null,P=[],target=null,history=[],uid=1;
+/* P — програма під «Коли старт» (виконується). LOOSE — окремі стоси на полотні (не виконуються). */
+let L=null,P=[],LOOSE=[],target=null,history=[],uid=1;
+const SLOTS=['body','then','else'];
 const mk=t=>{const n={id:uid++,t};if(t==='rep'){n.n=3;n.body=[]}if(t==='while')n.body=[];if(t==='if'){n.then=[];n.else=[]}return n};
 function count(list){return list.reduce((a,n)=>a+1+(n.body?count(n.body):0)+(n.then?count(n.then)+count(n.else):0),0)}
-function findList(tg){
-  if(!tg)return P;
-  const walk=list=>{for(const n of list){if(n.id===tg.id)return n[tg.slot];for(const s of ['body','then','else'])if(n[s]){const r=walk(n[s]);if(r)return r}}return null};
-  return walk(P)||P;
-}
-function removeNode(id){
-  const walk=list=>{const i=list.findIndex(n=>n.id===id);if(i>=0){list.splice(i,1);return true}return list.some(n=>['body','then','else'].some(s=>n[s]&&walk(n[s])))};
-  walk(P);
-  if(target&&!exists(target.id))target=null;
-}
-function exists(id){const walk=list=>list.some(n=>n.id===id||['body','then','else'].some(s=>n[s]&&walk(n[s])));return walk(P)}
-const snap=()=>JSON.stringify(P);
+const roots=()=>[P,...LOOSE.map(s=>s.list)];
+function nodeById(id){let r=null;const w=l=>l.some(n=>{if(n.id===id){r=n;return true}return SLOTS.some(s=>n[s]&&w(n[s]))});roots().some(w);return r}
+function parentOf(id){let r=null;const w=l=>{const i=l.findIndex(n=>n.id===id);if(i>=0){r={list:l,idx:i};return true}return l.some(n=>SLOTS.some(s=>n[s]&&w(n[s])))};roots().some(w);return r}
+function keyList(k){if(k==='root')return P;if(k.startsWith('L:')){const s=LOOSE.find(s=>s.id===+k.slice(2));return s?s.list:null}const [id,slot]=k.split(':');const n=nodeById(+id);return n?n[slot]:null}
+const findList=tg=>(tg&&keyList(`${tg.id}:${tg.slot}`))||P;
+function dropEmpty(){LOOSE=LOOSE.filter(s=>s.list.length);if(target&&!nodeById(target.id))target=null}
+function takeTail(id){const p=parentOf(id);if(!p)return[];const out=p.list.splice(p.idx);dropEmpty();return out}
+const snap=()=>JSON.stringify({P,LOOSE});
 function pushHist(){history.push(snap());if(history.length>60)history.shift()}
 function addBlock(t){
   if(running)return;pushHist();
@@ -558,111 +634,140 @@ function addBlock(t){
   if(n.body)target={id:n.id,slot:'body'};else if(n.then)target={id:n.id,slot:'then'};
   Sound.add();resetRun();renderProg();
 }
-function renderList(list,tg){
-  const isT=(tg===null&&target===null)||(tg&&target&&tg.id===target.id&&tg.slot===target.slot);
-  const key=tg?`${tg.id}:${tg.slot}`:'root';
-  return `<div class="list${isT?' target':''}" data-list="${key}">${list.map(renderNode).join('')}<button class="slot" data-slot="${key}">${isT?'▸ нові блоки потраплять сюди':'+ додавати сюди'}</button></div>`;
+const LOCK='<svg viewBox="0 0 24 24"><use href="#i-lock"/></svg>';
+function listHTML(list,key){
+  const isT=target&&key===`${target.id}:${target.slot}`;
+  return `<div class="list${isT?' target':''}" data-list="${key}">${list.map(n=>renderNode(n)).join('')}</div>`;
 }
-function renderNode(n){
-  const b=BLOCKS[n.t];
-  let head=`<div class="bh">${ico(n.t)}<span class="lbl">${n.t==='rep'?'Повторити':b.lbl}</span>`;
-  if(n.t==='rep')head+=`<span class="num"><button data-dec="${n.id}" aria-label="Менше">−</button><b>${n.n}</b><button data-inc="${n.id}" aria-label="Більше">+</button></span><span style="font-weight:800">рази</span>`;
-  head+=`<button class="x" data-del="${n.id}" aria-label="Видалити">×</button></div>`;
-  let inner='';
-  if(n.body)inner=`<div class="inner">${renderList(n.body,{id:n.id,slot:'body'})}</div>`;
-  if(n.then)inner=`<div class="inner">${renderList(n.then,{id:n.id,slot:'then'})}</div><div class="else-l">інакше</div><div class="inner">${renderList(n.else,{id:n.id,slot:'else'})}</div>`;
-  return `<div class="blk k-${n.t}" data-id="${n.id}">${head}${inner}</div>`;
+function renderNode(n,pal){
+  const b=BLOCKS[n.t],tag=pal?'button':'div',attr=pal?` type="button" data-add="${n.t}" title="Натисни або перетягни"`:` data-id="${n.id}"`;
+  const lbl=pal&&b.pl?b.pl:b.lbl;
+  let head=`<div class="bh">${ico(n.t)}<span class="lbl">${lbl}</span>`;
+  if(n.t==='rep')head+=pal?`<b>3</b>`:`<span class="num"><button type="button" data-dec="${n.id}" aria-label="Менше">−</button><b>${n.n}</b><button type="button" data-inc="${n.id}" aria-label="Більше">+</button></span><span>рази</span>`;
+  head+='</div>';
+  const mouth=(l,slot)=>`<div class="mouth"><div class="arm"></div>${pal?'<div class="list"></div>':listHTML(l,`${n.id}:${slot}`)}</div>`;
+  if(n.body)return `<${tag} class="blk c k-${n.t}"${attr}>${head}${mouth(n.body,'body')}<div class="foot"></div></${tag}>`;
+  if(n.then)return `<${tag} class="blk c k-${n.t}"${attr}>${head}${mouth(n.then,'then')}<div class="mid">інакше</div>${mouth(n.else,'else')}<div class="foot"></div></${tag}>`;
+  return `<${tag} class="blk k-${n.t}"${attr}>${head}</${tag}>`;
+}
+const CATS=[{n:'Рух',c:'--move',b:['fwd','left','right']},{n:'Цикли',c:'--loop',b:['rep','while']},{n:'Умови',c:'--cond',b:['if']}];
+const chOf=k=>CHAPTERS.findIndex(c=>c.blocks.includes(k));
+function renderPalette(){
+  $('palette').innerHTML=CATS.map(c=>{
+    const h=`<h4><i style="background:var(${c.c})"></i>${c.n}</h4>`;
+    if(!c.b.some(k=>L.blocks.includes(k))){const ch=Math.min(...c.b.map(chOf));return `<div class="cat locked">${h}<div class="lockn">${LOCK}Відкриється в розділі «${CHAPTERS[ch].title}»</div></div>`}
+    return `<div class="cat">${h}<div class="pbl">${c.b.map(k=>L.blocks.includes(k)?renderNode(mk(k),true)
+      :`<div class="blk locked" title="Відкриється в розділі «${CHAPTERS[chOf(k)].title}»"><div class="bh"><span class="ico">${LOCK}</span><span class="lbl">${BLOCKS[k].pl||BLOCKS[k].lbl}</span></div></div>`).join('')}</div></div>`;
+  }).join('');
 }
 function renderProg(){
-  const c=count(P);
-  $('prog').innerHTML=P.length?renderList(P,null):`<div class="empty-hint">Тут з'явиться програма. Натискай або перетягуй блоки сюди.</div>`+renderList(P,null);
-  $('cnt').textContent=`Блоків: ${c} · найкраще: ${L.best}`;
-  S.progs[L.num]=P;persist();
+  const ws=$('ws'),empty=!P.length&&!LOOSE.length;
+  ws.innerHTML=`<div class="stack main" style="left:18px;top:18px"><div class="hat"><svg viewBox="0 0 24 24"><path class="ink" d="M5 3h2v19H5z"/><path class="ink" d="M7 4c4-2 6 2 12 0v9c-6 2-8-2-12 0z"/></svg>Коли старт</div>${listHTML(P,'root')}</div>`
+    +LOOSE.map(s=>`<div class="stack loose" data-loose="${s.id}" style="left:${s.x}px;top:${s.y}px" title="Не приєднано до «Коли старт» — не виконується">${listHTML(s.list,'L:'+s.id)}</div>`).join('')
+    +(empty?`<div class="wsempty"><svg viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M20 12H5M10 6l-6 6 6 6"/></svg>Перетягни сюди команди або натисни на них</div>`:'');
+  let h=0;ws.querySelectorAll('.stack').forEach(s=>h=Math.max(h,s.offsetTop+s.offsetHeight));
+  ws.style.minHeight=Math.max(innerWidth<640?360:460,h+60)+'px';
+  $('cnt').textContent=`Блоків: ${count(P)} · найкраще: ${L.best}`;
+  S.progs[L.num]=P;S.loose[L.num]=LOOSE;persist();
 }
-$('prog').addEventListener('click',e=>{
-  if(running)return;
-  const t=e.target.closest('button');if(!t)return;
-  if(t.dataset.del){pushHist();removeNode(+t.dataset.del);Sound.turn();resetRun();renderProg();return}
-  if(t.dataset.inc||t.dataset.dec){pushHist();const id=+(t.dataset.inc||t.dataset.dec);const walk=list=>{for(const n of list){if(n.id===id){n.n=Math.max(2,Math.min(12,n.n+(t.dataset.inc?1:-1)));return}['body','then','else'].forEach(s=>n[s]&&walk(n[s]))}};walk(P);Sound.add();resetRun();renderProg();return}
-  if(t.dataset.slot){const k=t.dataset.slot;target=k==='root'?null:{id:+k.split(':')[0],slot:k.split(':')[1]};renderProg()}
+$('ws').addEventListener('click',e=>{
+  if(running||dragJust)return;
+  const t=e.target.closest('button');
+  if(t){
+    if(t.dataset.inc||t.dataset.dec){pushHist();const n=nodeById(+(t.dataset.inc||t.dataset.dec));if(n)n.n=Math.max(2,Math.min(12,n.n+(t.dataset.inc?1:-1)));Sound.add();resetRun();renderProg()}
+    return;
+  }
+  const bh=e.target.closest('.blk.k-left>.bh,.blk.k-right>.bh');
+  if(bh){const n=nodeById(+bh.parentElement.dataset.id);if(!n)return;pushHist();n.t=n.t==='left'?'right':'left';Sound.turn();resetRun();renderProg();return}
+  const m=e.target.closest('.mouth');
+  if(m){const k=m.querySelector(':scope>.list').dataset.list.split(':');target={id:+k[0],slot:k[1]};renderProg();return}
+  if(!e.target.closest('.blk')&&target){target=null;renderProg()}
 });
-$('prog').addEventListener('click',e=>{
-  if(running||dragJust||e.target.closest('button'))return;
-  const bh=e.target.closest('.blk.k-left>.bh,.blk.k-right>.bh');if(!bh)return;
-  const n=nodeById(+bh.parentElement.dataset.id);if(!n)return;
-  pushHist();n.t=n.t==='left'?'right':'left';Sound.turn();resetRun();renderProg();
-});
-$('bClear').onclick=()=>{if(running||!P.length)return;pushHist();P=[];target=null;resetRun();renderProg()};
-$('bUndo').onclick=()=>{if(running||!history.length)return;P=JSON.parse(history.pop());fixUid();if(target&&!exists(target.id))target=null;resetRun();renderProg()};
-function fixUid(){const walk=list=>list.forEach(n=>{uid=Math.max(uid,n.id+1);['body','then','else'].forEach(s=>n[s]&&walk(n[s]))});walk(P)}
+$('bClear').onclick=()=>{if(running||(!P.length&&!LOOSE.length))return;pushHist();P=[];LOOSE=[];target=null;resetRun();renderProg()};
+$('bUndo').onclick=()=>{if(running||!history.length)return;const h=JSON.parse(history.pop());P=h.P;LOOSE=h.LOOSE;fixUid();if(target&&!nodeById(target.id))target=null;resetRun();renderProg()};
+function fixUid(){const walk=list=>list.forEach(n=>{uid=Math.max(uid,n.id+1);SLOTS.forEach(s=>n[s]&&walk(n[s]))});walk(P);LOOSE.forEach(s=>{uid=Math.max(uid,s.id+1);walk(s.list)})}
 
 /* ===================== ПЕРЕТЯГУВАННЯ ===================== */
 let D=null,dragJust=false;
-function nodeById(id){let r=null;const w=l=>l.some(n=>{if(n.id===id){r=n;return true}return ['body','then','else'].some(s=>n[s]&&w(n[s]))});w(P);return r}
-function keyList(k){if(k==='root')return P;const [id,slot]=k.split(':');const n=nodeById(+id);return n?n[slot]:null}
-function insideNode(rootId,id){const r=nodeById(rootId);if(!r)return false;let f=false;const w=l=>l.forEach(n=>{if(n.id===id)f=true;['body','then','else'].forEach(s=>n[s]&&w(n[s]))});['body','then','else'].forEach(s=>r[s]&&w(r[s]));return f}
 document.addEventListener('pointerdown',e=>{
   if(cur!=='play'||running||e.button>0)return;
-  const pb=e.target.closest('.pb');let src=null;
+  let src=null;const pb=e.target.closest('#palette .blk[data-add]');
   if(pb)src={kind:'new',t:pb.dataset.add,el:pb};
   else{
-    const bh=e.target.closest('.blk>.bh');
-    if(!bh||e.target.closest('button'))return;
-    src={kind:'move',id:+bh.parentElement.dataset.id,el:bh.parentElement};
+    if(e.target.closest('button')||!e.target.closest('#ws'))return;
+    const part=e.target.closest('.blk>.bh,.blk>.mid,.blk>.foot,.mouth>.arm');if(!part)return;
+    const b=part.closest('.blk');src={kind:'move',id:+b.dataset.id,el:b};
   }
-  D={src,x0:e.clientX,y0:e.clientY,on:false,pid:e.pointerId,drop:null};
+  D={src,x0:e.clientX,y0:e.clientY,on:false,pid:e.pointerId};
 });
 document.addEventListener('pointermove',e=>{
   if(!D||e.pointerId!==D.pid)return;
-  if(!D.on){if(Math.hypot(e.clientX-D.x0,e.clientY-D.y0)<7)return;startDrag()}
+  if(!D.on){if(Math.hypot(e.clientX-D.x0,e.clientY-D.y0)<6)return;startDrag()}
   e.preventDefault();moveDrag(e);
 },{passive:false});
-document.addEventListener('pointerup',e=>{if(!D||e.pointerId!==D.pid)return;if(D.on)endDrag(true);D=null});
+document.addEventListener('pointerup',e=>{if(!D||e.pointerId!==D.pid)return;if(D.on)endDrag(true,e);D=null});
 document.addEventListener('pointercancel',()=>{if(D&&D.on)endDrag(false);D=null});
 function startDrag(){
   D.on=true;const src=D.src,r=src.el.getBoundingClientRect();
-  const g=(src.kind==='new'?src.el:src.el.querySelector('.bh')).cloneNode(true);
-  g.classList.add('ghost');if(src.kind==='move')g.classList.add('k-'+nodeById(src.id).t);
-  g.style.width=Math.min(r.width,340)+'px';
-  D.offX=Math.min(D.x0-r.left,40);D.offY=Math.min(D.y0-r.top,24);
-  document.body.appendChild(g);D.ghost=g;
-  D.line=document.createElement('div');D.line.className='dropline';
-  if(src.kind==='move')src.el.classList.add('dragging');
+  let html;
+  if(src.kind==='new')html=renderNode(mk(src.t));
+  else{const p=parentOf(src.id);D.tail=p.list.slice(p.idx);D.srcKey=src.el.parentElement.dataset.list;D.whole=p.idx===0&&D.srcKey.startsWith('L:');
+    html=D.tail.map(n=>renderNode(n)).join('');
+    D.tail.forEach(n=>{const el=$('ws').querySelector(`.blk[data-id="${n.id}"]`);if(el)el.style.display='none'})}
+  const g=document.createElement('div');g.className='stack ghost';g.innerHTML=`<div class="list">${html}</div>`;
+  document.body.appendChild(g);D.ghost=g;D.gh=g.offsetHeight;
+  D.offX=D.x0-r.left;D.offY=D.y0-r.top;
+  D.line=document.createElement('div');D.line.className='snapline';
+  /* точки зчеплення (у координатах документа) */
+  D.pts=[];
+  $('ws').querySelectorAll('.list[data-list]').forEach(l=>{
+    if(!l.offsetParent)return;const key=l.dataset.list;
+    if(D.whole&&key===D.srcKey)return;
+    const kids=[...l.children].filter(c=>c.classList.contains('blk')&&c.style.display!=='none');
+    const lr=l.getBoundingClientRect(),x=lr.left+scrollX;
+    for(let i=0;i<=kids.length;i++){
+      const y=(i<kids.length?kids[i].getBoundingClientRect().top:(kids.length?kids[kids.length-1].getBoundingClientRect().bottom:lr.top))+scrollY;
+      D.pts.push({key,idx:i,x,y,top:i===0&&key.startsWith('L:')});
+    }
+  });
   document.body.classList.add('dragging-now');
-  if(src.kind==='move')setMsg('Відпусти поза програмою — і блок видалиться');
 }
 function moveDrag(e){
-  const g=D.ghost;g.style.left=(e.clientX-D.offX)+'px';g.style.top=(e.clientY-D.offY)+'px';
+  const g=D.ghost,gx=e.clientX-D.offX,gy=e.clientY-D.offY;g.style.left=gx+'px';g.style.top=gy+'px';
   if(e.clientY<70)scrollBy(0,-14);else if(e.clientY>innerHeight-50)scrollBy(0,14);
   const el=document.elementFromPoint(e.clientX,e.clientY);
-  D.overProg=!!(el&&el.closest('.prog'));
-  let list=el&&el.closest('#prog .list');
-  if(!list&&el&&el.closest('.prog'))list=$('prog').querySelector('.list[data-list="root"]');
-  if(list&&D.src.kind==='move'){const k=list.dataset.list;if(k!=='root'){const id=+k.split(':')[0];if(id===D.src.id||insideNode(D.src.id,id))list=null}}
-  D.line.remove();
-  if(!list){D.drop=null;g.classList.toggle('del',D.src.kind==='move'&&!D.overProg);return}
-  g.classList.remove('del');
-  const kids=[...list.children].filter(c=>c.classList.contains('blk')&&c!==D.src.el);
-  let idx=kids.findIndex(c=>{const r=c.getBoundingClientRect();return e.clientY<r.top+r.height/2});
-  if(idx<0)idx=kids.length;
-  list.insertBefore(D.line,idx<kids.length?kids[idx]:list.querySelector(':scope>.slot'));
-  D.drop={key:list.dataset.list,idx};
-}
-function endDrag(apply){
-  D.ghost.remove();D.line.remove();document.body.classList.remove('dragging-now');
-  if(D.src.kind==='move')D.src.el.classList.remove('dragging');
-  dragJust=true;setTimeout(()=>dragJust=false,0);setMsg('');
-  if(!apply)return;
-  if(D.drop){
-    pushHist();let n;
-    if(D.src.kind==='new')n=mk(D.src.t);else{n=nodeById(D.src.id);removeNode(D.src.id)}
-    const list=keyList(D.drop.key)||P;list.splice(Math.min(D.drop.idx,list.length),0,n);
-    if(D.src.kind==='new'){if(n.body)target={id:n.id,slot:'body'};else if(n.then)target={id:n.id,slot:'then'}}
-    Sound.add();resetRun();renderProg();
-  } else if(D.src.kind==='move'&&!D.overProg){
-    pushHist();removeNode(D.src.id);Sound.turn();resetRun();renderProg();
+  D.overPal=!!(el&&el.closest('.palcol'));D.overWs=!!(el&&el.closest('#ws'));
+  $('palette').classList.toggle('trash',D.src.kind==='move'&&D.overPal);
+  D.snap=null;
+  if(!D.overPal){
+    let best=1e9;const ax=gx+scrollX,ay=gy+scrollY;
+    for(const p of D.pts){const dx=ax-p.x,dy=(p.top?ay+D.gh:ay)-p.y;if(Math.abs(dx)<60&&Math.abs(dy)<32){const d=dx*dx+dy*dy*2;if(d<best){best=d;D.snap=p}}}
   }
+  g.classList.toggle('del',D.src.kind==='move'&&!D.snap&&!D.overWs);
+  if(D.snap){if(!D.line.isConnected)document.body.appendChild(D.line);D.line.style.left=(D.snap.x-scrollX)+'px';D.line.style.top=(D.snap.y-scrollY-3)+'px'}else D.line.remove();
 }
+function endDrag(apply,e){
+  D.ghost.remove();D.line.remove();document.body.classList.remove('dragging-now');$('palette').classList.remove('trash');
+  dragJust=true;setTimeout(()=>dragJust=false,0);
+  if(!apply||(D.src.kind==='new'&&!D.snap&&!D.overWs)){renderProg();return}
+  pushHist();
+  const nodes=D.src.kind==='new'?[mk(D.src.t)]:takeTail(D.src.id);
+  if(D.snap){
+    const list=keyList(D.snap.key);
+    if(list){list.splice(Math.min(D.snap.idx,list.length),0,...nodes);
+      if(D.snap.top){const s=LOOSE.find(s=>'L:'+s.id===D.snap.key);if(s)s.y=Math.max(4,s.y-D.gh)}}
+    else LOOSE.push({id:uid++,x:20,y:20,list:nodes});
+    Sound.add();
+  } else if(D.overWs){
+    const wr=$('ws').getBoundingClientRect();
+    LOOSE.push({id:uid++,x:Math.max(4,Math.round(e.clientX-D.offX-wr.left+$('ws').scrollLeft)),y:Math.max(4,Math.round(e.clientY-D.offY-wr.top)),list:nodes});
+    Sound.add();
+  } else Sound.turn(); /* видалено */
+  if(D.src.kind==='new'&&D.snap&&!D.snap.key.startsWith('L:')){const n=nodes[0];if(n.body)target={id:n.id,slot:'body'};else if(n.then)target={id:n.id,slot:'then'}}
+  dropEmpty();resetRun();renderProg();
+}
+$('palette').addEventListener('click',e=>{const b=e.target.closest('.blk[data-add]');if(!b||dragJust)return;addBlock(b.dataset.add)});
+
 
 /* ===================== СВІТ ===================== */
 const CELL=60,DX=[0,1,0,-1],DY=[-1,0,1,0];
@@ -746,7 +851,7 @@ function resetRun(){stop();resetWorlds();mapIdx=Math.min(mapIdx,worlds.length-1)
 function stop(){running=false;clearTimeout(timer);gen=null;stepping=false;setBtns()}
 function setBtns(){const r=running&&!stepping;$('bRun').disabled=r;['bClear','bUndo'].forEach(i=>$(i).disabled=running)}
 function begin(){
-  if(!P.length){setMsg('Спершу додай блоки в програму','bad');return false}
+  if(!P.length){setMsg(LOOSE.length?'Приєднай блоки до «Коли старт» — інакше вони не виконуються':'Спершу додай блоки в програму','bad');return false}
   const mb=$('mapbox').getBoundingClientRect();if(mb.top<64||mb.bottom>innerHeight)$('mapbox').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'center'});
   resetWorlds();mapIdx=0;renderMap();stepsDone=0;
   gen=exec(P,worlds[0]);seen=new Set();running=true;setBtns();return true;
@@ -787,7 +892,8 @@ function W_res(r){worlds[mapIdx].res=r;const tabs=$('mapTabs');if(!tabs.hidden){
 $('bRun').onclick=()=>{if(running&&stepping){stepping=false;setBtns();tick();return}if(running)return;if(begin()){setMsg('');tick()}};
 $('bStep').onclick=()=>{if(!running){if(!begin())return;stepping=true;setBtns();setMsg('Покроковий режим: натискай «Крок»');}stepping=true;setBtns();clearTimeout(timer);tick()};
 $('bReset').onclick=()=>resetRun();
-$('bSpeed').onclick=()=>{S.speed=S.speed%3+1;persist();$('speedT').textContent='×'+S.speed};
+function drawSpeed(){$('speedSeg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.s===S.speed)))}
+$('speedSeg').onclick=e=>{const b=e.target.closest('[data-s]');if(!b)return;S.speed=+b.dataset.s;persist();drawSpeed();Sound.add()};
 
 /* ===================== ПЕРЕМОГА ===================== */
 function starsFor(c){return c<=L.best?3:c<=L.best+2?2:1}
@@ -806,12 +912,10 @@ function win(){
 /* ===================== ВІДКРИТИ РІВЕНЬ ===================== */
 function openLevel(n){
   show('play');L=LEVELS[n-1];history=[];target=null;mapIdx=0;
-  P=Array.isArray(S.progs[n])?S.progs[n]:[];fixUid();
+  P=Array.isArray(S.progs[n])?S.progs[n]:[];LOOSE=Array.isArray(S.loose[n])?S.loose[n].filter(x=>x&&Array.isArray(x.list)):[];fixUid();
   $('lvTitle').textContent=`${L.num}. ${L.name}`;$('lvTask').textContent=L.task;
   $('lvStars').innerHTML=`${CHAPTERS[L.ci].title}`;
-  $('palette').innerHTML=L.blocks.map(k=>`<button class="pb k-${k}" data-add="${k}">${ico(k)}${BLOCKS[k].lbl}</button>`).join('');
-  $('palette').querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{if(dragJust)return;addBlock(b.dataset.add)});
-  $('speedT').textContent='×'+S.speed;
+  renderPalette();
   resetRun();renderProg();
 }
 
@@ -827,7 +931,8 @@ document.addEventListener('keydown',e=>{
 });
 
 /* ===================== [i] ===================== */
-const info=$('info');$('infoBtn').onclick=()=>{const g=info.querySelector('.howto2 figure:last-child svg>g:last-of-type');if(g)g.innerHTML=robotSVG(ROBOT);info.showModal()};
+const info=$('info');$('infoBtn').onclick=()=>{$('ctlBotSvg').innerHTML=robotSVG(ROBOT);drawSpeed();info.showModal()};
+$('ctlBot').onclick=()=>{info.close();$('bCustom').click()};
 info.addEventListener('click',e=>{if(e.target===info||e.target.closest('[data-close]'))info.close()});
 $('win').addEventListener('click',e=>{if(e.target===$('win'))$('win').close()});
 
