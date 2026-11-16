@@ -128,8 +128,18 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 .lv.locked{opacity:.45;cursor:not-allowed}
 
 /* play */
-.phead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
-.phead h2{font-size:22px}
+.lvname{display:flex;align-items:center;gap:8px;flex:1;min-width:0;border:0;background:none;padding:0;cursor:pointer;font:800 17px Rubik,sans-serif;text-align:left}
+.lvname span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lvname svg{width:20px;height:20px;flex:none;opacity:.75}
+.lvname:hover svg{opacity:1}
+.colh .maptabs{margin:0}
+.colh .maptabs button{padding:6px 10px}
+#intro{max-width:420px}
+.intro{text-align:center;padding:28px 26px 24px}
+.intro .pill{display:inline-block;margin-bottom:12px}
+.intro h2{font-size:26px}
+.intro p{font-size:17px;color:var(--ink);margin:10px 0 20px}
+.gwrap.playw{padding-top:16px}
 .pill{padding:5px 12px;border-radius:12px;background:var(--card);font-weight:800;font-size:14px;box-shadow:0 2px 0 var(--shadow),0 0 0 1px var(--line)}
 .task{margin:0 0 14px;font-size:16px;max-width:80ch}
 .play{display:grid;grid-template-columns:196px minmax(0,1.15fr) minmax(300px,1fr);gap:16px;align-items:start}
@@ -273,6 +283,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
   .ib.ctl span{display:none}
   .ib.ctl{width:42px;padding:0;justify-content:center}
   .colh .btn.sm span{display:none}
+  .lvname span{white-space:normal;font-size:16px}
 }
 @media (max-width:860px){
   .creator{grid-template-columns:1fr}
@@ -364,9 +375,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
 <section class="screen" id="s-levels"><div class="wrap gwrap" id="levels"></div></section>
 
 <section class="screen" id="s-play">
-  <div class="wrap gwrap">
-    <div class="phead"><h2 id="lvTitle"></h2><span class="pill" id="lvStars"></span></div>
-    <p class="task" id="lvTask"></p>
+  <div class="wrap gwrap playw">
     <div class="play">
       <div class="palcol">
         <div class="colh"><h3>Команди</h3></div>
@@ -380,7 +389,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
         <div class="ws" id="ws"></div>
       </div>
       <div class="mapcol">
-        <div class="maptabs" id="mapTabs"></div>
+        <div class="colh"><button class="lvname" id="lvName" type="button" title="Показати завдання"><span id="lvTitle"></span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" class="ink"/><path d="M12 11v6" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="7.5" r="1.6" fill="#fff"/></svg></button><div class="maptabs" id="mapTabs"></div></div>
         <div class="mapbox" id="mapbox"></div>
         <div class="runbar">
           <button class="btn go" id="bRun"><svg viewBox="0 0 24 24"><path class="ink" d="M5 3h2v19H5z"/><path class="ink" d="M7 4c4-2 6 2 12 0v9c-6 2-8-2-12 0z"/></svg>Старт</button>
@@ -407,6 +416,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
     </div>
   </div>
 </dialog>
+<dialog id="intro" aria-labelledby="inT"><div class="dlg intro"><span class="pill" id="inCh"></span><h2 id="inT"></h2><p id="inTask"></p><button class="btn main" type="button" data-close><svg viewBox="0 0 24 24"><path class="ink" d="M7 4l13 8-13 8z"/></svg>Почати</button></div></dialog>
 <dialog id="win"><div class="dlg win" id="winBody"></div></dialog>
 
 <dialog id="info" aria-labelledby="infoT">
@@ -913,15 +923,16 @@ function win(){
 function openLevel(n){
   show('play');L=LEVELS[n-1];history=[];target=null;mapIdx=0;
   P=Array.isArray(S.progs[n])?S.progs[n]:[];LOOSE=Array.isArray(S.loose[n])?S.loose[n].filter(x=>x&&Array.isArray(x.list)):[];fixUid();
-  $('lvTitle').textContent=`${L.num}. ${L.name}`;$('lvTask').textContent=L.task;
-  $('lvStars').innerHTML=`${CHAPTERS[L.ci].title}`;
+  $('lvTitle').textContent=`${L.num}. ${L.name}`;
+  $('inT').textContent=`${L.num}. ${L.name}`;$('inCh').textContent=CHAPTERS[L.ci].title;$('inTask').textContent=L.task;
+  setTimeout(()=>{if(cur==='play'&&!$('intro').open)$('intro').showModal()},60);
   renderPalette();
   resetRun();renderProg();
 }
 
 /* ===================== КЛАВІАТУРА ===================== */
 document.addEventListener('keydown',e=>{
-  if(cur!=='play'||$('info').open||$('win').open||$('creatorDlg').open||e.target.tagName==='INPUT')return;
+  if(cur!=='play'||$('info').open||$('win').open||$('creatorDlg').open||$('intro').open||e.target.tagName==='INPUT')return;
   const has=k=>L.blocks.includes(k);
   if(e.key==='ArrowUp'&&has('fwd')){e.preventDefault();addBlock('fwd')}
   else if(e.key==='ArrowLeft'){e.preventDefault();addBlock('left')}
@@ -934,6 +945,8 @@ document.addEventListener('keydown',e=>{
 const info=$('info');$('infoBtn').onclick=()=>{$('ctlBotSvg').innerHTML=robotSVG(ROBOT);drawSpeed();info.showModal()};
 $('ctlBot').onclick=()=>{info.close();$('bCustom').click()};
 info.addEventListener('click',e=>{if(e.target===info||e.target.closest('[data-close]'))info.close()});
+$('lvName').onclick=()=>$('intro').showModal();
+$('intro').addEventListener('click',e=>{if(e.target===$('intro')||e.target.closest('[data-close]'))$('intro').close()});
 $('win').addEventListener('click',e=>{if(e.target===$('win'))$('win').close()});
 
 ROBOT={...RDEF,...(S.robot||{})};
