@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="uk" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Keyboard Academy — тренажер клавіатури</title>
+<meta name="description" content="Уроки сліпого друку, тренажер швидкості, комбінації клавіш і знайомство з клавіатурою. Українська та англійська розкладки.">
+<meta name="theme-color" content="#FFF6DF">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='9' y='9' width='52' height='52' rx='8' fill='%23111111'/%3E%3Crect x='4' y='4' width='52' height='52' rx='8' fill='%23FFD84A' stroke='%23111111' stroke-width='4'/%3E%3Cpath d='M22 16v24M22 30l13-14M27 25l10 15' stroke='%23111111' stroke-width='5.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Crect x='21' y='45' width='18' height='4.5' rx='2' fill='%232B50E8'/%3E%3C/svg%3E">
+<link rel="preload" href="fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<a class="skip-link" href="#view">Перейти до змісту</a>
+
+<header class="topbar">
+  <button id="menuBtn" class="btn ghost menu-btn" type="button" aria-label="Меню" title="Меню" aria-expanded="false" aria-controls="sidebar">
+    <span class="ico" data-ico="menu"></span>
+  </button>
+  <a href="#/home" class="brand" aria-label="Keyboard Academy — на головну">
+    <svg class="brand-logo" viewBox="0 0 64 64" aria-hidden="true"><rect x="9" y="9" width="52" height="52" rx="8" fill="var(--line)"/><rect x="4" y="4" width="52" height="52" rx="8" fill="#FFD84A" stroke="#111111" stroke-width="4"/><path d="M22 16v24M22 30l13-14M27 25l10 15" stroke="#111111" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><rect x="21" y="45" width="18" height="4.5" rx="2" fill="#2B50E8"/></svg>
+    <span class="brand-name">Keyboard Academy</span>
+  </a>
+  <div class="top-actions">
+    <button id="soundBtn" class="btn ghost" type="button" aria-pressed="true">
+      <span class="ico" data-ico="sound"></span><span class="lbl">Звук</span>
+    </button>
+    <a href="#/help" class="btn ghost" id="helpBtn"><span class="ico" data-ico="help"></span><span class="lbl">Довідка</span></a>
+    <button id="infoBtn" class="info-btn" type="button" aria-label="Про проєкт" title="Про проєкт">i</button>
+  </div>
+</header>
+
+<div class="layout">
+  <nav id="sidebar" class="sidebar" aria-label="Розділи">
+    <ul>
+      <li><a href="#/home" data-nav="home"><span class="ico" data-ico="home"></span>Головна</a></li>
+      <li class="nav-label">Навчання</li>
+      <li><a href="#/academy" data-nav="academy"><span class="ico" data-ico="hands"></span>Академія друку</a></li>
+      <li><a href="#/speed" data-nav="speed"><span class="ico" data-ico="gauge"></span>Швидкість друку</a></li>
+      <li><a href="#/shortcuts" data-nav="shortcuts"><span class="ico" data-ico="combo"></span>Комбінації клавіш</a></li>
+      <li><a href="#/explorer" data-nav="explorer"><span class="ico" data-ico="keyboard"></span>Знайомство з клавіатурою</a></li>
+      <li><a href="#/everyday" data-nav="everyday"><span class="ico" data-ico="window"></span>Комп'ютер щодня</a></li>
+      <li class="nav-label">Моє</li>
+      <li><a href="#/daily" data-nav="daily"><span class="ico" data-ico="calendar"></span>Щоденне тренування</a></li>
+      <li><a href="#/progress" data-nav="progress"><span class="ico" data-ico="chart"></span>Мій прогрес</a></li>
+      <li><a href="#/achievements" data-nav="achievements"><span class="ico" data-ico="award"></span>Досягнення</a></li>
+      <li><a href="#/settings" data-nav="settings"><span class="ico" data-ico="gear"></span>Налаштування</a></li>
+      <li><a href="#/help" data-nav="help"><span class="ico" data-ico="help"></span>Довідка</a></li>
+    </ul>
+  </nav>
+  <div class="scrim" id="scrim" hidden></div>
+  <main id="view" tabindex="-1"></main>
+</div>
+
+<div id="toasts" class="toasts" aria-live="polite" aria-atomic="false"></div>
+<div id="sr-live" class="sr-only" aria-live="assertive"></div>
+
+<noscript><p class="noscript">Для роботи тренажера потрібно увімкнути JavaScript у браузері.</p></noscript>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

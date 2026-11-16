@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Піксельна малювалка</title>
+  <!-- Modern SVG Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%2318181b'/><text x='50%' y='68%' font-family='sans-serif' font-weight='800' font-size='50' fill='%23ffffff' text-anchor='middle'>🎨</text></svg>">
+
+  <meta name="theme-color" content="#fcfcfc">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fcfcfc;
+      color: #18181b;
+      touch-action: manipulation;
+    }
+
+    .glass-header {
+      background: rgba(252, 252, 252, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+      touch-action: none;
+      cursor: crosshair;
+    }
+
+    .btn-tool {
+      background: #f4f4f5;
+      border: 1px solid #e4e4e7;
+      color: #52525b;
+      transition: all 0.15s ease;
+    }
+
+    .btn-tool:hover {
+      background: #e4e4e7;
+      color: #18181b;
+    }
+
+    .btn-tool[aria-pressed="true"] {
+      background: #18181b;
+      color: #ffffff;
+      border-color: #18181b;
+    }
+
+    /* PWA: атрибут hidden має бути сильнішим за класи Tailwind */
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #fcfcfc;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #d4d4d8;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-zinc-900 selection:text-white pb-6">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 glass-header border-b border-zinc-200/80">
+    <div class="max-w-5xl mx-auto px-4 h-14 sm:h-16 flex items-center justify-between">
+      <!-- Title -->
+      <a href="#" class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-zinc-900 text-white flex items-center justify-center text-sm font-bold shadow-sm">
+          🎨
+        </div>
+        <span class="font-bold tracking-tight text-zinc-900 text-base sm:text-lg">
+          Пікселька
+        </span>
+      </a>
+
+      <!-- Controls Right -->
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <button id="undoBtn" disabled title="Крок назад (Ctrl+Z)"
+                class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 flex items-center justify-center text-zinc-700 text-xs sm:text-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+        <button id="redoBtn" disabled title="Крок уперед (Ctrl+Y)"
+                class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 flex items-center justify-center text-zinc-700 text-xs sm:text-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+        <button id="clearBtn" title="Очистити полотно"
+                class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-zinc-100 hover:bg-rose-100 border border-zinc-200 hover:border-rose-200 text-zinc-700 hover:text-rose-600 text-xs sm:text-sm transition-all">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+
+        <div class="h-5 w-px bg-zinc-200 mx-1"></div>
+
+
+        <button id="infoBtn" aria-label="Інформація та підказки"
+                class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 flex items-center justify-center text-zinc-800 font-serif italic text-sm font-bold transition-all shadow-sm">
+          i
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-8 flex-grow w-full flex flex-col lg:flex-row gap-5 items-center lg:items-start justify-center">
+
+    <!-- CANVAS AREA -->
+    <div class="w-full max-w-[500px] lg:max-w-[520px] aspect-square bg-white border border-zinc-200 rounded-2xl p-2 sm:p-3 shadow-md relative flex items-center justify-center">
+      <div class="w-full h-full border border-zinc-200 rounded-xl overflow-hidden bg-zinc-50 relative z-10 shadow-inner">
+        <canvas id="canvas" width="512" height="512" aria-label="Полотно для малювання"></canvas>
+      </div>
+    </div>
+
+    <!-- CONTROL PANEL -->
+    <div class="w-full max-w-[500px] lg:w-[320px] bg-white border border-zinc-200 rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+      
+      <!-- Size Picker -->
+      <div>
+        <label class="text-[11px] font-bold uppercase tracking-wider text-zinc-400 block mb-2">Розмір сітки</label>
+        <div class="grid grid-cols-3 gap-1.5" id="sizes">
+          <button class="py-1.5 rounded-lg text-xs font-semibold btn-tool" data-size="8" aria-pressed="false">8×8</button>
+          <button class="py-1.5 rounded-lg text-xs font-semibold btn-tool" data-size="16" aria-pressed="true">16×16</button>
+          <button class="py-1.5 rounded-lg text-xs font-semibold btn-tool" data-size="32" aria-pressed="false">32×32</button>
+        </div>
+
+        <!-- Other sizes (collapsed) -->
+        <button type="button" id="toggleSizesBtn" class="w-full flex items-center justify-between mt-2.5 text-[11px] font-bold uppercase tracking-wider text-zinc-400 hover:text-zinc-700 transition select-none">
+          <span class="flex items-center gap-1.5">
+            <i class="fa-solid fa-expand"></i> Інші розміри <span id="sizeCurrent" class="normal-case tracking-normal text-zinc-700"></span>
+          </span>
+          <i id="sizesArrow" class="fa-solid fa-chevron-right text-[10px] transition-transform duration-200"></i>
+        </button>
+
+        <div id="sizesContainer" class="hidden pt-2">
+        <div class="grid grid-cols-3 gap-1.5" id="moreSizes">
+          <button class="py-1.5 rounded-lg text-xs font-semibold btn-tool" data-size="64" aria-pressed="false">64×64</button>
+          <button class="py-1.5 rounded-lg text-xs font-semibold btn-tool" data-cols="16" data-rows="8" aria-pressed="false" title="Горизонтальне полотно">16×8</button>
+          <button class="py-1.5 rounded-lg text-xs font-semibold btn-tool" data-cols="32" data-rows="16" aria-pressed="false" title="Горизонтальне полотно">32×16</button>
+          <button class="py-1.5 rounded-lg text-xs font-semibold btn-tool" data-cols="8" data-rows="16" aria-pressed="false" title="Вертикальне полотно">8×16</button>
+          <button class="py-1.5 rounded-lg text-xs font-semibold btn-tool" data-cols="16" data-rows="32" aria-pressed="false" title="Вертикальне полотно">16×32</button>
+        </div>
+
+        <!-- Custom width x height -->
+        <div class="flex items-center gap-1.5 mt-2.5">
+          <input id="colsInput" type="number" min="1" max="128" value="16" inputmode="numeric" aria-label="Ширина в клітинках" title="Ширина"
+                 class="w-14 py-1.5 text-center text-xs font-semibold rounded-lg bg-zinc-100 border border-zinc-200 text-zinc-800 focus:outline-none focus:border-zinc-900">
+          <span class="text-xs text-zinc-400">×</span>
+          <input id="rowsInput" type="number" min="1" max="128" value="16" inputmode="numeric" aria-label="Висота в клітинках" title="Висота"
+                 class="w-14 py-1.5 text-center text-xs font-semibold rounded-lg bg-zinc-100 border border-zinc-200 text-zinc-800 focus:outline-none focus:border-zinc-900">
+          <button id="applySize" type="button" class="flex-1 py-1.5 rounded-lg text-xs font-semibold btn-tool">Застосувати</button>
+        </div>
+        <p class="text-[10px] text-zinc-400 mt-1.5">Власний розмір: ширина × висота, від 1 до 128 клітинок</p>
+        </div>
+      </div>
+
+      <!-- Main Tools -->
+      <div>
+        <label class="text-[11px] font-bold uppercase tracking-wider text-zinc-400 block mb-2">Основні інструменти</label>
+        <div class="grid grid-cols-4 gap-1.5" id="tools">
+          <button class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl text-[11px] font-medium btn-tool" data-tool="pen" aria-pressed="true" title="Пензлик (B)">
+            <i class="fa-solid fa-pen text-sm"></i> Олівець
+          </button>
+          <button class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl text-[11px] font-medium btn-tool" data-tool="eraser" aria-pressed="false" title="Гумка (E)">
+            <i class="fa-solid fa-eraser text-sm"></i> Гумка
+          </button>
+          <button class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl text-[11px] font-medium btn-tool" data-tool="fill" aria-pressed="false" title="Заливка (G)">
+            <i class="fa-solid fa-fill-drip text-sm"></i> Заливка
+          </button>
+          <button class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl text-[11px] font-medium btn-tool" data-tool="pick" aria-pressed="false" title="Піпетка (I)">
+            <i class="fa-solid fa-eye-dropper text-sm"></i> Піпетка
+          </button>
+        </div>
+      </div>
+
+      <!-- Shapes Accordion Section -->
+      <div class="border-t border-zinc-100 pt-3">
+        <button type="button" id="toggleShapesBtn" class="w-full flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-zinc-400 hover:text-zinc-700 transition select-none">
+          <span class="flex items-center gap-1.5">
+            <i class="fa-solid fa-shapes"></i> Фігури
+          </span>
+          <i id="shapesArrow" class="fa-solid fa-chevron-right text-[10px] transition-transform duration-200"></i>
+        </button>
+        
+        <div id="shapesContainer" class="hidden space-y-2.5 pt-2">
+          <div class="grid grid-cols-4 gap-1.5" id="shapeTools">
+            <button class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl text-[11px] font-medium btn-tool" data-tool="line" aria-pressed="false" title="Лінія (L)">
+              <i class="fa-solid fa-minus text-sm"></i> Лінія
+            </button>
+            <button class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl text-[11px] font-medium btn-tool" data-tool="rect" aria-pressed="false" title="Квадрат (R)">
+              <i class="fa-regular fa-square text-sm"></i> Квадрат
+            </button>
+            <button class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl text-[11px] font-medium btn-tool" data-tool="triangle" aria-pressed="false" title="Трикутник (T)">
+              <i class="fa-solid fa-play text-sm -rotate-90"></i> Трикутник
+            </button>
+            <button class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl text-[11px] font-medium btn-tool" data-tool="circle" aria-pressed="false" title="Коло (O)">
+              <i class="fa-regular fa-circle text-sm"></i> Коло
+            </button>
+          </div>
+
+          <label class="flex items-center gap-2 text-xs text-zinc-500 cursor-pointer select-none pt-1">
+            <input type="checkbox" id="fillShapes" class="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900">
+            Заповнювати фігури
+          </label>
+        </div>
+      </div>
+
+      <!-- Palette -->
+      <div class="border-t border-zinc-100 pt-3">
+        <div class="flex items-center justify-between mb-2">
+          <label class="text-[11px] font-bold uppercase tracking-wider text-zinc-400">Палітра</label>
+          <input type="color" id="colorInput" value="#18181b" class="w-6 h-6 rounded-md border border-zinc-200 cursor-pointer p-0 bg-transparent">
+        </div>
+        <div class="grid grid-cols-8 gap-1.5" id="palette"></div>
+      </div>
+
+      <!-- Export -->
+      <div class="pt-2 border-t border-zinc-100 flex gap-2">
+        <select id="exportSize" title="Довша сторона зображення" class="bg-zinc-100 border border-zinc-200 rounded-xl px-2.5 py-2 text-xs font-medium text-zinc-700 focus:outline-none">
+          <option value="512">512px</option>
+          <option value="1024" selected>1024px</option>
+          <option value="2048">2048px</option>
+        </select>
+        <button id="saveBtn" class="flex-1 py-2 px-4 bg-zinc-900 hover:bg-zinc-800 text-white font-semibold rounded-xl text-xs transition shadow-sm flex items-center justify-center gap-2">
+          <i class="fa-solid fa-download"></i> Зберегти PNG
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-zinc-200/70 py-4 bg-zinc-50/50 mt-auto">
+    <div class="max-w-5xl mx-auto px-4 text-center text-xs text-zinc-400">
+      &copy; <span id="year"></span> whyuxavier. Піксельна малювалка.
+    </div>
+  </footer>
+
+  <!-- MODAL [i] -->
+  <div id="infoModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-900/40 backdrop-blur-sm hidden opacity-0 transition-opacity duration-200">
+    <div id="modalContent" class="bg-white border border-zinc-200 rounded-2xl max-w-sm w-full p-6 shadow-xl transform scale-95 transition-transform duration-200 relative">
+      <button id="closeModal" class="absolute top-4 right-4 w-7 h-7 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-500 hover:text-zinc-900 flex items-center justify-center text-xs">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-zinc-900 text-white flex items-center justify-center text-base font-bold">
+          🎨
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-zinc-900">Про програму</h3>
+          <p class="text-xs text-zinc-400">Створення піксель-арту</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-xs text-zinc-600 leading-relaxed border-t border-zinc-100 pt-3">
+        <p>Малюйте олівцем або за допомогою геометричних фігур. Затисніть та розтягуйте лінію чи фігуру для побудови.</p>
+        
+        <h4 class="font-bold text-zinc-900 pt-1">Гарячі клавіші:</h4>
+        <ul class="grid grid-cols-2 gap-1.5 text-[11px]">
+          <li><span class="font-mono bg-zinc-100 px-1 rounded border border-zinc-200">B</span> Олівець</li>
+          <li><span class="font-mono bg-zinc-100 px-1 rounded border border-zinc-200">E</span> Гумка</li>
+          <li><span class="font-mono bg-zinc-100 px-1 rounded border border-zinc-200">G</span> Заливка</li>
+          <li><span class="font-mono bg-zinc-100 px-1 rounded border border-zinc-200">L</span> Лінія</li>
+          <li><span class="font-mono bg-zinc-100 px-1 rounded border border-zinc-200">R</span> Квадрат</li>
+          <li><span class="font-mono bg-zinc-100 px-1 rounded border border-zinc-200">Ctrl+Z</span> Назад</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    (() => {
+      const PRESETS = [
+        '#000000','#ffffff','#71717a','#a1a1aa','#ef4444','#f97316','#f59e0b','#eab308',
+        '#84cc16','#10b981','#06b6d4','#3b82f6','#6366f1','#8b5cf6','#ec4899','#f43f5e'
+      ];
+      const MAX_CANVAS_PX = 512;
+      const MAX_CELLS = 128;
+      const HISTORY_LIMIT = 50;
+
+      const $ = id => document.getElementById(id);
+      const canvas = $('canvas');
+      const ctx = canvas.getContext('2d');
+
+      let cols = 16, rows = 16;
+      let cellPx = 32;
+      let pixels = new Array(cols * rows).fill(null);
+      let color = '#000000';
+      let tool = 'pen';
+      let undoStack = [], redoStack = [];
+      // Малюнок до зміни розміру: якщо полотно зменшили й обрізали краї, при збільшенні вони повернуться
+      let sizeSource = null;
+      let isDrawing = false;
+      let shapeStart = null, shapeEnd = null;
+
+      // Palette Build
+      const paletteEl = $('palette');
+      PRESETS.forEach((hex, idx) => {
+        const btn = document.createElement('button');
+        btn.className = `w-full aspect-square rounded-md border border-zinc-200 hover:scale-105 transition-transform ${idx===0?'ring-2 ring-zinc-900':''}`;
+        btn.style.backgroundColor = hex;
+        btn.addEventListener('click', () => {
+          color = hex;
+          $('colorInput').value = hex;
+          document.querySelectorAll('#palette button').forEach(b => b.classList.remove('ring-2', 'ring-zinc-900'));
+          btn.classList.add('ring-2', 'ring-zinc-900');
+        });
+        paletteEl.appendChild(btn);
+      });
+
+      $('colorInput').addEventListener('input', (e) => {
+        color = e.target.value;
+      });
+
+      // Toggle Shapes Section
+      const toggleShapesBtn = $('toggleShapesBtn');
+      const shapesContainer = $('shapesContainer');
+      const shapesArrow = $('shapesArrow');
+
+      toggleShapesBtn.addEventListener('click', () => {
+        const isHidden = shapesContainer.classList.contains('hidden');
+        if (isHidden) {
+          shapesContainer.classList.remove('hidden');
+          shapesArrow.classList.add('rotate-90');
+        } else {
+          shapesContainer.classList.add('hidden');
+          shapesArrow.classList.remove('rotate-90');
+        }
+      });
+
+      // Geometry functions
+      function lineCells(a, b) {
+        const out = [];
+        let x0 = a.x, y0 = a.y;
+        const dx = Math.abs(b.x - x0), dy = Math.abs(b.y - y0);
+        const sx = x0 < b.x ? 1 : -1, sy = y0 < b.y ? 1 : -1;
+        let err = dx - dy;
+        while (true) {
+          out.push({ x: x0, y: y0 });
+          if (x0 === b.x && y0 === b.y) break;
+          const e2 = 2 * err;
+          if (e2 > -dy) { err -= dy; x0 += sx; }
+          if (e2 < dx) { err += dx; y0 += sy; }
+        }
+        return out;
+      }
+
+      function shapeCells(kind, a, b, fill) {
+        const x0 = Math.min(a.x, b.x), x1 = Math.max(a.x, b.x);
+        const y0 = Math.min(a.y, b.y), y1 = Math.max(a.y, b.y);
+        const out = [];
+
+        if (kind === 'line') return lineCells(a, b);
+
+        if (kind === 'rect') {
+          for (let y = y0; y <= y1; y++) {
+            for (let x = x0; x <= x1; x++) {
+              if (fill || x === x0 || x === x1 || y === y0 || y === y1) out.push({ x, y });
+            }
+          }
+          return out;
+        }
+
+        if (kind === 'triangle') {
+          const apex = { x: Math.round((x0 + x1) / 2), y: y0 };
+          const left = { x: x0, y: y1 };
+          const right = { x: x1, y: y1 };
+          
+          let pts = lineCells(apex, left).concat(lineCells(left, right)).concat(lineCells(right, apex));
+          if (fill) {
+            for (let y = y0; y <= y1; y++) {
+              const rowX = pts.filter(p => p.y === y).map(p => p.x);
+              if (rowX.length) {
+                const minX = Math.min(...rowX), maxX = Math.max(...rowX);
+                for (let x = minX; x <= maxX; x++) pts.push({ x, y });
+              }
+            }
+          }
+          return pts;
+        }
+
+        if (kind === 'circle') {
+          const rx = Math.abs(b.x - a.x), ry = Math.abs(b.y - a.y);
+          const cx = a.x, cy = a.y;
+          for (let y = cy - ry; y <= cy + ry; y++) {
+            for (let x = cx - rx; x <= cx + rx; x++) {
+              if (x < 0 || y < 0 || x >= cols || y >= rows) continue;
+              const dx = (x - cx) / (rx || 1);
+              const dy = (y - cy) / (ry || 1);
+              const val = dx*dx + dy*dy;
+              if (fill ? val <= 1.1 : (val >= 0.6 && val <= 1.2)) {
+                out.push({ x, y });
+              }
+            }
+          }
+          return out;
+        }
+        return [];
+      }
+
+      // Render
+      function render(previewPixels = []) {
+        const cell = cellPx;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw Pixels
+        for (let y = 0; y < rows; y++) {
+          for (let x = 0; x < cols; x++) {
+            const c = pixels[y * cols + x];
+            if (c) {
+              ctx.fillStyle = c;
+            } else {
+              ctx.fillStyle = (x + y) % 2 ? '#ffffff' : '#f4f4f5';
+            }
+            ctx.fillRect(x * cell, y * cell, cell, cell);
+          }
+        }
+
+        // Draw Shape Preview
+        if (previewPixels.length) {
+          ctx.fillStyle = color;
+          for (const p of previewPixels) {
+            if (p.x >= 0 && p.y >= 0 && p.x < cols && p.y < rows) {
+              ctx.fillRect(p.x * cell, p.y * cell, cell, cell);
+            }
+          }
+        }
+
+        // Grid lines
+        ctx.strokeStyle = 'rgba(0,0,0,0.06)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        for (let i = 1; i < cols; i++) {
+          const p = i * cell;
+          ctx.moveTo(p, 0); ctx.lineTo(p, canvas.height);
+        }
+        for (let i = 1; i < rows; i++) {
+          const p = i * cell;
+          ctx.moveTo(0, p); ctx.lineTo(canvas.width, p);
+        }
+        ctx.stroke();
+      }
+
+      function pushHistory() {
+        sizeSource = null; // малюнок змінено — далі масштабуємо вже нову версію
+        undoStack.push(pixels.slice());
+        if (undoStack.length > HISTORY_LIMIT) undoStack.shift();
+        redoStack = [];
+        updateButtons();
+      }
+
+      function updateButtons() {
+        $('undoBtn').disabled = !undoStack.length;
+        $('redoBtn').disabled = !redoStack.length;
+      }
+
+      $('undoBtn').addEventListener('click', () => {
+        if (!undoStack.length) return;
+        redoStack.push(pixels.slice());
+        pixels = undoStack.pop();
+        render(); updateButtons();
+      });
+
+      $('redoBtn').addEventListener('click', () => {
+        if (!redoStack.length) return;
+        undoStack.push(pixels.slice());
+        pixels = redoStack.pop();
+        render(); updateButtons();
+      });
+
+      $('clearBtn').addEventListener('click', () => {
+        pushHistory();
+        pixels = new Array(cols * rows).fill(null);
+        render();
+      });
+
+      function getCellCoords(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const x = Math.floor((clientX - rect.left) / rect.width * cols);
+        const y = Math.floor((clientY - rect.top) / rect.height * rows);
+        if (x < 0 || x >= cols || y < 0 || y >= rows) return null;
+        return { x, y };
+      }
+
+      function applyTool(coords) {
+        if (!coords) return;
+        const idx = coords.y * cols + coords.x;
+
+        if (tool === 'pen') {
+          pixels[idx] = color;
+          render();
+        } else if (tool === 'eraser') {
+          pixels[idx] = null;
+          render();
+        } else if (tool === 'pick') {
+          if (pixels[idx]) {
+            color = pixels[idx];
+            $('colorInput').value = color;
+          }
+        } else if (tool === 'fill') {
+          const targetColor = pixels[idx];
+          if (targetColor === color) return;
+          
+          const queue = [coords];
+          const visited = new Set();
+
+          while (queue.length) {
+            const { x, y } = queue.pop();
+            const key = `${x},${y}`;
+            if (visited.has(key)) continue;
+            visited.add(key);
+
+            const i = y * cols + x;
+            if (pixels[i] === targetColor) {
+              pixels[i] = color;
+              if (x > 0) queue.push({ x: x - 1, y });
+              if (x < cols - 1) queue.push({ x: x + 1, y });
+              if (y > 0) queue.push({ x, y: y - 1 });
+              if (y < rows - 1) queue.push({ x, y: y + 1 });
+            }
+          }
+          render();
+        }
+      }
+
+      // Touch & Mouse Events
+      function startDraw(e) {
+        const coords = getCellCoords(e);
+        if (!coords) return;
+
+        isDrawing = true;
+        pushHistory();
+
+        if (['line', 'rect', 'triangle', 'circle'].includes(tool)) {
+          shapeStart = coords;
+          shapeEnd = coords;
+        } else {
+          applyTool(coords);
+        }
+      }
+
+      function moveDraw(e) {
+        if (!isDrawing) return;
+        const coords = getCellCoords(e);
+        if (!coords) return;
+
+        if (['line', 'rect', 'triangle', 'circle'].includes(tool)) {
+          shapeEnd = coords;
+          const isFill = $('fillShapes').checked;
+          const preview = shapeCells(tool, shapeStart, shapeEnd, isFill);
+          render(preview);
+        } else if (tool !== 'fill') {
+          applyTool(coords);
+        }
+      }
+
+      function stopDraw() {
+        if (!isDrawing) return;
+        isDrawing = false;
+
+        if (['line', 'rect', 'triangle', 'circle'].includes(tool) && shapeStart && shapeEnd) {
+          const isFill = $('fillShapes').checked;
+          const cells = shapeCells(tool, shapeStart, shapeEnd, isFill);
+          for (const p of cells) {
+            if (p.x >= 0 && p.y >= 0 && p.x < cols && p.y < rows) {
+              pixels[p.y * cols + p.x] = color;
+            }
+          }
+          shapeStart = null; shapeEnd = null;
+          render();
+        }
+      }
+
+      canvas.addEventListener('mousedown', startDraw);
+      canvas.addEventListener('mousemove', moveDraw);
+      window.addEventListener('mouseup', stopDraw);
+
+      canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDraw(e); }, { passive: false });
+      canvas.addEventListener('touchmove', (e) => { e.preventDefault(); moveDraw(e); }, { passive: false });
+      window.addEventListener('touchend', stopDraw);
+
+      // Select Tool handler
+      function selectTool(selectedBtn) {
+        document.querySelectorAll('#tools button, #shapeTools button').forEach(b => b.setAttribute('aria-pressed', 'false'));
+        selectedBtn.setAttribute('aria-pressed', 'true');
+        tool = selectedBtn.dataset.tool;
+      }
+
+      document.querySelectorAll('#tools button, #shapeTools button').forEach(btn => {
+        btn.addEventListener('click', () => selectTool(btn));
+      });
+
+      // Grid size (square presets, rectangular presets, custom width x height)
+      function syncSizeUI() {
+        document.querySelectorAll('#sizes button, #moreSizes button').forEach(b => {
+          const c = parseInt(b.dataset.cols || b.dataset.size, 10);
+          const r = parseInt(b.dataset.rows || b.dataset.size, 10);
+          b.setAttribute('aria-pressed', String(c === cols && r === rows));
+        });
+        // Show the current size next to "Інші розміри" when it isn't one of the main three
+        const isMain = cols === rows && [8, 16, 32].includes(cols);
+        $('sizeCurrent').textContent = isMain ? '' : `· ${cols}×${rows}`;
+      }
+
+      $('toggleSizesBtn').addEventListener('click', () => {
+        const hidden = $('sizesContainer').classList.toggle('hidden');
+        $('sizesArrow').classList.toggle('rotate-90', !hidden);
+      });
+
+      // Переносить малюнок на нову сітку без масштабування: кожен піксель лишається пікселем.
+      // Малюнок ставиться по центру; на меншому полотні краї, що не влазять, обрізаються.
+      function placePixels(src, oc, or, nc, nr) {
+        const out = new Array(nc * nr).fill(null);
+        const dx = Math.floor((nc - oc) / 2), dy = Math.floor((nr - or) / 2);
+        for (let y = 0; y < or; y++) {
+          const ny = y + dy;
+          if (ny < 0 || ny >= nr) continue;
+          for (let x = 0; x < oc; x++) {
+            const nx = x + dx;
+            if (nx < 0 || nx >= nc) continue;
+            out[ny * nc + nx] = src[y * oc + x];
+          }
+        }
+        return out;
+      }
+
+      function setGrid(c, r) {
+        if (!sizeSource) sizeSource = { pixels: pixels.slice(), cols, rows };
+        cols = c; rows = r;
+        pixels = placePixels(sizeSource.pixels, sizeSource.cols, sizeSource.rows, cols, rows);
+        undoStack = []; redoStack = [];
+
+        // Whole-number cell size keeps pixels crisp
+        cellPx = Math.max(1, Math.floor(MAX_CANVAS_PX / Math.max(cols, rows)));
+        canvas.width = cols * cellPx;
+        canvas.height = rows * cellPx;
+
+        // Fit the canvas frame to the grid proportions inside the square area
+        const frame = canvas.parentElement;
+        frame.style.width = (cols >= rows ? 100 : (cols / rows) * 100) + '%';
+        frame.style.height = (rows >= cols ? 100 : (rows / cols) * 100) + '%';
+
+        $('colsInput').value = cols;
+        $('rowsInput').value = rows;
+        syncSizeUI();
+        updateButtons();
+        render();
+      }
+
+      document.querySelectorAll('#sizes button, #moreSizes button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          setGrid(
+            parseInt(btn.dataset.cols || btn.dataset.size, 10),
+            parseInt(btn.dataset.rows || btn.dataset.size, 10)
+          );
+        });
+      });
+
+      function applyCustomSize() {
+        const clamp = (v, fallback) => {
+          const n = parseInt(v, 10);
+          return Number.isNaN(n) ? fallback : Math.min(MAX_CELLS, Math.max(1, n));
+        };
+        setGrid(clamp($('colsInput').value, cols), clamp($('rowsInput').value, rows));
+      }
+      $('applySize').addEventListener('click', applyCustomSize);
+      ['colsInput', 'rowsInput'].forEach(id => {
+        $(id).addEventListener('keydown', e => { if (e.key === 'Enter') applyCustomSize(); });
+      });
+
+      // Save PNG (the selected size is the longer side of the image)
+      $('saveBtn').addEventListener('click', () => {
+        const target = parseInt($('exportSize').value, 10);
+        const scale = Math.max(1, Math.floor(target / Math.max(cols, rows)));
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = cols * scale;
+        tempCanvas.height = rows * scale;
+        const tCtx = tempCanvas.getContext('2d');
+        tCtx.imageSmoothingEnabled = false;
+
+        for (let y = 0; y < rows; y++) {
+          for (let x = 0; x < cols; x++) {
+            const c = pixels[y * cols + x];
+            if (c) {
+              tCtx.fillStyle = c;
+              tCtx.fillRect(x * scale, y * scale, scale, scale);
+            }
+          }
+        }
+
+        const link = document.createElement('a');
+        link.download = `pixel-art-${cols}x${rows}.png`;
+        link.href = tempCanvas.toDataURL('image/png');
+        link.click();
+      });
+
+      // Hotkeys
+      document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT') return;
+        const k = e.key.toLowerCase();
+        if (k === 'b') selectTool(document.querySelector('[data-tool="pen"]'));
+        if (k === 'e') selectTool(document.querySelector('[data-tool="eraser"]'));
+        if (k === 'g') selectTool(document.querySelector('[data-tool="fill"]'));
+        if (k === 'i') selectTool(document.querySelector('[data-tool="pick"]'));
+        if (k === 'l') selectTool(document.querySelector('[data-tool="line"]'));
+        if (k === 'r') selectTool(document.querySelector('[data-tool="rect"]'));
+        if (e.ctrlKey && k === 'z') { e.preventDefault(); $('undoBtn').click(); }
+        if (e.ctrlKey && k === 'y') { e.preventDefault(); $('redoBtn').click(); }
+      });
+
+      // Modal Logic
+      const infoBtn = $('infoBtn');
+      const infoModal = $('infoModal');
+      const modalContent = $('modalContent');
+      const closeModal = $('closeModal');
+
+      function openModal() {
+        infoModal.classList.remove('hidden');
+        setTimeout(() => {
+          infoModal.classList.remove('opacity-0');
+          modalContent.classList.remove('scale-95');
+          modalContent.classList.add('scale-100');
+        }, 10);
+      }
+
+      function hideModal() {
+        infoModal.classList.add('opacity-0');
+        modalContent.classList.remove('scale-100');
+        modalContent.classList.add('scale-95');
+        setTimeout(() => { infoModal.classList.add('hidden'); }, 200);
+      }
+
+      infoBtn.addEventListener('click', openModal);
+      closeModal.addEventListener('click', hideModal);
+      infoModal.addEventListener('click', (e) => { if (e.target === infoModal) hideModal(); });
+
+      $('year').textContent = new Date().getFullYear();
+      setGrid(16, 16);
+    })();
+  </script>
+
+</body>
+</html>

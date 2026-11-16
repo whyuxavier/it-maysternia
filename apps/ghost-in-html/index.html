@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ghost in HTML</title>
+<meta name="description" content="Квест з HTML, CSS і JavaScript: виправ код у 12 кімнатах і звільни привида.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231c1834'/%3E%3Cpath d='M14 30a18 18 0 0 1 36 0v22l-6-4-6 5-6-5-6 5-6-5-6 4z' fill='%237ff5cf'/%3E%3Cellipse cx='26' cy='30' rx='3' ry='4.5' fill='%231c1834'/%3E%3Cellipse cx='38' cy='30' rx='3' ry='4.5' fill='%231c1834'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=JetBrains+Mono:wght@400;600&family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e0c1b; --bg2:#14112a; --panel:#1b1734; --panel2:#221d40; --line:#2e2852;
+  --text:#ece9ff; --muted:#9d97c4; --mint:#7ff5cf; --mint-d:#3fbf9a; --violet:#a98bff;
+  --amber:#ffbe6b; --red:#ff6b8a; --ink:#120f24;
+  --sans:'Rubik',system-ui,'Segoe UI',sans-serif; --mono:'JetBrains Mono',ui-monospace,Consolas,monospace; --hand:'Caveat','Segoe Print',cursive;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--mint)}
+.hidden{display:none!important}
+
+/* ---------- header ---------- */
+header.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;height:60px;padding:0 18px;background:rgba(14,12,27,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;font-weight:800;font-size:18px;letter-spacing:.2px}
+.brand svg{width:30px;height:30px}
+.top .sp{flex:1}
+.xp-chip{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:14px;color:var(--mint);white-space:nowrap}
+.xp-chip svg{width:16px;height:16px}
+.icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center;padding:0;transition:border-color .15s,background .15s}
+.icon-btn:hover{border-color:var(--mint)}
+.icon-btn svg{width:20px;height:20px}
+.icon-btn.info{font-family:var(--mono);font-weight:600;font-size:15px}
+.icon-btn.on{background:rgba(127,245,207,.12);border-color:var(--mint);color:var(--mint)}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:12px;border:1px solid var(--line);background:var(--panel);font-weight:600;font-size:15px;text-decoration:none;color:var(--text);transition:transform .12s,border-color .15s,background .15s}
+.btn:hover{border-color:var(--mint)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--mint);color:var(--ink);border-color:var(--mint);font-weight:700}
+.btn.primary:hover{background:#9ffbe0}
+.btn.small{padding:8px 13px;font-size:14px;border-radius:10px}
+.btn.danger{border-color:rgba(255,107,138,.5);color:var(--red)}
+.btn svg{width:18px;height:18px}
+
+/* ---------- home / hero ---------- */
+.hero{position:relative;overflow:hidden;min-height:calc(100dvh - 60px);display:flex;align-items:center}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(169,139,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(169,139,255,.09) 1px,transparent 1px);background-size:34px 34px;-webkit-mask-image:radial-gradient(ellipse 70% 65% at 55% 50%,#000 25%,transparent 75%);mask-image:radial-gradient(ellipse 70% 65% at 55% 50%,#000 25%,transparent 75%);pointer-events:none}
+.hero::after{content:"";position:absolute;width:520px;height:520px;right:6%;top:50%;transform:translateY(-50%);background:radial-gradient(circle,rgba(127,245,207,.12),transparent 65%);pointer-events:none}
+.hero-in{position:relative;z-index:1;width:100%;max-width:1180px;margin:0 auto;padding:40px 24px;display:grid;grid-template-columns:1fr 1.05fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(40px,6vw,72px);line-height:1;margin:0 0 18px;font-weight:800;letter-spacing:-1px}
+.hero h1 span{color:var(--mint)}
+.hero p{font-size:18px;line-height:1.55;color:var(--muted);margin:0 0 28px;max-width:470px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.hero-art svg{width:100%;height:auto;display:block;overflow:visible}
+.ghost-rise{animation:rise 1.5s cubic-bezier(.2,.8,.2,1) .2s both}
+.wave-draw{stroke-dasharray:80;animation:draw .7s ease-out 1.2s both}
+.chip-in{animation:fade .6s ease-out 1.4s both}
+@keyframes rise{from{transform:translateY(80px);opacity:0}to{transform:none;opacity:1}}
+@keyframes draw{from{stroke-dashoffset:80}to{stroke-dashoffset:0}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* ---------- map ---------- */
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 60px}
+.map-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}
+.map-head h2{margin:0;font-size:28px;font-weight:800}
+.rank{display:flex;align-items:center;gap:12px}
+.rank-badge{width:46px;height:46px}
+.rank b{display:block;font-size:16px}
+.rank small{color:var(--muted);font-size:13px}
+.keys{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:26px}
+.keys i{flex:1;min-width:18px;height:10px;border-radius:5px;background:var(--panel);border:1px solid var(--line)}
+.keys i.got{background:var(--mint);border-color:var(--mint);box-shadow:0 0 10px rgba(127,245,207,.4)}
+.house{display:flex;flex-direction:column;gap:0;max-width:900px;margin:0 auto}
+.roof{display:block;width:100%;height:auto;margin-bottom:-2px}
+.floor{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:12px;background:var(--bg2);border:2px solid var(--line);border-top:0}
+.floor:first-of-type{border-top:2px solid var(--line)}
+.room-card{position:relative;text-align:left;border-radius:12px;border:1px solid var(--line);background:var(--panel);padding:14px 14px 12px;min-height:118px;display:flex;flex-direction:column;gap:4px;transition:transform .15s,border-color .15s}
+.room-card:not(:disabled):hover{transform:translateY(-2px);border-color:var(--mint)}
+.room-card .n{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.room-card .t{font-weight:700;font-size:17px}
+.room-card .s{font-size:12.5px;color:var(--muted);margin-top:auto}
+.room-card .st{position:absolute;top:12px;right:12px;width:22px;height:22px}
+.room-card.done{border-color:rgba(127,245,207,.45);background:linear-gradient(160deg,rgba(127,245,207,.10),var(--panel) 60%)}
+.room-card.next{border-color:var(--amber);box-shadow:0 0 0 3px rgba(255,190,107,.12)}
+.room-card:disabled{opacity:.45;cursor:not-allowed}
+.ground{height:14px;background:linear-gradient(var(--line),transparent);border-radius:0 0 12px 12px}
+.final-cta{display:flex;justify-content:center;margin-top:24px}
+
+/* ---------- room ---------- */
+.room-bar{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--bg2);flex-wrap:wrap}
+.room-bar h2{margin:0;font-size:18px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.room-bar h2 small{font-family:var(--mono);color:var(--muted);font-weight:400;font-size:13px;margin-right:6px}
+.room-bar .sp{flex:1}
+.tabs{display:none;padding:3px;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+.tabs button{border:0;background:none;padding:6px 14px;border-radius:8px;font-size:14px;font-weight:600;color:var(--muted)}
+.tabs button.on{background:var(--panel2);color:var(--text)}
+.room-grid{display:grid;grid-template-columns:330px minmax(0,1fr) minmax(0,1fr);gap:12px;padding:12px;height:calc(100dvh - 60px - 61px)}
+.side{overflow:auto;display:flex;flex-direction:column;gap:12px;padding-right:2px}
+.note{position:relative;background:#f4ecd8;color:#3a2e46;border-radius:12px;padding:14px 16px 16px 16px;font-family:var(--hand);font-size:22px;line-height:1.15;box-shadow:0 6px 0 rgba(0,0,0,.25)}
+.note .who{display:flex;align-items:center;gap:8px;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#7b6a8f;margin-bottom:6px}
+.note .who svg{width:22px;height:22px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.card h3{margin:0 0 10px;font-size:13px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.tasks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.tasks li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.35}
+.tasks .mk{flex:0 0 20px;height:20px;border-radius:6px;border:1.5px solid var(--line);display:grid;place-items:center;margin-top:1px}
+.tasks .mk svg{width:13px;height:13px}
+.tasks li.ok .mk{background:var(--mint);border-color:var(--mint);color:var(--ink)}
+.tasks li.no .mk{border-color:var(--red);color:var(--red)}
+.tasks li.ok span{color:var(--muted)}
+.reward{font-family:var(--mono);font-size:12.5px;color:var(--mint);text-transform:none;letter-spacing:0}
+.hints{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.hints p{margin:0;font-size:14px;line-height:1.4;padding:9px 11px;border-radius:9px;background:rgba(169,139,255,.1);border-left:3px solid var(--violet)}
+.hints code,.files code,.mod code{font-family:var(--mono);font-size:12.5px;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:5px}
+.files{display:flex;flex-direction:column;gap:6px;font-family:var(--mono);font-size:13px}
+.files div{display:flex;align-items:center;gap:8px}
+.files svg{width:16px;height:16px;color:var(--amber)}
+.word-row{display:flex;gap:8px}
+.word-row input{flex:1;min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 12px;color:var(--text);font:600 15px var(--mono);text-transform:uppercase}
+.word-ok{color:var(--mint);font-weight:700;font-family:var(--mono)}
+
+.pane{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--bg2);min-height:0}
+.pane-head{display:flex;align-items:center;gap:8px;height:40px;padding:0 8px 0 12px;border-bottom:1px solid var(--line);background:var(--panel);flex:0 0 auto}
+.file-tab{font-family:var(--mono);font-size:13px;padding:4px 10px;border-radius:7px;background:var(--bg2);border:1px solid var(--line)}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.addr{flex:1;min-width:0;font-family:var(--mono);font-size:12.5px;color:var(--muted);background:var(--bg2);border-radius:7px;padding:4px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pane-head .icon-btn{width:30px;height:30px;border-radius:8px}
+.pane-head .icon-btn svg{width:16px;height:16px}
+.editor{position:relative;flex:1;display:flex;min-height:0;background:#100e22}
+.gutter{flex:0 0 auto;margin:0;padding:12px 8px 12px 10px;text-align:right;color:#4d4675;font:13px/1.6 var(--mono);user-select:none;overflow:hidden;border-right:1px solid var(--line);min-width:38px}
+.code-wrap{position:relative;flex:1;min-width:0}
+.code-wrap pre,.code-wrap textarea{position:absolute;inset:0;margin:0;padding:12px 14px;font:13px/1.6 var(--mono);white-space:pre;tab-size:2;overflow:auto;border:0;letter-spacing:0;word-spacing:0}
+.code-wrap pre{pointer-events:none;color:#d9d4ff}
+.code-wrap textarea{background:transparent;color:transparent;caret-color:var(--mint);resize:none;outline:none;-webkit-text-fill-color:transparent}
+.code-wrap textarea::selection{background:rgba(127,245,207,.25);-webkit-text-fill-color:transparent}
+.c-com{color:#8b84b8;font-style:italic}
+.c-com.ghosty{color:#7ff5cf;font-style:italic}
+.c-tag{color:#ff8fb3}
+.c-str{color:#ffd28a}
+.c-attr{color:#a6c8ff}
+.preview{position:relative;flex:1;background:var(--bg2);display:flex;justify-content:center;min-height:0;overflow:auto}
+.preview iframe{border:0;width:100%;height:100%;display:block;background-color:#14112a;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 90'%3E%3Cpath d='M20 42A25 25 0 0 1 70 42V74L62 68L54 76L45 68L36 76L28 68L20 74Z' fill='%237ff5cf' opacity='.08'/%3E%3C/svg%3E"),linear-gradient(rgba(169,139,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(169,139,255,.07) 1px,transparent 1px);background-size:140px 140px,28px 28px,28px 28px;background-position:center,0 0,0 0;background-repeat:no-repeat,repeat,repeat}
+.preview.phone{background:#0e0c1b;padding:14px 0}
+.preview.phone iframe{width:360px;max-width:100%;border-radius:18px;box-shadow:0 0 0 8px #0e0c1b}
+.cursed{animation:curse .55s linear}
+@keyframes curse{0%,100%{transform:none;filter:none}20%{transform:translate(-6px,2px) skewX(3deg);filter:hue-rotate(90deg) saturate(2)}40%{transform:translate(5px,-3px);filter:invert(.8)}60%{transform:translate(-4px,1px) skewX(-4deg);filter:hue-rotate(-90deg)}80%{transform:translate(3px,0)}}
+
+/* ---------- modal & toast ---------- */
+.overlay{position:fixed;inset:0;z-index:60;background:rgba(6,5,14,.7);backdrop-filter:blur(4px);display:grid;place-items:center;padding:18px}
+.mod{position:relative;width:min(520px,100%);max-height:calc(100dvh - 36px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px 24px 22px}
+.mod h2{margin:0 0 10px;font-size:24px}
+.mod h3{margin:18px 0 8px;font-size:14px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
+.mod p,.mod li{color:#d6d1f5;line-height:1.5;font-size:15px}
+.mod ul{padding-left:20px;margin:0}
+.mod .x{position:absolute;top:12px;right:12px;width:34px;height:34px}
+.mod .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.gh{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);text-decoration:none;color:var(--text);font-weight:600}
+.gh:hover{border-color:var(--amber)}
+.gh svg{width:18px;height:18px;color:var(--amber)}
+.kbd{font-family:var(--mono);font-size:12.5px;padding:2px 7px;border-radius:6px;border:1px solid var(--line);background:var(--bg2)}
+.name-in{width:100%;margin-top:6px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:13px 14px;color:var(--text);font:600 17px var(--sans)}
+.name-in:focus,.word-row input:focus{outline:2px solid var(--mint);outline-offset:1px}
+.win{text-align:center}
+.win .big{width:96px;height:96px;margin:0 auto 6px;display:block}
+.win .xp{font:700 30px var(--mono);color:var(--mint);margin:4px 0}
+.win .say{font-family:var(--hand);font-size:25px;color:var(--amber);margin:8px 0 2px}
+.win .row{justify-content:center}
+.toast{position:fixed;left:16px;bottom:16px;z-index:70;display:flex;gap:10px;align-items:center;max-width:min(420px,calc(100vw - 32px));background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:10px 14px 10px 10px;font-size:14.5px;line-height:1.35;box-shadow:0 10px 30px rgba(0,0,0,.4);transition:opacity .25s,transform .25s}
+.toast svg{flex:0 0 34px;width:34px;height:34px}
+.toast.off{opacity:0;transform:translateY(10px);pointer-events:none}
+
+/* ---------- final ---------- */
+.final{text-align:center}
+.final h2{font-size:clamp(30px,5vw,46px);margin:8px 0 6px;font-weight:800}
+.final p.lead{color:var(--muted);margin:0 auto 24px;max-width:520px;font-size:17px;line-height:1.5}
+.final-ghost{width:120px;height:120px;margin:0 auto;display:block}
+.fly{animation:fly 2.2s cubic-bezier(.3,.7,.3,1) both}
+@keyframes fly{0%{transform:translateY(60px) scale(.7);opacity:0}60%{opacity:1}100%{transform:none;opacity:1}}
+.cert-box{max-width:820px;margin:0 auto 18px;border-radius:14px;overflow:hidden;border:1px solid var(--line);box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.cert-box canvas{width:100%;height:auto;display:block}
+.cert-ctrl{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:620px;margin:0 auto}
+.cert-ctrl input{flex:1 1 220px;margin:0}
+
+@media (prefers-reduced-motion: reduce){
+  .ghost-rise,.wave-draw,.chip-in,.fly{animation:none!important}
+  .cursed{animation:none}
+  .toast,.room-card{transition:none}
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:1180px){
+  .room-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);height:auto}
+  .side{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;overflow:visible}
+  .pane{height:calc(100dvh - 140px);min-height:420px}
+}
+@media (max-width:860px){
+  .hero-in{grid-template-columns:1fr;gap:22px;padding-top:28px}
+  .hero-art{max-width:520px;margin:0 auto;width:100%}
+  .hero{min-height:auto}
+  .floor{grid-template-columns:repeat(2,1fr)}
+  .house{flex-direction:column-reverse}
+  .floor:first-of-type{border-top:0}
+  .floor:last-of-type{border-top:2px solid var(--line)}
+  .roof{order:99}
+}
+@media (max-width:760px){
+  header.top{padding:0 12px;gap:8px}
+  .brand span{font-size:16px}
+  .side{display:flex}
+  .tabs{display:flex}
+  .room-grid{grid-template-columns:1fr;padding:10px;gap:10px}
+  .room-grid .pane{height:72dvh;min-height:380px}
+  .room-grid.show-code .pane.pv{display:none}
+  .room-grid.show-site .pane.ed{display:none}
+  .room-bar .lbl{display:none}
+  .room-bar{gap:8px;padding:10px}
+  .room-bar .sp{display:none}
+  .room-bar h2{flex:1;min-width:0}
+  .tabs{order:10;width:100%}
+  .tabs button{flex:1}
+  .code-wrap pre,.code-wrap textarea,.gutter{font-size:14px}
+  .wrap{padding:22px 14px 50px}
+}
+@media (max-width:420px){
+  .brand span{display:none}
+  .room-card{min-height:104px;padding:12px}
+  .room-card .t{font-size:15.5px}
+  .hero p{font-size:16.5px}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-ghost" viewBox="0 0 90 90">
+      <path d="M20 42A25 25 0 0 1 70 42V74L62 68L54 76L45 68L36 76L28 68L20 74Z" fill="#7ff5cf"/>
+      <ellipse cx="36" cy="42" rx="4" ry="6" fill="#120f24"/><ellipse cx="54" cy="42" rx="4" ry="6" fill="#120f24"/>
+      <ellipse cx="45" cy="56" rx="4" ry="3" fill="#120f24" opacity=".75"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12.5 12H21M18 12v3.5M21 12v2.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-door" viewBox="0 0 24 24"><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M3 21h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="12.5" r="1.3" fill="currentColor"/></symbol>
+    <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 2.5C9 7 6 10.5 6 14.5a6 6 0 0 0 12 0c0-4-3-7.5-6-12z" fill="currentColor"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 2.5h8l4.5 4.5v14.5H6z M14 2.5V7h4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-sound-on" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-sound-off" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.5 9.5l5 5M21.5 9.5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-torch" viewBox="0 0 24 24"><path d="M7 3h10l-2 6H9z M9 9h6v11a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M12 13v3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-desk" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M9 20h6M12 16v4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z" fill="currentColor"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <button class="brand" id="brand" aria-label="На головну"><svg><use href="#i-ghost"/></svg><span>Ghost in HTML</span></button>
+  <div class="sp"></div>
+  <div class="xp-chip hidden" id="xpChip" title="Досвід"><svg><use href="#i-drop"/></svg><span id="xpVal">0</span></div>
+  <button class="icon-btn" id="soundBtn" aria-label="Звук"><svg><use href="#i-sound-on"/></svg></button>
+  <button class="icon-btn info" id="infoBtn" aria-label="Про гру">[i]</button>
+</header>
+
+<!-- ================= HOME ================= -->
+<main id="home">
+  <section class="hero">
+    <div class="hero-in">
+      <div>
+        <h1>Ghost in <span>HTML</span></h1>
+        <p>На старому сайті шкільної газети застряг привид Піксель. Виправ код у 12 кімнатах — HTML, CSS і трохи JavaScript — і випусти його на волю.</p>
+        <div class="hero-actions">
+          <button class="btn primary" id="startBtn"><svg><use href="#i-door"/></svg><span id="startLbl">Увійти в сайт</span></button>
+          <button class="btn" id="howBtn">Як грати</button>
+        </div>
+      </div>
+      <div class="hero-art">
+        <svg viewBox="0 0 560 470" role="img" aria-label="Вікно браузера з кодом, з якого вилітає привид">
+          <defs>
+            <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <clipPath id="winClip"><rect x="30" y="76" width="430" height="314" rx="16"/></clipPath>
+          </defs>
+          <!-- window -->
+          <rect x="30" y="76" width="430" height="314" rx="16" fill="#1b1734" stroke="#2e2852" stroke-width="2"/>
+          <g clip-path="url(#winClip)">
+            <rect x="30" y="76" width="430" height="38" fill="#221d40"/>
+            <rect x="30" y="114" width="44" height="276" fill="#16132c"/>
+          </g>
+          <circle cx="54" cy="95" r="5.5" fill="#ff6b8a"/><circle cx="72" cy="95" r="5.5" fill="#ffbe6b"/><circle cx="90" cy="95" r="5.5" fill="#7ff5cf"/>
+          <rect x="112" y="85" width="230" height="20" rx="10" fill="#14112a"/>
+          <text x="126" y="99" font-family="JetBrains Mono, monospace" font-size="11" fill="#9d97c4">pererva.site/index.html</text>
+          <g font-family="JetBrains Mono, monospace" font-size="14">
+            <g fill="#4d4675" text-anchor="end"><text x="62" y="148">1</text><text x="62" y="178">2</text><text x="62" y="208">3</text><text x="62" y="238">4</text><text x="62" y="268">5</text><text x="62" y="298">6</text><text x="62" y="328">7</text><text x="62" y="358">8</text></g>
+            <text x="86" y="148" fill="#ff8fb3">&lt;!DOCTYPE html&gt;</text>
+            <text x="86" y="178"><tspan fill="#ff8fb3">&lt;title&gt;</tspan><tspan fill="#d9d4ff">Перерва</tspan><tspan fill="#ff8fb3">&lt;/titel&gt;</tspan></text>
+            <text x="86" y="208" fill="#7ff5cf" font-style="italic">&lt;!-- я тут застряг --&gt;</text>
+            <text x="86" y="238"><tspan fill="#ff8fb3">&lt;img </tspan><tspan fill="#a6c8ff">src</tspan><tspan fill="#d9d4ff">=</tspan><tspan fill="#ffd28a">"images/me.svg"</tspan><tspan fill="#ff8fb3">&gt;</tspan></text>
+            <text x="86" y="268"><tspan fill="#d9d4ff">.fog { </tspan><tspan fill="#a6c8ff">z-index</tspan><tspan fill="#d9d4ff">: 5; }</tspan></text>
+            <text x="86" y="298"><tspan fill="#d9d4ff">.room { </tspan><tspan fill="#a6c8ff">colr</tspan><tspan fill="#d9d4ff">: #fff; }</tspan></text>
+            <text x="86" y="328" fill="#ff8fb3">&lt;/body&gt;</text>
+          </g>
+          <!-- error underlines -->
+          <path class="wave-draw" d="M228 184q3-4 6 0t6 0t6 0t6 0t6 0t6 0t6 0t6 0" fill="none" stroke="#ff6b8a" stroke-width="2" stroke-linecap="round"/>
+          <path class="wave-draw" d="M154 304q3-4 6 0t6 0t6 0t6 0t6 0t6 0t6 0" fill="none" stroke="#ff6b8a" stroke-width="2" stroke-linecap="round"/>
+          <rect x="76" y="340" width="2" height="22" fill="#7ff5cf" opacity=".9"/>
+          <!-- ghost -->
+          <g class="ghost-rise">
+            <g transform="translate(318 34) scale(2.25)" filter="url(#glow)">
+              <path d="M20 42A25 25 0 0 1 70 42V74L62 68L54 76L45 68L36 76L28 68L20 74Z" fill="#7ff5cf"/>
+              <ellipse cx="36" cy="42" rx="4.2" ry="6.2" fill="#120f24"/><ellipse cx="54" cy="42" rx="4.2" ry="6.2" fill="#120f24"/>
+              <ellipse cx="45" cy="57" rx="4" ry="3" fill="#120f24" opacity=".75"/>
+            </g>
+          </g>
+          <!-- surrounding chips -->
+          <g class="chip-in">
+            <g transform="translate(4 18)">
+              <rect width="104" height="36" rx="18" fill="#221d40" stroke="#a98bff" stroke-width="1.5"/>
+              <text x="52" y="23" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#a98bff">&lt;!-- --&gt;</text>
+            </g>
+            <g transform="translate(70 410)">
+              <rect width="96" height="36" rx="18" fill="#221d40" stroke="#ffbe6b" stroke-width="1.5"/>
+              <text x="48" y="23" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#ffbe6b">{ css }</text>
+            </g>
+            <g transform="translate(484 398)">
+              <circle r="30" cx="30" cy="30" fill="#221d40" stroke="#7ff5cf" stroke-width="1.5"/>
+              <g transform="translate(14 14) scale(1.35)" color="#7ff5cf"><circle cx="8" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12.5 12H21M18 12v3.5M21 12v2.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></g>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ================= MAP ================= -->
+<main id="map" class="hidden">
+  <div class="wrap">
+    <div class="map-head">
+      <h2>Будинок газети</h2>
+      <div class="rank">
+        <svg class="rank-badge" viewBox="0 0 46 46"><circle cx="23" cy="23" r="21" fill="#221d40" stroke="#ffbe6b" stroke-width="2"/><use href="#i-ghost" x="9" y="8" width="28" height="28"/></svg>
+        <div><b id="rankName">Новачок-медіум</b><small id="rankXp">0 XP</small></div>
+      </div>
+    </div>
+    <div class="keys" id="keys" aria-label="Фрагменти ключа"></div>
+    <div class="house" id="house"></div>
+    <div class="final-cta hidden" id="finalCta"><button class="btn primary" id="toFinal"><svg><use href="#i-key"/></svg>Сертифікат</button></div>
+  </div>
+</main>
+
+<!-- ================= ROOM ================= -->
+<main id="room" class="hidden">
+  <div class="room-bar">
+    <button class="btn small" id="backMap">← <span class="lbl">Карта</span></button>
+    <h2 id="roomTitle"></h2>
+    <div class="sp"></div>
+    <div class="tabs" id="tabs"><button data-t="code" class="on">Код</button><button data-t="site">Сайт</button></div>
+    <button class="btn small" id="resetRoom" title="Повернути зламаний код"><svg><use href="#i-reset"/></svg><span class="lbl">Скинути</span></button>
+  </div>
+  <div class="room-grid show-code" id="roomGrid">
+    <aside class="side">
+      <div class="note"><div class="who"><svg><use href="#i-ghost"/></svg>Записка привида</div><div id="noteText"></div></div>
+      <div class="card"><h3>Завдання <span class="reward" id="reward"></span></h3><ul class="tasks" id="tasks"></ul></div>
+      <div class="card"><h3>Підказки</h3><div class="hints" id="hints"></div><button class="btn small" id="hintBtn"></button></div>
+      <div class="card hidden" id="filesCard"><h3>Файли сайту</h3><div class="files" id="files"></div></div>
+      <div class="card hidden" id="wordCard"><h3>Слово привида <span class="reward">+25 XP</span></h3><div id="wordBody"></div></div>
+    </aside>
+    <section class="pane ed">
+      <div class="pane-head"><span class="file-tab">index.html</span></div>
+      <div class="editor">
+        <pre class="gutter" id="gutter"></pre>
+        <div class="code-wrap">
+          <pre id="hl" aria-hidden="true"></pre>
+          <textarea id="ed" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Код сторінки"></textarea>
+        </div>
+      </div>
+    </section>
+    <section class="pane pv">
+      <div class="pane-head">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <div class="addr" id="addr"></div>
+        <button class="icon-btn" id="torchBtn" title="Ліхтарик: показує межі й теги"><svg><use href="#i-torch"/></svg></button>
+        <button class="icon-btn" id="devBtn" title="ПК / телефон"><svg><use href="#i-phone"/></svg></button>
+      </div>
+      <div class="preview" id="preview"><iframe id="pv" title="Перегляд сайту"></iframe></div>
+    </section>
+  </div>
+</main>
+
+<!-- ================= FINAL ================= -->
+<main id="final" class="hidden">
+  <div class="wrap final">
+    <svg class="final-ghost fly"><use href="#i-ghost"/></svg>
+    <h2>Піксель вільний!</h2>
+    <p class="lead">Усі 12 кімнат виправлено, ключ зібрано, двері відчинено. Ось твій сертифікат екзорциста коду.</p>
+    <div class="cert-box"><canvas id="cert" width="1600" height="1130"></canvas></div>
+    <div class="cert-ctrl">
+      <input class="name-in" id="certName" maxlength="40" aria-label="Ім'я в сертифікаті">
+      <button class="btn primary" id="dlCert"><svg><use href="#i-down"/></svg>Завантажити</button>
+      <button class="btn" id="finalMap">На карту</button>
+    </div>
+  </div>
+</main>
+
+<!-- hidden test labs -->
+<div aria-hidden="true" style="position:fixed;left:-20000px;top:0;opacity:0;pointer-events:none">
+  <iframe id="lab" style="width:900px;height:700px;border:0" tabindex="-1"></iframe>
+  <iframe id="lab2" style="width:360px;height:700px;border:0" tabindex="-1"></iframe>
+</div>
+
+<div class="overlay hidden" id="overlay"><div class="mod" id="mod" role="dialog" aria-modal="true"></div></div>
+<div class="toast off" id="toast"><svg><use href="#i-ghost"/></svg><div id="toastText"></div></div>
+
+<script>
+/* ===================== virtual files ===================== */
+const GHOST_PATH='M20 42A25 25 0 0 1 70 42V74L62 68L54 76L45 68L36 76L28 68L20 74Z';
+const ghostSvg=(fill,w,h,extra='')=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90" width="${w}" height="${h}">${extra}<path d="${GHOST_PATH}" fill="${fill}"/><ellipse cx="36" cy="42" rx="4" ry="6" fill="#120f24"/><ellipse cx="54" cy="42" rx="4" ry="6" fill="#120f24"/><ellipse cx="45" cy="56" rx="4" ry="3" fill="#120f24" opacity=".7"/></svg>`;
+const uri=s=>'data:image/svg+xml,'+encodeURIComponent(s).replace(/'/g,'%27');
+const VFS={
+  'img/portrait.svg':uri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b2f6b"/><stop offset="1" stop-color="#161230"/></linearGradient></defs><rect width="160" height="200" fill="url(#g)"/><circle cx="125" cy="38" r="16" fill="#f6efc8" opacity=".85"/><g transform="translate(20 40) scale(1.35)"><path d="${GHOST_PATH}" fill="#7ff5cf"/><ellipse cx="36" cy="42" rx="4" ry="6" fill="#120f24"/><ellipse cx="54" cy="42" rx="4" ry="6" fill="#120f24"/><path d="M38 55q7 6 14 0" stroke="#120f24" stroke-width="3" fill="none" stroke-linecap="round"/></g><rect y="168" width="160" height="32" fill="#0e0c1b" opacity=".5"/></svg>`),
+  'img/candle.svg':uri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200"><rect width="160" height="200" fill="#1f1a38"/><circle cx="80" cy="70" r="46" fill="#ffbe6b" opacity=".18"/><path d="M80 38c10 14 12 22 0 34c-12-12-10-20 0-34z" fill="#ffbe6b"/><path d="M80 52c5 8 5 12 0 18c-5-6-5-10 0-18z" fill="#fff4cf"/><rect x="62" y="76" width="36" height="96" rx="4" fill="#f4ecd8"/><path d="M62 90q8 8 0 18" fill="#e6dcc0"/><rect x="40" y="170" width="80" height="12" rx="6" fill="#c9a86a"/></svg>`),
+  'img/ghost.svg':uri(ghostSvg('#7ff5cf',180,180)),
+  'img/mirror.svg':uri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 300" width="700" height="300"><rect width="700" height="300" rx="20" fill="#3b2f20"/><rect x="14" y="14" width="672" height="272" rx="140" fill="#c9a86a"/><rect x="30" y="30" width="640" height="240" rx="120" fill="#bcd3e6"/><path d="M90 80l90-40M120 120l110-60" stroke="#fff" stroke-width="10" opacity=".45" stroke-linecap="round"/><g opacity=".45" transform="translate(300 60) scale(2)"><path d="${GHOST_PATH}" fill="#7ff5cf"/><ellipse cx="36" cy="42" rx="4" ry="6" fill="#120f24"/><ellipse cx="54" cy="42" rx="4" ry="6" fill="#120f24"/></g></svg>`)
+};
+
+/* ===================== helpers for checks ===================== */
+const cs=el=>el.ownerDocument.defaultView.getComputedStyle(el);
+const rc=el=>el.getBoundingClientRect();
+const cnt=(s,re)=>(s.match(re)||[]).length;
+const rgb=s=>(s.match(/[\d.]+/g)||[0,0,0]).slice(0,3).map(Number);
+function lum([r,g,b]){const f=v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)};return .2126*f(r)+.7152*f(g)+.0722*f(b)}
+function contrast(a,b){const A=lum(rgb(a)),B=lum(rgb(b));return (Math.max(A,B)+.05)/(Math.min(A,B)+.05)}
+const has=(el,t)=>!!el&&el.textContent.includes(t);
+
+/* ===================== rooms ===================== */
+const ROOMS=[
+{name:'Підвал',topic:'Структура документа',
+note:'Я застряг у підвалі сайту. Тут хтось загубив сам початок документа, і браузер вмикає «режим дивацтв». А назва сторінки чомусь проковтнула весь сайт!',
+win:'Я бачу назву вкладки! Підвал більше не тоне в дивацтвах.',
+code:`<!-- Привид: колись тут був початок документа... де він? -->
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Газета «Перерва»</titel>
+  <style>
+    body { font-family: Georgia, serif; background: #efe6d2; color: #2b2116; padding: 24px; }
+    h1 { border-bottom: 3px double #2b2116; padding-bottom: 6px; }
+  </style>
+</head>
+<body>
+  <h1>Газета «Перерва»</h1>
+  <p>Ласкаво просимо до архіву шкільної газети!
+  <!-- Привид: цей абзац у повному порядку. Не чіпай його. -->
+  <p>Останній випуск вийшов у листопаді. А потім редактор зник...</p>
+</body>
+`,
+tasks:[
+ ['Браузер працює в стандартному режимі, а не в «режимі дивацтв»',c=>/^\s*(?:<!--[\s\S]*?-->\s*)*<!DOCTYPE\s+html\s*>/i.test(c.code)],
+ ['Назва вкладки — «Газета «Перерва»»',c=>c.doc.title.trim()==='Газета «Перерва»'],
+ ['Кожен абзац закритий',c=>{const o=cnt(c.code,/<p[\s>]/gi);return o>=2&&o===cnt(c.code,/<\/p>/gi)}],
+ ['Документ закінчується закритим тегом html',c=>/<\/html>\s*$/i.test(c.code.trim())]
+],
+hints:['Перший рядок будь-якої HTML-сторінки: <code>&lt;!DOCTYPE html&gt;</code>.','Придивись до тегу назви: закривальний має бути <code>&lt;/title&gt;</code>, а не titel.','Привид збрехав: перший абзац не закритий — додай <code>&lt;/p&gt;</code>. І не забудь <code>&lt;/html&gt;</code> у самому кінці.']},
+
+{name:'Бібліотека',topic:'Заголовки й текст',
+note:'У бібліотеці переплутали всі таблички. Головний заголовок дрібний, а розділи кричать на весь зал. Наведи лад — і, може, знайдеш моє перше слово.',
+win:'Таблички на місці. Тепер бібліотекар мене не вижене.',word:'СВІЧКА',
+code:`<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Бібліотека</title>
+  <style>
+    body { font-family: Georgia, serif; background: #f3ead8; color: #3a2e1f; padding: 24px; }
+  </style>
+</head>
+<body>
+  <h4>Бібліотека газети</h4>
+  <!-- Привид: головний заголовок на сторінці — лише один -->
+  <h1>Новини</h1>
+  <p>Тут зберігаються всі новини ліцею.</p>
+  <h1>Спорт</h1>
+  <p>Результати шкільних змагань.</p>
+  <!-- Привид: h6 — найбільший заголовок, я точно знаю! -->
+  <h6>Футбол</h6>
+  <p>Наша команда виграла 3:1.</p>
+  <p>Правила бібліотеки <i>дуже важливі</i>.</p>
+  <p hidden>Перше слово привида: СВІЧКА</p>
+</body>
+</html>
+`,
+tasks:[
+ ['На сторінці один h1 — «Бібліотека газети»',c=>{const h=c.raw.querySelectorAll('h1');return h.length===1&&has(h[0],'Бібліотека газети')}],
+ ['«Новини» і «Спорт» — заголовки другого рівня',c=>{const h=[...c.raw.querySelectorAll('h2')].map(e=>e.textContent);return h.some(t=>t.includes('Новини'))&&h.some(t=>t.includes('Спорт'))}],
+ ['«Футбол» — підрозділ спорту, третій рівень',c=>[...c.raw.querySelectorAll('h3')].some(e=>has(e,'Футбол'))],
+ ['Важливі слова виділено за змістом, а не лише курсивом',c=>[...c.raw.querySelectorAll('strong')].some(e=>has(e,'дуже важливі'))]
+],
+hints:['Рівні заголовків: h1 — головний, далі h2, h3… Не стрибай через рівні.','Привид збрехав: h6 — найменший. Футбол — підрозділ спорту, тобто <code>&lt;h3&gt;</code>.','Важливий текст позначають тегом <code>&lt;strong&gt;</code>. А слово привида сховане в абзаці з атрибутом <code>hidden</code>.']},
+
+{name:'Галерея',topic:'Зображення й посилання',
+note:'У галереї висять мої портрети, але рамки порожні. А двері до архіву ведуть у нікуди. Глянь на список файлів сайту — шляхи мають збігатися до літери.',
+win:'Мої портрети! Я на них такий… прозорий.',files:['img/portrait.svg','img/candle.svg','archive.html'],
+code:`<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Галерея</title>
+  <style>
+    body { font-family: sans-serif; background: #1d1a2e; color: #eee; padding: 24px; }
+    img { border: 6px solid #c9a86a; background: #2a2540; margin: 8px; }
+    a { color: #7ff5cf; }
+  </style>
+</head>
+<body>
+  <h1>Галерея привидів</h1>
+  <!-- Привид: мої картини лежать у папці img -->
+  <img src="images/portrait.svg" width="160">
+  <!-- Привид: великі й малі літери в назві файлу не мають значення -->
+  <img src="img/Candle.svg" alt="Свічка на столі" width="160">
+  <p><a>Відкрити архів газети</a></p>
+  <!-- Привид: архів лежить у файлі archive.html -->
+  <p>Довідник: <a href="https://developer.mozilla.org/uk/" target="blank">MDN</a></p>
+  <!-- Привид: хай довідник відкривається в новій вкладці -->
+</body>
+</html>
+`,
+tasks:[
+ ['Обидві картини завантажуються',c=>{const i=[...c.raw.querySelectorAll('img')];return i.length===2&&i.every(e=>VFS[e.getAttribute('src')])}],
+ ['У кожного зображення є опис alt',c=>{const i=[...c.raw.querySelectorAll('img')];return i.length>=2&&i.every(e=>(e.getAttribute('alt')||'').trim().length>1)}],
+ ['Посилання веде до архіву',c=>[...c.raw.querySelectorAll('a')].some(a=>has(a,'архів')&&a.getAttribute('href')==='archive.html')],
+ ['Довідник відкривається в новій вкладці',c=>{const a=c.raw.querySelector('a[href*="mozilla"]');return !!a&&a.getAttribute('target')==='_blank'}]
+],
+hints:['Портрет лежить не в <code>images</code>, а в <code>img</code>. Перевір список файлів.','Привид збрехав: <code>Candle.svg</code> і <code>candle.svg</code> — різні файли.','Адресу посилання задає <code>href</code>. Нова вкладка — <code>target="_blank"</code> з підкресленням.']},
+
+{name:'Архів',topic:'Списки й таблиці',
+note:'В архіві я веду облік випусків. Але таблиця розсипалась, інструкція загубила нумерацію, а рубрики випали зі свого списку.',
+win:'Облік відновлено. Архіваріус би пишався.',
+code:`<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Архів</title>
+  <style>
+    body { font-family: sans-serif; background: #f1efe8; color: #222; padding: 24px; }
+    table { border-collapse: collapse; margin: 12px 0; }
+    th, td { border: 1px solid #555; padding: 6px 14px; }
+    th { background: #ddd6c3; }
+  </style>
+</head>
+<body>
+  <h1>Архів випусків</h1>
+  <!-- Привид: кроки йдуть по порядку, тож їх треба пронумерувати -->
+  <ul>
+    <li>Відкрий шафу</li>
+    <li>Візьми теку</li>
+    <li>Знайди потрібний рік</li>
+  </ul>
+  <table>
+    <tr><th>Рік</th><th>Випусків</th></tr>
+    <tr><td>2024</td><td>12</tr>
+    <tr><td>2025</td><td>9</td></tr>
+    <td>2026</td><td>7</td>
+  </table>
+  <!-- Привид: таблиця ідеальна, браузер усе одно все покаже -->
+  <p>Улюблені рубрики:</p>
+  <li>Новини</li>
+  <li>Спорт</li>
+  <li>Таємниці</li>
+</body>
+</html>
+`,
+tasks:[
+ ['Кроки інструкції пронумеровані',c=>[...c.raw.querySelectorAll('ol')].some(o=>o.querySelectorAll('li').length>=3&&has(o,'шафу'))],
+ ['Кожен рядок таблиці у своїх тегах tr',c=>{const t=(c.code.match(/<table[\s\S]*?<\/table>/i)||[''])[0];return cnt(t,/<tr[\s>]/gi)===4&&cnt(t,/<\/tr>/gi)===4}],
+ ['Кожна клітинка таблиці закрита',c=>{const o=cnt(c.code,/<td[\s>]/gi);return o>=6&&o===cnt(c.code,/<\/td>/gi)}],
+ ['Рубрики стоять у маркованому списку',c=>{const l=[...c.raw.querySelectorAll('li')].find(e=>has(e,'Таємниці'));return !!l&&l.parentElement.tagName==='UL'}]
+],
+hints:['Нумерований список — <code>&lt;ol&gt;</code>, маркований — <code>&lt;ul&gt;</code>.','Привид збрехав: браузер латає помилки сам, але код від цього не стає правильним. Рядку 2026 бракує <code>&lt;tr&gt;</code>.','У рядку 2024 бракує <code>&lt;/td&gt;</code>. А рубрики обгорни в <code>&lt;ul&gt;…&lt;/ul&gt;</code>.']},
+
+{name:'Вхідна',topic:'Форми',
+note:'Щоб пройти далі, треба заповнити пропуск. Але форма зламана: підписи не прив’язані до полів, а пароль видно всім. Я б такій вахті не довіряв.',
+win:'Пропуск видано. Вахтер задоволений.',
+code:`<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Вхідна</title>
+  <style>
+    body { font-family: sans-serif; background: #22203a; color: #eee; padding: 24px; }
+    form { display: grid; gap: 8px; max-width: 280px; }
+    input, select, button { padding: 8px; border-radius: 6px; border: 1px solid #555; font: inherit; }
+    button { background: #7ff5cf; border: 0; font-weight: bold; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Пропуск у редакцію</h1>
+  <form>
+    <!-- Привид: клік по підпису має ставити курсор у поле -->
+    <label>Ім'я</label>
+    <input id="name" type="text">
+    <label for="mail">Пошта</label>
+    <input id="email" type="text">
+    <!-- Привид: пароль краще показувати відкрито, так зручніше -->
+    <label for="pass">Пароль</label>
+    <input id="pass" type="text">
+    <label for="cls">Клас</label>
+    <select id="cls">
+      <option>10-А</option>
+      <option>11-Б</option>
+    </select>
+    <button>Увійти</button>
+  </form>
+</body>
+</html>
+`,
+tasks:[
+ ['Кожен підпис прив’язаний до свого поля',c=>{const l=[...c.raw.querySelectorAll('label')];return l.length>=4&&l.every(x=>{const f=x.getAttribute('for');const el=f&&c.raw.getElementById(f);return !!el&&/^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName)})}],
+ ['Поле пошти перевіряє адресу',c=>!!c.raw.querySelector('input[type="email" i]')],
+ ['Пароль ховається за крапками',c=>!!c.raw.querySelector('input[type="password" i]')],
+ ['Без імені пропуск не видадуть',c=>{const n=c.raw.getElementById('name');return !!n&&n.hasAttribute('required')}]
+],
+hints:['Атрибут <code>for</code> у label має збігатися з <code>id</code> поля: <code>for="name"</code> → <code>id="name"</code>. У пошти вони різні!','Привид збрехав: для пароля є <code>type="password"</code>, а для пошти — <code>type="email"</code>.','Обов’язкове поле позначають атрибутом <code>required</code>.']},
+
+{name:'Коридор',topic:'Семантика',
+note:'Цей коридор збудований з однакових коробок div. Пошуковики й екранні читалки губляться: де шапка, де меню, де головне? Дай кожній частині справжнє ім’я.',
+win:'Тепер кожна частина знає своє ім’я. Як і я — Піксель.',word:'ДВЕРІ',
+code:`<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Коридор</title>
+  <style>
+    body { margin: 0; font-family: sans-serif; background: #f4f1ea; color: #222; }
+    .top { background: #2b2546; color: #fff; padding: 12px 20px; }
+    .menu a { color: #7ff5cf; margin-right: 12px; }
+    .content { padding: 20px; }
+    .post { background: #fff; padding: 14px; border-radius: 8px; }
+    .bottom { padding: 12px 20px; color: #777; }
+  </style>
+</head>
+<body data-ghost="ДВЕРІ">
+  <div class="top">
+    <h1>Газета «Перерва»</h1>
+    <div class="menu">
+      <a href="#">Новини</a>
+      <a href="#">Спорт</a>
+      <a href="#">Таємниці</a>
+    </div>
+  </div>
+  <!-- Привид: семантичні теги потрібні тільки для краси -->
+  <div class="content">
+    <div class="post">
+      <h2>Привид у ліцеї?</h2>
+      <p>Учні чують, як уночі хтось клацає клавіатурою в кабінеті інформатики.</p>
+    </div>
+  </div>
+  <div class="bottom">© 2026 Редакція «Перерви»</div>
+</body>
+</html>
+`,
+tasks:[
+ ['Шапка сайту — header із заголовком',c=>!!c.raw.querySelector('header h1')],
+ ['Меню — nav з посиланнями',c=>{const n=c.raw.querySelector('nav');return !!n&&n.querySelectorAll('a').length>=3}],
+ ['Головний вміст — main, а новина в ньому — article',c=>!!c.raw.querySelector('main article')],
+ ['Низ сторінки — footer',c=>{const f=c.raw.querySelector('footer');return has(f,'Редакція')}]
+],
+hints:['Семантичні теги: <code>header</code>, <code>nav</code>, <code>main</code>, <code>article</code>, <code>footer</code>. Клас можна лишити — стилі не зламаються.','Привид збрехав: семантика допомагає пошуковикам, браузерам і людям, які користуються екранними читалками.','Слово привида сховане в атрибуті <code>data-…</code> одного з тегів.']},
+
+{name:'Фарбувальня',topic:'Селектори й кольори',
+note:'Хтось пофарбував заголовок у колір стін — тепер його не видно. Попередження сіре, хоча мало б горіти помаранчевим. А ще я сховав на стіні напис…',
+win:'Ох, ці кольори! Я майже відчув, що в мене є очі.',word:'ПЕНЗЕЛЬ',
+code:`<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Фарбувальня</title>
+  <style>
+    body { background: #1b1a2e; font-family: sans-serif; padding: 24px; color: #ddd; }
+    h1 { color: #1b1a2e; }
+    .note { colr: #ffd166; }
+    .warn { color: orange; }
+    #warning { color: gray; }
+    /* Привид: клас завжди сильніший за id, тож .warn переможе */
+    .secret { color: #1b1a2e; }
+  </style>
+</head>
+<body>
+  <h1>Фарбувальня</h1>
+  <p class="note">Фарба для стін: жовта</p>
+  <p id="warning" class="warn">Обережно, свіжа фарба!</p>
+  <p class="secret">Слово привида: ПЕНЗЕЛЬ</p>
+</body>
+</html>
+`,
+tasks:[
+ ['Заголовок добре видно на фоні',c=>{const h=c.doc.querySelector('h1');return !!h&&contrast(cs(h).color,cs(c.doc.body).backgroundColor)>=4.5}],
+ ['Нотатка жовта (#ffd166)',c=>{const n=c.doc.querySelector('.note');return !!n&&cs(n).color==='rgb(255, 209, 102)'}],
+ ['Попередження помаранчеве',c=>{const w=c.doc.getElementById('warning');return !!w&&cs(w).color==='rgb(255, 165, 0)'}],
+ ['Напис на стіні можна прочитати',c=>{const s=c.doc.querySelector('.secret');return !!s&&contrast(cs(s).color,cs(c.doc.body).backgroundColor)>=4.5}]
+],
+hints:['Колір заголовка збігається з фоном. Дай йому світлий, наприклад <code>#ffffff</code>.','У правилі <code>.note</code> одруківка: <code>colr</code> → <code>color</code>.','Привид збрехав: селектор за id (<code>#</code>) сильніший за клас (<code>.</code>). Прибери сірий колір з <code>#warning</code> або зміни його на orange.']},
+
+{name:'Коробки',topic:'Блокова модель',
+note:'Кімнати злиплися в одну коробку, текст тулиться до стін, а гострі кути чіпляють мій саван. І кожна кімната має бути рівно 200px завширшки — разом з рамкою!',
+win:'Кімнати розсунулись — нарешті є де політати.',
+code:`<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Коробки</title>
+  <style>
+    body { background: #201d36; font-family: sans-serif; color: #eee; padding: 24px; }
+    .room {
+      width: 200px;
+      padding: 0;
+      border: 4px solid #7ff5cf;
+      margin: 0;
+      background: #2c2850;
+    }
+    /* Привид: padding — це відступ ЗОВНІ рамки */
+  </style>
+</head>
+<body>
+  <div class="room">Кімната 1: тут лежать старі газети</div>
+  <div class="room">Кімната 2: тут стоїть друкарська машинка</div>
+  <div class="room">Кімната 3: тут я ховаюсь</div>
+</body>
+</html>
+`,
+tasks:[
+ ['Текст не торкається рамки (внутрішній відступ від 12px)',c=>{const r=[...c.doc.querySelectorAll('.room')];return r.length===3&&r.every(e=>parseFloat(cs(e).paddingLeft)>=12&&parseFloat(cs(e).paddingTop)>=12)}],
+ ['Між кімнатами рівно 16px',c=>{const r=[...c.doc.querySelectorAll('.room')].map(rc);return r.length===3&&Math.round(r[1].top-r[0].bottom)===16&&Math.round(r[2].top-r[1].bottom)===16}],
+ ['Кожна кімната рівно 200px разом з рамкою',c=>{const r=[...c.doc.querySelectorAll('.room')];return r.length===3&&r.every(e=>Math.round(rc(e).width)===200)}],
+ ['Кути кімнат заокруглені',c=>{const r=c.doc.querySelector('.room');return !!r&&parseFloat(cs(r).borderTopLeftRadius)>0}]
+],
+hints:['Привид збрехав: <code>padding</code> — внутрішній відступ, а <code>margin</code> — зовнішній.','Відступ між блоками — <code>margin-bottom: 16px</code>.','<code>box-sizing: border-box</code> включає padding і рамку у width. Кути заокруглює <code>border-radius</code>.']},
+
+{name:'Меню',topic:'Flexbox',
+note:'Меню редакції розсипалося стовпчиком, як листя з дерева. Збери його: логотип зліва, кнопки справа, усе в один рядок і рівно по центру.',
+win:'Меню в рядку! Шкода, що я не можу на нього натиснути.',
+code:`<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Меню</title>
+  <style>
+    body { margin: 0; font-family: sans-serif; background: #f2efe7; }
+    .bar { background: #2b2546; padding: 10px 20px; }
+    .logo { font-size: 24px; color: #7ff5cf; font-weight: bold; }
+    .links a { display: block; color: #fff; text-decoration: none; padding: 6px 10px; }
+    /* Привид: щоб поставити блоки в рядок, напиши display: row */
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <div class="logo">Перерва</div>
+    <div class="links">
+      <a href="#">Новини</a>
+      <a href="#">Спорт</a>
+      <a href="#">Таємниці</a>
+    </div>
+  </div>
+</body>
+</html>
+`,
+tasks:[
+ ['Логотип і меню в одному рядку',c=>{const b=c.doc.querySelector('.bar'),l=c.doc.querySelector('.logo'),k=c.doc.querySelector('.links');if(!b||!l||!k)return false;return /flex/.test(cs(b).display)&&rc(l).right<=rc(k).left+1}],
+ ['Логотип біля лівого краю, меню біля правого',c=>{const b=c.doc.querySelector('.bar'),l=c.doc.querySelector('.logo'),k=c.doc.querySelector('.links');if(!b||!l||!k)return false;const B=rc(b),s=cs(b);return Math.abs(rc(l).left-(B.left+parseFloat(s.paddingLeft)))<=2&&Math.abs(rc(k).right-(B.right-parseFloat(s.paddingRight)))<=2&&rc(k).left-rc(l).right>100}],
+ ['Посилання меню теж стоять у рядок',c=>{const a=[...c.doc.querySelectorAll('.links a')].map(rc);return a.length===3&&a.every(r=>Math.abs(r.top-a[0].top)<=2)&&a[1].left>a[0].left}],
+ ['Усе вирівняно по вертикальному центру',c=>{const b=c.doc.querySelector('.bar');return !!b&&cs(b).alignItems==='center'}]
+],
+hints:['Привид збрехав: <code>display: row</code> не існує. Потрібно <code>display: flex</code> для <code>.bar</code>.','Розкинути по краях: <code>justify-content: space-between</code>. Вертикальний центр: <code>align-items: center</code>.','Посилання стоять стовпцем, бо в них <code>display: block</code>. Зроби <code>.links</code> теж flex-контейнером.']},
+
+{name:'Шари',topic:'Позиціювання',files:['img/ghost.svg'],
+note:'Ось я! Тобто… мене не видно — я застряг під шаром туману, а туман розповзся на весь сайт. І двері виходу мали б стояти в правому нижньому куті кімнати.',
+win:'Мене видно! Ну як я тобі? Тільки не кажи, що страшно.',word:'ВІКНО',
+code:`<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Шари</title>
+  <style>
+    body { margin: 0; font-family: sans-serif; background: #15132a; color: #eee; padding: 20px; }
+    .room { height: 260px; background: #2a2648; border-radius: 12px; overflow: hidden; }
+    .wall-text { margin: 0; padding: 20px; font-size: 22px; letter-spacing: 4px; }
+    .fog { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #3d3a5c; z-index: 5; }
+    .ghost { position: relative; z-index: 1; width: 110px; margin: 0 20px; }
+    .door { width: 60px; height: 90px; background: #c9a86a; border-radius: 30px 30px 0 0; }
+    /* Привид: щоб бути зверху, потрібен МЕНШИЙ z-index */
+    /* Привид: щоб туман став напівпрозорим, є властивість opacity */
+  </style>
+</head>
+<body>
+  <div class="room">
+    <p class="wall-text">ВІКНО</p>
+    <img class="ghost" src="img/ghost.svg" alt="Привид">
+    <div class="door"></div>
+    <div class="fog"></div>
+  </div>
+</body>
+</html>
+`,
+tasks:[
+ ['Привид поверх туману',c=>{const g=c.doc.querySelector('.ghost');if(!g)return false;const r=rc(g);return c.doc.elementFromPoint(r.left+r.width/2,r.top+r.height/2)===g}],
+ ['Туман лише в кімнаті, а не на всьому сайті',c=>{const f=c.doc.querySelector('.fog'),m=c.doc.querySelector('.room');if(!f||!m)return false;const F=rc(f),M=rc(m);return F.left>=M.left-1&&F.top>=M.top-1&&F.right<=M.right+1&&F.bottom<=M.bottom+1}],
+ ['Двері в правому нижньому куті кімнати',c=>{const d=c.doc.querySelector('.door'),m=c.doc.querySelector('.room');if(!d||!m)return false;const D=rc(d),M=rc(m);return Math.abs(D.right-M.right)<=2&&Math.abs(D.bottom-M.bottom)<=2}],
+ ['Напис на стіні проглядає крізь туман',c=>{const f=c.doc.querySelector('.fog');if(!f)return false;const o=parseFloat(cs(f).opacity);return o<1}]
+],
+hints:['Привид збрехав: вище той, у кого БІЛЬШИЙ z-index. Наприклад, <code>.ghost { z-index: 10; }</code>.','absolute-елемент рахує координати від найближчого предка з position. Додай <code>.room { position: relative; }</code>.','Двері: <code>position: absolute; right: 0; bottom: 0;</code> Туман: <code>opacity: 0.6;</code>']},
+
+{name:'Дзеркала',topic:'Адаптивність',files:['img/mirror.svg'],narrow:true,phone:true,
+note:'У кімнаті дзеркал сайт побачив себе на телефоні — і жахнувся: усе роз’їжджається вбік. На вузькому екрані картки мають стати стовпчиком, а дзеркало — не вилазити за край.',
+win:'У дзеркалах усе рівно. Навіть на телефоні.',
+code:`<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Дзеркала</title>
+  <style>
+    body { margin: 0; padding: 16px; font-family: sans-serif; background: #eef0f6; color: #222; }
+    .cards { display: flex; gap: 12px; }
+    .card { width: 260px; flex-shrink: 0; background: #fff; padding: 14px; border-radius: 10px; box-sizing: border-box; }
+    .mirror { width: 700px; display: block; margin-top: 12px; border-radius: 10px; }
+    /* Привид: медіазапит я налаштував ідеально */
+    @media (max-widht: 600px) {
+      .cards { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Кімната дзеркал</h1>
+  <div class="cards">
+    <div class="card">Дзеркало 1: показує минуле</div>
+    <div class="card">Дзеркало 2: показує код</div>
+    <div class="card">Дзеркало 3: показує привида</div>
+  </div>
+  <img class="mirror" src="img/mirror.svg" alt="Старе дзеркало">
+</body>
+</html>
+`,
+tasks:[
+ ['Є мета-тег viewport для мобільних',c=>{const m=c.raw.querySelector('meta[name="viewport" i]');return !!m&&/width\s*=\s*device-width/i.test(m.getAttribute('content')||'')}],
+ ['На телефоні картки стоять стовпчиком',c=>{const r=[...c.narrow.querySelectorAll('.card')].map(rc);return r.length===3&&r[1].top>=r[0].bottom-1&&r[2].top>=r[1].bottom-1}],
+ ['На телефоні нічого не вилазить за край',c=>c.narrow.documentElement.scrollWidth<=361],
+ ['На широкому екрані картки лишаються в рядок',c=>{const r=[...c.doc.querySelectorAll('.card')].map(rc);return r.length===3&&r.every(x=>Math.abs(x.top-r[0].top)<=2)}]
+],
+hints:['Привид збрехав: у медіазапиті одруківка — <code>max-width</code>.','Щоб картинка не вилазила: <code>max-width: 100%; height: auto;</code>','Мета-тег у <code>&lt;head&gt;</code>: <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code>']},
+
+{name:'Вихід',topic:'JavaScript',files:['img/ghost.svg'],prep:d=>{const b=d.querySelector('button');b&&b.click()},
+note:'Останні двері. Кнопка має прочитати закляття й відчинити їх, але закляття написане з помилками. Виправ його, натисни кнопку… і я нарешті вийду з цього сайту.',
+win:'Двері відчинено… Я вільний!',
+code:`<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Вихід</title>
+  <style>
+    body { margin: 0; padding: 24px; font-family: sans-serif; background: #12102a; color: #eee; text-align: center; }
+    .ghost { width: 120px; transition: transform 1.2s, opacity 1.2s; }
+    .free { transform: translateY(-160px) scale(1.2); opacity: 0; }
+    button { padding: 12px 22px; font-size: 18px; border: 0; border-radius: 10px; background: #7ff5cf; cursor: pointer; }
+    #msg { font-size: 22px; color: #ffbe6b; min-height: 30px; }
+  </style>
+</head>
+<body>
+  <img class="gost" src="img/ghost.svg" alt="Привид">
+  <p id="msg"></p>
+  <!-- Привид: кнопка має викликати закляття freeGhost() -->
+  <button onclick="freeGost()">Відчинити двері</button>
+  <script>
+    // Привид: JavaScript не зважає на великі й малі літери
+    function freeGhost() {
+      document.getElementByID("msg").textContent = "Я вільний! Дякую!";
+      document.querySelector(".ghost").classList.add("free");
+    }
+  <\/script>
+</body>
+</html>
+`,
+tasks:[
+ ['Кнопка викликає закляття freeGhost()',c=>{const b=c.raw.querySelector('button');return !!b&&/freeGhost\s*\(/.test(b.getAttribute('onclick')||'')}],
+ ['Після натискання з’являється повідомлення',c=>has(c.doc.getElementById('msg'),'вільний')],
+ ['Привид отримує клас free і вилітає',c=>!!c.doc.querySelector('.ghost.free')]
+],
+hints:['У <code>onclick</code> одруківка в назві функції: <code>freeGost</code> → <code>freeGhost</code>.','Привид збрехав: JavaScript розрізняє регістр. Правильно <code>getElementById</code>.','<code>querySelector(".ghost")</code> шукає клас ghost, а в картинки клас <code>gost</code>.']}
+];
+const WORD_ROOMS=ROOMS.filter(r=>r.word).length;
+
+/* ===================== state ===================== */
+const KEY='ghost-site.v1';
+let S;try{S=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){S={}}
+S.rooms=S.rooms||{}; if(S.sound===undefined)S.sound=true;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function R(i){return S.rooms[i]||(S.rooms[i]={done:false,xp:0,hints:0,fails:0,word:false,code:null})}
+const doneCount=()=>ROOMS.filter((_,i)=>R(i).done).length;
+const totalXP=()=>ROOMS.reduce((s,_,i)=>s+(R(i).done?R(i).xp:0)+(R(i).word?25:0),0);
+const unlocked=i=>i===0||R(i-1).done;
+const roomPrize=i=>Math.max(40,100-R(i).hints*15);
+const RANKS=[[0,'Новачок-медіум'],[250,'Слідопит тегів'],[550,'Медіум коду'],[850,'Екзорцист стилів'],[1100,'Повелитель DOM']];
+const rankOf=x=>RANKS.filter(r=>x>=r[0]).pop()[1];
+
+/* ===================== sound ===================== */
+let AC=null;
+function ac(){if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C()}if(AC.state==='suspended')AC.resume();return AC}
+function tone(f,d,type='sine',v=.07,at=0,to=null){const a=ac();if(!a)return;const t=a.currentTime+at,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(to)o.frequency.exponentialRampToValueAtTime(to,t+d);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+.05)}
+const SFX={
+  ok(){[523,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.07,i*.09))},
+  err(){tone(196,.22,'sawtooth',.04);tone(147,.3,'sawtooth',.035,.1)},
+  hint(){tone(880,.14,'sine',.05);tone(1175,.18,'sine',.04,.08)},
+  boo(){tone(420,.9,'sine',.06,0,140);tone(430,.9,'triangle',.03,.05,150)},
+  click(){tone(900,.05,'square',.02)},
+  win(){[392,523,659,784,1047,1319].forEach((f,i)=>tone(f,.35,'triangle',.06,i*.11))}
+};
+function play(n){if(!S.sound)return;try{SFX[n]()}catch(e){}}
+
+/* ===================== ui basics ===================== */
+const $=s=>document.querySelector(s);
+const SCREENS=['home','map','room','final'];
+let cur=0;
+function show(id){SCREENS.forEach(s=>$('#'+s).classList.toggle('hidden',s!==id));$('#xpChip').classList.toggle('hidden',id==='home'&&!doneCount());updXP();window.scrollTo(0,0)}
+function updXP(){$('#xpVal').textContent=totalXP()}
+function soundIcon(){$('#soundBtn').innerHTML=`<svg><use href="#i-sound-${S.sound?'on':'off'}"/></svg>`;$('#soundBtn').classList.toggle('on',S.sound);$('#soundBtn').setAttribute('aria-pressed',S.sound)}
+$('#soundBtn').onclick=()=>{S.sound=!S.sound;save();soundIcon();play('click')};
+let toastT;
+function toast(msg,ms=3200){$('#toastText').innerHTML=msg;$('#toast').classList.remove('off');clearTimeout(toastT);toastT=setTimeout(()=>$('#toast').classList.add('off'),ms)}
+function modal(html,cls=''){$('#mod').className='mod '+cls;$('#mod').innerHTML='<button class="icon-btn x" data-close aria-label="Закрити"><svg><use href="#i-x"/></svg></button>'+html;$('#overlay').classList.remove('hidden');const f=$('#mod').querySelector('input,.btn.primary');f&&setTimeout(()=>f.focus(),30)}
+function closeModal(){$('#overlay').classList.add('hidden')}
+$('#overlay').addEventListener('click',e=>{if(e.target.id==='overlay'||e.target.closest('[data-close]'))closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#overlay').classList.contains('hidden'))closeModal()});
+
+/* ===================== info ===================== */
+function info(){
+  modal(`<h2>Ghost in HTML</h2>
+  <p>Квест для закріплення курсу веб-програмування. На старому сайті шкільної газети застряг привид Піксель. Виправ помилки в коді 12 кімнат, збери 12 фрагментів ключа — і отримай сертифікат.</p>
+  <h3>Правила</h3>
+  <ul>
+    <li>Кімнати відкриваються по черзі. У кожній — список завдань.</li>
+    <li>Читай коментарі привида в коді. Але в кожній кімнаті один коментар бреше!</li>
+    <li>Код перевіряється одразу, щойно ти його змінюєш. Виконав усі пункти — кімнату звільнено.</li>
+    <li>Кімната дає до 100 XP, кожна підказка −15.</li>
+    <li>У деяких кімнатах сховане слово привида: +25 XP.</li>
+  </ul>
+  <h3>Керування</h3>
+  <ul>
+    <li>Миша або дотик — кнопки й редактор коду.</li>
+    <li><span class="kbd">Tab</span> — відступ у коді.</li>
+    <li>Ліхтарик — показує межі елементів і теги під курсором.</li>
+    <li>ПК / телефон — перемикає ширину перегляду.</li>
+  </ul>
+  <div class="row">
+    <a class="gh" href="https://github.com/whyuxavier/ghost-in-html" target="_blank" rel="noopener"><svg><use href="#i-star"/></svg>GitHub</a>
+    <button class="btn danger small" id="wipe">Почати спочатку</button>
+  </div>`);
+  $('#wipe').onclick=()=>{if(confirm('Стерти весь прогрес?')){S={rooms:{},sound:S.sound};save();closeModal();show('home');homeLbl()}};
+}
+$('#infoBtn').onclick=info; $('#howBtn').onclick=info;
+
+/* ===================== home ===================== */
+function homeLbl(){$('#startLbl').textContent=doneCount()?'Продовжити':'Увійти в сайт'}
+$('#brand').onclick=()=>{homeLbl();show('home')};
+$('#startBtn').onclick=()=>{
+  ac();
+  if(S.name){openMap();return}
+  modal(`<h2>Хто увійшов у сайт?</h2><p>Ім’я з’явиться у твоєму сертифікаті.</p>
+  <form id="nameF"><input class="name-in" id="nameIn" maxlength="40" placeholder="Ім’я та прізвище" required><div class="row"><button class="btn primary" type="submit">Почати</button></div></form>`);
+  $('#nameF').onsubmit=e=>{e.preventDefault();const v=$('#nameIn').value.trim();if(!v)return;S.name=v;save();closeModal();play('boo');openMap();setTimeout(()=>toast('Привіт, '+esc(v)+'! Я Піксель. Почнемо з підвалу.'),400)};
+};
+
+/* ===================== map ===================== */
+function openMap(){renderMap();show('map')}
+function renderMap(){
+  const xp=totalXP();$('#rankName').textContent=rankOf(xp);$('#rankXp').textContent=xp+' XP';
+  $('#keys').innerHTML=ROOMS.map((_,i)=>`<i class="${R(i).done?'got':''}"></i>`).join('');
+  const nxt=ROOMS.findIndex((_,i)=>!R(i).done);
+  const card=i=>{const r=R(i),lock=!unlocked(i),st=r.done?'done':(i===nxt?'next':'');
+    const ic=r.done?'<svg class="st" style="color:var(--mint)"><use href="#i-key"/></svg>':lock?'<svg class="st" style="color:var(--muted)"><use href="#i-lock"/></svg>':'<svg class="st" style="color:var(--amber)"><use href="#i-door"/></svg>';
+    return `<button class="room-card ${st}" data-r="${i}" ${lock?'disabled':''}><span class="n">${String(i+1).padStart(2,'0')}</span><span class="t">${ROOMS[i].name}</span><span class="s">${ROOMS[i].topic}</span>${ic}</button>`};
+  const floors=[[8,9,10,11],[4,5,6,7],[0,1,2,3]];
+  $('#house').innerHTML=`<svg class="roof" viewBox="0 0 900 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120 L450 8 L900 120Z" fill="#1b1734" stroke="#2e2852" stroke-width="2" vector-effect="non-scaling-stroke"/><rect x="660" y="22" width="40" height="60" fill="#1b1734" stroke="#2e2852" stroke-width="2" vector-effect="non-scaling-stroke"/><circle cx="450" cy="76" r="24" fill="#14112a" stroke="#2e2852" stroke-width="2" vector-effect="non-scaling-stroke"/><ellipse cx="442" cy="76" rx="3" ry="5" fill="#7ff5cf"/><ellipse cx="458" cy="76" rx="3" ry="5" fill="#7ff5cf"/></svg>`+
+    floors.map(f=>`<div class="floor">${f.map(card).join('')}</div>`).join('')+'<div class="ground"></div>';
+  $('#house').querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{play('click');openRoom(+b.dataset.r)});
+  $('#finalCta').classList.toggle('hidden',doneCount()<ROOMS.length);
+}
+$('#toFinal').onclick=()=>openFinal(false);
+
+/* ===================== editor ===================== */
+const ed=$('#ed'),hl=$('#hl'),gut=$('#gutter');
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const TOK=/(<!--[\s\S]*?(?:-->|$))|(\/\*[\s\S]*?(?:\*\/|$)|\/\/[^\n]*)|(<\/?[a-zA-Z][\w-]*|\/?>)|("[^"\n]*"|'[^'\n]*')|([a-zA-Z][\w-]*)(?=\s*(?:=|:(?!\/)))/g;
+function highlight(code){
+  let out='',last=0,m;TOK.lastIndex=0;
+  while((m=TOK.exec(code))){
+    if(m[0]===''){TOK.lastIndex++;continue}
+    out+=esc(code.slice(last,m.index));
+    const t=esc(m[0]);
+    if(m[1]||m[2])out+=`<span class="c-com${/Привид/.test(m[0])?' ghosty':''}">${t}</span>`;
+    else if(m[3])out+=`<span class="c-tag">${t}</span>`;
+    else if(m[4])out+=`<span class="c-str">${t}</span>`;
+    else out+=`<span class="c-attr">${t}</span>`;
+    last=m.index+m[0].length;
+  }
+  return out+esc(code.slice(last))+'\n';
+}
+function paint(){hl.innerHTML=highlight(ed.value);const n=ed.value.split('\n').length;gut.textContent=Array.from({length:n},(_,i)=>i+1).join('\n');syncScroll()}
+function syncScroll(){hl.scrollTop=ed.scrollTop;hl.scrollLeft=ed.scrollLeft;gut.scrollTop=ed.scrollTop}
+ed.addEventListener('scroll',syncScroll);
+let saveT,pvT;
+ed.addEventListener('input',()=>{paint();clearTimeout(saveT);saveT=setTimeout(()=>{R(cur).code=ed.value;save()},300);clearTimeout(pvT);pvT=setTimeout(()=>{renderPreview();check()},450)});
+ed.addEventListener('keydown',e=>{
+  if(e.key==='Tab'&&!e.shiftKey){e.preventDefault();if(!document.execCommand('insertText',false,'  '))ed.setRangeText('  ',ed.selectionStart,ed.selectionEnd,'end');}
+});
+
+/* ===================== rendering ===================== */
+function prepare(code,stamp){return code.replace(/(src\s*=\s*)(["'])([^"']*)\2/gi,(m,a,q,p)=>VFS[p]?a+'"'+VFS[p]+'"':m)+'\n<!--r'+stamp+'-->'}
+let stamp=0;
+function renderInto(fr,code){return new Promise(res=>{let done=false;const fin=()=>{if(done)return;done=true;requestAnimationFrame(()=>setTimeout(()=>res(fr.contentDocument),40))};fr.onload=fin;setTimeout(fin,2500);fr.srcdoc=prepare(code,++stamp)})}
+function guard(doc){
+  if(!doc||doc.__g)return;doc.__g=1;
+  doc.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a');if(a){e.preventDefault();toast('Посилання: <code>'+esc(a.getAttribute('href')||'немає href')+'</code>',2200)}},true);
+  doc.addEventListener('submit',e=>{e.preventDefault();toast('Форма надіслана… у потойбіччя.',2000)},true);
+}
+let torch=false;
+function applyTorch(doc){
+  if(!doc||!doc.documentElement)return;
+  const old=doc.getElementById('__torch');old&&old.remove();const tip=doc.getElementById('__tip');tip&&tip.remove();
+  if(!torch)return;
+  const st=doc.createElement('style');st.id='__torch';
+  st.textContent='*{outline:1px dashed rgba(63,191,154,.9)!important;outline-offset:-1px!important}#__tip{position:fixed;z-index:2147483647;pointer-events:none;font:12px/1.3 monospace;background:#120f24;color:#7ff5cf;padding:3px 7px;border-radius:6px;outline:none!important;white-space:nowrap}';
+  (doc.head||doc.documentElement).appendChild(st);
+  const t=doc.createElement('div');t.id='__tip';t.style.display='none';doc.documentElement.appendChild(t);
+  if(!doc.__tl){doc.__tl=1;const mv=e=>{const tp=doc.getElementById('__tip');if(!tp)return;const el=e.target;if(!el||el===tp||!el.tagName)return;let s=el.tagName.toLowerCase();if(el.id)s+='#'+el.id;if(typeof el.className==='string'&&el.className.trim())s+='.'+el.className.trim().split(/\s+/).join('.');tp.textContent=s;tp.style.display='block';const w=doc.documentElement.clientWidth;tp.style.left=Math.min(e.clientX+12,w-tp.offsetWidth-4)+'px';tp.style.top=(e.clientY+14)+'px'};doc.addEventListener('mousemove',mv);doc.addEventListener('pointerdown',mv)}
+}
+async function renderPreview(){const d=await renderInto($('#pv'),ed.value);guard(d);applyTorch(d);return d}
+$('#torchBtn').onclick=()=>{torch=!torch;$('#torchBtn').classList.toggle('on',torch);applyTorch($('#pv').contentDocument);play('click')};
+let phone=false;
+function setDev(p){phone=p;$('#preview').classList.toggle('phone',p);$('#devBtn').innerHTML=`<svg><use href="#i-${p?'desk':'phone'}"/></svg>`;$('#devBtn').classList.toggle('on',p)}
+$('#devBtn').onclick=()=>{setDev(!phone);play('click')};
+
+/* ===================== room ===================== */
+let results=null;
+function openRoom(i){
+  cur=i;results=null;const room=ROOMS[i],r=R(i);
+  $('#roomTitle').innerHTML=`<small>${String(i+1).padStart(2,'0')}</small>${room.name}`;
+  $('#noteText').textContent=room.note;
+  $('#addr').textContent='pererva.site/'+['pidval','biblioteka','galereya','arhiv','vhidna','korydor','farbuvalnya','korobky','menu','shary','dzerkala','vyhid'][i]+'.html';
+  ed.value=r.code??room.code;paint();ed.scrollTop=0;ed.scrollLeft=0;syncScroll();
+  $('#filesCard').classList.toggle('hidden',!room.files);
+  if(room.files)$('#files').innerHTML=room.files.map(f=>`<div><svg><use href="#i-file"/></svg>${f}</div>`).join('');
+  setDev(!!room.phone);
+  setTab('code');
+  renderSide();
+  show('room');
+  renderPreview();check(true);
+}
+function renderSide(){
+  const room=ROOMS[cur],r=R(cur);
+  $('#tasks').innerHTML=room.tasks.map((t,k)=>{const s=results&&results[k]?'ok':'';const ic=s==='ok'?'<svg><use href="#i-check"/></svg>':s==='no'?'<svg><use href="#i-x"/></svg>':'';return `<li class="${s}"><span class="mk">${ic}</span><span>${t[0]}</span></li>`}).join('');
+  $('#reward').textContent=r.done?`${r.xp} XP ✓`:`${roomPrize(cur)} XP`;
+  $('#hints').innerHTML=room.hints.slice(0,r.hints).map(h=>`<p>${h}</p>`).join('');
+  const left=room.hints.length-r.hints;
+  $('#hintBtn').classList.toggle('hidden',!left);
+  $('#hintBtn').textContent=r.done?'Показати підказку':`Підказка (−15 XP) · ${left}`;
+  if(room.word){$('#wordCard').classList.remove('hidden');
+    $('#wordBody').innerHTML=r.word?`<span class="word-ok">${room.word}</span>`:`<form class="word-row" id="wordF"><input id="wordIn" maxlength="20" aria-label="Слово привида" autocomplete="off"><button class="btn small">OK</button></form>`;
+    const f=$('#wordF');f&&(f.onsubmit=e=>{e.preventDefault();const v=$('#wordIn').value.trim().toUpperCase().replace(/'/g,'’');if(!v)return;if(v===room.word){r.word=true;save();play('ok');renderSide();updXP();toast('Ти знайшов моє слово! +25 XP')}else{play('err');toast('Ні, не те слово. Шукай у коді.');$('#wordIn').select()}});
+  }else $('#wordCard').classList.add('hidden');
+}
+$('#hintBtn').onclick=()=>{const r=R(cur);if(r.hints<ROOMS[cur].hints.length){r.hints++;save();play('hint');renderSide()}};
+$('#resetRoom').onclick=()=>{if(!confirm('Повернути зламаний код цієї кімнати?'))return;ed.value=ROOMS[cur].code;R(cur).code=null;save();paint();results=null;renderSide();renderPreview();check(true)};
+$('#backMap').onclick=()=>{R(cur).code=ed.value;save();openMap()};
+function setTab(t){$('#roomGrid').classList.toggle('show-code',t==='code');$('#roomGrid').classList.toggle('show-site',t==='site');$('#tabs').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.t===t))}
+$('#tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>setTab(b.dataset.t));
+
+let checking=false,pending=false;
+async function runChecks(i,code){
+  const room=ROOMS[i];
+  const raw=new DOMParser().parseFromString(code,'text/html');
+  const doc=await renderInto($('#lab'),code);
+  const narrow=room.narrow?await renderInto($('#lab2'),code):null;
+  if(room.prep){try{room.prep(doc)}catch(e){}await new Promise(r=>setTimeout(r,60))}
+  const ctx={code,raw,doc,narrow};
+  return room.tasks.map(t=>{try{return !!t[1](ctx)}catch(e){return false}});
+}
+async function check(silent){
+  if(checking){pending=true;return}
+  checking=true;
+  const i=cur,code=ed.value,r=R(i);
+  let res;
+  try{res=await runChecks(i,code)}finally{checking=false}
+  if(pending){pending=false;check(silent);return}
+  if(i!==cur||code!==ed.value)return;
+  const before=results?results.filter(Boolean).length:null;
+  results=res;renderSide();
+  const n=res.filter(Boolean).length;
+  if(!silent&&before!==null&&n>before&&n<res.length)play('hint');
+  if(n===res.length&&!r.done){
+    r.code=code;r.xp=roomPrize(i);r.done=true;save();renderSide();updXP();
+    renderPreview().then(d=>{if(i===11&&d){const b=d.querySelector('button');b&&b.click()}});
+    setTimeout(()=>{if(cur===i&&!$('#room').classList.contains('hidden'))winModal(i)},i===11?1300:500);
+  }
+}
+function winModal(i){
+  const last=i===ROOMS.length-1;play(last?'win':'ok');
+  modal(`<div class="win"><svg class="big" style="color:var(--mint)"><use href="#i-key"/></svg>
+  <h2>Кімнату звільнено!</h2>
+  <div class="xp">+${R(i).xp} XP</div>
+  <p>Фрагмент ключа ${doneCount()} / ${ROOMS.length}</p>
+  <div class="say">«${ROOMS[i].win}»</div>
+  <div class="row">${last?'<button class="btn primary" id="wNext">Вийти на волю</button>':'<button class="btn primary" id="wNext">Наступна кімната →</button><button class="btn" id="wMap">Карта</button>'}</div></div>`,'');
+  $('#wNext').onclick=()=>{closeModal();last?openFinal(true):openRoom(i+1)};
+  const m=$('#wMap');m&&(m.onclick=()=>{closeModal();openMap()});
+}
+
+/* ===================== final & certificate ===================== */
+function openFinal(fresh){
+  $('#certName').value=S.name||'';show('final');
+  const g=$('.final-ghost');g.classList.remove('fly');void g.getBoundingClientRect();g.classList.add('fly');
+  drawCert();if(fresh)setTimeout(()=>play('boo'),300);
+}
+$('#finalMap').onclick=openMap;
+let certT;
+$('#certName').addEventListener('input',()=>{S.name=$('#certName').value.trim();save();clearTimeout(certT);certT=setTimeout(drawCert,150)});
+async function drawCert(){
+  try{await Promise.all(['800 60px Rubik','700 60px Rubik','400 30px Rubik','600 40px Caveat','600 20px "JetBrains Mono"'].map(f=>document.fonts.load(f)))}catch(e){}
+  const c=$('#cert'),x=c.getContext('2d'),W=c.width,H=c.height;
+  const F=(w,s,f='Rubik, system-ui, sans-serif')=>`${w} ${s}px ${f}`;
+  x.clearRect(0,0,W,H);
+  const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#16122e');g.addColorStop(1,'#0c0a18');x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.strokeStyle='rgba(169,139,255,.07)';x.lineWidth=1;
+  for(let i=0;i<W;i+=40){x.beginPath();x.moveTo(i,0);x.lineTo(i,H);x.stroke()}
+  for(let i=0;i<H;i+=40){x.beginPath();x.moveTo(0,i);x.lineTo(W,i);x.stroke()}
+  const rg=x.createRadialGradient(W/2,190,10,W/2,190,420);rg.addColorStop(0,'rgba(127,245,207,.18)');rg.addColorStop(1,'rgba(127,245,207,0)');x.fillStyle=rg;x.fillRect(0,0,W,H);
+  x.strokeStyle='#7ff5cf';x.lineWidth=4;x.strokeRect(40,40,W-80,H-80);
+  x.strokeStyle='rgba(169,139,255,.6)';x.lineWidth=1.5;x.strokeRect(58,58,W-116,H-116);
+  [[40,40],[W-40,40],[40,H-40],[W-40,H-40]].forEach(([a,b])=>{x.fillStyle='#ffbe6b';x.beginPath();x.arc(a,b,9,0,7);x.fill()});
+  // ghost
+  x.save();x.translate(W/2-72,92);x.scale(1.6,1.6);x.shadowColor='rgba(127,245,207,.6)';x.shadowBlur=30;x.fillStyle='#7ff5cf';x.fill(new Path2D(GHOST_PATH));x.shadowBlur=0;x.fillStyle='#120f24';
+  [[36,42],[54,42]].forEach(([a,b])=>{x.beginPath();x.ellipse(a,b,4,6,0,0,7);x.fill()});
+  x.beginPath();x.moveTo(37,55);x.quadraticCurveTo(45,63,53,55);x.lineWidth=3;x.strokeStyle='#120f24';x.lineCap='round';x.stroke();x.restore();
+  x.textAlign='center';x.textBaseline='alphabetic';
+  x.fillStyle='#ece9ff';x.font=F(800,78);if('letterSpacing' in x)x.letterSpacing='10px';x.fillText('СЕРТИФІКАТ',W/2,330);if('letterSpacing' in x)x.letterSpacing='0px';
+  x.fillStyle='#7ff5cf';x.font=F(600,58,'Caveat, cursive');x.fillText('екзорциста коду',W/2,392);
+  x.fillStyle='#9d97c4';x.font=F(400,28);x.fillText('Цим засвідчується, що',W/2,470);
+  const nm=(S.name||'Безіменний екзорцист').trim();let fs=88;x.font=F(700,fs);while(x.measureText(nm).width>W-320&&fs>40){fs-=4;x.font=F(700,fs)}
+  x.fillStyle='#ffffff';x.fillText(nm,W/2,565);
+  const nw=Math.min(x.measureText(nm).width+80,W-260);x.strokeStyle='#ffbe6b';x.lineWidth=2;x.beginPath();x.moveTo(W/2-nw/2,592);x.lineTo(W/2+nw/2,592);x.stroke();
+  x.fillStyle='#d6d1f5';x.font=F(400,30);x.fillText('звільнив(-ла) привида Пікселя, виправивши код у 12 кімнатах',W/2,650);x.fillText('з HTML, CSS і JavaScript',W/2,692);
+  const xp=totalXP(),words=ROOMS.filter((_,i)=>R(i).word).length;
+  const stats=[['РАНГ',rankOf(xp)],['ДОСВІД',xp+' XP'],['СЛОВА ПРИВИДА',words+' / '+WORD_ROOMS]];
+  stats.forEach((s,k)=>{const cx=W/2+(k-1)*400,y=780;x.fillStyle='rgba(34,29,64,.9)';x.strokeStyle='#2e2852';x.lineWidth=2;
+    x.beginPath();x.roundRect?x.roundRect(cx-170,y,340,120,18):x.rect(cx-170,y,340,120);x.fill();x.stroke();
+    x.fillStyle='#9d97c4';x.font=F(700,22,'"JetBrains Mono", monospace');x.fillText(s[0],cx,y+42);
+    x.fillStyle=k===0?'#ffbe6b':'#7ff5cf';let f=36;x.font=F(700,f);while(x.measureText(s[1]).width>310&&f>22){f-=2;x.font=F(700,f)}x.fillText(s[1],cx,y+92)});
+  const d=new Date();x.textAlign='left';x.fillStyle='#9d97c4';x.font=F(400,24);x.fillText(d.toLocaleDateString('uk-UA',{day:'numeric',month:'long',year:'numeric'}),110,H-100);
+  x.textAlign='right';x.fillStyle='#7ff5cf';x.font=F(600,44,'Caveat, cursive');x.fillText('Привид Піксель',W-110,H-96);
+  x.fillStyle='#9d97c4';x.font=F(400,18,'"JetBrains Mono", monospace');x.fillText('pererva.site',W-110,H-70);
+}
+$('#dlCert').onclick=()=>{drawCert().then(()=>{$('#cert').toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='ghost-in-html-certificate.png';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)},'image/png');play('ok')})};
+
+/* ===================== init ===================== */
+soundIcon();homeLbl();show('home');
+window.__ghost={ROOMS,runChecks,S};
+</script>
+</body>
+</html>

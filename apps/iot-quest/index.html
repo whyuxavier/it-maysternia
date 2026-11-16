@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a0a0a">
+<title>Місія «Інтернет речей» — навчальний тест</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Crect x='20' y='30' width='24' height='22' rx='5' fill='none' stroke='%2322d3ee' stroke-width='4'/%3E%3Ccircle cx='32' cy='41' r='4' fill='%2322d3ee'/%3E%3Cpath d='M21 22a16 16 0 0 1 22 0M15 15a25 25 0 0 1 34 0' fill='none' stroke='%2322d3ee' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{color-scheme:dark;--bg:#0a0a0a;--card:#121212;--field:#171717;--edge:#2b2b2b;--text:#e5e5e5;--muted:#a3a3a3;--acc:#22d3ee;--acc2:#06b6d4;--accbg:#0b2a31;--accedge:#155e6b;--green:#22c55e;--red:#f43f5e;--yellow:#facc15}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+#app{max-width:880px;margin:auto;padding:22px 16px 56px}h1,h2,h3,p{margin-top:0}
+h1{font-size:clamp(2rem,6vw,3rem);line-height:1.08;color:#fff;letter-spacing:-.04em;margin-bottom:12px}h2{font-size:1.3rem;color:#fff;margin-bottom:10px}.muted{color:var(--muted)}
+.tag{display:inline-block;padding:5px 10px;border-radius:8px;background:var(--accbg);border:1px solid var(--accedge);color:#a5f3fc;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.card{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--edge);border-radius:18px;padding:clamp(18px,4vw,28px);margin:16px 0;box-shadow:0 12px 30px #0005}
+.card:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,#22d3ee08,transparent 45%)}.card>*{position:relative}
+/* ---- hero ---- */
+.hero:after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+background-image:linear-gradient(#22d3ee14 1px,transparent 1px),linear-gradient(90deg,#22d3ee14 1px,transparent 1px),radial-gradient(#22d3ee40 1.4px,transparent 1.6px);
+background-size:28px 28px,28px 28px,28px 28px;background-position:-1px -1px,-1px -1px,-14px -14px;
+-webkit-mask-image:radial-gradient(ellipse 75% 70% at 70% 45%,#000 20%,transparent 80%);mask-image:radial-gradient(ellipse 75% 70% at 70% 45%,#000 20%,transparent 80%)}
+.hero>*{z-index:1}
+.hero-top{display:grid;grid-template-columns:1.05fr 1fr;gap:20px;align-items:center}
+.hero-art{position:relative;min-width:0}.hero-art svg{display:block;width:100%;height:auto}
+.chip-f{position:absolute;padding:5px 10px;border-radius:999px;background:#0f1a1d;border:1px solid var(--accedge);color:#a5f3fc;font-size:.74rem;font-weight:700;white-space:nowrap;box-shadow:0 6px 16px #0006}
+.chip-f.c1{left:-2%;top:6%}.chip-f.c2{right:0;top:38%}.chip-f.c3{left:50%;bottom:-14px;transform:translateX(-50%);color:#bbf7d0;border-color:#245c36;background:#0f1d14}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--acc2);border-radius:11px;padding:11px 17px;background:var(--acc2);color:#042f36;font:inherit;font-weight:750;cursor:pointer;text-decoration:none;margin:5px 6px 0 0}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}.btn.secondary{background:var(--field);border-color:var(--edge);color:var(--text)}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+input{width:100%;max-width:420px;padding:12px 14px;border:1px solid var(--edge);border-radius:10px;background:var(--field);color:var(--text);font:inherit}
+input:focus,select:focus{outline:2px solid var(--acc2);outline-offset:1px}
+label{display:block;color:#d4d4d4;font-size:.9rem;font-weight:650;margin:14px 0 6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;margin:22px 0 18px}.stat{padding:12px 14px;border:1px solid var(--edge);border-radius:12px;background:#ffffff04}.stat b{display:block;font-size:1.3rem;color:#fff}
+.mission-banner{border:1px dashed #3f3f46;border-radius:12px;padding:14px;background:#ffffff03;margin:16px 0}
+.video{position:relative;aspect-ratio:16/9;margin:22px 0 0;border:1px solid var(--accedge);border-radius:14px;overflow:hidden;background:#000;box-shadow:0 10px 26px #0006}.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}.hidden{display:none!important}
+/* ---- progress ---- */
+.progress-top{position:sticky;top:8px;z-index:5;padding:12px 14px;border:1px solid var(--edge);border-radius:14px;background:#141414ed;backdrop-filter:blur(12px);margin-bottom:16px}
+.segs{display:flex;gap:4px;margin-top:10px}.segs i{flex:1;height:7px;border-radius:4px;background:#303030}.segs i.ok{background:var(--green)}.segs i.bad{background:var(--red)}.segs i.cur{background:#5b6b70;box-shadow:0 0 0 1px var(--acc)}
+/* ---- questions ---- */
+.qtype{font-size:.78rem;color:var(--acc);font-weight:750;text-transform:uppercase;letter-spacing:.06em}
+.q{font-size:1.15rem;font-weight:750;color:#fff;line-height:1.4;margin:8px 0 14px}
+.opts{display:grid;gap:9px;margin:14px 0}.opts.two{grid-template-columns:1fr 1fr}
+.opt{width:100%;text-align:left;border:1px solid var(--edge);border-radius:11px;background:var(--field);color:var(--text);padding:12px 14px;font:inherit;cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt:hover:not(:disabled){border-color:#666;background:#202020}.opt.sel{border-color:var(--acc);background:var(--accbg)}
+.opt .box{width:20px;height:20px;flex:0 0 20px;border:2px solid #555;border-radius:6px;display:grid;place-items:center;font-size:13px;line-height:1}.opt.sel .box{border-color:var(--acc);background:var(--acc);color:#042f36}
+.opt.correct{border-color:var(--green);background:#12301d;color:#bbf7d0}.opt.wrong{border-color:var(--red);background:#35151d;color:#fecdd3}.opt:disabled{cursor:default}
+.feedback{padding:13px 15px;border-radius:10px;margin-top:14px;background:#12301d;border-left:4px solid var(--green)}.feedback.bad{background:#35151d;border-color:var(--red)}
+.mrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--edge);border-radius:11px;background:var(--field);margin:8px 0}
+.mrow.ok{border-color:var(--green)}.mrow.no{border-color:var(--red)}
+select{width:100%;padding:10px 12px;border:1px solid var(--edge);border-radius:9px;background:#0f0f0f;color:var(--text);font:inherit}
+.seq{min-height:52px;border:1px dashed #3f3f46;border-radius:12px;padding:8px;display:grid;gap:6px;margin:10px 0}
+.seq:empty:before{content:"Натискай кроки нижче по черзі";color:#737373;padding:6px}
+.pool{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--edge);border-radius:10px;background:#202020;color:var(--text);padding:9px 12px;font:inherit;cursor:pointer;text-align:left}
+.chip:hover:not(:disabled){border-color:var(--acc)}.seq .chip{display:flex;gap:10px;width:100%;background:var(--accbg);border-color:var(--accedge)}
+.seq .chip b{color:var(--acc)}.seq.ok .chip{background:#12301d;border-color:#245c36}.seq.no .chip{background:#35151d;border-color:#7f1d2d}
+.data-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.92rem}.data-table th,.data-table td{border:1px solid var(--edge);padding:8px 10px;text-align:left}.data-table th{background:#202020;color:#fff}
+.tbl-wrap{overflow-x:auto}
+pre.code{margin:10px 0;padding:14px;border:1px solid var(--edge);border-radius:12px;background:#0d1117;color:#c9d1d9;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow-x:auto}
+.k{color:#ff7b72}.s{color:#a5d6ff}.n{color:#79c0ff}.c{color:#8b949e}
+/* ---- report ---- */
+.result-score{font-size:4rem;font-weight:850;line-height:1;color:var(--acc);text-align:center;margin:20px 0 6px}.result-score small{font-size:1rem;color:var(--muted);font-weight:600}
+.verdict{text-align:center;font-weight:750;color:#fff;margin-bottom:16px}
+.topic-row{padding:12px 0;border-bottom:1px solid var(--edge)}.topic-row:last-child{border-bottom:0}
+.bar{height:8px;background:#2b2b2b;border-radius:6px;overflow:hidden;margin-top:7px}.bar i{display:block;height:100%;background:var(--acc)}
+.err-item{padding:10px 12px;border-left:3px solid var(--red);background:#ffffff04;border-radius:6px;margin:8px 0}.err-item small{display:block;color:#86efac;margin-top:4px}
+footer{text-align:center;color:#737373;font-size:.8rem;margin-top:24px}
+/* ---- hero animation ---- */
+.hl{stroke-dasharray:240;stroke-dashoffset:240;animation:draw 1s ease-out .3s forwards}
+.dev{opacity:0;transform-box:fill-box;transform-origin:center;animation:pop .45s ease-out forwards}
+.dev.d1{animation-delay:.05s}.dev.d2{animation-delay:.15s}.dev.d3{animation-delay:.25s}.dev.d4{animation-delay:.35s}
+.pk{opacity:0;animation:fly 1s ease-in 1.1s forwards}
+.pk1{offset-path:path('M62 186 C 70 120, 140 120, 180 96')}.pk2{offset-path:path('M140 196 C 145 140, 170 130, 180 96')}
+.pk3{offset-path:path('M226 192 C 220 140, 190 130, 180 96')}.pk4{offset-path:path('M306 186 C 296 120, 220 120, 180 96')}
+.hub-glow{opacity:0;animation:glow .6s ease-out 2s forwards}
+.dash-bar{transform-box:fill-box;transform-origin:bottom;transform:scaleY(0);animation:grow .5s ease-out forwards}
+.dash-bar.b1{animation-delay:2.1s}.dash-bar.b2{animation-delay:2.2s}.dash-bar.b3{animation-delay:2.3s}
+@keyframes draw{to{stroke-dashoffset:0}}@keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+@keyframes fly{0%{offset-distance:0%;opacity:1}90%{opacity:1}100%{offset-distance:100%;opacity:0}}
+@keyframes glow{to{opacity:.16}}@keyframes grow{to{transform:scaleY(1)}}
+@media (prefers-reduced-motion:reduce){.hl,.dev,.dash-bar{animation:none!important;opacity:1;stroke-dashoffset:0;transform:none}.hub-glow{animation:none!important;opacity:.16}.pk{display:none}}
+@media(max-width:720px){.hero-top{grid-template-columns:1fr}.hero-art{max-width:440px;margin:6px auto 0;width:100%}}
+@media(max-width:520px){#app{padding:12px}.card{border-radius:14px}.opts.two{grid-template-columns:1fr}.mrow{grid-template-columns:1fr;gap:6px}.result-score{font-size:3.2rem}}
+@media print{body{background:white;color:#111}.card,.progress-top{box-shadow:none;background:white;color:#111;border-color:#ccc}.btn,.progress-top,.ib-info{display:none!important}.muted{color:#555}h1,h2,.verdict{color:#111}.hero:after{display:none}}
+/* ---------- кнопка й вікно [i] ---------- */
+.ib-info{position:fixed;top:12px;right:12px;z-index:60;width:38px;height:38px;display:grid;place-items:center;padding:0;border-radius:50%;border:1px solid #2b2b2b;background:#121212;color:var(--acc);font:700 16px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.35);transition:border-color .15s,transform .15s}
+.ib-info:hover{border-color:var(--acc);transform:translateY(-1px)}.ib-info:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.info-dlg{width:min(470px,calc(100vw - 24px));max-height:calc(100dvh - 40px);overflow:auto;padding:20px 22px;border:1px solid #2b2b2b;border-radius:18px;background:#121212;color:#e5e5e5;box-shadow:0 24px 60px rgba(0,0,0,.5);line-height:1.5;font-size:15px}
+.info-dlg::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
+.info-dlg .dh{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+.info-dlg h2{margin:0;font-size:19px;color:#fff}.info-dlg h3{margin:16px 0 6px;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:#a3a3a3}
+.info-dlg p{margin:8px 0}.info-dlg ul{margin:0;padding-left:20px}.info-dlg li{margin:3px 0}
+.info-dlg .x{width:32px;height:32px;flex:none;border-radius:50%;border:1px solid #2b2b2b;background:transparent;color:#a3a3a3;font-size:15px;cursor:pointer}.info-dlg .x:hover{color:#e5e5e5;border-color:var(--acc)}
+.info-dlg .gh{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:9px 15px;border-radius:11px;background:var(--acc2);color:#042f36;font-weight:750;text-decoration:none}
+.info-dlg .gh svg{width:17px;height:17px;fill:currentColor}.info-dlg .gh:hover{filter:brightness(1.08)}
+@media(max-width:960px){#app{padding-top:58px}.progress-top{padding-right:56px}}
+</style>
+</head>
+<body><main id="app"></main>
+<script>
+/* ============ КОНТРОЛЬ ЧЕСНОСТІ ============ */
+const HC=(()=>{const K='hc:'+location.pathname;let c={out:0,lens:0},on=false,away=false,mute=0,tid;
+try{Object.assign(c,JSON.parse(localStorage.getItem(K))||{})}catch(e){}
+const sv=()=>{try{localStorage.setItem(K,JSON.stringify(c))}catch(e){}};
+const toast=m=>{let t=document.getElementById('hc-t');if(!t){t=document.createElement('div');t.id='hc-t';t.setAttribute('role','status');t.style.cssText='position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:99999;max-width:calc(100% - 32px);padding:10px 16px;border-radius:12px;background:#b42335;color:#fff;font:600 14px/1.35 system-ui,sans-serif;text-align:center;box-shadow:0 6px 24px #0007;pointer-events:none;transition:opacity .3s;opacity:0';document.body.appendChild(t)}t.textContent=m;t.style.opacity=1;clearTimeout(tid);tid=setTimeout(()=>t.style.opacity=0,3500)};
+const leave=()=>{if(!on||away||mute)return;away=true;c.out++;sv()};
+const back=()=>{if(!away)return;away=false;if(on)toast('⚠ Вихід зі сторінки зафіксовано: '+c.out)};
+document.addEventListener('visibilitychange',()=>document.hidden?leave():back());
+addEventListener('blur',()=>setTimeout(()=>{if(!document.hasFocus())leave()},150));
+addEventListener('focus',back);
+document.addEventListener('contextmenu',e=>{if(!on)return;e.preventDefault();c.lens++;sv();toast('⚠ Спробу відкрити меню / Google Лінзу зафіксовано: '+c.lens)});
+['alert','confirm','prompt','print'].forEach(f=>{const o=window[f];if(o)window[f]=function(){mute++;try{return o.apply(window,arguments)}finally{setTimeout(()=>mute--,600)}}});
+return{start(){on=true},stop(){on=false;away=false},reset(){c={out:0,lens:0};sv()},
+html:()=>`<div style="margin:12px 0;padding:10px 14px;border:1px dashed currentColor;border-radius:10px">🛡 Виходів зі сторінки: <b>${c.out}</b> · Спроб Google Лінзи: <b>${c.lens}</b></div>`};})();
+
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const KEY='iot-quest-v1';
+const LEVELS=['Що таке IoT','Розумне місто','Аналіз трафіку','Python і Colab'];
+const TYPES={single:'Одна відповідь',tf:'Правда чи хибно',multi:'Кілька відповідей',match:'Встанови відповідність',order:'Постав по порядку',input:'Введи відповідь'};
+
+const TRAFFIC=`<div class="tbl-wrap"><table class="data-table"><thead><tr><th>Дата</th><th>Час</th><th>Місце</th><th>Інтенсивність</th><th>Затор</th></tr></thead><tbody>
+<tr><td>2024-02-20</td><td>08:00</td><td>вул. Київська</td><td>500</td><td>2</td></tr>
+<tr><td>2024-02-20</td><td>12:00</td><td>вул. Київська</td><td>800</td><td>3</td></tr>
+<tr><td>2024-02-20</td><td>17:00</td><td>вул. Київська</td><td>600</td><td>1</td></tr>
+<tr><td>2024-02-21</td><td>08:00</td><td>вул. Львівська</td><td>300</td><td>1</td></tr>
+<tr><td>2024-02-21</td><td>12:00</td><td>вул. Львівська</td><td>700</td><td>2</td></tr></tbody></table></div>`;
+const CODE=`<pre class="code"><span class="k">import</span> pandas <span class="k">as</span> pd
+
+traffic_data = [
+  {<span class="s">'hour'</span>: <span class="n">8</span>, <span class="s">'location'</span>: <span class="s">'Maidan'</span>,      <span class="s">'traffic'</span>: <span class="n">120</span>},
+  {<span class="s">'hour'</span>: <span class="n">9</span>, <span class="s">'location'</span>: <span class="s">'Maidan'</span>,      <span class="s">'traffic'</span>: <span class="n">150</span>},
+  {<span class="s">'hour'</span>: <span class="n">8</span>, <span class="s">'location'</span>: <span class="s">'Kreschatyk'</span>,  <span class="s">'traffic'</span>: <span class="n">200</span>},
+  {<span class="s">'hour'</span>: <span class="n">9</span>, <span class="s">'location'</span>: <span class="s">'Kreschatyk'</span>,  <span class="s">'traffic'</span>: <span class="n">250</span>},
+  {<span class="s">'hour'</span>: <span class="n">8</span>, <span class="s">'location'</span>: <span class="s">'Bessarabska'</span>, <span class="s">'traffic'</span>: <span class="n">180</span>},
+  {<span class="s">'hour'</span>: <span class="n">9</span>, <span class="s">'location'</span>: <span class="s">'Bessarabska'</span>, <span class="s">'traffic'</span>: <span class="n">220</span>},
+]
+df = pd.DataFrame(traffic_data)
+<span class="c"># сумарний трафік за кожну годину</span>
+df.groupby(<span class="s">'hour'</span>)[<span class="s">'traffic'</span>].sum()</pre>`;
+
+const Q=[
+/* Рівень 1 */
+{lv:0,t:'single',q:'Що таке Інтернет речей (IoT)?',o:['Соціальна мережа для обміну фото речей','Мережа фізичних пристроїв із сенсорами та програмним забезпеченням, які збирають дані й обмінюються ними','Інтернет-магазин розумних пристроїв','Програма для перегляду сайтів на телефоні'],a:1,ex:'IoT — мережа фізичних пристроїв із сенсорами та ПЗ, які збирають дані й обмінюються ними.'},
+{lv:0,t:'match',q:'Розподіли пристрої: розумний чи звичайний?',l:['Смартгодинник','Кварцовий настінний годинник','Фітнес-трекер','Розумний термостат'],r:['Розумний','Звичайний'],a:[0,1,0,0],fixed:true,ex:'Розумні пристрої мають сенсори й обмінюються даними. Кварцовий годинник лише показує час.'},
+{lv:0,t:'multi',q:'Що дають змогу робити сучасні технології (зокрема IoT)?',o:['Аналізувати ситуації','Реагувати на зміни в режимі реального часу','Працювати без жодного джерела живлення','Ухвалювати обґрунтовані рішення'],a:[0,1,3],ex:'Аналізувати ситуації, реагувати в реальному часі та ухвалювати обґрунтовані рішення. Живлення потрібне будь-якому пристрою.'},
+{lv:0,t:'tf',q:'Механічний годинник відстежує пульс і надсилає сповіщення на смартфон.',o:['Правда','Хибно'],a:1,ex:'Хибно: механічний годинник лише показує час і не взаємодіє з іншими пристроями. Це вміє смартгодинник.'},
+/* Рівень 2 */
+{lv:1,t:'order',q:'Як працює розумне місто? Розстав етапи по черзі.',items:['Сенсори збирають дані (якість повітря, трафік)','Дані передаються через мережу','Системи аналізують інформацію','На основі аналізу ухвалюється рішення (наприклад, світлофор змінює режим)'],ex:'Сенсори → передавання даних → аналіз → рішення.'},
+{lv:1,t:'match',q:'Розумне місто: що робить кожен пристрій?',l:['Світлофори в Барселоні','Датчики повітря','Сміттєві баки з сенсором'],r:['Надають пріоритет громадському транспорту в надзвичайних ситуаціях','Вимірюють рівень забруднення','Сповіщають, коли їх потрібно очистити'],a:[0,1,2],ex:'Світлофори — пріоритет транспорту, датчики — рівень забруднення, баки — сигнал про заповнення.'},
+{lv:1,t:'match',q:'Хто що робить у команді, яка створює розумне місто?',l:['Програмісти','Дизайнери інтерфейсів','Аналітики даних'],r:['Створюють програмне забезпечення','Роблять керування зручним','Обробляють великі обсяги інформації'],a:[0,1,2],ex:'Розумні системи — це міждисциплінарна робота програмістів, дизайнерів інтерфейсів і аналітиків даних.'},
+{lv:1,t:'multi',q:'Проблема: людині на візку важко пересуватися містом. Які дані потрібні для мапи безбар’єрних маршрутів?',o:['Доступність тротуарів, переходів, ліфтів і транспорту','Паркінги та будівлі','Рейтинг популярних пісень у місті','Відгуки користувачів'],a:[0,1,3],ex:'Потрібні дані про доступність інфраструктури, паркінги й будівлі та відгуки людей. Музичні рейтинги тут ні до чого.'},
+/* Рівень 3 */
+{lv:2,t:'input',q:'Яка найбільша інтенсивність руху в таблиці?',pre:TRAFFIC,acc:['800'],ph:'Число',ex:'Найбільша інтенсивність — 800 (вул. Київська, 12:00).'},
+{lv:2,t:'single',q:'Коли та де виникає найсильніший затор (рівень 3)?',pre:TRAFFIC,o:['08:00, вул. Київська','12:00, вул. Львівська','12:00, вул. Київська','17:00, вул. Київська'],a:2,ex:'Затор рівня 3 — о 12:00 на вул. Київській, саме тоді й найбільша інтенсивність.'},
+{lv:2,t:'multi',q:'Звідки розумне місто отримує дані про трафік?',o:['Відеоспостереження','Датчики руху','Паперовий шкільний журнал','Мобільні застосунки'],a:[0,1,3],ex:'Відеоспостереження, датчики руху й мобільні застосунки.'},
+{lv:2,t:'single',q:'Яке рішення НЕ допоможе зменшити затори?',o:['Оптимізувати роботу світлофорів','Створити альтернативні маршрути','Вимкнути всі світлофори в місті','Встановити електронні знаки'],a:2,ex:'Вимкнені світлофори лише створять хаос. Решта — пропозиції з аналізу трафіку.'},
+/* Рівень 4 */
+{lv:3,t:'single',q:'Що таке Google Colaboratory?',o:['Текстовий редактор для оформлення рефератів','Онлайн-середовище для роботи з Python просто в браузері','Хмарне сховище для фото','Гра для вивчення клавіатури'],a:1,ex:'Colab — безплатне онлайн-середовище: писати код, аналізувати дані й запускати програми в браузері.'},
+{lv:3,t:'order',q:'Розстав кроки роботи з блокнотом у Colab.',items:['Відкрити готовий блокнот за посиланням','Скопіювати та вставити код','Запустити всі комірки','Переглянути результати: пік трафіку, проблемні зони','Замінити тестові дані на справжні'],ex:'Відкрити → вставити код → запустити → переглянути результати → підставити справжні дані.'},
+{lv:3,t:'single',q:'Для чого рядок import pandas as pd?',o:['Малює панду на екрані','Підключає бібліотеку pandas для роботи з таблицями даних','Видаляє всі дані з таблиці','Запускає браузер'],a:1,ex:'pandas — бібліотека для роботи з табличними даними; pd — її коротке ім’я в коді.'},
+{lv:3,t:'input',q:'Скільки автомобілів сумарно о 9 годині поверне цей код?',pre:CODE,acc:['620'],ph:'Число',ex:'150 + 250 + 220 = 620. О 8:00 — лише 500, тож 9:00 — пікова година.'}
+];
+
+function shuffled(n,seed){const a=[...Array(n).keys()];let s=seed*9301+49297;for(let i=n-1;i>0;i--){s=(s*9301+49297)%233280;const j=Math.floor(s/233280*(i+1));[a[i],a[j]]=[a[j],a[i]]}
+ if(a.every((v,i)=>v===i)&&n>1)a.push(a.shift());return a}
+
+let state=load()||fresh(), tmp=[];
+function fresh(){return{name:'',cls:'',i:0,res:[],started:false,finished:false}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
+let lastView=null;
+function shell(h,view){const y=scrollY;$('#app').innerHTML=h+'<footer>Інформатика · 9 клас · Інтернет речей</footer>';if(view!==undefined&&view===lastView)scrollTo(0,y);else scrollTo(0,0);lastView=view}
+
+const HERO_SVG=`<svg viewBox="0 0 360 290" role="img" aria-label="Розумне місто: пристрої передають дані в хмару">
+<g opacity=".22" fill="#22d3ee">
+ <rect x="8" y="218" width="30" height="56" rx="2"/><rect x="42" y="236" width="22" height="38" rx="2"/><rect x="92" y="206" width="26" height="68" rx="2"/>
+ <rect x="168" y="196" width="28" height="78" rx="2"/><rect x="250" y="212" width="24" height="62" rx="2"/><rect x="326" y="226" width="28" height="48" rx="2"/></g>
+<line x1="0" y1="274" x2="360" y2="274" stroke="#2b2b2b" stroke-width="2"/>
+<g fill="none" stroke="#22d3ee" stroke-width="2" stroke-dasharray="5 6" opacity=".55">
+ <path class="hl" d="M62 186 C 70 120, 140 120, 180 96"/><path class="hl" d="M140 196 C 145 140, 170 130, 180 96"/>
+ <path class="hl" d="M226 192 C 220 140, 190 130, 180 96"/><path class="hl" d="M306 186 C 296 120, 220 120, 180 96"/></g>
+<!-- хмара-хаб із мініпанеллю -->
+<circle class="hub-glow" cx="180" cy="62" r="62" fill="#22d3ee"/>
+<path d="M128 92h106a24 24 0 0 0 0-48 34 34 0 0 0-64-8 26 26 0 0 0-42 20 18 18 0 0 0 0 36z" fill="#0b2a31" stroke="#22d3ee" stroke-width="2.5"/>
+<rect x="152" y="46" width="56" height="36" rx="5" fill="#0a0a0a" stroke="#155e6b"/>
+<rect class="dash-bar b1" x="160" y="64" width="9" height="12" rx="1.5" fill="#22d3ee"/>
+<rect class="dash-bar b2" x="175" y="54" width="9" height="22" rx="1.5" fill="#facc15"/>
+<rect class="dash-bar b3" x="190" y="68" width="9" height="8" rx="1.5" fill="#22d3ee"/>
+<!-- смартгодинник -->
+<g class="dev d1"><rect x="50" y="178" width="24" height="56" rx="7" fill="#1f2937"/><rect x="41" y="190" width="42" height="34" rx="9" fill="#0a0a0a" stroke="#22d3ee" stroke-width="2.5"/>
+ <polyline points="47,208 55,208 59,199 64,216 68,206 77,206" fill="none" stroke="#f43f5e" stroke-width="2.2" stroke-linejoin="round"/></g>
+<!-- світлофор -->
+<g class="dev d2"><rect x="137" y="232" width="6" height="42" fill="#3f3f46"/><rect x="126" y="186" width="28" height="50" rx="7" fill="#171717" stroke="#3f3f46" stroke-width="2"/>
+ <circle cx="140" cy="198" r="5.5" fill="#5f1d2a"/><circle cx="140" cy="211" r="5.5" fill="#5c4a12"/><circle cx="140" cy="224" r="5.5" fill="#22c55e"/></g>
+<!-- термостат -->
+<g class="dev d3"><circle cx="226" cy="216" r="24" fill="#0a0a0a" stroke="#22d3ee" stroke-width="2.5"/><path d="M210 224a18 18 0 1 1 32 0" fill="none" stroke="#155e6b" stroke-width="4" stroke-linecap="round"/>
+ <path d="M210 224a18 18 0 0 1 20-24" fill="none" stroke="#facc15" stroke-width="4" stroke-linecap="round"/><text x="226" y="221" text-anchor="middle" fill="#e5e5e5" font-size="12" font-weight="700" font-family="system-ui,sans-serif">21°</text></g>
+<!-- смітник із сенсором -->
+<g class="dev d4"><path d="M294 206h26l-3 46a4 4 0 0 1-4 4h-12a4 4 0 0 1-4-4z" fill="#14532d" stroke="#22c55e" stroke-width="2"/><rect x="290" y="198" width="34" height="8" rx="3" fill="#22c55e"/>
+ <path d="M300 188a10 10 0 0 1 14 0M296 182a16 16 0 0 1 22 0" fill="none" stroke="#22d3ee" stroke-width="2.2" stroke-linecap="round"/></g>
+<!-- пакети даних -->
+<circle class="pk pk1" r="4.5" fill="#22d3ee"/><circle class="pk pk2" r="4.5" fill="#22d3ee"/><circle class="pk pk3" r="4.5" fill="#facc15"/><circle class="pk pk4" r="4.5" fill="#22d3ee"/>
+</svg>`;
+
+const NAMES=['Ярослав Мудрий','Леся Українка','Тарас Шевченко','Іван Франко','Віктор Глушков','Катерина Ющенко','Сергій Корольов','Ігор Сікорський','Іван Пулюй','Ада Лавлейс','Алан Тюрінг','Ліна Костенко','Марія Примаченко','Григорій Сковорода','Михайло Грушевський','Нікола Тесла','Тім Бернерс-Лі','Грейс Гоппер','Леонід Каденюк','Олександр Довженко','Соломія Крушельницька','Микола Амосов','Борис Патон','Стів Джобс','Марія Кюрі'];
+function pickName(){let last='';try{last=localStorage.getItem('iot-last-name')||''}catch(e){}
+ const pool=NAMES.filter(n=>n!==last),n=pool[Math.floor(Math.random()*pool.length)];try{localStorage.setItem('iot-last-name',n)}catch(e){}return n}
+function home(){HC.stop();const old=load();
+shell(`<section class="card hero"><div class="hero-top"><div>
+<span class="tag">Інтерактивний тест · 9 клас</span>
+<h1 style="margin-top:14px">Місія<br>«Інтернет речей»</h1>
+<p class="muted">Сенсори, розумне місто, аналіз трафіку та Python у Colab. 16 завдань різних типів і оцінка в кінці.</p>
+</div><div class="hero-art" aria-hidden="false">${HERO_SVG}<span class="chip-f c1">📡 Сенсори</span><span class="chip-f c2">☁ Дані</span><span class="chip-f c3">✓ Рішення</span></div></div>
+<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/tS_cJN3-iGo?rel=0" title="Відео: Інтернет речей" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+<p class="muted" style="font-size:.9rem;margin:8px 0 0">▶ Спершу переглянь відео, а потім починай тест.</p>
+<label for="nm">Ім’я та прізвище</label><input id="nm" placeholder="Наприклад, ${pickName()}" autocomplete="name">
+<label for="cl">Клас</label><input id="cl" placeholder="Наприклад, 9-А">
+<div id="err" class="feedback bad hidden"></div>
+<div class="actions"><button class="btn" id="start">Почати тест</button>${old&&old.started&&!old.finished?'<button class="btn secondary" id="resume">Продовжити</button>':''}${old&&old.finished?'<button class="btn secondary" id="last">Мій звіт</button>':''}</div></section>`);
+$('#start').onclick=()=>{const n=$('#nm').value.trim(),c=$('#cl').value.trim();if(!n||!c){$('#err').textContent='Заповни ім’я та клас, щоб почати.';$('#err').classList.remove('hidden');return}
+ state={...fresh(),name:n,cls:c,started:true};save();HC.reset();tmp=[];renderQ()};
+if($('#resume'))$('#resume').onclick=()=>{state=old;tmp=[];renderQ()};
+if($('#last'))$('#last').onclick=()=>{state=old;report()};
+$('#nm').onkeydown=$('#cl').onkeydown=e=>{if(e.key==='Enter')$('#start').click()}}
+
+function topbar(){return `<div class="progress-top"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><b>${esc(state.name)} · ${esc(state.cls)}</b><span class="muted">${state.i<Q.length?'Завдання '+(state.i+1)+' з '+Q.length:'Готово'}</span></div>
+<div class="segs">${Q.map((_,k)=>{const r=state.res[k];return `<i class="${r?(r.ok?'ok':'bad'):k===state.i?'cur':''}"></i>`}).join('')}</div></div>`}
+
+function correctText(q){
+ if(q.t==='single'||q.t==='tf')return q.o[q.a];
+ if(q.t==='multi')return q.a.map(k=>q.o[k]).join('; ');
+ if(q.t==='match')return q.l.map((x,k)=>x+' → '+q.r[q.a[k]]).join('; ');
+ if(q.t==='order')return q.items.map((x,k)=>(k+1)+'. '+x).join(' ');
+ if(q.t==='input')return q.acc[0]}
+
+function renderQ(){HC.start();if(state.i>=Q.length){state.finished=true;save();report();return}
+ const q=Q[state.i],r=state.res[state.i],done=!!r;let body='';
+ if(q.t==='single'||q.t==='tf'){
+  body=`<div class="opts ${q.t==='tf'?'two':''}">${q.o.map((o,k)=>`<button class="opt ${done?(k===q.a?'correct':k===r.g?'wrong':''):''}" data-k="${k}" ${done?'disabled':''}>${esc(o)}</button>`).join('')}</div>`}
+ else if(q.t==='multi'){const sel=done?r.g:tmp;
+  body=`<p class="muted" style="margin:0">Обери всі правильні варіанти.</p><div class="opts">${q.o.map((o,k)=>{const on=sel.includes(k);let cls=on?'sel':'';if(done)cls=q.a.includes(k)?(on?'correct':'wrong'):(on?'wrong':'');
+   return `<button class="opt ${cls}" data-k="${k}" ${done?'disabled':''}><span class="box">${on?'✓':''}</span>${esc(o)}</button>`}).join('')}</div>`}
+ else if(q.t==='match'){const ord=q.fixed?q.r.map((_,k)=>k):shuffled(q.r.length,state.i+3);
+  body=q.l.map((x,k)=>{const g=done?r.g[k]:'';const st=done?(g===q.a[k]?'ok':'no'):'';
+   return `<div class="mrow ${st}"><b>${esc(x)}</b><select data-k="${k}" ${done?'disabled':''} aria-label="${esc(x)}"><option value="">— обери —</option>${ord.map(j=>`<option value="${j}" ${g===j?'selected':''}>${esc(q.r[j])}</option>`).join('')}</select></div>`}).join('')}
+ else if(q.t==='order'){const ord=shuffled(q.items.length,state.i+7),seq=done?r.g:tmp;
+  body=`<div class="seq ${done?(r.ok?'ok':'no'):''}" id="seq">${seq.map((k,n)=>`<button class="chip" data-rm="${n}" ${done?'disabled':''}><b>${n+1}</b>${esc(q.items[k])}</button>`).join('')}</div>
+  <div class="pool">${ord.filter(k=>!seq.includes(k)).map(k=>`<button class="chip" data-add="${k}">${esc(q.items[k])}</button>`).join('')}</div>`}
+ else if(q.t==='input'){body=`<input id="inp" inputmode="numeric" placeholder="${q.ph||'Відповідь'}" value="${done?esc(r.g):''}" ${done?'disabled':''} style="max-width:220px">`}
+ const needCheck=['multi','match','order','input'].includes(q.t);
+ shell(topbar()+`<section class="card"><span class="tag">Рівень ${q.lv+1} · ${LEVELS[q.lv]}</span>
+ <div style="margin-top:16px" class="qtype">${TYPES[q.t]}</div><p class="q">${esc(q.q)}</p>${q.pre||''}${body}
+ ${done?`<div class="feedback ${r.ok?'':'bad'}"><b>${r.ok?'Правильно!':'Неправильно.'}</b> ${esc(q.ex)}</div>`:''}
+ <div class="actions">${!done&&needCheck?'<button class="btn" id="check" disabled>Перевірити</button>':''}${!done&&q.t==='order'?'<button class="btn secondary" id="reset">Скинути</button>':''}${done?`<button class="btn" id="next">${state.i===Q.length-1?'Завершити й побачити оцінку':'Далі →'}</button>`:''}</div></section>`,'q'+state.i);
+ const finish=(ok,g)=>{state.res[state.i]={ok,g};tmp=[];save();renderQ()};
+ if(done){$('#next').onclick=()=>{state.i++;save();renderQ()};$('#next').focus({preventScroll:true});const fb=$('.feedback');if(fb&&fb.getBoundingClientRect().bottom>innerHeight)fb.scrollIntoView({block:'center',behavior:'smooth'});return}
+ const chk=$('#check');
+ if(q.t==='single'||q.t==='tf')$$('.opt').forEach(b=>b.onclick=()=>{const k=+b.dataset.k;finish(k===q.a,k)});
+ if(q.t==='multi'){chk.disabled=!tmp.length;$$('.opt').forEach(b=>b.onclick=()=>{const k=+b.dataset.k;tmp=tmp.includes(k)?tmp.filter(x=>x!==k):[...tmp,k];renderQ()});
+  chk.onclick=()=>{const g=[...tmp].sort();finish(g.length===q.a.length&&g.every((v,k)=>v===q.a[k]),g)}}
+ if(q.t==='match'){const sels=$$('select');const upd=()=>chk.disabled=sels.some(s=>s.value==='');sels.forEach(s=>s.onchange=upd);upd();
+  chk.onclick=()=>{const g=sels.map(s=>+s.value);finish(g.every((v,k)=>v===q.a[k]),g)}}
+ if(q.t==='order'){chk.disabled=tmp.length!==q.items.length;
+  $$('[data-add]').forEach(b=>b.onclick=()=>{tmp.push(+b.dataset.add);renderQ()});
+  $$('[data-rm]').forEach(b=>b.onclick=()=>{tmp.splice(+b.dataset.rm,1);renderQ()});
+  $('#reset').onclick=()=>{tmp=[];renderQ()};
+  chk.onclick=()=>{const g=[...tmp];finish(g.every((v,k)=>v===k),g)}}
+ if(q.t==='input'){const inp=$('#inp');inp.oninput=()=>chk.disabled=!inp.value.trim();inp.onkeydown=e=>{if(e.key==='Enter'&&inp.value.trim())chk.click()};
+  chk.onclick=()=>{const v=inp.value.trim().toLowerCase().replace(/\s+/g,'');finish(q.acc.includes(v),inp.value.trim())}}
+}
+
+function report(){HC.stop();
+ const ok=state.res.filter(r=>r&&r.ok).length,grade=Math.max(1,Math.round(ok/Q.length*12));
+ const verdict=grade>=10?'Відмінно':grade>=7?'Добре':grade>=4?'Задовільно':'Потрібно повторити тему';
+ const lv=LEVELS.map((n,k)=>{const qs=Q.map((q,i)=>i).filter(i=>Q[i].lv===k),c=qs.filter(i=>state.res[i]&&state.res[i].ok).length;return{n,c,t:qs.length}});
+ const errs=Q.map((q,i)=>({q,i,r:state.res[i]})).filter(x=>!x.r||!x.r.ok);
+ shell(topbar()+`<section class="card"><span class="tag">Тест завершено</span><h1 style="margin-top:16px">${esc(state.name)}, ${esc(state.cls)}</h1>
+ <div class="result-score">${grade}<small> з 12</small></div><div class="verdict">${verdict} · правильно ${ok} з ${Q.length}</div>
+ ${HC.html()}<h2>За рівнями</h2>${lv.map(x=>`<div class="topic-row"><b>${x.n}</b><div class="muted">${x.c} з ${x.t}</div><div class="bar"><i style="width:${x.c/x.t*100}%"></i></div></div>`).join('')}
+ ${errs.length?`<h2 style="margin-top:22px">Розбір помилок</h2>${errs.map(x=>`<div class="err-item">${x.i+1}. ${esc(x.q.q)}<small>Правильно: ${esc(correctText(x.q))}</small></div>`).join('')}`:'<p style="margin-top:18px">Жодної помилки — чудово! 🎉</p>'}
+ <div class="actions"><button class="btn" id="again">Пройти ще раз</button><button class="btn secondary" id="print">Друкувати / зберегти PDF</button></div></section>`);
+ $('#again').onclick=()=>{try{localStorage.removeItem(KEY)}catch(e){}HC.reset();state=fresh();home()};$('#print').onclick=()=>window.print()}
+
+home();
+</script>
+<button class="ib-info" id="infoBtn" type="button" aria-label="Про тест" aria-haspopup="dialog" title="Про тест">i</button>
+<dialog class="info-dlg" id="infoDlg" aria-labelledby="infoTitle">
+  <div class="dh"><h2 id="infoTitle">Місія «Інтернет речей»</h2><button class="x" type="button" id="infoClose" aria-label="Закрити">✕</button></div>
+  <p>Швидкий тест для 9 класу за уроком «Інтернет речей (IoT)»: розумні пристрої, розумне місто, аналіз трафіку, Python у Google Colab.</p>
+  <h3>Правила</h3>
+  <ul><li>4 рівні по 4 завдання: одна відповідь, кілька відповідей, правда/хибно, відповідність, порядок, введення числа.</li><li>Кожне завдання — 1 бал; відповідь перевіряється одразу й змінити її не можна.</li><li>Наприкінці — оцінка з 12, результат за рівнями й розбір помилок.</li><li>Виходи зі сторінки та спроби відкрити Google Лінзу фіксуються у звіті.</li><li>Прогрес зберігається в браузері.</li></ul>
+  <h3>Керування</h3>
+  <ul><li>Миша або дотик — обрати відповідь, кроки, пункти списку.</li><li><b>Enter</b> — підтвердити введене число.</li></ul>
+  <a class="gh" href="https://github.com/whyuxavier/iot-quest" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>GitHub</a>
+</dialog>
+<script>
+(()=>{const d=document.getElementById('infoDlg'),b=document.getElementById('infoBtn');
+const open=()=>{if(d.open)return;if(d.showModal)d.showModal();else d.setAttribute('open','')};
+const close=()=>{if(d.close)d.close();else d.removeAttribute('open')};
+b.addEventListener('click',open);document.getElementById('infoClose').addEventListener('click',close);
+d.addEventListener('click',e=>{if(e.target===d)close()});d.addEventListener('close',()=>b.focus());})();
+</script>
+</body></html>

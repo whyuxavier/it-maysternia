@@ -1,0 +1,1138 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1c1e24">
+<script>try{if(localStorage.getItem("bs_theme")==='"light"')document.documentElement.dataset.theme="light"}catch(e){}</script>
+<meta name="description" content="Баг-шторм — гра і тестування: виправ помилки в коді HTML, CSS і Python, поки вікна не завалили екран.">
+<title>Баг-шторм · HTML, CSS, Python</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='8' width='56' height='48' rx='10' fill='%23252830' stroke='%238ea9db' stroke-width='4'/%3E%3Cpath d='M4 18a10 10 0 0 1 10-10h36a10 10 0 0 1 10 10v4H4z' fill='%23d9909c'/%3E%3Cpath d='M16 31l9 7-9 7' fill='none' stroke='%238ea9db' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M30 46h16' stroke='%23d8be6a' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#1c1e24;--panel:#252830;--panel2:#2d3039;--line:#3a3e49;--text:#e3e1dc;--muted:#9a9ca6;--acc:#8ea9db;--acc2:#d8be6a;--ok:#7cbf98;--err:#d9909c;--warn:#d4b06a;--errT:#3d2d33;--errD:#e8b4bd;--okT:#2a3a31;--okD:#a9dcbd;--accD:#b8ccee;--accT:#2a3346;--acc2T:#3a3527;--acc2D:#e3cc85;--hdr:rgba(28,30,36,.92);--ovl:rgba(28,30,36,.86);--shadow:rgba(0,0,0,.35);--grad:linear-gradient(90deg,#a9c1ea,#e3cc85);--gridc:rgba(142,169,219,.12);--wgrid:rgba(142,169,219,.07);
+--s1:#252830;--s2:#2d3039;--s3:#3a3e49;--s4:#1e2026;--serr:#d9909c;--smut:#9a9ca6;--sln:#5b5f6b;--skw:#a9c1ea;--stx:#e3e1dc;--sstr:#e3cc85;--snum:#d9a7c7;--stag:#b3a8e6;--scy:#8cc6d6;--scy2:#8cc6d6;--serrD:#e8b4bd;--sokD:#a9dcbd;--serrT:#3d2d33;--sokT:#2a3a31;
+color-scheme:dark;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+:root[data-theme="light"]{--bg:#f4f2ee;--panel:#ffffff;--panel2:#efece6;--line:#ddd8cf;--text:#3b4050;--muted:#7d8291;--acc:#8ea9db;--acc2:#d8be6a;--ok:#7cbf98;--err:#e39aa6;--warn:#b58f3e;--errT:#f6dde1;--errD:#8a3d4b;--okT:#d9efe2;--okD:#2f6b4a;--accD:#3f5f99;--accT:#e3ebf7;--acc2T:#f6efd9;--acc2D:#a8872f;--hdr:rgba(244,242,238,.92);--ovl:rgba(244,242,238,.85);--shadow:rgba(60,55,45,.12);--grad:linear-gradient(90deg,#5b7fbf,#c49a3a);--gridc:rgba(142,169,219,.2);--wgrid:rgba(142,169,219,.12);
+--s1:#ffffff;--s2:#efece6;--s3:#ddd8cf;--s4:#ece9e3;--serr:#e39aa6;--smut:#7d8291;--sln:#b8b3aa;--skw:#4f6fae;--stx:#3b4050;--sstr:#a8872f;--snum:#a35d86;--stag:#8a7cc8;--scy:#5fa3b6;--scy2:#4c8fa2;--serrD:#8a3d4b;--sokD:#2f6b4a;--serrT:#f6dde1;--sokT:#d9efe2;color-scheme:light}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+button{font:inherit;touch-action:manipulation}
+#app{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+body.playing{overflow:hidden}
+body.playing #app{position:fixed;left:0;right:0;top:var(--vt,0px);height:var(--vh,100dvh);min-height:0}
+
+.top{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--hdr);backdrop-filter:blur(8px);position:sticky;top:0;z-index:20;flex:none}
+.brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;background:none;border:0;color:inherit;cursor:pointer;padding:0}
+.brand svg{width:30px;height:30px}
+@media(max-width:400px){.pyb{display:none}}
+.brand{white-space:nowrap}
+.pyb{font:800 11px var(--mono);padding:2px 7px;border-radius:6px;background:var(--accT);color:var(--accD)}
+.sp{flex:1}
+.ib{width:38px;height:38px;flex:none;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--text);display:grid;place-items:center;cursor:pointer;font:800 16px var(--mono);padding:0}
+.ib:hover{border-color:var(--acc)}
+.ib svg{width:20px;height:20px;fill:currentColor}
+main{flex:1;min-height:0;display:flex;flex-direction:column}
+.screen{display:none}
+.screen.on{display:flex}
+.muted{color:var(--muted)}
+
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:12px;font-weight:700;border:1px solid transparent;cursor:pointer;color:var(--text);text-decoration:none}
+.btn.pri{background:var(--acc);color:#1f2a40;box-shadow:0 6px 16px rgba(142,169,219,.25)}
+.btn.sec{background:var(--panel);border-color:var(--line)}
+.btn:hover{filter:brightness(1.07)}
+.btn:active{transform:translateY(1px)}
+.seg{display:inline-flex;padding:4px;gap:4px;border-radius:12px;background:var(--panel2);border:1px solid var(--line)}
+.seg button{border:0;background:none;color:var(--muted);font-weight:700;padding:8px 16px;border-radius:9px;cursor:pointer}
+.seg button.on{background:var(--panel);color:var(--text);box-shadow:0 1px 4px var(--shadow)}
+
+#home{flex-direction:column;flex:1}
+.hero{position:relative;isolation:isolate;flex:1;display:grid;grid-template-columns:1fr;gap:28px;align-items:center;padding:32px 16px 44px;max-width:1140px;margin:0 auto;width:100%}
+#home{position:relative;isolation:isolate}
+#home::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(var(--gridc) 1px,transparent 1px),linear-gradient(90deg,var(--gridc) 1px,transparent 1px);background-size:32px 32px;-webkit-mask-image:radial-gradient(ellipse 70% 65% at var(--mx,50%) var(--my,45%),#000 25%,transparent 78%);mask-image:radial-gradient(ellipse 70% 65% at var(--mx,50%) var(--my,45%),#000 25%,transparent 78%)}
+.hero h1{font-size:clamp(36px,6vw,58px);line-height:1.05;margin:0 0 14px;letter-spacing:-.5px}
+.hero h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);font-size:18px;max-width:42ch;margin:0 0 20px}
+.selrow{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.fcard .selrow{justify-content:center;margin:0}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.chip{font:700 14px var(--mono);padding:4px 11px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);white-space:nowrap}
+.art{width:100%;max-width:560px;justify-self:center}
+.hero-svg{width:100%;height:auto;display:block}
+@media(min-width:860px){.hero{grid-template-columns:1fr 1.05fr;padding:56px 32px}}
+.mono{font-family:var(--mono)}
+.hero-svg .dlg{transform-box:fill-box;transform-origin:center;animation:drop .75s cubic-bezier(.2,1.35,.4,1) .15s both}
+.hero-svg .cover{transform-box:fill-box;transform-origin:right center;transform:scaleX(0);animation:typing .6s steps(9) .95s both}
+.hero-svg .red{opacity:0;animation:fadeOut .3s 1.7s both}
+.hero-svg .green{opacity:1;animation:fadeIn .3s 1.7s both}
+.hero-svg .pop{transform-box:fill-box;transform-origin:center;animation:pop .45s cubic-bezier(.3,1.6,.5,1) 1.95s both}
+@keyframes drop{from{transform:translateY(-170px);opacity:0}to{transform:none;opacity:1}}
+@keyframes typing{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@keyframes fadeOut{from{opacity:1}to{opacity:0}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:none;opacity:1}}
+
+#game,#test{flex-direction:column;flex:1;min-height:0}
+.hud{display:flex;align-items:center;gap:8px;padding:8px 12px;flex-wrap:wrap;flex:none;border-bottom:1px solid var(--line);background:var(--panel)}
+.hearts{display:flex;gap:1px}
+.h svg{width:22px;height:22px;fill:var(--line);display:block;transition:fill .2s}
+.h.f svg{fill:var(--err)}
+.h.gain svg{animation:pop .4s}
+.prog{flex-basis:100%;display:flex;align-items:center;gap:8px;font:700 12px var(--mono);color:var(--muted)}
+.bar{flex:1;height:6px;border-radius:9px;background:var(--panel2);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .3s}
+#hCombo{color:var(--warn);min-width:34px;text-align:right}
+.ws{position:relative;flex:1;min-height:0;overflow:hidden;background-image:linear-gradient(var(--wgrid) 1px,transparent 1px),linear-gradient(90deg,var(--wgrid) 1px,transparent 1px);background-size:28px 28px}
+.ws.hurt{animation:hurt .45s}
+@keyframes hurt{0%,100%{box-shadow:inset 0 0 0 0 rgba(217,144,156,0)}30%{box-shadow:inset 0 0 0 3px rgba(217,144,156,.8),inset 0 -40px 60px rgba(217,144,156,.18)}}
+.console{flex:none;border-top:1px solid var(--line);background:var(--panel2);padding:8px 10px calc(8px + env(safe-area-inset-bottom))}
+.console>*{max-width:860px;margin-left:auto;margin-right:auto}
+.keys{display:none;gap:6px;overflow-x:auto;padding-bottom:7px;scrollbar-width:none}
+.keys::-webkit-scrollbar{display:none}
+@media (pointer:coarse),(max-width:700px){.keys{display:flex}}
+.keys button{flex:none;min-width:38px;height:36px;padding:0 8px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--text);font:700 16px var(--mono);cursor:pointer}
+.cform{display:flex;gap:8px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px 4px 4px 12px}
+.cform:focus-within{border-color:var(--acc);box-shadow:0 0 0 3px rgba(142,169,219,.2)}
+.prompt{color:var(--acc2D);font:800 15px var(--mono);white-space:nowrap}
+.cin{flex:1;min-width:0;background:none;border:0;outline:0;color:var(--text);font:16px var(--mono);padding:9px 0;white-space:pre}
+.go{flex:none;height:40px;min-width:48px;border-radius:9px;border:0;background:var(--acc);color:#1f2a40;font:800 18px var(--mono);cursor:pointer}
+.cmsg{min-height:20px;font:12px/1.5 var(--mono);color:var(--muted);padding:4px 4px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cmsg.ok{color:var(--okD)}.cmsg.err{color:var(--errD)}
+.shake{animation:shake .35s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+
+.win{position:absolute;width:min(350px,calc(100% - 20px));border-radius:12px;background:var(--panel);border:1px solid var(--err);box-shadow:0 6px 18px var(--shadow);cursor:pointer;user-select:none;-webkit-user-select:none}
+.win .tb{display:flex;align-items:center;gap:6px;padding:5px 10px;background:var(--errT);color:var(--errD);font:800 12px var(--mono);border-radius:10px 10px 0 0}
+.win .tag{font-size:10px;background:rgba(127,127,127,.15);padding:1px 7px;border-radius:6px}
+.win .x{margin-left:auto;opacity:.7}
+.win pre{margin:0;padding:8px 0 4px;font:600 14px/1.5 var(--mono);white-space:pre-wrap;word-break:break-all}
+.ln{display:block;padding:0 12px;color:var(--muted);min-height:1.5em}
+.ln.bad{color:var(--text);font-weight:800;background:var(--errT)}
+.win.heal .ln.bad{background:var(--okT)}
+.win .hint{padding:2px 12px 6px;font-size:12.5px;color:var(--muted)}
+.win.heal{border-color:var(--ok)}.win.heal .tb{background:var(--okT);color:var(--okD)}
+.win .ttl{height:3px;margin:0 12px 8px;background:var(--panel2);border-radius:3px;overflow:hidden;opacity:0;transition:opacity .3s}
+.win.landed .ttl{opacity:1}
+.win .ttl i{display:block;height:100%;background:var(--acc);transform-origin:left}
+.win.late .ttl i{background:var(--err)}
+.win.sel{outline:2px solid var(--acc);outline-offset:2px}
+.win.fixed,.win.good{border-color:var(--ok)}
+.win.fixed .tb,.win.good .tb{background:var(--okT);color:var(--okD)}
+.win.fixed .ln.bad,.win.good .ln.bad{background:var(--okT)}
+.win.fixed{animation:fixOut .45s forwards}
+.win.miss{animation:missOut .4s forwards}
+@keyframes fixOut{to{opacity:0;transform:scale(.85)}}
+@keyframes missOut{to{opacity:0;transform:translateY(24px)}}
+.float{position:absolute;font:800 20px var(--mono);color:var(--warn);pointer-events:none;animation:rise .9s forwards}
+@keyframes rise{to{transform:translateY(-46px);opacity:0}}
+.toast{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);font:900 clamp(26px,6vw,40px) var(--mono);color:var(--accD);pointer-events:none;animation:toast 1.3s forwards;white-space:nowrap}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}20%{opacity:1;transform:translate(-50%,-50%) scale(1)}75%{opacity:1}100%{opacity:0}}
+.ov{position:absolute;inset:0;z-index:5;background:var(--ovl);backdrop-filter:blur(4px);display:grid;place-items:center;padding:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px;text-align:center;width:min(420px,100%)}
+.card h2{margin:4px 0 14px}
+.card .big{font-size:40px;line-height:1}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.grid3 div{background:var(--panel2);border-radius:12px;padding:10px 4px}
+.grid3 b{display:block;font:800 22px var(--mono)}
+.grid3 span{font-size:12px;color:var(--muted)}
+.card .btns{justify-content:center}
+
+.tws{display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
+.twin{position:relative;width:min(560px,100%);cursor:default;animation:dropIn .45s cubic-bezier(.2,1.3,.4,1)}
+.twin pre{font-size:16px;padding:12px 0 6px}
+.twin .ln{padding:0 16px}
+.twin .hint{padding:2px 16px 16px;font-size:14px}
+.twin .ttl{display:none}
+.twin.bad{animation:shake .35s}
+.qwin{border-color:var(--acc)}.qwin .tb{background:var(--accT);color:var(--accD)}
+.qq{padding:16px 16px 4px;font-weight:700;font-size:17px}
+.qq code{font:700 15px var(--mono);background:var(--panel2);padding:1px 6px;border-radius:6px}
+.opts{display:grid;grid-template-columns:1fr;gap:8px;padding:12px 16px 16px}
+@media(min-width:560px){.opts{grid-template-columns:1fr 1fr}}
+.opts button{padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font:600 15px var(--mono);cursor:pointer;text-align:left;word-break:break-word}
+.opts button:hover{border-color:var(--acc)}
+.opts button.pick{border-color:var(--acc);background:var(--accT)}
+@keyframes dropIn{from{transform:translateY(-60px);opacity:0}to{transform:none;opacity:1}}
+
+.formwrap{flex:1;display:grid;place-items:center;padding:24px 16px}
+.fcard{display:flex;flex-direction:column;gap:12px;text-align:left}
+.fcard h2,.fcard p{margin:0;text-align:center}
+.fcard .seg{align-self:center}
+.fcard label{display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--muted)}
+.fcard input{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--text);font:16px inherit;outline:0}
+.fcard input:focus{border-color:var(--acc)}
+
+#result{flex:1;justify-content:center;padding:24px 16px}
+.res{width:min(900px,100%)}
+.rhead{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.rname{font-size:24px;font-weight:800}
+.grade{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;border:5px solid var(--gc,var(--acc));font:900 34px var(--mono);flex:none}
+.grade small{display:block;font-size:12px;color:var(--muted);margin-top:-8px;text-align:center}
+.cats{display:grid;gap:8px;margin:16px 0}
+.cat{display:grid;grid-template-columns:110px 1fr 46px;gap:10px;align-items:center;font:13px var(--mono)}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin-bottom:18px}
+.rt{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+.rt th,.rt td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.rt th{background:var(--panel2);font-size:12px;color:var(--muted)}
+.rt code{font-family:var(--mono);font-size:13px;word-break:break-all;white-space:pre-wrap}
+.rt tr:last-child td{border-bottom:0}
+.okc{color:var(--okD);font-weight:800}.bdc{color:var(--errD);font-weight:800}
+
+.modal{position:fixed;inset:0;z-index:50;background:rgba(20,20,26,.5);display:grid;place-items:center;padding:16px}
+.mbox{background:var(--panel);border:1px solid var(--line);border-radius:18px;width:min(540px,100%);max-height:86vh;overflow:auto;padding:22px;position:relative}
+.mbox h2{margin:0 36px 8px 0}
+.mbox h3{margin:16px 0 6px;font-size:15px;color:var(--acc2D)}
+.mbox ul{margin:0;padding-left:20px;color:var(--muted);font-size:14.5px}
+.mbox li{margin:3px 0}
+.mbox kbd{font:700 12px var(--mono);background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:var(--text)}
+.mclose{position:absolute;top:14px;right:14px}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.links svg{width:18px;height:18px;fill:var(--warn)}
+
+@media (prefers-reduced-motion:reduce){
+  .hero-svg *{animation:none!important}
+  .toast,.float,.twin,.h.gain svg{animation-duration:.01s!important}
+}
+@media print{
+  body{background:#fff;color:#000}
+  .top,.no-print{display:none!important}
+  .rt th{background:#eee;color:#000}.rt th,.rt td{border-color:#ccc}
+  .tw{border-color:#ccc}.muted{color:#444}
+}
+</style>
+</head>
+<body>
+<div id="app">
+<header class="top">
+  <button class="brand" id="brand" aria-label="На головну">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="8" width="56" height="48" rx="10" style="fill:var(--s1);stroke:var(--acc)" stroke-width="4"/><path d="M4 18a10 10 0 0 1 10-10h36a10 10 0 0 1 10 10v4H4z" style="fill:var(--serr)"/><path d="M16 31l9 7-9 7" fill="none" style="stroke:var(--acc)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M30 46h16" style="stroke:var(--acc2)" stroke-width="5" stroke-linecap="round"/></svg>
+    Баг-шторм <span class="pyb" id="trackPill">Python</span>
+  </button>
+  <span class="sp"></span>
+  <button class="ib" id="themeBtn" aria-label="Тема"></button>
+  <button class="ib" id="soundBtn" aria-label="Звук"></button>
+  <button class="ib" id="infoBtn" aria-label="Інформація">i</button>
+</header>
+
+<main>
+<section id="home" class="screen on">
+  <div class="hero">
+    <div>
+      <h1>Баг-<em>шторм</em></h1>
+      <p class="lead">Вікна з помилками в коді падають і складаються в стос. Виправ рядок у консолі, поки їх не завалило.</p>
+      <div class="selrow"><div class="seg" data-track-seg><button data-tr="html">HTML і CSS</button><button data-tr="py">Python</button></div></div>
+      <div class="btns">
+        <button class="btn pri" id="playBtn">▶ Грати</button>
+        <button class="btn sec" id="testBtn">📝 Тестування</button>
+      </div>
+      <div class="chips"><span class="chip">🏆 <b id="sBest">0</b></span><span class="chip">⚡ XP <b id="sXp">0</b></span></div>
+    </div>
+    <div class="art">
+      <svg class="hero-svg" id="heroHtml" hidden viewBox="0 0 560 420" role="img" aria-label="Редактор коду з вікном помилки, яку виправляють у консолі">
+        <defs><linearGradient id="hg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c9c1ee"/><stop offset="1" stop-color="#b3dbe5"/></linearGradient></defs>
+        <!-- editor -->
+        <rect x="10" y="20" width="410" height="300" rx="16" stroke-width="2" style="fill:var(--s1);stroke:var(--s3)"/>
+        <path d="M11 36a15 15 0 0 1 15-15h378a15 15 0 0 1 15 15v14H11z" style="fill:var(--s2)"/>
+        <circle cx="32" cy="36" r="5" style="fill:var(--serr)"/><circle cx="50" cy="36" r="5" fill="#e8c98a"/><circle cx="68" cy="36" r="5" fill="#7cbf98"/>
+        <rect x="88" y="26" width="96" height="24" rx="6" style="fill:var(--s1);stroke:var(--s3)"/><text x="100" y="43" class="mono" font-size="12" style="fill:var(--smut)">index.html</text>
+        <g class="mono" font-size="14">
+          <g style="fill:var(--sln)"><text x="24" y="82">1</text><text x="24" y="108">2</text><text x="24" y="134">3</text><text x="24" y="160">4</text><text x="24" y="186">5</text><text x="24" y="212">6</text><text x="24" y="238">7</text><text x="24" y="264">8</text><text x="24" y="290">9</text></g>
+          <text x="50" y="82" style="fill:var(--smut)">&lt;!DOCTYPE html&gt;</text>
+          <text x="50" y="108" style="fill:var(--stag)">&lt;html&gt;</text>
+          <text x="50" y="134" style="fill:var(--stag)">&lt;body&gt;</text>
+          <text x="66" y="160" style="fill:var(--stag)">&lt;h1&gt;<tspan style="fill:var(--stx)">My site</tspan>&lt;/h1&gt;</text>
+          <rect class="red" x="44" y="170" width="366" height="23" rx="4" fill-opacity=".2" style="fill:var(--serr)"/>
+          <rect class="green" x="44" y="170" width="366" height="23" rx="4" fill="#7cbf98" fill-opacity=".22"/>
+          <text class="red" x="66" y="186" style="fill:var(--stag)">&lt;p&gt;<tspan style="fill:var(--stx)">Hello</tspan>&lt;p&gt;</text>
+          <path class="red" d="M66 192q4 4 8 0t8 0 8 0 8 0 8 0 8 0 8 0 8 0 8 0 8 0" fill="none" stroke-width="2" style="stroke:var(--serr)"/>
+          <text class="green" x="66" y="186" style="fill:var(--stag)">&lt;p&gt;<tspan style="fill:var(--stx)">Hello</tspan>&lt;/p&gt;</text>
+          <text x="66" y="212" style="fill:var(--stag)">&lt;a <tspan style="fill:var(--scy)">href</tspan>=<tspan fill="#e8c98a">"#"</tspan>&gt;<tspan style="fill:var(--stx)">Go</tspan>&lt;/a&gt;</text>
+          <text x="50" y="238" style="fill:var(--stag)">&lt;/body&gt;</text>
+          <text x="50" y="264" style="fill:var(--stag)">&lt;/html&gt;</text>
+        </g>
+        <!-- error dialog -->
+        <g class="dlg">
+          <rect x="196" y="72" width="214" height="118" rx="12" stroke-width="2" class="red" style="fill:var(--s2);stroke:var(--serr)"/>
+          <rect x="196" y="72" width="214" height="118" rx="12" stroke="#7cbf98" stroke-width="2" class="green" style="fill:var(--s2)"/>
+          <path class="red" d="M197 84a11 11 0 0 1 11-11h190a11 11 0 0 1 11 11v14H197z" style="fill:var(--serrT)"/>
+          <path class="green" d="M197 84a11 11 0 0 1 11-11h190a11 11 0 0 1 11 11v14H197z" style="fill:var(--sokT)"/>
+          <text class="red mono" x="208" y="91" font-size="12" font-weight="800" style="fill:var(--serrD)">⚠ ERROR</text>
+          <text class="green mono" x="208" y="91" font-size="12" font-weight="800" style="fill:var(--sokD)">✓ FIXED</text>
+          <text class="mono" x="392" y="91" font-size="12" opacity=".7" style="fill:var(--serrD)">✕</text>
+          <text class="red mono" x="212" y="134" font-size="17" font-weight="700" style="fill:var(--serrD)">&lt;p&gt;Hello&lt;p&gt;</text>
+          <text class="green mono" x="212" y="134" font-size="17" font-weight="700" style="fill:var(--sokD)">&lt;p&gt;Hello&lt;/p&gt;</text>
+          <rect x="212" y="152" width="120" height="8" rx="4" style="fill:var(--s3)"/>
+          <rect x="212" y="166" width="78" height="8" rx="4" style="fill:var(--s3)"/>
+        </g>
+        <!-- console -->
+        <rect x="10" y="338" width="410" height="58" rx="12" stroke-width="2" style="fill:var(--s4);stroke:var(--s3)"/>
+        <text x="28" y="374" class="mono" font-size="18" font-weight="800" style="fill:var(--scy)">&gt;</text>
+        <text x="48" y="374" class="mono" font-size="17" style="fill:var(--stx)">&lt;p&gt;Hello&lt;/p&gt;</text>
+        <rect class="cover" x="46" y="352" width="132" height="32" style="fill:var(--s4)"/>
+        <rect x="176" y="358" width="9" height="20" opacity=".8" style="fill:var(--scy)"/>
+        <rect x="366" y="350" width="44" height="34" rx="8" fill="#9b8fd6"/><text x="379" y="373" class="mono" font-size="16" font-weight="800" fill="#fff">⏎</text>
+        <!-- side items -->
+        <g class="mono" font-size="14" font-weight="800">
+          <rect x="440" y="34" width="110" height="34" rx="17" stroke="#9b8fd6" stroke-width="2" style="fill:var(--s2)"/>
+          <text x="458" y="56" style="fill:var(--stag)">&lt;/&gt; HTML</text>
+          <rect x="440" y="82" width="110" height="34" rx="17" stroke-width="2" style="fill:var(--s2);stroke:var(--scy)"/>
+          <text x="462" y="104" style="fill:var(--scy2)">{ } CSS</text>
+        </g>
+        <g class="pop">
+          <circle cx="495" cy="196" r="44" fill="url(#hg2)"/>
+          <path d="M495 166l6.6 13.4 14.8 2.1-10.7 10.4 2.5 14.7-13.2-6.9-13.2 6.9 2.5-14.7-10.7-10.4 14.8-2.1z" fill="#fff" fill-opacity=".45"/>
+          <text x="495" y="200" text-anchor="middle" class="mono" font-size="22" font-weight="900" fill="#4a4570">+25</text>
+          <text x="495" y="220" text-anchor="middle" class="mono" font-size="12" font-weight="800" fill="#4a4570">XP</text>
+        </g>
+        <g style="fill:var(--serr)">
+          <path transform="translate(440 272) scale(.85)" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          <path transform="translate(462 272) scale(.85)" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          <path transform="translate(484 272) scale(.85)" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          <path transform="translate(506 272) scale(.85)" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          <path transform="translate(528 272) scale(.85)" fill="#7cbf98" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </g>
+      </svg>
+      <svg class="hero-svg" id="heroPy" viewBox="0 0 560 420" role="img" aria-label="Редактор коду Python з вікном помилки, яку виправляють у консолі">
+        <defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#bcd0f0"/><stop offset="1" stop-color="#ecdca6"/></linearGradient></defs>
+        <rect x="10" y="20" width="410" height="300" rx="16" style="fill:var(--s1);stroke:var(--s3)" stroke-width="2"/>
+        <path d="M11 36a15 15 0 0 1 15-15h378a15 15 0 0 1 15 15v14H11z" style="fill:var(--s2)"/>
+        <circle cx="32" cy="36" r="5" style="fill:var(--serr)"/><circle cx="50" cy="36" r="5" fill="#e8c98a"/><circle cx="68" cy="36" r="5" fill="#7cbf98"/>
+        <rect x="88" y="26" width="84" height="24" rx="6" style="fill:var(--s1);stroke:var(--s3)"/><text x="100" y="43" class="mono" font-size="12" style="fill:var(--smut)">main.py</text>
+        <g class="mono" font-size="14">
+          <g style="fill:var(--sln)"><text x="24" y="82">1</text><text x="24" y="108">2</text><text x="24" y="134">3</text><text x="24" y="160">4</text><text x="24" y="186">5</text><text x="24" y="212">6</text><text x="24" y="238">7</text><text x="24" y="264">8</text><text x="24" y="290">9</text></g>
+          <text x="50" y="82" style="fill:var(--skw)">import <tspan style="fill:var(--stx)">random</tspan></text>
+          <text x="50" y="134" style="fill:var(--stx)">x = random.randint(<tspan style="fill:var(--snum)">1</tspan>, <tspan style="fill:var(--snum)">10</tspan>)</text>
+          <rect class="red" x="44" y="144" width="366" height="23" rx="4" style="fill:var(--serr)" fill-opacity=".2"/>
+          <rect class="green" x="44" y="144" width="366" height="23" rx="4" fill="#7cbf98" fill-opacity=".22"/>
+          <text class="red" x="50" y="160" style="fill:var(--skw)">if <tspan style="fill:var(--stx)">x &gt; </tspan><tspan style="fill:var(--snum)">5</tspan></text>
+          <path class="red" d="M50 166q4 4 8 0t8 0 8 0 8 0 8 0 8 0 8 0 8 0" fill="none" style="stroke:var(--serr)" stroke-width="2"/>
+          <text class="green" x="50" y="160" style="fill:var(--skw)">if <tspan style="fill:var(--stx)">x &gt; </tspan><tspan style="fill:var(--snum)">5</tspan><tspan style="fill:var(--stx)">:</tspan></text>
+          <text x="82" y="186" style="fill:var(--skw)">print<tspan style="fill:var(--stx)">(</tspan><tspan style="fill:var(--sstr)">"Big"</tspan><tspan style="fill:var(--stx)">)</tspan></text>
+          <text x="50" y="212" style="fill:var(--skw)">else<tspan style="fill:var(--stx)">:</tspan></text>
+          <text x="82" y="238" style="fill:var(--skw)">print<tspan style="fill:var(--stx)">(</tspan><tspan style="fill:var(--sstr)">"Small"</tspan><tspan style="fill:var(--stx)">)</tspan></text>
+        </g>
+        <g class="dlg">
+          <rect class="red" x="196" y="62" width="214" height="118" rx="12" style="fill:var(--s1);stroke:var(--serr)" stroke-width="2"/>
+          <rect class="green" x="196" y="62" width="214" height="118" rx="12" style="fill:var(--s1)" stroke="#7cbf98" stroke-width="2"/>
+          <path class="red" d="M197 74a11 11 0 0 1 11-11h190a11 11 0 0 1 11 11v14H197z" style="fill:var(--serrT)"/>
+          <path class="green" d="M197 74a11 11 0 0 1 11-11h190a11 11 0 0 1 11 11v14H197z" style="fill:var(--sokT)"/>
+          <text class="red mono" x="208" y="81" font-size="12" font-weight="800" style="fill:var(--serrD)">⚠ SyntaxError</text>
+          <text class="green mono" x="208" y="81" font-size="12" font-weight="800" style="fill:var(--sokD)">✓ FIXED</text>
+          <text class="mono" x="392" y="81" font-size="12" style="fill:var(--serrD)" opacity=".7">✕</text>
+          <text class="red mono" x="212" y="124" font-size="17" font-weight="700" style="fill:var(--serrD)">if x &gt; 5</text>
+          <text class="green mono" x="212" y="124" font-size="17" font-weight="700" style="fill:var(--sokD)">if x &gt; 5:</text>
+          <rect x="212" y="142" width="120" height="8" rx="4" style="fill:var(--s2)"/>
+          <rect x="212" y="156" width="78" height="8" rx="4" style="fill:var(--s2)"/>
+        </g>
+        <rect x="10" y="338" width="410" height="58" rx="12" style="fill:var(--s4);stroke:var(--s3)" stroke-width="2"/>
+        <text x="26" y="373" class="mono" font-size="15" font-weight="800" style="fill:var(--sstr)">&gt;&gt;&gt;</text>
+        <text x="64" y="374" class="mono" font-size="17" style="fill:var(--stx)">if x &gt; 5:</text>
+        <rect class="cover" x="62" y="352" width="96" height="32" style="fill:var(--s4)"/>
+        <rect x="160" y="358" width="9" height="20" style="fill:var(--sstr)" opacity=".8"/>
+        <rect x="366" y="350" width="44" height="34" rx="8" fill="#8ea9db"/><text x="379" y="373" class="mono" font-size="16" font-weight="800" fill="#1f2a40">⏎</text>
+        <g class="mono" font-size="14" font-weight="800">
+          <rect x="440" y="34" width="110" height="34" rx="17" style="fill:var(--s2)" stroke="#8ea9db" stroke-width="2"/>
+          <text x="457" y="56" style="fill:var(--skw)">🐍 Python</text>
+          <rect x="440" y="82" width="110" height="34" rx="17" style="fill:var(--s2)" stroke="#d8be6a" stroke-width="2"/>
+          <text x="459" y="104" style="fill:var(--sstr)">def f():</text>
+        </g>
+        <g class="pop">
+          <circle cx="495" cy="196" r="44" fill="url(#hg)"/>
+          <path d="M495 166l6.6 13.4 14.8 2.1-10.7 10.4 2.5 14.7-13.2-6.9-13.2 6.9 2.5-14.7-10.7-10.4 14.8-2.1z" fill="#fff" fill-opacity=".45"/>
+          <text x="495" y="200" text-anchor="middle" class="mono" font-size="22" font-weight="900" fill="#3a4060">+25</text>
+          <text x="495" y="220" text-anchor="middle" class="mono" font-size="12" font-weight="800" fill="#3a4060">XP</text>
+        </g>
+        <g style="fill:var(--serr)">
+          <path transform="translate(440 272) scale(.85)" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          <path transform="translate(462 272) scale(.85)" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          <path transform="translate(484 272) scale(.85)" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          <path transform="translate(506 272) scale(.85)" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          <path transform="translate(528 272) scale(.85)" fill="#7cbf98" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="game" class="screen">
+  <div class="hud">
+    <div class="hearts" id="hearts"></div>
+    <span class="chip">★ <b id="hScore">0</b></span>
+    <span class="chip">XP <b id="hXp">0</b></span>
+    <span class="sp"></span>
+    <button class="ib" id="pauseBtn" aria-label="Пауза"><svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
+    <div class="prog"><span id="hLvl">Рів. 1</span><div class="bar"><i id="hBar"></i></div><span id="hCombo"></span></div>
+  </div>
+  <div class="ws" id="ws"><div class="ov" id="gov" hidden></div></div>
+  <div class="console">
+    <div class="keys" data-for="cin"></div>
+    <form class="cform" id="cform" autocomplete="off"><span class="prompt">&gt;&gt;&gt;</span><input id="cin" class="cin" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" placeholder="виправлений рядок" aria-label="Консоль"><button class="go" aria-label="Перевірити">⏎</button></form>
+    <div class="cmsg" id="cmsg"></div>
+  </div>
+</section>
+
+<section id="tstart" class="screen">
+  <div class="formwrap">
+    <form id="tsForm" class="card fcard">
+      <div class="big" style="text-align:center">📝</div>
+      <h2>Тестування</h2>
+      <p class="muted">12 завдань · 1 спроба · оцінка /12</p>
+      <div class="selrow"><div class="seg" data-track-seg><button type="button" data-tr="html">HTML і CSS</button><button type="button" data-tr="py">Python</button></div></div>
+      <label>Ім'я та прізвище<input id="tsName" maxlength="40" autocomplete="name"></label>
+      <label>Клас<input id="tsClass" maxlength="10" placeholder="8-А"></label>
+      <button class="btn pri">Почати</button>
+      <button type="button" class="btn sec" data-home>Назад</button>
+    </form>
+  </div>
+</section>
+
+<section id="test" class="screen">
+  <div class="hud">
+    <span class="chip">📝 <b id="tNum">1/12</b></span>
+    <span class="chip">⏱ <b id="tTime">00:00</b></span>
+    <span class="chip" id="tAway" style="color:var(--errD)" hidden>👁 <b>0</b></span>
+    <span class="sp"></span>
+    <button class="ib" id="tExit" aria-label="Вийти">✕</button>
+    <div class="prog"><div class="bar"><i id="tBar"></i></div></div>
+  </div>
+  <div class="ws tws" id="tws"></div>
+  <div class="console" id="tcon">
+    <div class="keys" data-for="tin"></div>
+    <form class="cform" id="tform" autocomplete="off"><span class="prompt">&gt;&gt;&gt;</span><input id="tin" class="cin" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" placeholder="виправлений рядок" aria-label="Консоль"><button class="go" aria-label="Відповісти">⏎</button></form>
+    <div class="cmsg" id="tmsg"></div>
+  </div>
+</section>
+
+<section id="result" class="screen"><div class="res" id="resBox"></div></section>
+</main>
+</div>
+
+<div class="modal" id="info" hidden>
+  <div class="mbox" role="dialog" aria-modal="true" aria-labelledby="infoT">
+    <button class="ib mclose" id="infoClose" aria-label="Закрити">✕</button>
+    <h2 id="infoT">Баг-шторм</h2>
+    <p class="muted" style="margin:0">Виправляй помилки в коді HTML, CSS і Python, поки вікна не завалили екран.</p>
+    <h3>Гра</h3>
+    <ul>
+      <li>Обери мову, введи виправлений рядок і натисни <kbd>Enter</kbd>.</li>
+      <li>Вікно пролежало 30 с — мінус ❤. Зелене ✚ — плюс ❤ (до 5).</li>
+      <li>Кожні 5 виправлень — новий рівень.</li>
+      <li>У Python регістр важливий: <kbd>print</kbd> ≠ <kbd>Print</kbd>.</li>
+    </ul>
+    <h3>Тестування</h3>
+    <ul>
+      <li>12 завдань, одна спроба, оцінка /12 і звіт.</li>
+      <li>Перехід на іншу вкладку фіксується.</li>
+    </ul>
+    <h3>Керування</h3>
+    <ul>
+      <li><kbd>Enter</kbd> перевірити · <kbd>Tab</kbd> взяти рядок · <kbd>Esc</kbd> пауза</li>
+      <li>Клік або дотик по вікну — скопіювати рядок · <kbd>⇥</kbd> відступ</li>
+    </ul>
+    <div class="links">
+      <a class="btn sec" href="https://github.com/whyuxavier/bug-storm" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>GitHub</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const qs=s=>document.querySelector(s);
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const coarse=matchMedia('(pointer:coarse)').matches;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+/* HTML/CSS: регістр не важливий, лапки й пробіли біля символів не важливі */
+function normH(s){return s.toLowerCase().replace(/[‘’'`«»“”]/g,'"').replace(/\s+/g,' ').replace(/\s*([<>=:;{}\/,"()])\s*/g,'$1').replace(/\/>/g,'>').replace(/;}/g,'}').replace(/;$/,'').trim()}
+/* Python: регістр важливий; пробіли біля операторів не важливі; відступ важливий лише в завданнях із ind */
+function normP(s,ind){const raw=s.replace(/\t/g,'    ').replace(/[\r\n]+/g,' ');const lead=/^\s+\S/.test(raw);
+  const t=raw.trim().replace(/[‘’'`«»“”]/g,'"').replace(/\s+/g,' ').replace(/\s*([()\[\]{}:,=+\-*\/<>!%."#])\s*/g,'$1');
+  return (ind&&lead?'⇥':'')+t}
+const norm=(t,v)=>t.key==='html'?normH(v):normP(v,t.ind);
+
+/* ---------- завдання: [клас, складність, тема, рядки коду, № помилкового рядка, підказка, відповіді, відступ?] ---------- */
+const RAW=[
+// 8 клас — Основи
+[8,1,'Основи',['print("Hello)'],0,'Лапку не закрито',['print("Hello")']],
+[8,1,'Основи',['Print("Hi")'],0,'Python розрізняє великі й малі літери',['print("Hi")']],
+[8,1,'Основи',['print "Hi"'],0,'Потрібні дужки',['print("Hi")']],
+[8,1,'Основи',['name = input("Name: "','print(name)'],0,'Дужку не закрито',['name = input("Name: ")']],
+[8,1,'Основи',['a = input("Age: ")','age = a + 1'],1,'input() повертає рядок — перетвори на число',['age = int(a) + 1']],
+[8,1,'Основи',['2x = 10'],0,'Ім\'я змінної не починається з цифри',['x2 = 10','x = 10']],
+[8,1,'Основи',['x = 5','print(X)'],1,'Змінна називається інакше',['print(x)']],
+[8,1,'Основи',['print("Sum: " + 5)'],0,'Рядок і число так не додаються',['print("Sum: " + str(5))','print("Sum:", 5)','print("Sum: ", 5)']],
+[8,1,'Основи',['x == 5','print(x)'],0,'Тут потрібне присвоєння',['x = 5']],
+[8,1,'Основи',['# ціла частина від ділення','x = 7 / 2'],1,'Потрібен інший оператор ділення',['x = 7 // 2']],
+[8,1,'Основи',['# остача від ділення','r = 7 mod 2'],1,'У Python остачу дає інший знак',['r = 7 % 2']],
+// 8 клас — Розгалуження
+[8,2,'Розгалуження',['x = 7','if x > 5','    print("Big")'],1,'Не вистачає символу',['if x > 5:']],
+[8,2,'Розгалуження',['if x = 10:','    print("Ten")'],0,'Порівняння — подвійний знак',['if x == 10:']],
+[8,2,'Розгалуження',['if x > 0:','    print("Plus")','else','    print("Minus")'],2,'Не вистачає символу',['else:']],
+[8,2,'Розгалуження',['if x > 0:','    print("Plus")','else if x < 0:','    print("Minus")'],2,'У Python для цього є окреме слово',['elif x < 0:']],
+[8,2,'Розгалуження',['if x > 0:','print("Plus")'],1,'Тіло умови пишуть з відступом',['    print("Plus")'],1],
+[8,2,'Розгалуження',['if x > 5 and < 10:','    print("OK")'],0,'Друге порівняння треба написати повністю',['if x > 5 and x < 10:','if 5 < x < 10:']],
+[8,2,'Розгалуження',['if a =< 5:','    print(a)'],0,'Оператор записано неправильно',['if a <= 5:']],
+[8,2,'Розгалуження',['if x <> 0:','    print(10 / x)'],0,'«Не дорівнює» пишуть інакше',['if x != 0:']],
+// 8 клас — Цикли
+[8,2,'Цикли',['for i in range(5)','    print(i)'],0,'Не вистачає символу',['for i in range(5):']],
+[8,2,'Цикли',['for i in range 5:','    print(i)'],0,'range — це функція',['for i in range(5):']],
+[8,2,'Цикли',['# числа від 1 до 10','for i in range(1, 10):','    print(i)'],1,'Останнє число в range не входить',['for i in range(1, 11):']],
+[8,2,'Цикли',['x = 0','while x < 10','    x += 1'],1,'Не вистачає символу',['while x < 10:']],
+[8,2,'Цикли',['for i in rang(3):','    print(i)'],0,'Функцію написано з помилкою',['for i in range(3):']],
+[8,3,'Цикли',['x = 0','while x < 5:','    print(x)','    x = x - 1'],3,'Цикл ніколи не закінчиться',['x = x + 1','x += 1']],
+[8,3,'Цикли',['# 10, 9, … 1','for x in range(10, 0):','    print(x)'],1,'Потрібен від\'ємний крок',['for x in range(10, 0, -1):']],
+// 8 клас — Tkinter
+[8,3,'Tkinter',['import Tkinter'],0,'Назва модуля — малими літерами',['import tkinter']],
+[8,3,'Tkinter',['from tkinter import *','root = Tk()','root.mainloop'],2,'Метод треба викликати',['root.mainloop()']],
+[8,3,'Tkinter',['btn = Button(root, txt="OK")','btn.pack()'],0,'Параметр написано з помилкою',['btn = Button(root, text="OK")']],
+[8,3,'Tkinter',['btn = Button(root, text="Go", command=go())'],0,'Функцію передають без дужок',['btn = Button(root, text="Go", command=go)']],
+[8,3,'Tkinter',['entry = Entry(root)','name = entry.get'],1,'Метод треба викликати',['name = entry.get()']],
+[8,3,'Tkinter',['from tkinter import *','root = tk()'],1,'Назва класу — з великої літери',['root = Tk()']],
+[8,3,'Tkinter',['lbl.config(text="Hi"'],0,'Дужку не закрито',['lbl.config(text="Hi")']],
+[8,3,'Tkinter',['root = Tk()','root.title = "Game"'],1,'title — це метод',['root.title("Game")']],
+// 9 клас — Списки
+[9,1,'Списки',['a = [1, 2, 3'],0,'Дужку не закрито',['a = [1, 2, 3]']],
+[9,1,'Списки',['a = [1, 2, 3]','a.add(4)'],1,'Для списку потрібен інший метод',['a.append(4)']],
+[9,1,'Списки',['a = [5, 7, 9]','print(a[3])'],1,'Індекси з 0. Виведи останній',['print(a[2])','print(a[-1])']],
+[9,1,'Списки',['a = [4, 8]','n = a.len()'],1,'Довжину рахує функція',['n = len(a)']],
+[9,1,'Списки',['a = [1, 2]','for x in a','    print(x)'],1,'Не вистачає символу',['for x in a:']],
+[9,1,'Списки',['a = [3, 5, 2]','s = summ(a)'],1,'Функцію написано з помилкою',['s = sum(a)']],
+[9,1,'Списки',['a = ["x", "y" "z"]'],0,'Не вистачає коми',['a = ["x", "y", "z"]']],
+// 9 клас — Рядки
+[9,1,'Рядки',['s = "hello"','print(s.upper)'],1,'Метод треба викликати',['print(s.upper())']],
+[9,1,'Рядки',['print(len "word")'],0,'len — це функція',['print(len("word"))']],
+[9,1,'Рядки',['name = "Ann"','print("Hi, " name)'],1,'Не вистачає + або коми',['print("Hi, " + name)','print("Hi, ", name)','print("Hi,", name)']],
+[9,2,'Рядки',['name = "Ann"','print(f"Hi {name")'],1,'Фігурну дужку не закрито',['print(f"Hi {name}")']],
+[9,2,'Рядки',['name = "Ann"','print("Hi {name}")'],1,'Для підстановки потрібна літера перед лапками',['print(f"Hi {name}")']],
+[9,2,'Рядки',['s = "Python"','print(s[0:2)'],1,'Дужку зрізу не закрито',['print(s[0:2])']],
+// 9 клас — Функції
+[9,2,'Функції',['def hello()','    print("Hi")'],0,'Не вистачає символу',['def hello():']],
+[9,2,'Функції',['function hello():','    print("Hi")'],0,'У Python функцію оголошують іншим словом',['def hello():']],
+[9,2,'Функції',['def area(a b):','    return a * b'],0,'Не вистачає коми',['def area(a, b):']],
+[9,2,'Функції',['def hi():','    print("Hi")','hi'],2,'Функцію треба викликати',['hi()']],
+[9,3,'Функції',['def add(a, b):','    a + b'],1,'Функція має повернути результат',['return a + b']],
+[9,3,'Функції',['def double(x):','    return x * 2','print(Double(5))'],2,'Назва функції інша',['print(double(5))']],
+// 9 клас — Модулі
+[9,3,'Модулі',['import random','n = random.randint(1 10)'],1,'Не вистачає коми',['n = random.randint(1, 10)']],
+[9,3,'Модулі',['import random','n = randint(1, 6)'],1,'Звертайся через назву модуля',['n = random.randint(1, 6)']],
+[9,3,'Модулі',['import Random'],0,'Назва модуля — малими літерами',['import random']],
+[9,3,'Модулі',['import math','r = sqrt(16)'],1,'Звертайся через назву модуля',['r = math.sqrt(16)']],
+[9,3,'Модулі',['import random','x = random.choise(a)'],1,'Метод написано з помилкою',['x = random.choice(a)']],
+];
+const HT=[
+// 1 — HTML теги
+{t:1,c:'HTML',b:'<p>Hello<p>',h:'Тег не закрито',a:['<p>Hello</p>']},
+{t:1,c:'HTML',b:'<h1>Title</h2>',h:'Закриваючий тег не той',a:['<h1>Title</h1>']},
+{t:1,c:'HTML',b:'<b>Bold</b',h:'Не вистачає символу',a:['<b>Bold</b>']},
+{t:1,c:'HTML',b:'<li>Item</il>',h:'Помилка в назві тегу',a:['<li>Item</li>']},
+{t:1,c:'HTML',b:'<titel>Site</titel>',h:'Тег написано з помилкою',a:['<title>Site</title>']},
+{t:1,c:'HTML',b:'<em>Text<em>',h:'Тег не закрито',a:['<em>Text</em>']},
+{t:1,c:'HTML',b:'p>Text</p>',h:'Не вистачає символу',a:['<p>Text</p>']},
+{t:1,c:'HTML',b:'<i>Italic</b>',h:'Закриваючий тег не той',a:['<i>Italic</i>']},
+{t:1,c:'HTML',b:'<botton>OK</botton>',h:'Тег написано з помилкою',a:['<button>OK</button>']},
+{t:1,c:'HTML',b:'<br></br>',h:'br — одиночний тег',a:['<br>']},
+{t:1,c:'HTML',b:'<h7>Main</h7>',h:'Такого заголовка немає. Найбільший?',a:['<h1>Main</h1>']},
+{t:1,c:'HTML',b:'<hr></hr>',h:'hr — одиночний тег',a:['<hr>']},
+{t:1,c:'HTML',b:'<span>Text</span>>',h:'Зайвий символ',a:['<span>Text</span>']},
+{t:1,c:'HTML',b:'<div>Box</dvi>',h:'Помилка в назві тегу',a:['<div>Box</div>']},
+{t:1,c:'HTML',b:'<h2>News<h2>',h:'Тег не закрито',a:['<h2>News</h2>']},
+{t:1,c:'HTML',b:'<strong>Hi</stong>',h:'Помилка в назві тегу',a:['<strong>Hi</strong>']},
+// 2 — атрибути і вкладеність
+{t:2,c:'Атрибути',b:'<img scr="cat.png">',h:'Атрибут написано з помилкою',a:['<img src="cat.png">']},
+{t:2,c:'Атрибути',b:'<a herf="index.html">Home</a>',h:'Атрибут написано з помилкою',a:['<a href="index.html">Home</a>']},
+{t:2,c:'Атрибути',b:'<img src=cat.png>',h:'Значення атрибута — в лапках',a:['<img src="cat.png">']},
+{t:2,c:'Атрибути',b:'<a href="page.html>Next</a>',h:'Лапку не закрито',a:['<a href="page.html">Next</a>']},
+{t:2,c:'Атрибути',b:'<ul><li>One</ul>',h:'Пункт списку не закрито',a:['<ul><li>One</li></ul>']},
+{t:2,c:'Атрибути',b:'<p><b>Hi</p></b>',h:'Порушено вкладеність',a:['<p><b>Hi</b></p>']},
+{t:2,c:'Атрибути',b:'<input type="txt">',h:'Неправильний тип поля',a:['<input type="text">']},
+{t:2,c:'Атрибути',b:'<img src="logo.png" atl="Logo">',h:'Атрибут написано з помилкою',a:['<img src="logo.png" alt="Logo">']},
+{t:2,c:'Атрибути',b:'<ol><li>One</li><ol>',h:'Список не закрито',a:['<ol><li>One</li></ol>']},
+{t:2,c:'Атрибути',b:'<a href="x.html" target="blank">Go</a>',h:'Неправильне значення target',a:['<a href="x.html" target="_blank">Go</a>']},
+{t:2,c:'Атрибути',b:'<link rel="stylesheet" herf="style.css">',h:'Атрибут написано з помилкою',a:['<link rel="stylesheet" href="style.css">']},
+{t:2,c:'Атрибути',b:'<div class=box>Hi</div>',h:'Значення атрибута — в лапках',a:['<div class="box">Hi</div>']},
+{t:2,c:'Атрибути',b:'<a href="#">Link<a>',h:'Тег не закрито',a:['<a href="#">Link</a>']},
+{t:2,c:'Атрибути',b:'<img src="cat.png" alt=Cat>',h:'Значення атрибута — в лапках',a:['<img src="cat.png" alt="Cat">']},
+{t:2,c:'Атрибути',b:'<button type="sumbit">Send</button>',h:'Неправильне значення type',a:['<button type="submit">Send</button>']},
+// 3 — CSS
+{t:3,c:'CSS',b:'p { colour: red; }',h:'Властивість з помилкою',a:['p { color: red; }']},
+{t:3,c:'CSS',b:'h1 { font-size: 24; }',h:'Немає одиниць виміру (px)',a:['h1 { font-size: 24px; }']},
+{t:3,c:'CSS',b:'body { background-color red; }',h:'Не вистачає символу',a:['body { background-color: red; }']},
+{t:3,c:'CSS',b:'h1 { text-align: middle; }',h:'Неправильне значення',a:['h1 { text-align: center; }']},
+{t:3,c:'CSS',b:'p { color: blue;',h:'Блок не закрито',a:['p { color: blue; }']},
+{t:3,c:'CSS',b:'.card { margin 10px; }',h:'Не вистачає символу',a:['.card { margin: 10px; }']},
+{t:3,c:'CSS',b:'h2 { font-wieght: bold; }',h:'Властивість з помилкою',a:['h2 { font-weight: bold; }']},
+{t:3,c:'CSS',b:'a { text-decoration: no; }',h:'Неправильне значення',a:['a { text-decoration: none; }']},
+{t:3,c:'CSS',b:'div { border: 1px red; }',h:'Не вказано тип лінії (solid)',a:['div { border: 1px solid red; }']},
+{t:3,c:'CSS',b:'.btn { padding: 10 px; }',h:'Зайвий пробіл',a:['.btn { padding: 10px; }']},
+{t:3,c:'CSS',b:'box { color: blue; }',h:'Клас починається з крапки',a:['.box { color: blue; }']},
+{t:3,c:'CSS',b:'img { widht: 50%; }',h:'Властивість з помилкою',a:['img { width: 50%; }']},
+{t:3,c:'CSS',b:'h1 { color: red, }',h:'Неправильний роздільник',a:['h1 { color: red; }']},
+{t:3,c:'CSS',b:'p ( color: red; )',h:'Не ті дужки',a:['p { color: red; }']},
+{t:3,c:'CSS',b:'#menu { display: hide; }',h:'Неправильне значення',a:['#menu { display: none; }']},
+{t:3,c:'CSS',b:'body { backround: white; }',h:'Властивість з помилкою',a:['body { background: white; }']},
+];
+/* ---------- генератор варіацій: при кожному завантаженні — сотні нових завдань ---------- */
+const R=a=>a[Math.random()*a.length|0];
+const RI=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+function typo(w,bad){const v=[];
+  for(let i=0;i<w.length-1;i++)if(w[i]!==w[i+1])v.push(w.slice(0,i)+w[i+1]+w[i]+w.slice(i+2));
+  for(let i=0;i<w.length;i++){if(w.length>3)v.push(w.slice(0,i)+w.slice(i+1));if(/[a-z]/i.test(w[i]))v.push(w.slice(0,i+1)+w[i]+w.slice(i+1))}
+  const ok=v.filter(x=>x!==w&&!(bad&&bad.has(x))&&!/^-|-$|--/.test(x));return ok.length?R(ok):null}
+const two=a=>{const x=R(a);let y=R(a);while(y===x&&a.length>1)y=R(a);return[x,y]};
+
+/* --- словники --- */
+const W_TXT=['Hello','Menu','News','Prices','About','Contacts','Sale','Welcome','Photos','Team','Lessons','Games','Home','Schedule','Shop','Gallery','Events','Help','Login','Cart'];
+const HSET=new Set('a b i u s q p em br hr h1 h2 h3 h4 h5 h6 li ol ul td th tr dd dl dt div nav img sub sup del ins pre var kbd map col bdi bdo wbr span code form main head body html link meta mark area base cite abbr data menu ruby samp slot time small title label input table tbody thead tfoot video audio style aside embed meter param track header footer button strong select option iframe canvas figure object output source script section article address caption details summary dialog picture template textarea progress fieldset legend datalist optgroup noscript colgroup blockquote figcaption'.split(' '));
+const H_TAGS=['p','b','i','em','strong','span','div','li','h1','h2','h3','h4','h5','h6','title','button','label','small','mark','td','th','code','nav','main','footer','header','section','article','aside','u','s','q'];
+const H_LONG=H_TAGS.filter(t=>t.length>=3);
+const H_GROUPS=[['h1','h2','h3','h4','h5','h6'],['b','i','u','s','em','strong','mark','small'],['p','div','span','section','article'],['li','td','th'],['header','footer','nav','main','aside']];
+const IMG=['cat.png','dog.jpg','logo.png','photo.jpg','team.jpg','map.png','pizza.jpg','school.png','bg.jpg','icon.svg'];
+const ALT=['Cat','Dog','Logo','Photo','Team','Map','Pizza','School'];
+const URL_=['index.html','about.html','menu.html','contacts.html','news.html','shop.html','#top','#menu'];
+const CLS=['box','card','btn','price','hero','item','wrap','badge','tile','panel'];
+const ASET=new Set('src href alt class id type name value title width height target rel style lang for placeholder action method'.split(' '));
+const CSET=new Set('color background background-color margin padding border width height display position top left right bottom float clear font gap order flex grid cursor content opacity outline overflow z-index font-size font-weight font-style font-family text-align line-height text-decoration border-radius box-shadow transition transform animation visibility max-width min-width max-height min-height text-transform letter-spacing'.split(' '));
+const SEL=['p','h1','h2','body','a','li','img','nav','.card','.box','.btn','.menu','.price','#header','#logo','#main'];
+const CPROPS={'color':['red','blue','#333','white','green','black','navy'],'background':['white','#f5f5f5','yellow','pink'],'background-color':['white','#eee','lightblue','orange'],'font-size':['16px','24px','2em','18px','32px'],'font-weight':['bold','700'],'width':['100px','50%','300px','100%'],'height':['200px','100px','50vh'],'margin':['10px','0 auto','20px'],'padding':['10px','15px','5px 10px'],'border':['1px solid red','2px solid #333','3px dashed blue'],'text-align':['center','left','right'],'display':['none','block','flex','grid'],'text-decoration':['none','underline'],'border-radius':['8px','50%','12px'],'line-height':['1.5','24px']};
+const UNIT_PROPS=['font-size','width','height','margin','padding','border-radius','gap','top','left'];
+const PV=['x','n','a','b','k','age','score','total','num','count','level','coins'];
+const PW=['Hello','Hi','Bye','Done','Ready','Start','OK','Yes','No','Win','Lose','Game over','Good','Next'];
+const PN=['name','city','pet','color','food','word','hero','team'];
+const PCITY=['Kyiv','Lviv','Odesa','Boryspil','Dnipro','Poltava'];
+const PF=['hello','area','double','square','greet','total','check','bonus','price','grow','half'];
+const PL=['a','nums','marks','scores','prices','data','items','ages'];
+const PS=['"apple", "pear" "plum"','"cat", "dog" "fox"','"red", "green" "blue"','"Ann", "Max" "Ola"'];
+const PSW=['python','school','laptop','summer','planet','rocket','garden','friend'];
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+const nums=k=>Array.from({length:k},()=>RI(1,20));
+
+/* шаблон: [ключ, складність, тема, ідентифікатор, функція → [рядки коду, № помилкового рядка, підказка, відповіді, відступ?]] */
+const TPL=[
+/* ===== HTML: теги ===== */
+['html',1,'HTML','h-unc',()=>{const t=R(H_TAGS),w=R(W_TXT);return[[`<${t}>${w}<${t}>`],0,'Тег не закрито',[`<${t}>${w}</${t}>`]]}],
+['html',1,'HTML','h-gt',()=>{const t=R(H_TAGS),w=R(W_TXT);return[[R([`<${t}>${w}</${t}`,`<${t}>${w}</${t}>`.replace(`<${t}>`,`<${t}`)])],0,'Не вистачає символу',[`<${t}>${w}</${t}>`]]}],
+['html',1,'HTML','h-lt',()=>{const t=R(H_TAGS),w=R(W_TXT);return[[R([`${t}>${w}</${t}>`,`<${t}>${w}/${t}>`])],0,'Не вистачає символу',[`<${t}>${w}</${t}>`]]}],
+['html',1,'HTML','h-slash',()=>{const t=R(H_TAGS),w=R(W_TXT);return[[R([`<${t}>${w}<\\${t}>`,`<${t}>${w}<${t}/>`,`</${t}>${w}</${t}>`])],0,'Риска не там або не та',[`<${t}>${w}</${t}>`]]}],
+['html',1,'HTML','h-extra',()=>{const t=R(H_TAGS),w=R(W_TXT);return[[R([`<${t}>${w}</${t}>>`,`<<${t}>${w}</${t}>`,`<${t}>>${w}</${t}>`,`<${t}>${w}<</${t}>`])],0,'Зайвий символ',[`<${t}>${w}</${t}>`]]}],
+['html',1,'HTML','h-mis',()=>{const g=R(H_GROUPS),[a,b]=two(g),w=R(W_TXT);return[[`<${a}>${w}</${b}>`],0,'Закриваючий тег не той',[`<${a}>${w}</${a}>`,`<${b}>${w}</${b}>`]]}],
+['html',1,'HTML','h-typo',()=>{const t=R(H_LONG),x=typo(t,HSET),w=R(W_TXT);if(!x)return null;return[[`<${x}>${w}</${x}>`],0,'Тег написано з помилкою',[`<${t}>${w}</${t}>`]]}],
+['html',1,'HTML','h-typo1',()=>{const t=R(H_LONG),x=typo(t,HSET),w=R(W_TXT);if(!x)return null;return Math.random()<.5?[[`<${t}>${w}</${x}>`],0,'Помилка в закриваючому тегу',[`<${t}>${w}</${t}>`]]:[[`<${x}>${w}</${t}>`],0,'Помилка у відкриваючому тегу',[`<${t}>${w}</${t}>`]]}],
+['html',1,'HTML','h-head',()=>{const n=R([0,7,8,9]),q=R([['найбільший заголовок',1],['найменший заголовок',6],['заголовок 2-го рівня',2],['заголовок 3-го рівня',3],['заголовок 4-го рівня',4]]),w=R(W_TXT);return[[`<h${n}>${w}</h${n}>`],0,`Тегу h${n} немає. Потрібен ${q[0]}`,[`<h${q[1]}>${w}</h${q[1]}>`]]}],
+['html',1,'HTML','h-head2',()=>{const[a,b]=two([1,2,3,4,5,6]),w=R(W_TXT);return[[`<h${a}>${w}</h${a}>`],0,`Потрібен заголовок ${b}-го рівня`,[`<h${b}>${w}</h${b}>`]]}],
+['html',1,'HTML','h-void',()=>{const v=R(['br','hr']);return[[R([`<${v}></${v}>`,`</${v}>`,`<${v}>${v}>`])],0,`${v} — одиночний тег`,[`<${v}>`]]}],
+['html',1,'HTML','h-struct',()=>{const t=R(['html','head','body','title']),x=typo(t,HSET);if(!x)return null;const c=R(['<',''])==='<'?`</${x}>`:`<${x}>`;return[[c],0,'Тег структури сторінки з помилкою',[c.replace(x,t)]]}],
+['html',1,'HTML','h-doctype',()=>R([[['<DOCTYPE html>'],0,'Не вистачає символу',['<!DOCTYPE html>']],[['<!DOCTYP html>'],0,'Слово написано з помилкою',['<!DOCTYPE html>']],[['<!DOCTYPE htlm>'],0,'Слово написано з помилкою',['<!DOCTYPE html>']],[['<!DOCTYPE html'],0,'Не вистачає символу',['<!DOCTYPE html>']],[['<meta charset="utf8">'],0,'Кодування пишуть з дефісом',['<meta charset="utf-8">']]])],
+/* ===== HTML: атрибути ===== */
+...(()=>{const E=[
+  {a:'src',v:()=>R(IMG),s:(x,i)=>`<img ${x} alt="${i.alt}">`},
+  {a:'alt',v:()=>R(ALT),s:(x,i)=>`<img src="${i.img}" ${x}>`},
+  {a:'href',v:()=>R(URL_),s:(x,i)=>`<a ${x}>${i.w}</a>`},
+  {a:'class',v:()=>R(CLS),s:(x,i)=>`<div ${x}>${i.w}</div>`},
+  {a:'id',v:()=>R(CLS),s:(x,i)=>`<p ${x}>${i.w}</p>`},
+  {a:'placeholder',v:()=>R(PN),s:(x)=>`<input type="text" ${x}>`},
+  {a:'width',v:()=>String(R([100,150,200,300])),s:(x,i)=>`<img src="${i.img}" ${x}>`},
+  {a:'height',v:()=>String(R([100,150,200,300])),s:(x,i)=>`<img src="${i.img}" ${x}>`},
+  {a:'target',v:()=>'_blank',s:(x,i)=>`<a href="${i.url}" ${x}>${i.w}</a>`},
+  {a:'href',v:()=>R(['style.css','main.css','css/style.css']),s:(x)=>`<link rel="stylesheet" ${x}>`},
+  {a:'src',v:()=>R(['app.js','script.js','game.js']),s:(x)=>`<script ${x}><\/script>`},
+  {a:'title',v:()=>R(W_TXT),s:(x,i)=>`<span ${x}>${i.w}</span>`},
+  {a:'value',v:()=>R(PN),s:(x)=>`<input type="text" ${x}>`},
+];
+const ctx=()=>({alt:R(ALT),img:R(IMG),w:R(W_TXT),url:R(URL_)});
+const mk=(p,fn)=>['html',2,'Атрибути',p,()=>{const e=R(E),i=ctx(),v=e.v();return fn(e,i,v)}];
+return[
+  mk('a-typo',(e,i,v)=>{const x=typo(e.a,ASET);if(!x)return null;return[[e.s(`${x}="${v}"`,i)],0,'Атрибут написано з помилкою',[e.s(`${e.a}="${v}"`,i)]]}),
+  mk('a-noq',(e,i,v)=>[[e.s(`${e.a}=${v}`,i)],0,'Значення атрибута — в лапках',[e.s(`${e.a}="${v}"`,i)]]),
+  mk('a-q1',(e,i,v)=>Math.random()<.5?[[e.s(`${e.a}="${v}`,i)],0,'Лапку не закрито',[e.s(`${e.a}="${v}"`,i)]]:[[e.s(`${e.a}=${v}"`,i)],0,'Лапку не відкрито',[e.s(`${e.a}="${v}"`,i)]]),
+  mk('a-eq',(e,i,v)=>[[e.s(R([`${e.a}"${v}"`,`${e.a}:"${v}"`,`${e.a}-"${v}"`]),i)],0,'Між атрибутом і значенням — знак =',[e.s(`${e.a}="${v}"`,i)]]),
+];})(),
+['html',2,'Атрибути','a-type',()=>{const m=R([['text',['txt','tekst','test'],'звичайного тексту'],['password',['pasword','passwrd','pass'],'пароля'],['email',['emial','mail','e-mail'],'пошти'],['number',['numbr','num','nubmer'],'числа'],['checkbox',['chekbox','check','checkbx'],'прапорця'],['date',['data','dat'],'дати'],['color',['colour','colr'],'вибору кольору']]);return[[`<input type="${R(m[1])}">`],0,`Тип поля для ${m[2]}`,[`<input type="${m[0]}">`]]}],
+['html',2,'Атрибути','a-btn',()=>{const w=R(['Send','OK','Save','Go']);return[[`<button type="${R(['sumbit','submt','send','sbmit'])}">${w}</button>`],0,'Кнопка надсилання форми',[`<button type="submit">${w}</button>`]]}],
+['html',2,'Атрибути','a-target',()=>{const u=R(URL_),w=R(W_TXT);return[[`<a href="${u}" target="${R(['blank','new','_new','tab','_tab'])}">${w}</a>`],0,'Відкрити в новій вкладці',[`<a href="${u}" target="_blank">${w}</a>`]]}],
+['html',2,'Атрибути','a-rel',()=>{const f=R(['style.css','main.css']);return[[`<link rel="${R(['stylesheat','styleshet','stylesheets','style','css'])}" href="${f}">`],0,'Неправильне значення rel',[`<link rel="stylesheet" href="${f}">`]]}],
+['html',2,'Атрибути','a-nest',()=>{const b=R(['p','h1','h2','li','div','td']),n=R(['b','i','em','strong','span','mark']),w=R(W_TXT);return[[`<${b}><${n}>${w}</${b}></${n}>`],0,'Порушено вкладеність',[`<${b}><${n}>${w}</${n}></${b}>`]]}],
+['html',2,'Атрибути','a-list',()=>{const l=R(['ul','ol']),w=R(W_TXT);return Math.random()<.5?[[`<${l}><li>${w}</li><${l}>`],0,'Список не закрито',[`<${l}><li>${w}</li></${l}>`]]:[[`<${l}><li>${w}</${l}>`],0,'Пункт списку не закрито',[`<${l}><li>${w}</li></${l}>`]]}],
+['html',2,'Атрибути','a-table',()=>{const[a,b]=two(W_TXT);return[[R([`<tr><td>${a}</td><td>${b}</tr>`,`<tr><td>${a}<td>${b}</td></tr>`,`<tr><td>${a}</td><td>${b}</td><tr>`])],0,'Щось не закрито в рядку таблиці',[`<tr><td>${a}</td><td>${b}</td></tr>`]]}],
+['html',2,'Атрибути','a-img',()=>{const f=R(IMG),a=R(ALT);return[[`<img src="${f}" alt="${a}"></img>`],0,'img — одиночний тег',[`<img src="${f}" alt="${a}">`]]}],
+/* ===== CSS ===== */
+...(()=>{const pick=()=>{const p=R(Object.keys(CPROPS));return{s:R(SEL),p,v:R(CPROPS[p])}};
+const ok=o=>`${o.s} { ${o.p}: ${o.v}; }`;
+const mk=(p,fn)=>['html',3,'CSS',p,()=>{const o=pick();return fn(o)}];
+return[
+  mk('c-ptypo',o=>{const x=typo(o.p,CSET);if(!x)return null;return[[`${o.s} { ${x}: ${o.v}; }`],0,'Властивість написано з помилкою',[ok(o)]]}),
+  mk('c-colon',o=>[[`${o.s} { ${o.p} ${o.v}; }`],0,'Не вистачає символу',[ok(o)]]),
+  mk('c-eq',o=>[[`${o.s} { ${o.p}${R([' =',' -',';'])} ${o.v}; }`],0,'Між властивістю і значенням — двокрапка',[ok(o)]]),
+  mk('c-sep',o=>[[`${o.s} { ${o.p}: ${o.v}${R([',','.',':'])} }`],0,'Неправильний роздільник',[ok(o)]]),
+  mk('c-brace',o=>R([[[`${o.s} { ${o.p}: ${o.v};`],0,'Блок не закрито',[ok(o)]],[[`${o.s} ${o.p}: ${o.v}; }`],0,'Блок не відкрито',[ok(o)]],[[`${o.s} ( ${o.p}: ${o.v}; )`],0,'Не ті дужки',[ok(o)]],[[`${o.s} [ ${o.p}: ${o.v}; ]`],0,'Не ті дужки',[ok(o)]]])),
+  ['html',3,'CSS','c-unit',()=>{const s=R(SEL),p=R(UNIT_PROPS),n=R([5,10,12,15,20,24,30,40,100,200]);return[[`${s} { ${p}: ${n}; }`],0,'Немає одиниць виміру (px)',[`${s} { ${p}: ${n}px; }`]]}],
+  ['html',3,'CSS','c-unit2',()=>{const s=R(SEL),p=R(UNIT_PROPS),n=R([5,10,12,15,20,24,30,40]);return Math.random()<.5?[[`${s} { ${p}: ${n} px; }`],0,'Зайвий пробіл',[`${s} { ${p}: ${n}px; }`]]:[[`${s} { ${p}: ${n}${R(['pz','xp','p','pix','pxx'])}; }`],0,'Одиницю виміру написано з помилкою',[`${s} { ${p}: ${n}px; }`]]}],
+  ['html',3,'CSS','c-val',()=>{const s=R(SEL),m=R([['text-align','center',['middle','centre','centr'],'Вирівняй по центру'],['display','none',['hide','hidden','off','no'],'Сховай елемент'],['text-decoration','none',['no','nothing','off'],'Прибери підкреслення'],['font-weight','bold',['big','fat','strong','bolt'],'Зроби текст жирним'],['font-style','italic',['italics','cursive','itallic'],'Зроби текст курсивом'],['text-align','right',['rigth','rite'],'Вирівняй праворуч']]);return[[`${s} { ${m[0]}: ${R(m[2])}; }`],0,m[3],[`${s} { ${m[0]}: ${m[1]}; }`]]}],
+  ['html',3,'CSS','c-hex',()=>{const s=R(SEL),p=R(['color','background-color']),h=R(['ff0000','333','00aa55','fafafa','1e90ff','000']);return[[`${s} { ${p}: ${h}; }`],0,'HEX-колір починається з #',[`${s} { ${p}: #${h}; }`]]}],
+  ['html',3,'CSS','c-sel',()=>{const c=R(CLS),p=R(Object.keys(CPROPS)),v=R(CPROPS[p]);return Math.random()<.5?[[`${c} { ${p}: ${v}; }`],0,'Клас починається з крапки',[`.${c} { ${p}: ${v}; }`]]:[[`${c}# { ${p}: ${v}; }`],0,'Решітка для id стоїть не там',[`#${c} { ${p}: ${v}; }`]]}],
+  ['html',3,'CSS','c-border',()=>{const s=R(SEL),n=R([1,2,3]),c=R(['red','#333','blue','black']);return[[`${s} { border: ${n}px ${c}; }`],0,'Не вказано тип лінії (solid)',[`${s} { border: ${n}px solid ${c}; }`]]}],
+];})(),
+
+/* ===== Python 8: основи ===== */
+['py8',1,'Основи','p-pcase',()=>{const w=R(PW);return[[`${R(['Print','PRINT','pRint','PrInt'])}("${w}")`],0,'Python розрізняє великі й малі літери',[`print("${w}")`]]}],
+['py8',1,'Основи','p-ptypo',()=>{const w=R(PW),x=typo('print');return[[`${x}("${w}")`],0,'Функцію написано з помилкою',[`print("${w}")`]]}],
+['py8',1,'Основи','p-paren',()=>{const w=R(PW);return R([[[`print "${w}"`],0,'Потрібні дужки',[`print("${w}")`]],[[`print("${w}"`],0,'Дужку не закрито',[`print("${w}")`]],[[`print "${w}")`],0,'Дужку не відкрито',[`print("${w}")`]],[[`print["${w}"]`],0,'Потрібні круглі дужки',[`print("${w}")`]],[[`print{"${w}"}`],0,'Потрібні круглі дужки',[`print("${w}")`]]])}],
+['py8',1,'Основи','p-quote',()=>{const w=R(PW);return Math.random()<.5?[[`print("${w})`],0,'Лапку не закрито',[`print("${w}")`]]:[[`print(${w}")`],0,'Лапку не відкрито',[`print("${w}")`]]}],
+['py8',1,'Основи','p-input',()=>{const v=R(PN),P=cap(v);return R([[[`${v} = ${typo('input')}("${P}: ")`,`print(${v})`],0,'Функцію написано з помилкою',[`${v} = input("${P}: ")`]],[[`${v} = ${R(['Input','INPUT'])}("${P}: ")`,`print(${v})`],0,'Python розрізняє великі й малі літери',[`${v} = input("${P}: ")`]],[[`${v} = input("${P}: "`,`print(${v})`],0,'Дужку не закрито',[`${v} = input("${P}: ")`]]])}],
+['py8',1,'Основи','p-int',()=>{const v=R(['age','n','x','score','num']),f=R(['int','float']);return R([[[`${v} = ${f}(input("${cap(v)}: ")`],0,'Не вистачає дужки',[`${v} = ${f}(input("${cap(v)}: "))`]],[[`${v} = ${cap(f)}(input("${cap(v)}: "))`],0,'Python розрізняє великі й малі літери',[`${v} = ${f}(input("${cap(v)}: "))`]],[[`${v} = ${f}input("${cap(v)}: ")`],0,'Не вистачає дужок',[`${v} = ${f}(input("${cap(v)}: "))`]]])}],
+['py8',1,'Основи','p-conv',()=>{const[v,r]=two(['a','b','age','x','n','num']),n=RI(1,9);return[[`${v} = input("${cap(v)}: ")`,`${r} = ${v} + ${n}`],1,'input() повертає рядок — перетвори на число',[`${r} = int(${v}) + ${n}`,`${r} = float(${v}) + ${n}`]]}],
+['py8',1,'Основи','p-name',()=>{const v=R(['score','name','age','total','x']),n=RI(1,50),d=RI(1,9);return R([[[`${d}${v} = ${n}`],0,"Ім'я змінної не починається з цифри",[`${v}${d} = ${n}`,`${v} = ${n}`]],[[`my ${v} = ${n}`],0,"У назві змінної не буває пробілу — використай _",[`my_${v} = ${n}`]],[[`my-${v} = ${n}`],0,"Дефіс у назві не можна — використай _",[`my_${v} = ${n}`]]])}],
+['py8',1,'Основи','p-vcase',()=>{const v=R(['score','name','age','total','x','n']),n=RI(1,50);return[[`${v} = ${n}`,`print(${R([cap(v),v.toUpperCase()])})`],1,'Змінна називається інакше',[`print(${v})`]]}],
+['py8',1,'Основи','p-strnum',()=>{const w=R(['Score','Age','Total','Coins','Level']),n=RI(1,99);return[[`print("${w}: " + ${n})`],0,'Рядок і число так не додаються',[`print("${w}: " + str(${n}))`,`print("${w}:", ${n})`,`print("${w}: ", ${n})`]]}],
+['py8',1,'Основи','p-assign',()=>{const v=R(PV),n=RI(1,50);return[[`${v} == ${n}`,`print(${v})`],0,'Тут потрібне присвоєння',[`${v} = ${n}`]]}],
+['py8',1,'Основи','p-ops',()=>{const a=RI(10,40),b=RI(2,9),r=R(['r','res','x']);return R([[['# ціла частина від ділення',`${r} = ${a} / ${b}`],1,'Потрібен інший оператор ділення',[`${r} = ${a} // ${b}`]],[['# остача від ділення',`${r} = ${a} ${R(['mod','%%','\\'])} ${b}`],1,'Остачу дає інший знак',[`${r} = ${a} % ${b}`]],[['# число в квадраті',`${r} = ${b} ^ 2`],1,'Степінь у Python — інший оператор',[`${r} = ${b} ** 2`]],[['# множення',`${r} = ${a} x ${b}`],1,'Множення — інший знак',[`${r} = ${a} * ${b}`]]])}],
+/* ===== Python 8: розгалуження ===== */
+...(()=>{const c=()=>({v:R(PV),n:RI(1,20),w:R(PW),w2:R(PW),op:R(['>','<','>=','<=','==','!='])});const mk=(p,fn)=>['py8',2,'Розгалуження',p,()=>fn(c())];return[
+  mk('r-colon',o=>[[`if ${o.v} ${o.op} ${o.n}`,`    print("${o.w}")`],0,'Не вистачає символу',[`if ${o.v} ${o.op} ${o.n}:`]]),
+  mk('r-eq',o=>[[`if ${o.v} = ${o.n}:`,`    print("${o.w}")`],0,'Порівняння — подвійний знак',[`if ${o.v} == ${o.n}:`]]),
+  mk('r-else',o=>[[`if ${o.v} > ${o.n}:`,`    print("${o.w}")`,'else',`    print("${o.w2}")`],2,'Не вистачає символу',['else:']]),
+  mk('r-elsec',o=>[[`if ${o.v} > ${o.n}:`,`    print("${o.w}")`,`else ${o.v} < ${o.n}:`,`    print("${o.w2}")`],2,'Після else умова не пишеться',['else:',`elif ${o.v} < ${o.n}:`]]),
+  mk('r-elif',o=>[[`if ${o.v} > ${o.n}:`,`    print("${o.w}")`,`${R(['else if','elseif','elsif'])} ${o.v} < ${o.n}:`,`    print("${o.w2}")`],2,'У Python для цього є окреме слово',[`elif ${o.v} < ${o.n}:`]]),
+  mk('r-elifc',o=>[[`if ${o.v} > ${o.n}:`,`    print("${o.w}")`,`elif ${o.v} == ${o.n}`,`    print("${o.w2}")`],2,'Не вистачає символу',[`elif ${o.v} == ${o.n}:`]]),
+  mk('r-case',o=>{const k=R(['If','IF','Elif','Else']);const bad=k==='Else'?'Else:':k==='Elif'?`Elif ${o.v} < ${o.n}:`:`${k} ${o.v} > ${o.n}:`;return[[bad,`    print("${o.w}")`],0,'Python розрізняє великі й малі літери',[bad.replace(k,k.toLowerCase())]]}),
+  mk('r-op',o=>{const m=R([['=<','<='],['=>','>='],['<>','!='],['=!','!='],['><','!=']]);return[[`if ${o.v} ${m[0]} ${o.n}:`,`    print("${o.w}")`],0,'Оператор записано неправильно',[`if ${o.v} ${m[1]} ${o.n}:`]]}),
+  mk('r-and',o=>{const a=RI(1,9),b=RI(10,20);return[[`if ${o.v} > ${a} and < ${b}:`,`    print("${o.w}")`],0,'Друге порівняння треба написати повністю',[`if ${o.v} > ${a} and ${o.v} < ${b}:`,`if ${a} < ${o.v} < ${b}:`]]}),
+  mk('r-logic',o=>{const a=RI(1,9),b=RI(10,20);return Math.random()<.5?[[`if ${o.v} > ${a} && ${o.v} < ${b}:`,`    print("${o.w}")`],0,'У Python логічне «і» — слово',[`if ${o.v} > ${a} and ${o.v} < ${b}:`]]:[[`if ${o.v} < ${a} || ${o.v} > ${b}:`,`    print("${o.w}")`],0,'У Python логічне «або» — слово',[`if ${o.v} < ${a} or ${o.v} > ${b}:`]]}),
+  mk('r-indent',o=>[[`if ${o.v} ${o.op} ${o.n}:`,`print("${o.w}")`],1,'Тіло умови пишуть з відступом',[`    print("${o.w}")`],1]),
+  mk('r-str',o=>{const v=R(['city','town']),c=R(PCITY);return[[`if ${v} == ${c}:`,`    print("${o.w}")`],0,'Рядок треба взяти в лапки',[`if ${v} == "${c}":`]]}),
+];})(),
+/* ===== Python 8: цикли ===== */
+...(()=>{const mk=(t,p,fn)=>['py8',t,'Цикли',p,()=>fn({i:R(['i','j','k','n']),n:RI(3,12),v:R(['x','n','k','count']),w:R(PW)})];return[
+  mk(2,'l-colon',o=>[[`for ${o.i} in range(${o.n})`,`    print(${o.i})`],0,'Не вистачає символу',[`for ${o.i} in range(${o.n}):`]]),
+  mk(2,'l-paren',o=>[[`for ${o.i} in range ${o.n}:`,`    print(${o.i})`],0,'range — це функція',[`for ${o.i} in range(${o.n}):`]]),
+  mk(2,'l-rtypo',o=>[[`for ${o.i} in ${R([typo('range'),'Range',typo('range')])}(${o.n}):`,`    print(${o.i})`],0,'Функцію написано з помилкою',[`for ${o.i} in range(${o.n}):`]]),
+  mk(2,'l-in',o=>[[R([`for ${o.i} range(${o.n}):`,`for ${o.i} of range(${o.n}):`,`for ${o.i} on range(${o.n}):`,`for ${o.i} In range(${o.n}):`]),`    print(${o.i})`],0,'Потрібне слово in',[`for ${o.i} in range(${o.n}):`]]),
+  mk(2,'l-fcase',o=>[[`${R(['For','FOR'])} ${o.i} in range(${o.n}):`,`    print(${o.i})`],0,'Python розрізняє великі й малі літери',[`for ${o.i} in range(${o.n}):`]]),
+  mk(2,'l-bound',o=>{const a=RI(0,5),b=RI(8,20);return[[`# числа від ${a} до ${b}`,`for ${o.i} in range(${a}, ${b}):`,`    print(${o.i})`],1,'Останнє число в range не входить',[`for ${o.i} in range(${a}, ${b+1}):`]]}),
+  mk(2,'l-while',o=>[[`${o.v} = 0`,R([`while ${o.v} < ${o.n}`,`While ${o.v} < ${o.n}:`,`whlie ${o.v} < ${o.n}:`]),`    ${o.v} += 1`],1,'Цикл while записано неправильно',[`while ${o.v} < ${o.n}:`]]),
+  mk(2,'l-pluseq',o=>[[`${o.v} = 0`,`while ${o.v} < ${o.n}:`,`    ${o.v} ${R(['=+','++','+'])} 1`],2,'Збільш змінну на 1',[`${o.v} += 1`,`${o.v} = ${o.v} + 1`]]),
+  mk(3,'l-step',o=>{const a=RI(0,3),b=RI(8,15);return[[`# ${b}, ${b-1}, … ${a}`,`for ${o.i} in range(${b}, ${a-1}):`,`    print(${o.i})`],1,"Потрібен від'ємний крок",[`for ${o.i} in range(${b}, ${a-1}, -1):`]]}),
+  mk(3,'l-step2',o=>{const m=RI(4,10)*2;return[[`# парні числа від 0 до ${m}`,`for ${o.i} in range(0, ${m+1}):`,`    print(${o.i})`],1,'Додай крок',[`for ${o.i} in range(0, ${m+1}, 2):`,`for ${o.i} in range(0, ${m+2}, 2):`]]}),
+  mk(3,'l-inf',o=>[[`${o.v} = 0`,`while ${o.v} < ${o.n}:`,`    print(${o.v})`,`    ${o.v} = ${o.v} - 1`],3,'Цикл ніколи не закінчиться',[`${o.v} = ${o.v} + 1`,`${o.v} += 1`]]),
+  mk(3,'l-break',o=>[['while True:',`    cmd = input()`,`    if cmd == "q":`,`        ${R(['brake','brek','Break','stop'])}`],3,'Вихід із циклу — інше слово',['break']]),
+];})(),
+/* ===== Python 8: tkinter ===== */
+...(()=>{const mk=(p,fn)=>['py8',3,'Tkinter',p,()=>fn({w:R(PW),v:R(['lbl','btn','label','button','title']),f:R(['go','start','check','buy','count','click','play'])})];return[
+  mk('k-import',o=>R([[[`import ${R(['Tkinter','TKinter','tkInter'])}`],0,'Назва модуля — малими літерами',['import tkinter']],[[`import ${typo('tkinter')}`],0,'Назву модуля написано з помилкою',['import tkinter']],[[`${R(['form','frm','From'])} tkinter import *`],0,'Слово написано з помилкою',['from tkinter import *']],[[`from tkinter ${R(['imprt','improt','Import'])} *`],0,'Слово написано з помилкою',['from tkinter import *']]])),
+  mk('k-tk',o=>[['from tkinter import *',`root = ${R(['tk()','TK()','tK()','Tk'])}`],1,'Вікно створює клас Tk()',['root = Tk()']]),
+  mk('k-loop',o=>[['root = Tk()',R(['root.mainloop','root.MainLoop()','root.Mainloop()',`root.${typo('mainloop')}()`,'root.mainloop(']),],1,'Запусти головний цикл вікна',['root.mainloop()']]),
+  mk('k-widget',o=>{const W=R(['Label','Button']),bad=R([W.toLowerCase(),typo(W),W.toUpperCase()]);return[[`${o.v} = ${bad}(root, text="${o.w}")`],0,'Назву віджета написано неправильно',[`${o.v} = ${W}(root, text="${o.w}")`]]}),
+  mk('k-entry',o=>[[`entry = ${R(['entry','Entri','Enrty','Input'])}(root)`],0,'Поле введення — віджет Entry',['entry = Entry(root)']]),
+  mk('k-text',o=>{const W=R(['Label','Button']);return[[`${o.v} = ${W}(root, ${R(['txt','tex','Text','tekst','label'])}="${o.w}")`],0,'Параметр для тексту написано неправильно',[`${o.v} = ${W}(root, text="${o.w}")`]]}),
+  mk('k-cmd',o=>[[`btn = Button(root, text="${o.w}", command=${o.f}())`],0,'Функцію передають без дужок',[`btn = Button(root, text="${o.w}", command=${o.f})`]]),
+  mk('k-pack',o=>[[`${o.v} = Label(root, text="${o.w}")`,`${o.v}.${R(['pack','Pack()','pak()','pack(','packk()'])}`],1,'Розмісти віджет у вікні',[`${o.v}.pack()`]]),
+  mk('k-get',o=>[['entry = Entry(root)',`name = entry.${R(['get','Get()','gett()','get('])}`],1,'Отримай текст із поля',['name = entry.get()']]),
+  mk('k-title',o=>R([[['root = Tk()',`root.title = "${o.w}"`],1,'title — це метод',[`root.title("${o.w}")`]],[['root = Tk()',`root.title(${o.w})`],1,'Текст — у лапках',[`root.title("${o.w}")`]]])),
+  mk('k-geo',o=>{const w=R([300,400,500,600]),h=R([200,300,400]);return R([[['root = Tk()',`root.geometry(${w}x${h})`],1,'Розмір вікна — рядок у лапках',[`root.geometry("${w}x${h}")`]],[['root = Tk()',`root.geometry("${w}${R(['*',',','X',' на '])}${h}")`],1,'Між шириною і висотою — маленька літера x',[`root.geometry("${w}x${h}")`]]])}),
+  mk('k-config',o=>R([[[`lbl.config(text="${o.w}"`],0,'Дужку не закрито',[`lbl.config(text="${o.w}")`]],[[`lbl.config("${o.w}")`],0,'Вкажи параметр text',[`lbl.config(text="${o.w}")`]],[[`lbl.${R(['confg','conifg','Config'])}(text="${o.w}")`],0,'Метод написано з помилкою',[`lbl.config(text="${o.w}")`]]])),
+  mk('k-grid',o=>{const r=RI(0,3),c=RI(0,3);return[[`btn.grid(row=${r} column=${c})`],0,'Не вистачає коми',[`btn.grid(row=${r}, column=${c})`]]}),
+];})(),
+
+/* ===== Python 9: списки ===== */
+...(()=>{const mk=(t,p,fn)=>['py9',t,'Списки',p,()=>{const L=nums(RI(3,5));return fn({a:R(PL),L,s:L.join(', '),n:RI(1,30)})}];return[
+  mk(1,'s-br',o=>Math.random()<.5?[[`${o.a} = [${o.s}`],0,'Дужку не закрито',[`${o.a} = [${o.s}]`]]:[[`${o.a} = ${o.s}]`],0,'Дужку не відкрито',[`${o.a} = [${o.s}]`]]),
+  mk(1,'s-comma',o=>{const s=R(PS);return[[`${o.a} = [${s}]`],0,'Не вистачає коми',[`${o.a} = [${s.replace(/" "/,'", "')}]`]]}),
+  mk(1,'s-append',o=>[[`${o.a} = [${o.s}]`,`${o.a}.${R(['add','push','Append','apend','appendd','put'])}(${o.n})`],1,'Додати в кінець — метод append',[`${o.a}.append(${o.n})`]]),
+  mk(1,'s-index',o=>Math.random()<.6?[[`${o.a} = [${o.s}]`,`print(${o.a}[${o.L.length}])`],1,'Індекси з 0. Виведи останній',[`print(${o.a}[${o.L.length-1}])`,`print(${o.a}[-1])`]]:[[`${o.a} = [${o.s}]`,`print(${o.a}[1])`],1,'Індекси з 0. Виведи перший',[`print(${o.a}[0])`]]),
+  mk(1,'s-len',o=>[[`${o.a} = [${o.s}]`,`n = ${R([`${o.a}.len()`,`lenght(${o.a})`,`len ${o.a}`,`Len(${o.a})`,`${o.a}.length`,`size(${o.a})`])}`],1,'Довжину рахує функція len()',[`n = len(${o.a})`]]),
+  mk(1,'s-sum',o=>[[`${o.a} = [${o.s}]`,`s = ${R(['summ','Sum','suma','add','total'])}(${o.a})`],1,'Суму рахує функція sum()',[`s = sum(${o.a})`]]),
+  mk(1,'s-maxmin',o=>Math.random()<.5?[[`${o.a} = [${o.s}]`,`m = ${R(['maximum','Max','biggest','maks'])}(${o.a})`],1,'Найбільше значення — функція max()',[`m = max(${o.a})`]]:[[`${o.a} = [${o.s}]`,`m = ${R(['minimum','Min','smallest','mini'])}(${o.a})`],1,'Найменше значення — функція min()',[`m = min(${o.a})`]]),
+  mk(1,'s-for',o=>[[`${o.a} = [${o.s}]`,R([`for x in ${o.a}`,`for x of ${o.a}:`,`for x in ${o.a};`]),`    print(x)`],1,'Цикл по списку записано неправильно',[`for x in ${o.a}:`]]),
+  mk(2,'s-sort',o=>[[`${o.a} = [${o.s}]`,`${o.a}.${R(['sort','srot()','Sort()','sorted()','order()'])}`],1,'Відсортуй список методом',[`${o.a}.sort()`]]),
+  mk(2,'s-remove',o=>[[`${o.a} = [${o.s}]`,`${o.a}.${R(['delete','del','Remove','remov','erase'])}(${o.L[0]})`],1,'Видалити значення — метод remove',[`${o.a}.remove(${o.L[0]})`]]),
+  mk(2,'s-empty',o=>[[`${o.a} = []`,`${o.a}[0] = ${o.n}`],1,'Порожній список — додай елемент методом',[`${o.a}.append(${o.n})`]]),
+];})(),
+/* ===== Python 9: рядки ===== */
+...(()=>{const mk=(t,p,fn)=>['py9',t,'Рядки',p,()=>fn({w:R(PSW),v:R(['s','word','text','msg']),nm:R(['name','hero','user']),k:RI(2,4)})];return[
+  mk(1,'t-up',o=>{const m=R(['upper','lower']);return[[`${o.v} = "${o.w}"`,`print(${o.v}.${R([m,typo(m)+'()',cap(m)+'()',m+'('])})`],1,`Метод ${m}() записано неправильно`,[`print(${o.v}.${m}())`]]}),
+  mk(1,'t-len',o=>R([[[`print(len "${o.w}")`],0,'len — це функція',[`print(len("${o.w}"))`]],[[`${o.v} = "${o.w}"`,`print(${o.v}.length())`],1,'Довжину рядка рахує функція len()',[`print(len(${o.v}))`]]])),
+  mk(1,'t-concat',o=>[[`${o.nm} = "Ann"`,`print("Hi, " ${o.nm})`],1,'Не вистачає + або коми',[`print("Hi, " + ${o.nm})`,`print("Hi, ", ${o.nm})`,`print("Hi,", ${o.nm})`]]),
+  mk(1,'t-mul',o=>{const n=RI(2,5);return[[`print("${o.w}" * "${n}")`],0,'Рядок множать на число',[`print("${o.w}" * ${n})`]]}),
+  mk(1,'t-idx',o=>[[`${o.v} = "${o.w}"`,`print(${o.v}[${o.w.length}])`],1,`Індекси з 0. Виведи останню літеру`,[`print(${o.v}[${o.w.length-1}])`,`print(${o.v}[-1])`]]),
+  mk(2,'t-f',o=>R([[[`${o.nm} = "Ann"`,`print(f"Hi {${o.nm}")`],1,'Фігурну дужку не закрито',[`print(f"Hi {${o.nm}}")`]],[[`${o.nm} = "Ann"`,`print("Hi {${o.nm}}")`],1,'Для підстановки потрібна літера f',[`print(f"Hi {${o.nm}}")`]],[[`${o.nm} = "Ann"`,`print(f"Hi (${o.nm})")`],1,'Підстановка — у фігурних дужках',[`print(f"Hi {${o.nm}}")`]]])),
+  mk(2,'t-slice',o=>R([[[`${o.v} = "${o.w}"`,`print(${o.v}[0:${o.k})`],1,'Дужку зрізу не закрито',[`print(${o.v}[0:${o.k}])`]],[[`${o.v} = "${o.w}"`,`print(${o.v}(0:${o.k}))`],1,'Зріз — у квадратних дужках',[`print(${o.v}[0:${o.k}])`]],[[`${o.v} = "${o.w}"`,`print(${o.v}[0-${o.k}])`],1,'У зрізі — двокрапка',[`print(${o.v}[0:${o.k}])`]]])),
+  mk(2,'t-replace',o=>Math.random()<.5?[[`${o.v} = "${o.w}"`,`${o.v} = ${o.v}.replace("a" "o")`],1,'Не вистачає коми',[`${o.v} = ${o.v}.replace("a", "o")`]]:[[`${o.v} = "${o.w}"`,`${o.v} = ${o.v}.${R(['replase','repalce','Replace','change'])}("a", "o")`],1,'Метод replace записано неправильно',[`${o.v} = ${o.v}.replace("a", "o")`]]),
+  mk(2,'t-split',o=>[['text = "a b c"',`words = text.${R(['split','splitt()','Split()','spilt()','split('])}`],1,'Розбий рядок на слова',['words = text.split()']]),
+];})(),
+/* ===== Python 9: функції ===== */
+...(()=>{const mk=(t,p,fn)=>['py9',t,'Функції',p,()=>fn({f:R(PF),a:RI(2,9),b:RI(2,9),op:R(['+','-','*'])})];return[
+  mk(2,'f-colon',o=>[[`def ${o.f}(x)`,`    return x * 2`],0,'Не вистачає символу',[`def ${o.f}(x):`]]),
+  mk(2,'f-kw',o=>[[`${R(['function','func','define','Def','fun'])} ${o.f}(x):`,`    return x * 2`],0,'Функцію оголошують словом def',[`def ${o.f}(x):`]]),
+  mk(2,'f-par',o=>[[`def ${o.f}:`,`    print("Hi")`],0,'Після назви функції — дужки',[`def ${o.f}():`]]),
+  mk(2,'f-comma',o=>R([[[`def ${o.f}(a b):`,`    return a ${o.op} b`],0,'Не вистачає коми',[`def ${o.f}(a, b):`]],[[`def ${o.f}(a, b):`,`    return a ${o.op} b`,`print(${o.f}(${o.a} ${o.b}))`],2,'Не вистачає коми',[`print(${o.f}(${o.a}, ${o.b}))`]]])),
+  mk(2,'f-call',o=>[[`def ${o.f}():`,`    print("Hi")`,R([o.f,`${o.f}[]`,`call ${o.f}`,`${o.f}{}`])],2,'Функцію викликають з круглими дужками',[`${o.f}()`]]),
+  mk(3,'f-ret',o=>[[`def ${o.f}(a, b):`,`    a ${o.op} b`],1,'Функція має повернути результат',[`return a ${o.op} b`]]),
+  mk(3,'f-retw',o=>[[`def ${o.f}(x):`,`    ${R(['retrun','Return','retun','returns','give'])} x * 2`],1,'Слово для повернення результату',['return x * 2']]),
+  mk(3,'f-name',o=>{const x=R([cap(o.f),typo(o.f)]);return[[`def ${o.f}(x):`,`    return x * 2`,`print(${x}(${o.a}))`],2,'Назва функції інша',[`print(${o.f}(${o.a}))`]]}),
+];})(),
+/* ===== Python 9: модулі ===== */
+...(()=>{const mk=(p,fn)=>['py9',3,'Модулі',p,()=>fn({a:RI(1,5),b:RI(6,100),l:R(PL)})];return[
+  mk('m-imp',o=>{const m=R(['random','math','time']);return Math.random()<.5?[[`import ${R([cap(m),m.toUpperCase()])}`],0,'Назва модуля — малими літерами',[`import ${m}`]]:[[`import ${typo(m)}`],0,'Назву модуля написано з помилкою',[`import ${m}`]]}),
+  mk('m-randint',o=>R([[['import random',`n = random.randint(${o.a} ${o.b})`],1,'Не вистачає коми',[`n = random.randint(${o.a}, ${o.b})`]],[['import random',`n = randint(${o.a}, ${o.b})`],1,'Звертайся через назву модуля',[`n = random.randint(${o.a}, ${o.b})`]],[['import random',`n = random.${R(['randInt','RandInt','Randint'])}(${o.a}, ${o.b})`],1,'Python розрізняє великі й малі літери',[`n = random.randint(${o.a}, ${o.b})`]],[['import random',`n = random.${typo('randint')}(${o.a}, ${o.b})`],1,'Функцію написано з помилкою',[`n = random.randint(${o.a}, ${o.b})`]],[['import random',`n = random,randint(${o.a}, ${o.b})`],1,'Між модулем і функцією — крапка',[`n = random.randint(${o.a}, ${o.b})`]]])),
+  mk('m-choice',o=>[['import random',`x = random.${R(['choise','chose','Choice','choic','pick'])}(${o.l})`],1,'Випадковий елемент — функція choice',[`x = random.choice(${o.l})`]]),
+  mk('m-shuffle',o=>[['import random',`random.${R(['shufle','shuffel','Shuffle','mix'])}(${o.l})`],1,'Перемішати список — функція shuffle',[`random.shuffle(${o.l})`]]),
+  mk('m-math',o=>{const n=R([16,25,36,49,81,100]);return R([[['import math',`r = sqrt(${n})`],1,'Звертайся через назву модуля',[`r = math.sqrt(${n})`]],[['import math',`r = math.${R(['Sqrt','sqr','sqroot','root'])}(${n})`],1,'Корінь — функція sqrt',[`r = math.sqrt(${n})`]],[['import math',`r = math.${R(['PI','Pi','pii'])} * 2`],1,'Константа π пишеться малими',['r = math.pi * 2']]])}),
+  mk('m-from',o=>R([[[`${R(['form','frm','From'])} random import randint`],0,'Слово написано з помилкою',['from random import randint']],[['import randint from random'],0,'Порядок слів інший',['from random import randint']],[[`from random ${R(['imprt','Import','improt'])} randint`],0,'Слово написано з помилкою',['from random import randint']]])),
+  mk('m-time',o=>{const s=RI(1,3);return[['import time',R([`time.${R(['slep','Sleep','sleap','wait'])}(${s})`,`sleep(${s})`])],1,'Пауза — time.sleep()',[`time.sleep(${s})`]]}),
+];})(),
+];
+const GEN=[];
+TPL.forEach(([key,t,c,pat,f])=>{const seen=new Set();for(let k=0;k<14&&seen.size<7;k++){let r;try{r=f()}catch(e){r=null}if(!r||!r[0]||r[0].some(l=>l==null||/null|undefined/.test(l))||r[3].some(a=>/null|undefined/.test(a)))continue;const id=r[0].join('\n');if(seen.has(id))continue;seen.add(id);GEN.push({key,t,c,pat,code:r[0],k:r[1],h:r[2],a:r[3],ind:!!r[4],b:r[0][r[1]]})}});
+
+/* генеровані теоретичні питання */
+const QT={
+html:[
+  ()=>{const n=RI(1,6);return{q:`Який тег створює заголовок ${n}-го рівня?`,o:[`<h${n}>`,`<head${n}>`,'<header>','<title>']}},
+  ()=>{const m=R([['маркований список','<ul>',['<ol>','<li>','<list>']],['нумерований список','<ol>',['<ul>','<li>','<nl>']],['пункт списку','<li>',['<ul>','<item>','<ol>']],['посилання','<a>',['<link>','<href>','<url>']],['зображення','<img>',['<image>','<pic>','<src>']],['абзац','<p>',['<par>','<text>','<br>']],['таблицю','<table>',['<tab>','<grid>','<tr>']],['кнопку','<button>',['<btn>','<input>','<click>']]]);return{q:`Який тег створює ${m[0]}?`,o:[m[1],...m[2]]}},
+  ()=>{const m=R([['колір тексту','color',['font-color','text-color','background']],['колір фону','background-color',['color','bgcolor','fill']],['розмір шрифту','font-size',['text-size','font-weight','size']],['внутрішній відступ','padding',['margin','border','gap']],['зовнішній відступ','margin',['padding','border','space']],['вирівнювання тексту','text-align',['align','text-position','float']],['закруглення кутів','border-radius',['corner','border-round','radius']],['товщину шрифту','font-weight',['font-size','font-bold','weight']]]);return{q:`Яка властивість задає ${m[0]}?`,o:[m[1],...m[2]]}},
+  ()=>{const m=R([['клас','.',['#','*','@']],['id','#',['.','*','&']]]),n=R(CLS);return{q:`Як у CSS звернутися до елемента з ${m[0]}="${n}"?`,o:[m[1]+n,...m[2].map(x=>x+n)]}},
+],
+py8:[
+  ()=>{const n=RI(2,12);return{q:`Скільки разів виконається тіло циклу for i in range(${n})?`,o:[String(n),String(n-1),String(n+1),'0']}},
+  ()=>{const a=RI(1,4),b=RI(6,12);return{q:`Яке останнє число виведе for i in range(${a}, ${b}): print(i)?`,o:[String(b-1),String(b),String(b+1),String(a)]}},
+  ()=>{const a=RI(11,40),b=RI(3,9),q=Math.floor(a/b),r=a%b;return R([{q:`Чому дорівнює ${a} // ${b}?`,o:[String(q),(a/b).toFixed(1),String(q+1),String(r)]},{q:`Чому дорівнює ${a} % ${b}?`,o:[String(r),String(q),String(r+1),(a/b).toFixed(1)]}])},
+  ()=>{const b=RI(2,5);return{q:`Чому дорівнює ${b} ** 2?`,o:[String(b*b),String(b*2),String(b+2),String(b)]}},
+  ()=>{const v=R(['3','3.5','"3"','True']),t={'3':'int','3.5':'float','"3"':'str','True':'bool'}[v];return{q:`Який тип має значення ${v}?`,o:[t,...['int','float','str','bool'].filter(x=>x!==t)]}},
+],
+py9:[
+  ()=>{const L=nums(RI(2,6));return{q:`Що поверне len([${L.join(', ')}])?`,o:[String(L.length),String(L.length+1),String(L.length-1),String(L.reduce((s,x)=>s+x,0))]}},
+  ()=>{const m=RI(3,9);return{q:`Який індекс останнього елемента у списку з ${m} елементів?`,o:[String(m-1),String(m),'1','0']}},
+  ()=>{const w=R(PSW);return{q:`Що виведе print("${w}"[0])?`,o:[w[0],w[1],w[w.length-1],w]}},
+  ()=>{const w=R(['ab','hi','ok','no']),k=RI(2,4);return{q:`Що виведе print("${w}" * ${k})?`,o:[w.repeat(k),w+k,'Помилку',String(k*2)]}},
+  ()=>{const L=nums(4);return{q:`Що поверне max([${L.join(', ')}])?`,o:[...new Set([String(Math.max(...L)),String(Math.min(...L)),String(L[0]),String(L.reduce((s,x)=>s+x,0)),'4'])].slice(0,4)}},
+],
+};
+const GENQ={html:[],py8:[],py9:[]};
+Object.entries(QT).forEach(([k,arr])=>arr.forEach((f,ti)=>{const seen=new Set();for(let i=0;i<10&&seen.size<5;i++){const q=f();if(new Set(q.o).size!==q.o.length||q.o.length<3||seen.has(q.q))continue;seen.add(q.q);q.pat=k+'q'+ti;GENQ[k].push(q)}}));
+
+const ALL=[...RAW.map(([g,t,c,code,k,h,a,ind],i)=>({key:'py'+g,t,c,code,k,h,a,ind:!!ind,b:code[k],pat:'s'+i})),...HT.map((x,i)=>({key:'html',t:x.t,c:x.c,code:[x.b],k:0,h:x.h,a:x.a,ind:false,b:x.b,pat:'sh'+i})),...GEN];
+ALL.forEach(t=>t.n=t.a.map(x=>norm(t,x)));
+const _seen=new Set();
+ALL.forEach(t=>{if(t.key.startsWith('py'))t.key='py'});
+const T=ALL.filter(t=>{const id=t.key+'|'+t.code.join('\n');if(_seen.has(id)||!t.n.length||t.n.includes(norm(t,t.b)))return false;_seen.add(id);return true});
+const CP={
+8:[
+{q:'Яка функція виводить текст на екран?',o:['print()','input()','output()','write()']},
+{q:'Що повертає input()?',o:['Рядок (str)','Ціле число (int)','Список','Нічого']},
+{q:'Який тип має значення 3.5?',o:['float','int','str','bool']},
+{q:'Скільки разів виконається тіло циклу for i in range(4)?',o:['4','3','5','0']},
+{q:'Який оператор дає остачу від ділення?',o:['%','//','/','mod']},
+{q:'Яке слово означає «інакше, якщо»?',o:['elif','else if','elseif','otherwise']},
+{q:'Чим у Python позначають блок коду?',o:['Відступом','Фігурними дужками','Словом begin','Крапкою з комою']},
+{q:'Який метод запускає головний цикл вікна tkinter?',o:['mainloop()','run()','start()','loop()']},
+{q:'Який віджет tkinter створює поле для введення?',o:['Entry','Label','Button','Input']},
+{q:'Чому дорівнює 7 // 2?',o:['3','3.5','4','1']},
+],
+9:[
+{q:'Який індекс першого елемента списку?',o:['0','1','-1','first']},
+{q:'Який метод додає елемент у кінець списку?',o:['append()','add()','push()','insert_end()']},
+{q:'Що поверне len([2, 4, 6])?',o:['3','6','2','12']},
+{q:'Яке слово оголошує функцію?',o:['def','function','func','define']},
+{q:'Що робить return?',o:['Повертає результат функції','Виводить на екран','Зупиняє програму','Створює змінну']},
+{q:'Що виведе print("ab" * 3)?',o:['ababab','ab3','Помилку','6']},
+{q:'Який модуль генерує випадкові числа?',o:['random','math','time','rand']},
+{q:'Що поверне "Python"[0]?',o:['P','y','n','Python']},
+{q:'Як перетворити рядок s на великі літери?',o:['s.upper()','upper(s)','s.big()','s.toUpper()']},
+{q:'Що поверне random.randint(1, 3)?',o:['Ціле число від 1 до 3','Дробове число','Завжди 1','Список']},
+]};
+const HC=[
+{q:'Який тег створює посилання?',o:['<a>','<link>','<href>','<url>']},
+{q:'Яка властивість змінює колір тексту?',o:['color','font-color','text-color','background']},
+{q:'Який атрибут задає шлях до зображення?',o:['src','href','alt','path']},
+{q:'Як правильно підключити CSS-файл?',o:['<link rel="stylesheet" href="style.css">','<css src="style.css">','<style href="style.css">','<script src="style.css">']},
+{q:'Який тег створює нумерований список?',o:['<ol>','<ul>','<li>','<list>']},
+{q:'Як у CSS звернутися до класу box?',o:['.box','#box','box','*box']},
+{q:'Яка властивість задає внутрішній відступ?',o:['padding','margin','border','spacing']},
+{q:'Який із тегів одиночний?',o:['<br>','<p>','<div>','<span>']},
+{q:'Як вирівняти текст по центру?',o:['text-align: center','align: center','text: middle','center: true']},
+{q:'Який тег — найбільший заголовок?',o:['<h1>','<h6>','<head>','<header>']},
+{q:'Як у CSS звернутися до елемента з id="menu"?',o:['#menu','.menu','menu','@menu']},
+{q:'Для чого атрибут alt у тегу <img>?',o:['Альтернативний текст','Розмір картинки','Посилання','Рамка']},
+{q:'Яка властивість задає розмір шрифту?',o:['font-size','text-size','font-weight','size']},
+{q:'Де розміщують видимий вміст сторінки?',o:['<body>','<head>','<title>','<meta>']},
+];
+HC.forEach((q,i)=>q.pat='sh'+i);CP[8].forEach((q,i)=>q.pat='s8'+i);CP[9].forEach((q,i)=>q.pat='s9'+i);
+const CH={html:[...HC,...GENQ.html],py:[...CP[8],...CP[9],...GENQ.py8,...GENQ.py9]};
+const CATS={html:['HTML','Атрибути','CSS'],py:['Основи','Розгалуження','Цикли','Tkinter','Списки','Рядки','Функції','Модулі']};
+
+/* ---------- мова і клас (посилання: ?t=html або ?t=python) ---------- */
+const QP=new URLSearchParams(location.search);
+let track=QP.get('t')==='html'?'html':QP.get('t')==='python'?'py':store.get('bs_track','html');
+const key=()=>track==='html'?'html':'py';
+const label=k=>k==='html'?'HTML і CSS':'Python';
+function paintSel(){
+  document.querySelectorAll('[data-track-seg] button').forEach(b=>b.classList.toggle('on',b.dataset.tr===track));
+  qs('#trackPill').textContent=track==='html'?'HTML/CSS':'Python';
+  qs('#heroHtml').toggleAttribute('hidden',track!=='html');qs('#heroPy').toggleAttribute('hidden',track==='html');
+  qs('#tsClass').placeholder=track==='html'?'10-А':'9-А';
+  document.querySelectorAll('.prompt').forEach(p=>p.textContent=track==='html'?'>':'>>>');
+  document.querySelectorAll('.cin').forEach(i=>i.placeholder=track==='html'?'виправлений код':'виправлений рядок');
+  buildKeys();homeStats();
+}
+document.querySelectorAll('[data-track-seg] button').forEach(b=>b.addEventListener('click',()=>{track=b.dataset.tr;store.set('bs_track',track);paintSel();sfx.click()}));
+
+/* ---------- звук ---------- */
+let soundOn=store.get('bs_sound',true),actx=null;
+function tone(f,d=.12,type='square',v=.05,delay=0){if(!soundOn)return;try{actx=actx||new(window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();const t=actx.currentTime+delay,o=actx.createOscillator(),g=actx.createGain();o.type=type;o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+d+.03)}catch(e){}}
+const sfx={ok(){tone(660,.08);tone(990,.12,'square',.05,.07)},err(){tone(170,.18,'sawtooth',.05)},heal(){[523,659,784,1046].forEach((f,i)=>tone(f,.1,'triangle',.08,i*.06))},hurt(){tone(300,.12,'sawtooth',.06);tone(140,.25,'sawtooth',.06,.1)},lvl(){[440,554,659,880].forEach((f,i)=>tone(f,.12,'square',.05,i*.08))},over(){[400,300,200,120].forEach((f,i)=>tone(f,.2,'triangle',.08,i*.15))},click(){tone(880,.04,'square',.03)}};
+const ICON_ON='<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>';
+const ICON_OFF='<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm18.7 1.1-1.4-1.4L18 11l-2.3-2.3-1.4 1.4 2.3 2.3-2.3 2.3 1.4 1.4L18 13.8l2.3 2.3 1.4-1.4-2.3-2.3z"/></svg>';
+function paintSound(){const b=qs('#soundBtn');b.innerHTML=soundOn?ICON_ON:ICON_OFF;b.setAttribute('aria-label',soundOn?'Вимкнути звук':'Увімкнути звук')}
+qs('#soundBtn').onclick=()=>{soundOn=!soundOn;store.set('bs_sound',soundOn);paintSound();sfx.click()};
+paintSound();
+/* ---------- тема ---------- */
+const MOON='<svg viewBox="0 0 24 24"><path d="M20 15.3A8.5 8.5 0 0 1 8.7 4a8.5 8.5 0 1 0 11.3 11.3z"/></svg>';
+const SUN='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+function paintTheme(){const l=document.documentElement.dataset.theme==='light',b=qs('#themeBtn');b.innerHTML=l?MOON:SUN;b.setAttribute('aria-label',l?'Темна тема':'Світла тема');qs('meta[name=theme-color]').content=l?'#f4f2ee':'#1c1e24'}
+qs('#themeBtn').onclick=()=>{const l=document.documentElement.dataset.theme!=='light';if(l)document.documentElement.dataset.theme='light';else delete document.documentElement.dataset.theme;store.set('bs_theme',l?'light':'dark');paintTheme();sfx.click()};
+paintTheme();
+
+/* ---------- екрани ---------- */
+function setVH(){const vv=window.visualViewport,r=document.documentElement.style;r.setProperty('--vh',(vv?vv.height:innerHeight)+'px');r.setProperty('--vt',(vv?vv.offsetTop:0)+'px')}
+if(window.visualViewport){visualViewport.addEventListener('resize',setVH);visualViewport.addEventListener('scroll',setVH)}
+addEventListener('resize',setVH);setVH();
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));document.body.classList.toggle('playing',id==='game'||id==='test');setVH();scrollTo(0,0);if(id==='home')homeStats()}
+function homeStats(){qs('#sBest').textContent=store.get('bs_best_'+key(),0);qs('#sXp').textContent=store.get('bs_xp',0)}
+function goHome(){if(G.started&&!G.saved)endSession();if(TS){clearInterval(TS.timer);TS=null}show('home')}
+qs('#brand').onclick=()=>{if(TS&&document.body.classList.contains('playing')&&!confirm('Вийти з тестування? Результат не збережеться.'))return;goHome()};
+document.addEventListener('click',e=>{if(e.target.closest('[data-home]'))goHome()});
+
+/* ---------- кнопки символів ---------- */
+const KEYS={html:['<','>','/','"','=','{','}',':',';','.','#','_','-'],py:['⇥','(',')',':','"','=','[',']','{','}',',','.','_','#','+','<','>']};
+function insertAt(inp,s){const a=inp.selectionStart??inp.value.length,b=inp.selectionEnd??a;inp.value=inp.value.slice(0,a)+s+inp.value.slice(b);inp.focus();inp.setSelectionRange(a+s.length,a+s.length)}
+function buildKeys(){document.querySelectorAll('.keys').forEach(k=>{const inp=qs('#'+k.dataset.for);k.innerHTML='';KEYS[track==='html'?'html':'py'].forEach(c=>{const b=document.createElement('button');b.type='button';b.textContent=c;b.addEventListener('pointerdown',e=>e.preventDefault());b.addEventListener('mousedown',e=>e.preventDefault());b.addEventListener('click',()=>insertAt(inp,c==='⇥'?'    ':c));k.appendChild(b)})})}
+
+/* ---------- [i] ---------- */
+function openInfo(){if(G.on&&!G.paused)pause(true);qs('#info').hidden=false;qs('#infoClose').focus()}
+function closeInfo(){qs('#info').hidden=true}
+qs('#infoBtn').onclick=openInfo;qs('#infoClose').onclick=closeInfo;
+qs('#info').addEventListener('click',e=>{if(e.target.id==='info')closeInfo()});
+
+const codeHTML=t=>t.code.map((l,i)=>`<span class="ln${i===t.k?' bad':''}">${esc(l)}</span>`).join('');
+const matches=(t,v)=>t.n.includes(norm(t,v));
+
+/* ---------- ГРА ---------- */
+const HEART='<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+const ws=qs('#ws'),cin=qs('#cin'),gov=qs('#gov');
+const G={on:false,started:false,saved:true};
+let runId=0;
+function startGame(){
+  ws.querySelectorAll('.win,.float,.toast').forEach(e=>e.remove());
+  Object.assign(G,{on:true,started:true,saved:false,paused:false,key:key(),lives:5,score:0,xp:0,level:1,fixed:0,combo:0,wins:[],spawnT:99,sel:null,recent:[],usedB:new Set(),last:performance.now()});
+  gov.hidden=true;cin.value='';msg('');
+  show('game');renderHUD();toast('Рівень 1');
+  const id=++runId;requestAnimationFrame(t=>loop(t,id));
+  if(!coarse)cin.focus();
+}
+function loop(now,id){if(id!==runId||!G.on)return;const dt=Math.min(.05,(now-G.last)/1000);G.last=now;if(!G.paused)update(dt);requestAnimationFrame(t=>loop(t,id))}
+function pickTier(){const L=G.level,r=Math.random();if(L<=2)return 1;if(L<=4)return r<.4?1:2;if(L<=6)return r<.2?1:r<.6?2:3;return r<.1?1:r<.4?2:3}
+function pickTask(tier){const mine=T.filter(t=>t.key===G.key&&t.t===tier),live=new Set(G.wins.filter(w=>!w.done).map(w=>w.task.b));
+  const free=mine.filter(t=>!live.has(t.b)&&!G.usedB.has(t.b)),fresh=free.filter(t=>!G.recent.includes(t.pat));
+  const pool=fresh.length?fresh:free.length?free:mine;const t=R(pool);
+  G.recent.push(t.pat);if(G.recent.length>8)G.recent.shift();G.usedB.add(t.b);return t}
+const LIFE=30;
+function update(dt){
+  const H=ws.clientHeight,W=ws.clientWidth,L=G.level;
+  const act=G.wins.filter(w=>!w.done);
+  const every=act.length?Math.max(3.5,8-(L-1)*.5):.6;
+  G.spawnT+=dt;
+  if(G.spawnT>=every&&act.length<12)spawn(W,H);
+  const speed=Math.max(H/10,40)*(1+(L-1)*.08);
+  const live=G.wins.filter(w=>!w.done);
+  live.forEach(w=>{w.w=w.el.offsetWidth;w.h=w.el.offsetHeight;w.x=Math.min(w.x,Math.max(8,W-w.w-8))});
+  live.sort((a,b)=>b.y-a.y);
+  const placed=[];
+  for(const w of live){
+    let floor=H-w.h-6;
+    for(const o of placed)if(o.x<w.x+w.w&&w.x<o.x+o.w)floor=Math.min(floor,o.y-w.h-6);
+    if(w.y<floor-.5){w.y=Math.min(floor,w.y+speed*dt);w.landed=false}else{w.y=floor;w.landed=true}
+    if(w.landed){w.ground+=dt;const r=Math.max(0,1-w.ground/LIFE);w.bar.style.transform='scaleX('+r+')';w.el.classList.toggle('late',r<.34)}
+    w.el.classList.toggle('landed',w.landed);
+    w.el.style.top=w.y+'px';w.el.style.left=w.x+'px';
+    placed.push(w);
+  }
+  live.filter(w=>w.ground>=LIFE).forEach(miss);
+}
+function spawn(W,H){
+  G.spawnT=0;
+  const heal=G.fixed>=2&&Math.random()<(G.lives<5?.16:.05);
+  let tier=pickTier();if(heal)tier=Math.max(1,tier-1);
+  const task=pickTask(tier),el=document.createElement('div');
+  el.className='win'+(heal?' heal':'');
+  el.innerHTML=`<div class="tb"><span>${heal?'✚ HEAL':'⚠ ERROR'}</span><span class="tag">${esc(task.c)}</span><span class="x">✕</span></div><pre>${codeHTML(task)}</pre><div class="hint">${esc(task.h)}</div><div class="ttl"><i></i></div>`;
+  el.style.top='-400px';ws.appendChild(el);
+  const ww=el.offsetWidth,hh=el.offsetHeight,maxX=Math.max(8,W-ww-8);
+  let best=null;
+  for(let k=0;k<10;k++){
+    const x=8+Math.random()*(maxX-8);let f=H-hh-6;
+    G.wins.forEach(o=>{if(!o.done&&o.x<x+ww&&x<o.x+o.w)f=Math.min(f,o.y-hh-6)});
+    if(!best||f>best.f)best={x,f};
+  }
+  if(best.f<0){el.remove();G.spawnT-=1;return}
+  const w={el,task,heal,x:best.x,y:-hh,w:ww,h:hh,ground:0,landed:false,born:performance.now(),done:false,bar:el.querySelector('.ttl i')};
+  el.style.left=w.x+'px';el.style.top=w.y+'px';
+  el.addEventListener('mousedown',e=>e.preventDefault());
+  el.addEventListener('click',()=>selectWin(w));
+  G.wins.push(w);
+}
+function hurt(text){
+  G.lives--;G.combo=0;
+  ws.classList.remove('hurt');void ws.offsetWidth;ws.classList.add('hurt');
+  sfx.hurt();if(navigator.vibrate)navigator.vibrate(80);
+  msg(text,'err');renderHUD();
+  if(G.lives<=0)gameOver();
+}
+function selectWin(w){if(!w||w.done||G.paused)return;G.sel=w;G.wins.forEach(x=>x.el.classList.toggle('sel',x===w));cin.value=w.task.b;cin.focus();cin.setSelectionRange(cin.value.length,cin.value.length);sfx.click()}
+const byAge=(a,b)=>b.ground-a.ground||b.y-a.y;
+function lowest(){return G.wins.filter(w=>!w.done).sort(byAge)[0]}
+function msg(t,k=''){const m=qs('#cmsg');m.textContent=t;m.className='cmsg '+k}
+function renderHUD(gain){
+  qs('#hearts').innerHTML=Array.from({length:5},(_,i)=>`<span class="h${i<G.lives?' f':''}${gain&&i===G.lives-1?' gain':''}">${HEART}</span>`).join('');
+  qs('#hScore').textContent=G.score;qs('#hXp').textContent=G.xp;
+  qs('#hLvl').textContent='Рів. '+G.level;qs('#hBar').style.width=(G.fixed%5)/5*100+'%';
+  qs('#hCombo').textContent=G.combo>1?'×'+(1+Math.min(G.combo,5)*.2).toFixed(1):'';
+}
+function floatText(w,t){const f=document.createElement('div');f.className='float';f.textContent=t;f.style.left=(w.x+20)+'px';f.style.top=(w.y+8)+'px';ws.appendChild(f);setTimeout(()=>f.remove(),900)}
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;ws.appendChild(d);setTimeout(()=>d.remove(),1300)}
+function fix(w){
+  w.done=true;if(G.sel===w)G.sel=null;
+  w.el.classList.remove('sel');w.el.classList.add('fixed');w.el.querySelector('.tb span').textContent='✓ FIXED';
+  const mult=1+Math.min(G.combo,5)*.2,pts=Math.round((10*w.task.t+Math.max(0,Math.round(15-(performance.now()-w.born)/2000)))*mult);
+  G.score+=pts;G.xp+=w.task.t*5+(w.heal?3:0);G.combo++;G.fixed++;
+  floatText(w,'+'+pts);
+  let gain=false;
+  if(w.heal){if(G.lives<5){G.lives++;gain=true;msg('✚ +1 життя','ok')}else{G.score+=20;msg('✚ Бонус +20','ok')}sfx.heal()}
+  else{sfx.ok();msg(G.combo>1?'✓ Комбо ×'+G.combo:'✓ Виправлено','ok')}
+  setTimeout(()=>{w.el.remove();G.wins=G.wins.filter(x=>x!==w)},450);
+  if(G.fixed%5===0){G.level++;setTimeout(()=>{if(G.on){toast('Рівень '+G.level);sfx.lvl()}},300)}
+  renderHUD(gain);
+}
+function miss(w){
+  w.done=true;if(G.sel===w)G.sel=null;
+  w.el.classList.add('miss');setTimeout(()=>{w.el.remove();G.wins=G.wins.filter(x=>x!==w)},400);
+  if(w.heal)return;
+  hurt('⌛ Час вийшов. Правильно: '+w.task.a[0].trim());
+}
+qs('#cform').addEventListener('submit',e=>{
+  e.preventDefault();if(!G.on||G.paused)return;
+  const v=cin.value;if(!v.trim())return;
+  const act=G.wins.filter(w=>!w.done);
+  const order=G.sel&&!G.sel.done?[G.sel,...act.filter(w=>w!==G.sel)]:act.sort(byAge);
+  const hit=order.find(w=>matches(w.task,v));
+  if(hit){fix(hit);cin.value=''}
+  else{G.combo=0;renderHUD();sfx.err();msg('✗ Не підходить жодному вікну','err');const f=qs('#cform');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake')}
+});
+cin.addEventListener('keydown',e=>{if(e.key==='Tab'){e.preventDefault();selectWin(lowest())}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!qs('#info').hidden){closeInfo();return}if(G.on)pause(!G.paused)}});
+function pause(p){
+  if(!G.on)return;G.paused=p;
+  if(p){gov.innerHTML=`<div class="card"><div class="big">⏸</div><h2>Пауза</h2><div class="btns"><button class="btn pri" id="resume">Продовжити</button><button class="btn sec" data-home>Меню</button></div></div>`;gov.hidden=false;qs('#resume').onclick=()=>pause(false)}
+  else{gov.hidden=true;G.last=performance.now();if(!coarse)cin.focus()}
+}
+qs('#pauseBtn').onclick=()=>pause(!G.paused);
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&G.on&&!G.paused)pause(true)});
+function endSession(){G.on=false;const k='bs_best_'+G.key,best=store.get(k,0),rec=G.score>best;if(rec)store.set(k,G.score);store.set('bs_xp',store.get('bs_xp',0)+G.xp);G.saved=true;return rec&&G.score>0}
+function gameOver(){
+  const rec=endSession();sfx.over();cin.blur();
+  gov.innerHTML=`<div class="card"><div class="big">💥</div><h2>Гру завершено</h2><div class="grid3"><div><b>${G.score}</b><span>бали</span></div><div><b>${G.level}</b><span>рівень</span></div><div><b>+${G.xp}</b><span>XP</span></div></div>${rec?'<p style="margin:0 0 14px;color:var(--warn);font-weight:800">🏆 Новий рекорд!</p>':''}<div class="btns"><button class="btn pri" id="again">Ще раз</button><button class="btn sec" data-home>Меню</button></div></div>`;
+  gov.hidden=false;qs('#again').onclick=startGame;
+}
+qs('#playBtn').onclick=()=>{sfx.click();startGame()};
+
+/* ---------- ТЕСТУВАННЯ ---------- */
+let TS=null;const tin=qs('#tin');
+qs('#testBtn').onclick=()=>{sfx.click();show('tstart');if(!coarse)qs('#tsName').focus()};
+function buildTest(g){
+  const per=CATS[g].length===3?[3,3,2]:CATS[g].map(()=>1);
+  const distinct=(arr,n)=>{const out=[],seen=new Set();for(const x of shuffle(arr.slice())){if(seen.has(x.pat))continue;seen.add(x.pat);out.push(x);if(out.length===n)break}return out};
+  const f=[];CATS[g].forEach((c,i)=>distinct(T.filter(t=>t.key===g&&t.c===c),per[i]).forEach(t=>f.push({type:'fix',task:t,cat:c})));
+  const ch=distinct(CH[g],4).map(c=>({type:'choice',ch:c,cat:'Теорія'}));
+  return [f[0],f[1],ch[0],f[2],f[3],ch[1],f[4],f[5],ch[2],f[6],f[7],ch[3]];
+}
+qs('#tsForm').addEventListener('submit',e=>{
+  e.preventDefault();const name=qs('#tsName').value.trim(),cls=qs('#tsClass').value.trim();
+  if(!name){const i=qs('#tsName');i.classList.remove('shake');void i.offsetWidth;i.classList.add('shake');i.focus();return}
+  TS={name,cls,g:key(),list:buildTest(key()),i:0,res:[],t0:Date.now(),qt:Date.now(),lock:false,away:0,awayMs:0,awayAt:0};
+  qs('#tAway').hidden=true;
+  show('test');TS.timer=setInterval(tick,1000);tick();showQ();
+});
+const fmt=ms=>{const s=Math.floor(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+function leaveTest(){if(!TS||TS.awayAt||!document.body.classList.contains('playing'))return;TS.awayAt=Date.now();TS.away++;const a=qs('#tAway');a.hidden=false;a.querySelector('b').textContent=TS.away}
+function backTest(){if(!TS||!TS.awayAt)return;TS.awayMs+=Date.now()-TS.awayAt;TS.awayAt=0}
+document.addEventListener('visibilitychange',()=>document.hidden?leaveTest():backTest());
+addEventListener('blur',leaveTest);addEventListener('focus',backTest);
+function tick(){if(TS)qs('#tTime').textContent=fmt(Date.now()-TS.t0)}
+function showQ(){
+  const q=TS.list[TS.i],n=TS.list.length;
+  qs('#tNum').textContent=(TS.i+1)+'/'+n;qs('#tBar').style.width=TS.i/n*100+'%';
+  TS.lock=false;TS.qt=Date.now();qs('#tmsg').textContent='';
+  const tws=qs('#tws');tws.innerHTML='';const el=document.createElement('div');el.className='win twin';
+  if(q.type==='fix'){
+    el.innerHTML=`<div class="tb"><span>⚠ ERROR #${TS.i+1}</span><span class="tag">${esc(q.cat)}</span></div><pre>${codeHTML(q.task)}</pre><div class="hint">${esc(q.task.h)}</div>`;
+    el.style.cursor='pointer';el.addEventListener('mousedown',e=>e.preventDefault());
+    el.addEventListener('click',()=>{if(TS.lock)return;tin.value=q.task.b;tin.focus();tin.setSelectionRange(tin.value.length,tin.value.length);sfx.click()});
+    qs('#tcon').hidden=false;tin.value='';if(!coarse)tin.focus();
+  }else{
+    el.classList.add('qwin');
+    el.innerHTML=`<div class="tb"><span>? QUESTION #${TS.i+1}</span><span class="tag">Теорія</span></div><div class="qq"></div><div class="opts"></div>`;
+    el.querySelector('.qq').textContent=q.ch.q;
+    shuffle(q.ch.o.slice()).forEach(o=>{const b=document.createElement('button');b.textContent=o;b.onclick=()=>{if(TS.lock)return;b.classList.add('pick');answerT(o,o===q.ch.o[0])};el.querySelector('.opts').appendChild(b)});
+    qs('#tcon').hidden=true;tin.blur();
+  }
+  tws.appendChild(el);setVH();
+}
+function answerT(given,ok){
+  TS.lock=true;const q=TS.list[TS.i];TS.res.push({q,given,ok,ms:Date.now()-TS.qt});
+  const el=qs('#tws .win');el.classList.add(ok?'good':'bad');el.querySelector('.tb span').textContent=ok?'✓ ПРАВИЛЬНО':'✗ НЕПРАВИЛЬНО';
+  ok?sfx.ok():sfx.err();
+  setTimeout(()=>{if(!TS)return;TS.i++;if(TS.i>=TS.list.length)finishTest();else showQ()},900);
+}
+qs('#tform').addEventListener('submit',e=>{
+  e.preventDefault();if(!TS||TS.lock)return;const v=tin.value;
+  if(!v.trim()){const f=qs('#tform');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');return}
+  answerT(v.replace(/\s+$/,''),matches(TS.list[TS.i].task,v));tin.value='';
+});
+tin.addEventListener('keydown',e=>{if(e.key==='Tab'&&TS&&TS.g!=='html'&&TS.list[TS.i].type==='fix'){e.preventDefault();insertAt(tin,'    ')}});
+qs('#tExit').onclick=()=>{if(confirm('Вийти з тестування? Результат не збережеться.'))goHome()};
+let lastReport='';
+function finishTest(){
+  clearInterval(TS.timer);backTest();tin.blur();
+  const r=TS.res,n=r.length,c=r.filter(x=>x.ok).length,pct=Math.round(c/n*100),grade12=Math.max(1,Math.round(c/n*12)),total=Date.now()-TS.t0;
+  const lvl=grade12>=10?['Високий','var(--ok)']:grade12>=7?['Достатній','var(--acc)']:grade12>=4?['Середній','var(--warn)']:['Початковий','var(--err)'];
+  const date=new Date().toLocaleDateString('uk-UA'),cats=[...CATS[TS.g],'Теорія'];
+  const task=x=>x.q.type==='fix'?x.q.task.b:x.q.ch.q,right=x=>x.q.type==='fix'?x.q.task.a[0]:x.q.ch.o[0];
+  const catRows=cats.map(k=>{const a=r.filter(x=>x.q.cat===k);if(!a.length)return'';const ok=a.filter(x=>x.ok).length;return`<div class="cat"><span>${k}</span><div class="bar"><i style="width:${ok/a.length*100}%"></i></div><span>${ok}/${a.length}</span></div>`}).join('');
+  const rows=r.map((x,i)=>`<tr><td>${i+1}</td><td>${x.q.type==='fix'?`<code>${esc(task(x))}</code>`:esc(task(x))}</td><td><code>${esc(x.given)}</code></td><td><code>${esc(right(x))}</code></td><td class="${x.ok?'okc':'bdc'}">${x.ok?'✓':'✗'}</td></tr>`).join('');
+  qs('#resBox').innerHTML=`
+    <div class="rhead"><div><div class="rname">${esc(TS.name)}</div><div class="muted">${TS.cls?esc(TS.cls)+' · ':''}${label(TS.g)} · ${date} · ⏱ ${fmt(total)}</div></div>
+    <div class="grade" style="--gc:${lvl[1]}"><div>${grade12}<small>з 12</small></div></div></div>
+    <div class="chips"><span class="chip">✓ ${c}/${n}</span><span class="chip">${pct}%</span><span class="chip">${lvl[0]} рівень</span><span class="chip" style="color:${TS.away?'var(--errD)':'var(--okD)'}">👁 Виходів з вкладки: ${TS.away}${TS.away?' · '+fmt(TS.awayMs):''}</span></div>
+    <div class="cats">${catRows}</div>
+    <div class="tw"><table class="rt"><thead><tr><th>#</th><th>Завдання</th><th>Відповідь учня</th><th>Правильна відповідь</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="btns no-print"><button class="btn pri" id="rPrint">🖨 Друк / PDF</button><button class="btn sec" id="rCopy">📋 Копіювати звіт</button><button class="btn sec" id="rAgain">↻ Ще раз</button><button class="btn sec" data-home>Меню</button></div>`;
+  lastReport=`Баг-шторм · Тестування: ${label(TS.g)}\nУчень: ${TS.name}${TS.cls?'\nКлас: '+TS.cls:''}\nДата: ${date}  Час: ${fmt(total)}\nРезультат: ${c}/${n} (${pct}%) — оцінка ${grade12}/12, ${lvl[0].toLowerCase()} рівень\nВиходів з вкладки: ${TS.away}${TS.away?' (разом '+fmt(TS.awayMs)+')':''}\n\n`+r.map((x,i)=>`${i+1}. ${x.ok?'✓':'✗'} [${x.q.cat}] ${task(x)}\n   відповідь: ${x.given}${x.ok?'':'\n   правильно: '+right(x)}`).join('\n');
+  qs('#rPrint').onclick=()=>print();
+  qs('#rCopy').onclick=async e=>{const b=e.currentTarget;try{await navigator.clipboard.writeText(lastReport)}catch(_){const t=document.createElement('textarea');t.value=lastReport;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()}b.textContent='✓ Скопійовано';setTimeout(()=>b.textContent='📋 Копіювати звіт',1500)};
+  qs('#rAgain').onclick=()=>show('tstart');
+  TS=null;show('result');sfx.lvl();
+}
+paintSel();
+/* сітка на головній підсвічується навколо курсора */
+(()=>{const hero=qs('#home');if(!hero||!matchMedia('(hover:hover) and (pointer:fine)').matches||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  let tx=null,ty=null,cx=null,cy=null,raf=0;
+  const center=()=>{const r=hero.getBoundingClientRect();return[r.width*.5,r.height*.45]};
+  function step(){const[dx,dy]=tx==null?center():[tx,ty];if(cx==null){[cx,cy]=center()}
+    cx+=(dx-cx)*.18;cy+=(dy-cy)*.18;hero.style.setProperty('--mx',cx+'px');hero.style.setProperty('--my',cy+'px');
+    raf=Math.abs(dx-cx)+Math.abs(dy-cy)>.5?requestAnimationFrame(step):0}
+  const go=()=>{if(!raf)raf=requestAnimationFrame(step)};
+  hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();tx=e.clientX-r.left;ty=e.clientY-r.top;go()});
+  hero.addEventListener('pointerleave',()=>{tx=ty=null;go()});
+})();
+</script>
+</body>
+</html>

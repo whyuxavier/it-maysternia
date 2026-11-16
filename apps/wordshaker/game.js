@@ -908,9 +908,6 @@ function init() {
     .catch(() => { $('menu-status').textContent = t('st_error'); });
 
   // PWA
-  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  }
 }
 document.addEventListener('DOMContentLoaded', init);
 

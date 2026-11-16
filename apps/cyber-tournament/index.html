@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кібертурнір</title>
+<meta name="description" content="Турнірна сітка на виліт для шкільних кібертурнірів.">
+<link rel="icon" id="fv" type="image/svg+xml" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800&family=Russo+One&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ac: #ffd400;
+  --ac-soft: color-mix(in srgb, var(--ac) 16%, transparent);
+  --vi: #7b2cff;
+  --cy: #00e5ff;
+  --bg: #07070f;
+  --pn: #11111d;
+  --pn2: #181828;
+  --ln: #2a2a44;
+  --tx: #ececf8;
+  --mu: #8a8aab;
+  --grid: rgba(140, 140, 255, .07);
+  --r: 14px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--tx);
+  font-family: 'Exo 2', system-ui, -apple-system, sans-serif;
+  background:
+    radial-gradient(900px 520px at 10% -10%, #2a1160 0, transparent 60%),
+    radial-gradient(800px 460px at 100% 0, #00334a 0, transparent 55%),
+    var(--bg);
+  background-attachment: fixed;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 {
+  font-family: 'Russo One', 'Exo 2', sans-serif;
+  font-weight: 400;
+  margin: 0;
+}
+[hidden] { display: none !important; }
+
+/* ---------- Шапка ---------- */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 62px;
+  padding: 0 max(16px, calc((100vw - 1200px) / 2));
+  background: rgba(9, 9, 18, .78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--ln);
+}
+.logo { width: 34px; height: 34px; flex-shrink: 0; }
+.logo .lg-bg { fill: var(--pn2); stroke: var(--ln); stroke-width: 2; }
+.logo .lg-line { fill: none; stroke: var(--mu); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.logo .lg-cup { fill: var(--ac); }
+#tt {
+  font-size: clamp(1rem, 3.4vw, 1.3rem);
+  color: var(--tx);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+#gm {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--ac-soft);
+  color: var(--ac);
+  font-weight: 700;
+  font-size: .75rem;
+  white-space: nowrap;
+}
+.sp { flex: 1; }
+.acts { display: flex; gap: 6px; flex-shrink: 0; }
+
+button {
+  font: inherit;
+  cursor: pointer;
+  color: var(--tx);
+  background: var(--pn2);
+  border: 1px solid var(--ln);
+  border-radius: 10px;
+  padding: 9px 14px;
+  transition: border-color .15s, color .15s, background .15s, transform .1s;
+  user-select: none;
+  touch-action: manipulation;
+}
+button:hover { border-color: var(--ac); color: var(--ac); }
+button:active { transform: scale(.97); }
+button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible {
+  outline: 2px solid var(--ac);
+  outline-offset: 2px;
+}
+.ib {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.ib svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ib.info { font-family: Georgia, serif; font-style: italic; font-weight: 700; font-size: 1.15rem; }
+#bt { color: var(--ac); border-color: var(--ac); }
+#snd .off { display: none; }
+#snd.muted { color: var(--mu); }
+#snd.muted .on { display: none; }
+#snd.muted .off { display: block; }
+
+main {
+  overflow-x: clip;
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto 40px;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 32px;
+  align-items: center;
+  padding: 34px 0 30px;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -16px -60px;
+  z-index: -1;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 34px 34px;
+  -webkit-mask-image: radial-gradient(ellipse 65% 60% at 62% 50%, #000 25%, transparent 75%);
+  mask-image: radial-gradient(ellipse 65% 60% at 62% 50%, #000 25%, transparent 75%);
+  pointer-events: none;
+}
+#heroName {
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.08;
+  margin-bottom: 14px;
+  overflow-wrap: anywhere;
+}
+#heroName span { color: var(--ac); text-shadow: 0 0 28px color-mix(in srgb, var(--ac) 45%, transparent); }
+.hero p {
+  color: var(--mu);
+  font-size: 1.1rem;
+  line-height: 1.55;
+  max-width: 430px;
+  margin: 0 0 26px;
+}
+.hero-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.hero-btns button { min-width: 150px; }
+
+.go {
+  background: var(--ac);
+  color: #111;
+  border-color: var(--ac);
+  font-weight: 800;
+  padding: 13px 24px;
+  font-size: 1rem;
+  box-shadow: 0 0 22px color-mix(in srgb, var(--ac) 45%, transparent);
+}
+.go:hover { color: #111; filter: brightness(1.08); }
+
+.hero-svg { display: block; width: 100%; max-width: 560px; height: auto; margin-left: auto; overflow: visible; }
+.hero-svg g, .hero-svg path { transform-box: fill-box; transform-origin: center; }
+.hs-pill { fill: var(--pn); stroke: var(--ln); stroke-width: 2; }
+.hs-win .hs-pill { stroke: var(--ac); }
+.hs-lose { opacity: .45; }
+.hs-bar { fill: #34345a; }
+.hs-win .hs-bar { fill: #4a4a78; }
+.hs-line { fill: none; stroke: var(--ln); stroke-width: 3; stroke-linejoin: round; }
+.hs-line.hot { stroke: var(--ac); }
+.hs-final .hs-pill { fill: var(--ac); stroke: var(--ac); }
+.hs-final .hs-bar { fill: rgba(0, 0, 0, .35); }
+.hs-cup { fill: var(--ac); filter: drop-shadow(0 0 18px color-mix(in srgb, var(--ac) 60%, transparent)); }
+.hs-cup-h { fill: none; stroke: var(--ac); stroke-width: 7; }
+.hs-star { fill: #111; opacity: .35; }
+.hs-badge { fill: var(--pn2); stroke: var(--ln); stroke-width: 2; }
+.hs-btxt { font: 800 15px 'Exo 2', sans-serif; fill: var(--tx); }
+.hs-live { fill: #ff3b5c; }
+.hs-score { font: 800 17px 'Exo 2', sans-serif; fill: var(--ac); }
+
+.hs-l1 { animation: fadeIn .4s ease both; }
+.hs-draw { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.hs-d1 { animation: draw .45s ease .35s both; }
+.hs-s { animation: pop .4s ease .75s both; }
+.hs-d2 { animation: draw .45s ease .95s both; }
+.hs-final { animation: pop .45s cubic-bezier(.3, 1.5, .5, 1) 1.3s both; }
+.hs-trophy { animation: rise .55s cubic-bezier(.3, 1.4, .5, 1) 1.45s both; }
+.hs-b { animation: pop .4s ease 1.7s both; }
+@keyframes fadeIn { from { opacity: 0; } }
+@keyframes draw { from { stroke-dashoffset: 1; } }
+@keyframes pop { from { opacity: 0; transform: scale(.6); } }
+@keyframes rise { from { opacity: 0; transform: translateY(26px) scale(.7); } }
+
+/* ---------- Налаштування ---------- */
+.card {
+  max-width: 820px;
+  margin: 0 auto;
+  background: var(--pn);
+  border: 1px solid var(--ln);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 0 50px #7b2cff1c;
+  scroll-margin-top: 80px;
+}
+.card h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 24px 0 12px;
+  font-size: 1rem;
+}
+.card h3 b {
+  font: 800 .8rem 'Exo 2', sans-serif;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--ac-soft);
+  color: var(--ac);
+}
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: var(--mu);
+  font-size: .85rem;
+  font-weight: 600;
+}
+input, select {
+  font: inherit;
+  color: var(--tx);
+  background: #0a0a15;
+  border: 1px solid var(--ln);
+  border-radius: 10px;
+  padding: 11px 13px;
+  width: 100%;
+  font-size: .95rem;
+  min-width: 0;
+}
+input:focus, select:focus { border-color: var(--ac); outline: none; }
+.sw { display: flex; gap: 10px; padding-top: 3px; }
+.sw button { width: 34px; height: 34px; padding: 0; border-radius: 50%; border: 2px solid transparent; }
+.sw .on { box-shadow: 0 0 0 2px var(--pn), 0 0 0 4px #fff; }
+
+.teams { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; }
+.tr { display: grid; grid-template-columns: 14px 1fr 40px; gap: 8px; align-items: center; }
+.dot { width: 12px; height: 12px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); flex-shrink: 0; display: inline-block; }
+.tr button { width: 40px; height: 42px; padding: 0; color: var(--mu); }
+.tr button:hover { color: #ff5c7a; border-color: #ff5c7a; }
+
+.row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
+.row .add { border-style: dashed; color: var(--mu); }
+.chk { flex-direction: row; align-items: center; gap: 10px; color: var(--tx); font-size: .92rem; cursor: pointer; }
+.chk input { width: 18px; height: 18px; accent-color: var(--ac); }
+.go.wide { width: 100%; margin-top: 22px; font-size: 1.05rem; padding: 15px; }
+
+/* ---------- Сітка ---------- */
+.bracket-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 14px; }
+.br { display: flex; gap: 40px; min-width: min-content; padding: 8px 4px 12px; }
+.rc { display: flex; flex-direction: column; width: 250px; flex: none; }
+.rc h4, .third h4 {
+  margin-bottom: 8px;
+  color: var(--mu);
+  font: 700 .78rem 'Exo 2', sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.rc:last-child h4 { color: var(--ac); }
+.col { flex: 1; display: flex; flex-direction: column; }
+.pair { flex: 1; position: relative; display: flex; flex-direction: column; justify-content: space-around; }
+.rc:not(:last-child) .pair:not(.solo)::after {
+  content: "";
+  position: absolute;
+  right: -20px;
+  top: 25%;
+  bottom: 25%;
+  border-right: 2px solid var(--ln);
+  margin-top: -1px;
+}
+
+.m {
+  position: relative;
+  margin: 8px 0;
+  background: var(--pn);
+  border: 1px solid var(--ln);
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .3);
+}
+.rc:not(:last-child) .m::after,
+.rc:not(:first-child) .m::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  border-top: 2px solid var(--ln);
+  margin-top: -1px;
+}
+.rc:not(:last-child) .m::after { left: 100%; }
+.rc:not(:first-child) .m::before { right: 100%; }
+.rc:not(:last-child) .m.done::after { border-color: color-mix(in srgb, var(--ac) 55%, var(--ln)); }
+
+.t {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 8px 7px 12px;
+  font-weight: 600;
+  min-height: 46px;
+  font-size: .92rem;
+}
+.t + .t { border-top: 1px solid var(--ln); }
+.nm { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.nm span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.t i { color: var(--mu); font-weight: 400; font-style: normal; font-size: .82rem; }
+.t.w { color: var(--ac); background: linear-gradient(90deg, var(--ac-soft), transparent 80%); }
+.t.w:first-child { border-radius: 11px 11px 0 0; }
+.t.w:last-child { border-radius: 0 0 11px 11px; }
+.t.l { opacity: .42; }
+
+.c { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.c b { min-width: 22px; text-align: center; font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+.c button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  border-radius: 8px;
+}
+.c .pl { background: var(--ac-soft); border-color: transparent; color: var(--ac); }
+.c .pl:hover { background: var(--ac); color: #111; }
+.c em { color: var(--mu); font-size: .75rem; font-style: normal; }
+
+.m.live {
+  border-color: var(--ac);
+  box-shadow: 0 0 0 1px var(--ac), 0 0 22px color-mix(in srgb, var(--ac) 30%, transparent);
+}
+.m.live::after { border-color: var(--ln); }
+.m.done { border-color: #343454; }
+
+.third { max-width: 290px; margin: 18px 4px 0; }
+
+/* ---------- Вікно [i] ---------- */
+#im, #ov {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+#im { background: rgba(5, 5, 12, .8); backdrop-filter: blur(4px); z-index: 90; }
+#im.on, #ov.on { display: flex; }
+.mb {
+  position: relative;
+  max-width: 480px;
+  width: 100%;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  background: var(--pn);
+  border: 1px solid var(--ln);
+  border-radius: 20px;
+  padding: 22px 24px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, .5), 0 0 40px #7b2cff2a;
+}
+.mb h2 { margin: 0 44px 8px 0; color: var(--ac); font-size: 1.25rem; }
+.mb h3 {
+  font: 700 .75rem 'Exo 2', sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--mu);
+  margin: 18px 0 6px;
+}
+.mb p { margin: 0 0 8px; line-height: 1.5; font-size: .92rem; color: #c9c9dc; }
+.mb ul { margin: 0; padding-left: 18px; color: #c9c9dc; font-size: .92rem; line-height: 1.5; }
+.mb li { margin: 3px 0; }
+.mb li b { color: var(--tx); }
+.x { position: absolute; top: 16px; right: 16px; }
+.keys { display: grid; gap: 8px; font-size: .9rem; color: #c9c9dc; }
+.keys div { display: flex; align-items: center; gap: 10px; }
+kbd {
+  min-width: 40px;
+  padding: 3px 8px;
+  text-align: center;
+  font: 700 .85rem 'Exo 2', sans-serif;
+  color: var(--tx);
+  background: var(--pn2);
+  border: 1px solid var(--ln);
+  border-bottom-width: 3px;
+  border-radius: 7px;
+}
+.gh {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: var(--tx);
+  color: #111;
+  font-weight: 800;
+  text-decoration: none;
+}
+.gh svg { width: 18px; height: 18px; fill: var(--ac); stroke: #111; stroke-width: 1; }
+.gh:hover { filter: brightness(.92); }
+.ver { font-size: .75rem !important; color: var(--mu) !important; margin-top: 14px !important; }
+
+/* ---------- Переможець ---------- */
+#ov { background: rgba(5, 5, 11, .92); z-index: 100; }
+.pd { text-align: center; padding: 10px; max-width: 480px; width: 100%; }
+.pd img { max-height: 35vh; max-width: 80vw; filter: drop-shadow(0 0 30px var(--ac)); }
+.tp svg { height: 30vh; max-height: 220px; width: auto; filter: drop-shadow(0 0 25px var(--ac)); }
+.pd .k { color: var(--mu); margin: 10px 0 0; text-transform: uppercase; font-size: .8rem; letter-spacing: 2px; }
+.pd h1 { font-size: clamp(1.8rem, 6vw, 3.2rem); color: var(--ac); text-shadow: 0 0 25px var(--ac); margin: 6px 0 10px; word-break: break-word; }
+.pd .s { font-size: 1rem; margin-bottom: 22px; display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+.pd .go { min-width: 180px; }
+#cf { position: fixed; inset: 0; pointer-events: none; z-index: 101; }
+
+/* ---------- Проєктор ---------- */
+body.proj main { padding: 20px; max-width: none; }
+body.proj .t { font-size: 1.15rem; min-height: 54px; }
+body.proj .rc { width: 300px; }
+
+/* ---------- Адаптив ---------- */
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; gap: 20px; padding: 22px 0 16px; }
+  .hero-svg { margin: 0 auto; max-width: 480px; }
+  .hero p { font-size: 1rem; }
+}
+@media (max-width: 640px) {
+  header { height: 56px; gap: 8px; padding: 0 10px; }
+  .logo { width: 30px; height: 30px; }
+  #gm, #fsb { display: none; }
+  .ib { width: 36px; height: 36px; }
+  .acts { gap: 5px; }
+  main { padding: 10px 10px; }
+  .hero-btns button { flex: 1; min-width: 0; }
+  .card { padding: 16px; border-radius: 16px; }
+  .g2, .teams { grid-template-columns: 1fr; }
+  .row { flex-direction: column; align-items: stretch; }
+  .br { gap: 32px; }
+  .rc { width: 246px; }
+  .c button { width: 28px; height: 30px; }
+  .c b { min-width: 18px; }
+  .t { padding-left: 10px; }
+  .hero::before { inset: -16px -10px; }
+  .rc:not(:last-child) .pair:not(.solo)::after { right: -16px; }
+  .rc:not(:last-child) .m::after, .rc:not(:first-child) .m::before { width: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-svg *, .hero-svg g { animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+    <rect x="2" y="2" width="60" height="60" rx="14" class="lg-bg"/>
+    <path d="M10 18h10v24H10M20 30h8" class="lg-line"/>
+    <path d="M32 19h20v8a10 10 0 0 1-20 0z" class="lg-cup"/>
+    <rect x="39" y="36" width="6" height="7" class="lg-cup"/>
+    <rect x="34" y="43" width="16" height="5" rx="2" class="lg-cup"/>
+  </svg>
+  <h1 id="tt"></h1><span id="gm"></span><span class="sp"></span>
+  <div class="acts">
+    <button id="bt" class="ib" onclick="podium()" title="Переможець" aria-label="Переможець" hidden>
+      <svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0zM7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4M12 14v4M8 20h8"/></svg>
+    </button>
+    <button id="bs" class="ib" onclick="back()" title="Налаштування" aria-label="Налаштування" hidden>
+      <svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+    </button>
+    <button id="fsb" class="ib" onclick="fs()" title="Проєктор (повний екран)" aria-label="Проєктор">
+      <svg viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>
+    </button>
+    <button id="snd" class="ib" onclick="toggleSnd()" title="Звук" aria-label="Звук">
+      <svg viewBox="0 0 24 24" class="on"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>
+      <svg viewBox="0 0 24 24" class="off"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></svg>
+    </button>
+    <button class="ib info" onclick="info()" aria-label="Про сайт" title="Про сайт">i</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="hero">
+    <div>
+      <h2 id="heroName"></h2>
+      <p>Сітка на виліт для шкільного кібертурніру: впиши команди, проведи жеребкування й стеж, хто йде далі.</p>
+      <div class="hero-btns">
+        <button class="go" onclick="toSetup()">▶ Почати</button>
+        <button onclick="info()">Як це працює</button>
+      </div>
+    </div>
+
+    <svg class="hero-svg" viewBox="0 0 560 400" aria-hidden="true">
+      <!-- 1/4 фіналу -->
+      <g class="hs-l1">
+        <g class="hs-win"><rect x="10" y="36" width="150" height="44" rx="12" class="hs-pill"/><circle cx="32" cy="58" r="7" fill="#00e5ff"/><rect x="48" y="52" width="80" height="12" rx="6" class="hs-bar"/></g>
+        <g class="hs-lose"><rect x="10" y="104" width="150" height="44" rx="12" class="hs-pill"/><circle cx="32" cy="126" r="7" fill="#ff2d95"/><rect x="48" y="120" width="64" height="12" rx="6" class="hs-bar"/></g>
+        <g class="hs-lose"><rect x="10" y="232" width="150" height="44" rx="12" class="hs-pill"/><circle cx="32" cy="254" r="7" fill="#39ff88"/><rect x="48" y="248" width="74" height="12" rx="6" class="hs-bar"/></g>
+        <g class="hs-win"><rect x="10" y="300" width="150" height="44" rx="12" class="hs-pill"/><circle cx="32" cy="322" r="7" fill="#a78bfa"/><rect x="48" y="316" width="86" height="12" rx="6" class="hs-bar"/></g>
+      </g>
+
+      <!-- лінії 1 -->
+      <path d="M160 58H190V126H160" class="hs-line hs-draw hs-d1" pathLength="1"/>
+      <path d="M190 92H220" class="hs-line hot hs-draw hs-d1" pathLength="1"/>
+      <path d="M160 254H190V322H160" class="hs-line hs-draw hs-d1" pathLength="1"/>
+      <path d="M190 288H220" class="hs-line hot hs-draw hs-d1" pathLength="1"/>
+
+      <!-- півфінал -->
+      <g class="hs-s hs-win"><rect x="220" y="70" width="140" height="44" rx="12" class="hs-pill"/><circle cx="242" cy="92" r="7" fill="#00e5ff"/><rect x="258" y="86" width="74" height="12" rx="6" class="hs-bar"/></g>
+      <g class="hs-s hs-lose"><rect x="220" y="266" width="140" height="44" rx="12" class="hs-pill"/><circle cx="242" cy="288" r="7" fill="#a78bfa"/><rect x="258" y="282" width="80" height="12" rx="6" class="hs-bar"/></g>
+
+      <!-- лінії 2 -->
+      <path d="M360 92H390V288H360" class="hs-line hs-draw hs-d2" pathLength="1"/>
+      <path d="M390 190H410" class="hs-line hot hs-draw hs-d2" pathLength="1"/>
+
+      <!-- фінал -->
+      <g class="hs-final"><rect x="410" y="166" width="140" height="48" rx="14" class="hs-pill"/><circle cx="434" cy="190" r="8" fill="#00e5ff" stroke="#111" stroke-width="2"/><rect x="452" y="184" width="76" height="12" rx="6" class="hs-bar"/></g>
+
+      <!-- кубок -->
+      <g class="hs-trophy">
+        <path d="M447 36h56v34c0 18-12 30-28 30s-28-12-28-30z" class="hs-cup"/>
+        <path d="M447 46h-14c0 16 6 25 18 28M503 46h14c0 16-6 25-18 28" class="hs-cup-h"/>
+        <rect x="469" y="99" width="12" height="18" class="hs-cup"/>
+        <rect x="455" y="117" width="40" height="12" rx="4" class="hs-cup"/>
+        <path d="M475 50l4 8 9 1-7 6 2 9-8-5-8 5 2-9-7-6 9-1z" class="hs-star"/>
+      </g>
+
+      <!-- бейджі -->
+      <g class="hs-b"><rect x="230" y="18" width="78" height="34" rx="17" class="hs-badge"/><circle cx="250" cy="35" r="5" class="hs-live"/><text x="262" y="40" class="hs-btxt">LIVE</text></g>
+      <g class="hs-b"><rect x="430" y="260" width="78" height="34" rx="17" class="hs-badge"/><text x="469" y="282" text-anchor="middle" class="hs-btxt">Bo3</text></g>
+      <g class="hs-b"><rect x="236" y="340" width="70" height="34" rx="17" class="hs-badge"/><text x="271" y="363" text-anchor="middle" class="hs-score">2:1</text></g>
+    </svg>
+  </section>
+
+  <div id="app"></div>
+</main>
+
+<div id="im" onclick="if(event.target===this)ci()">
+  <div class="mb" role="dialog" aria-modal="true" aria-label="Про сайт">
+    <button class="x ib" onclick="ci()" aria-label="Закрити">✕</button>
+    <h2>Кібертурнір</h2>
+    <p>Турнірна сітка для шкільних змагань з Brawl Stars та інших ігор. Працює з ноутбука, результати зберігаються в браузері.</p>
+
+    <h3>Правила</h3>
+    <ul>
+      <li>Турнір на виліт: програв матч — вибув.</li>
+      <li><b>Bo1</b> — одна гра, <b>Bo3</b> — до 2 перемог, <b>Bo5</b> — до 3.</li>
+      <li>За непарної кількості команд деякі проходять далі без гри (BYE).</li>
+      <li>Переможені півфіналісти грають за 3 місце.</li>
+    </ul>
+
+    <h3>Керування</h3>
+    <div class="keys">
+      <div><kbd>+</kbd>перемога команди в одній грі</div>
+      <div><kbd>−</kbd>скасувати помилкову гру</div>
+      <div><kbd>⛶</kbd>режим проєктора (повний екран)</div>
+      <div><kbd>Esc</kbd>закрити вікно</div>
+    </div>
+
+    <a class="gh" href="https://github.com/whyuxavier/cyber-tournament" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>
+      GitHub
+    </a>
+    <p class="ver">Оновлено 01.11.2026</p>
+    <p class="ver">Створено з використанням ШІ.</p>
+  </div>
+</div>
+
+<div id="ov"></div>
+<canvas id="cf"></canvas>
+
+<script>
+const TROPHY = 'https://event.supercell.com/brawlstars/assets/how-to-compete/images/1sQhdJ5eADXBnaiX5OY05m.png';
+const TEAM_COLORS = ['#00e5ff', '#ff2d95', '#39ff88', '#ff7a1a', '#a78bfa', '#ffd400', '#60a5fa', '#f472b6'];
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const tc = i => TEAM_COLORS[i % TEAM_COLORS.length];
+
+function def() {
+  return {
+    name: 'Шкільний кубок', game: 'Brawl Stars', ac: '#ffd400', bo: 3, shuf: true,
+    teams: Array.from({ length: 6 }, (_, i) => 'Команда ' + (i + 1)), started: false, rounds: [], third: null, champ: null
+  }
+}
+
+let S = def();
+try { const d = JSON.parse(localStorage.getItem('cybercup')); if (d && d.teams) S = d; } catch (e) {}
+
+function save() { try { localStorage.setItem('cybercup', JSON.stringify(S)); } catch (e) {} }
+function sv() { save(); hdr(); }
+function need() { return (S.bo + 1) / 2; }
+
+/* ---------- Звук ---------- */
+let sndOn = true, AC = null;
+try { sndOn = localStorage.getItem('cybercup-sound') !== 'off'; } catch (e) {}
+function sndUI() { $('#snd').classList.toggle('muted', !sndOn); $('#snd').title = sndOn ? 'Вимкнути звук' : 'Увімкнути звук'; }
+function toggleSnd() { sndOn = !sndOn; try { localStorage.setItem('cybercup-sound', sndOn ? 'on' : 'off'); } catch (e) {} sndUI(); beep('plus'); }
+function tone(f, t0, d, type = 'square', v = .07) {
+  const o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime + t0;
+  o.type = type; o.frequency.setValueAtTime(f, t);
+  g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+  o.connect(g).connect(AC.destination); o.start(t); o.stop(t + d + .02);
+}
+function beep(k) {
+  if (!sndOn) return;
+  try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); } catch (e) { return; }
+  if (k === 'plus') { tone(880, 0, .07); }
+  if (k === 'minus') { tone(330, 0, .1, 'triangle', .12); }
+  if (k === 'match') { tone(660, 0, .1); tone(990, .09, .16); }
+  if (k === 'start') { tone(440, 0, .1); tone(660, .1, .1); tone(880, .2, .18); }
+  if (k === 'win') { [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone(f, i * .12, i > 3 ? .3 : .14, 'square', .08)); }
+}
+
+/* ---------- Логіка сітки ---------- */
+function seedOrder(n) { let o = [0]; while (o.length < n) { const l = o.length * 2; o = o.flatMap(x => [x, l - 1 - x]); } return o; }
+function win(m) { if (m.bye) return m.a != null ? m.a : m.b; const n = need(); return m.sa >= n ? m.a : m.sb >= n ? m.b : null; }
+function lose(m) { const w = win(m); return (w == null || m.bye) ? null : (w === m.a ? m.b : m.a); }
+function up(m, a, b) { if (m.a !== a || m.b !== b) { m.a = a; m.b = b; m.sa = 0; m.sb = 0; } }
+
+function prop() {
+  const R = S.rounds;
+  for (let r = 1; r < R.length; r++) R[r].forEach((m, i) => up(m, win(R[r - 1][2 * i]), win(R[r - 1][2 * i + 1])));
+  if (S.third) { const p = R[R.length - 2]; up(S.third, lose(p[0]), lose(p[1])); }
+}
+
+function start() {
+  const t = S.teams.map((x, i) => x.trim() || 'Команда ' + (i + 1)), n = t.length;
+  if (n < 2) { alert('Потрібно мінімум 2 команди'); return; }
+  S.teams = t;
+  const ids = t.map((_, i) => i);
+  if (S.shuf) ids.sort(() => Math.random() - .5);
+  const size = 2 ** Math.ceil(Math.log2(n)), ord = seedOrder(size);
+  const g = k => ord[k] < n ? ids[ord[k]] : null;
+  const r0 = [];
+  for (let i = 0; i < size / 2; i++) { const a = g(2 * i), b = g(2 * i + 1); r0.push({ a, b, sa: 0, sb: 0, bye: a == null || b == null }); }
+  S.rounds = [r0];
+  for (let k = size / 4; k >= 1; k /= 2) S.rounds.push(Array.from({ length: k }, () => ({ a: null, b: null, sa: 0, sb: 0 })));
+  S.third = S.rounds.length >= 2 ? { a: null, b: null, sa: 0, sb: 0 } : null;
+  S.started = true; S.champ = null;
+  prop(); save(); render(); beep('start'); scrollTo(0, 0);
+}
+
+function sc(r, i, k, d) {
+  const m = r < 0 ? S.third : S.rounds[r][i];
+  if (m.a == null || m.b == null || m.bye) return;
+  if (d > 0 && win(m) != null) return;
+  const before = m[k];
+  m[k] = Math.max(0, Math.min(need(), m[k] + d));
+  if (m[k] === before) return;
+  const finished = d > 0 && win(m) != null;
+  prop(); save(); render();
+  const isChamp = chk();
+  if (!isChamp) beep(d < 0 ? 'minus' : finished ? 'match' : 'plus');
+}
+
+function chk() {
+  const f = S.rounds[S.rounds.length - 1][0], w = win(f);
+  let fired = false;
+  if (w != null && S.champ !== w) { S.champ = w; save(); podium(); fired = true; }
+  else if (w == null && S.champ != null) { S.champ = null; save(); }
+  hdr();
+  return fired;
+}
+
+/* ---------- Відображення ---------- */
+function isBS() { return /brawl\s*-?\s*stars|бравл\s*-?\s*старс/i.test(S.game || ''); }
+function trophySvg(c) { return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M18 6h28v16c0 9-6 16-14 16S18 31 18 22z" fill="${c}"/><path d="M18 11H8c0 10 4 17 12 19M46 11h10c0 10-4 17-12 19" fill="none" stroke="${c}" stroke-width="4"/><rect x="29" y="37" width="6" height="11" fill="${c}"/><rect x="19" y="48" width="26" height="9" rx="2" fill="${c}"/></svg>`; }
+function favSvg(c) { return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#11111d"/><path d="M8 17h10v26H8M18 30h7" fill="none" stroke="#8a8aab" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M30 16h24v9a12 12 0 0 1-24 0z" fill="${c}"/><rect x="39" y="36" width="6" height="8" fill="${c}"/><rect x="33" y="44" width="18" height="6" rx="2" fill="${c}"/></svg>`; }
+
+function hdr() {
+  $('#fv').href = 'data:image/svg+xml,' + encodeURIComponent(favSvg(S.ac));
+  $('#tt').textContent = S.name || 'Кібертурнір';
+  $('#gm').textContent = S.game; $('#gm').hidden = !S.game;
+  $('#bs').hidden = !S.started; $('#bt').hidden = S.champ == null;
+  $('#hero').hidden = S.started;
+  const nm = esc(S.name || 'Кібертурнір'), sp = nm.lastIndexOf(' ');
+  $('#heroName').innerHTML = sp > 0 ? `${nm.slice(0, sp)} <span>${nm.slice(sp + 1)}</span>` : `<span>${nm}</span>`;
+  document.documentElement.style.setProperty('--ac', S.ac);
+}
+
+function render() { hdr(); $('#app').innerHTML = S.started ? bracket() : setup(); }
+function rn(r) { const k = S.rounds.length - 1 - r; return k == 0 ? 'Фінал' : k == 1 ? 'Півфінал' : k == 2 ? 'Чвертьфінал' : 'Раунд ' + (r + 1); }
+
+function card(m, r, i) {
+  const w = win(m), rd = m.a != null && m.b != null && !m.bye;
+  const row = s => {
+    const t = m[s], v = m['s' + s], isw = w != null && t != null && w === t, isl = w != null && t != null && w !== t;
+    const ctl = rd ? `<span class="c"><button onclick="sc(${r},${i},'s${s}',-1)" aria-label="мінус">−</button><b>${v}</b><button class="pl" onclick="sc(${r},${i},'s${s}',1)" aria-label="плюс">+</button></span>`
+      : (m.bye && t != null ? '<span class="c"><em>далі</em></span>' : '');
+    const lb = t == null ? (m.bye ? '<i>BYE</i>' : '<i>Очікується…</i>') : `<span class="dot" style="--c:${tc(t)}"></span><span>${esc(S.teams[t])}</span>`;
+    return `<div class="t${isw ? ' w' : ''}${isl ? ' l' : ''}"><span class="nm">${lb}</span>${ctl}</div>`;
+  };
+  return `<div class="m${rd && w == null ? ' live' : ''}${w != null ? ' done' : ''}">${row('a')}${row('b')}</div>`;
+}
+
+function bracket() {
+  const first = S.rounds[0].length;
+  let h = `<div class="bracket-wrapper"><div class="br" style="min-height:max(55vh, ${first * 118 + 40}px)">`;
+  S.rounds.forEach((c, r) => {
+    let pairs = '';
+    if (c.length === 1) pairs = `<div class="pair solo">${card(c[0], r, 0)}</div>`;
+    else for (let i = 0; i < c.length; i += 2) pairs += `<div class="pair">${card(c[i], r, i)}${card(c[i + 1], r, i + 1)}</div>`;
+    h += `<div class="rc"><h4>${rn(r)}</h4><div class="col">${pairs}</div></div>`;
+  });
+  h += '</div></div>';
+  if (S.third && S.third.a != null && S.third.b != null) h += `<div class="third"><h4>Матч за 3 місце</h4>${card(S.third, -1, 0)}</div>`;
+  return h;
+}
+
+function setup() {
+  return `<section class="card" id="setup">
+  <div class="g2">
+   <label>Назва турніру<input value="${esc(S.name)}" oninput="S.name=this.value;sv()"></label>
+   <label>Гра<input value="${esc(S.game)}" oninput="S.game=this.value;sv()"></label>
+   <label>Формат матчу<select onchange="S.bo=+this.value;sv()">${[1, 3, 5].map(b => `<option value="${b}"${S.bo == b ? ' selected' : ''}>Bo${b} — до ${(b + 1) / 2} ${b == 1 ? 'перемоги' : 'перемог'}</option>`).join('')}</select></label>
+   <label>Колір акценту<div class="sw">${['#ffd400', '#00e5ff', '#ff2d95', '#39ff88', '#ff7a1a'].map(c => `<button style="background:${c}" class="${S.ac == c ? 'on' : ''}" onclick="S.ac='${c}';sv();render()" aria-label="колір"></button>`).join('')}</div></label>
+  </div>
+  <h3>Команди <b>${S.teams.length}</b></h3>
+  <div class="teams">${S.teams.map((t, i) => `<div class="tr"><span class="dot" style="--c:${tc(i)}"></span><input value="${esc(t)}" oninput="S.teams[${i}]=this.value;save()" aria-label="Команда ${i + 1}"><button onclick="rm(${i})" aria-label="видалити">✕</button></div>`).join('')}</div>
+  <div class="row"><button class="add" onclick="add()">+ Додати команду</button>
+   <label class="chk"><input type="checkbox" ${S.shuf ? 'checked' : ''} onchange="S.shuf=this.checked;save()"> Випадкове жеребкування</label></div>
+  <button class="go wide" onclick="start()">▶ Почати турнір</button></section>`;
+}
+
+function toSetup() {
+  const el = $('#setup'); if (!el) return;
+  el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  setTimeout(() => el.querySelector('input').focus({ preventScroll: true }), 400);
+}
+function add() { S.teams.push('Команда ' + (S.teams.length + 1)); save(); render(); const a = document.querySelectorAll('.tr input'); a[a.length - 1].focus(); a[a.length - 1].select(); }
+function rm(i) { if (S.teams.length <= 2) { alert('Потрібно мінімум 2 команди'); return; } S.teams.splice(i, 1); save(); render(); }
+function back() { if (confirm('Повернутися до налаштувань? Поточна сітка й результати будуть скинуті.')) { S.started = false; S.rounds = []; S.third = null; S.champ = null; save(); render(); } }
+function info() { $('#im').classList.add('on'); }
+function ci() { $('#im').classList.remove('on'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { ci(); if ($('#ov').classList.contains('on')) closeP(); } });
+function fs() { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); }
+document.addEventListener('fullscreenchange', () => document.body.classList.toggle('proj', !!document.fullscreenElement));
+
+/* ---------- Переможець ---------- */
+function podium() {
+  const f = S.rounds[S.rounds.length - 1][0], w = win(f); if (w == null) return;
+  const s2 = lose(f), s3 = S.third ? win(S.third) : null;
+  const pic = isBS() ? `<img src="${TROPHY}" alt="Кубок" onerror="this.outerHTML='<div class=tp>'+trophySvg(S.ac)+'</div>'">` : `<div class="tp">${trophySvg(S.ac)}</div>`;
+  $('#ov').innerHTML = `<div class="pd">${pic}
+  <p class="k">Переможець турніру</p><h1>${esc(S.teams[w])}</h1>
+  <p class="s"><span>🥈 ${s2 != null ? esc(S.teams[s2]) : '—'}</span>${s3 != null ? '<span>🥉 ' + esc(S.teams[s3]) + '</span>' : ''}</p>
+  <button class="go" onclick="closeP()">Закрити</button></div>`;
+  $('#ov').classList.add('on'); confetti(); beep('win');
+}
+
+function closeP() { $('#ov').classList.remove('on'); cancelAnimationFrame(raf); const c = $('#cf'); c.getContext('2d').clearRect(0, 0, c.width, c.height); }
+let raf;
+function confetti() {
+  const c = $('#cf'), x = c.getContext('2d'); c.width = innerWidth; c.height = innerHeight;
+  const cols = [S.ac, '#7b2cff', '#00e5ff', '#ff2d95', '#ffffff'];
+  const P = Array.from({ length: 180 }, () => ({ x: Math.random() * c.width, y: -Math.random() * c.height, vx: Math.random() * 2 - 1, vy: 2 + Math.random() * 4, s: 6 + Math.random() * 7, r: Math.random() * 6, vr: Math.random() * .3 - .15, c: cols[Math.random() * cols.length | 0] }));
+  cancelAnimationFrame(raf);
+  (function f() {
+    x.clearRect(0, 0, c.width, c.height);
+    P.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.r += p.vr; if (p.y > c.height) { p.y = -10; p.x = Math.random() * c.width; }
+      x.save(); x.translate(p.x, p.y); x.rotate(p.r); x.fillStyle = p.c; x.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); x.restore();
+    });
+    raf = requestAnimationFrame(f);
+  })();
+}
+
+sndUI();
+render();
+</script>
+</body>
+</html>
