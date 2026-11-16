@@ -366,7 +366,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
           <button class="btn hcust" id="bCustom" type="button"><svg viewBox="0 0 24 24"><rect x="11" y="2.5" width="2" height="4" class="ink"/><circle cx="12" cy="3" r="2" class="ink"/><rect x="4" y="6.5" width="16" height="13" rx="4.5" class="ink"/><rect x="1.5" y="10.5" width="2.5" height="5" rx="1.2" class="ink"/><rect x="20" y="10.5" width="2.5" height="5" rx="1.2" class="ink"/><circle cx="9" cy="12.3" r="1.9" fill="#fff"/><circle cx="15" cy="12.3" r="1.9" fill="#fff"/><rect x="9" y="15.6" width="6" height="1.7" rx=".85" fill="#fff"/></svg>Налаштувати робота</button>
         </div>
         <button class="chip c1" id="chipGears" type="button">0 шестерень</button>
-        <span class="chip c3" id="chipStars">0 з 39 зірок</span>
+        <span class="chip c3" id="chipStars">0 з 60 зірок</span>
       </div>
     </div>
   </div>
@@ -475,26 +475,33 @@ const BLOCKS={
 const ico=k=>`<span class="ico"><svg viewBox="0 0 24 24"><use href="#${BLOCKS[k].icon}"/></svg></span>`;
 
 /* ===================== РІВНІ =====================
-   Мапа: '.' трава, '#' кущ, 'H' будинок, робот: '>' '<' '^' 'v' (куди дивиться). best — найкоротша програма (кількість блоків). */
+   Мапа: '.' трава, '#' кущ, 'H' будинок, 'C' печера, 'G' бонусна шестерня, робот: '>' '<' '^' 'v' (куди дивиться). best — найкоротша програма (кількість блоків). */
 const CHAPTERS=[
  {title:'Лінійні алгоритми',sub:'Команди виконуються одна за одною.',blocks:['fwd','left','right'],levels:[
-  {name:'Перша доставка',task:'Додай три блоки «Крок вперед» і натисни «Старт».',best:3,maps:[['>..H']]},
-  {name:'Перший поворот',task:'Поворот змінює напрямок, але робот лишається на місці.',best:5,maps:[['>.#','..H']]},
-  {name:'Униз і праворуч',task:'Подумай, куди дивитиметься робот після повороту ліворуч.',best:6,maps:[['v...','.##.','...H']]},
-  {name:'Дві посилки',task:'Доставиш обидві — рівень пройдено.',best:7,maps:[['>.H.','##.#','...H']]},
-  {name:'Лабіринт',task:'Обійди кущі. Можна запускати по одному кроку кнопкою «Крок».',best:12,maps:[['>.#H','.#..','...#']]}
+  {name:'Перша доставка',task:'Доведи робота до будинку блоками «Крок вперед» і натисни «Старт».',best:5,maps:[['#..#.#', '>....H', '.#..#.']]},
+  {name:'Перший поворот',task:'Поворот змінює напрямок, але робот лишається на місці.',best:7,maps:[['>..#..', '##.#.#', '#..H..', '.#..#.']]},
+  {name:'Униз і праворуч',task:'Подумай, куди дивитиметься робот після повороту ліворуч.',best:8,maps:[['v.#..#', '.##..#', '.....H', '##.#..']]},
+  {name:'Дві посилки',task:'Доставиш обидві — рівень пройдено.',best:8,maps:[['>..H.#', '##.#..', '#.#...', '.#..H.']]},
+  {name:'Лабіринт',task:'Обійди кущі. Можна запускати по одному кроку кнопкою «Крок».',best:13,maps:[['>.#..H', '#.#.#.', '#...#.', '.##..#', '..#.##']]},
+  {name:'Шестерня по дорозі',task:'Бонус: збери шестерню по дорозі — отримаєш +5 шестерень.',best:10,maps:[['>...#..', '.##.#..', '.#..G.H', '...##.#', '.#....#']]},
+  {name:'Три посилки',task:'Довгий маршрут через усе містечко. Склади план, перш ніж їхати.',best:18,maps:[['>..H.##', '####.##', '#H...##', '#.###..', '#...H..']]}
  ]},
  {title:'Цикли',sub:'Блок «Повторити» виконує вкладені команди кілька разів.',blocks:['fwd','left','right','rep'],levels:[
-  {name:'Довга дорога',task:'Вісім кроків поспіль? Поклади «Крок» у «Повторити» і вистав 8.',best:2,maps:[['>.......H']]},
-  {name:'Сходинки',task:'Знайди, яка частина шляху повторюється.',best:5,maps:[['>.##','#..#','##..','###H']]},
-  {name:'Високі сходи',task:'Повторення + ще один крок у кінці.',best:6,maps:[['>.####','#..###','##..##','###..#','####.H']]},
-  {name:'Навколо ставка',task:'Три будинки по кутах. Спробуй цикл усередині циклу.',best:4,maps:[['>...H','.###.','.###.','.###.','H...H']]}
+  {name:'Довга дорога',task:'Десять кроків поспіль? Поклади «Крок» у «Повторити» і вистав 10.',best:2,maps:[['#.#..##.#..', '>.........H', '.#..#.##...']]},
+  {name:'Сходинки',task:'Знайди, яка частина шляху повторюється.',best:5,maps:[['>.###', '#..##', '##..#', '###..', '####H']]},
+  {name:'Високі сходи',task:'Сходи вищі, але візерунок той самий. Що зміниться в програмі?',best:5,maps:[['>.#####', '#..####', '##..###', '###..##', '####..#', '#####.H']]},
+  {name:'Навколо ставка',task:'Три будинки по кутах. Спробуй цикл усередині циклу.',best:4,maps:[['>....H', '.####.', '.####.', '.####.', '.####.', 'H....H']]},
+  {name:'Коло по периметру',task:'Будинок зовсім поруч, але кущ не пускає. Обійди все поле по колу!',best:4,maps:[['>.....', '#####.', 'H####.', '.####.', '.####.', '......']]},
+  {name:'Печера за озером',task:'Обійди озеро й привези посилку в печеру. Сторони різні — подумай, що повторюється.',best:7,maps:[['>......', '######.', 'C#####.', '.#####.', '.......']]},
+  {name:'Пагорб',task:'Вгору сходинками, а потім униз. На вершині — бонус!',best:11,maps:[['###.G###', '##....##', '#..##..#', '>.####.H']]},
+  {name:'Хрест',task:'Чотири печери на кінцях хреста. Їдь до печери, розвертайся — і до наступної.',best:8,maps:[['###C###', '###.###', '###.###', 'C..^..C', '###.###', '###.###', '###C###']]}
  ]},
  {title:'Умови',sub:'Одна програма має спрацювати на обох мапах — мапи різні!',blocks:['fwd','left','right','rep','while','if'],levels:[
-  {name:'Різна довжина',task:'Скільки кроків — невідомо. «Повторювати, поки не вдома» допоможе.',best:2,maps:[['>...H'],['>......H']]},
-  {name:'Поворот праворуч',task:'Кущ десь попереду. Якщо кущ — повертай праворуч, інакше — крок.',best:4,maps:[['>..#','##.#','##H#'],['>....#','####.#','####.#','####H#']]},
-  {name:'Поворот ліворуч',task:'Тепер дорога звертає ліворуч.',best:4,maps:[['##H#','##.#','>..#'],['####H#','####.#','####.#','>....#']]},
-  {name:'Равлик',task:'Дорога закручується. Твоя програма з умовою впорається?',best:4,maps:[['>...#','###.#','#H..#','#####'],['>.....#','#####.#','#####.#','#H....#','#######']]}
+  {name:'Різна довжина',task:'Скільки кроків — невідомо. «Повторювати, поки не вдома» допоможе.',best:2,maps:[['>...H'], ['>......H']]},
+  {name:'Поворот праворуч',task:'Кущ десь попереду. Якщо кущ — повертай праворуч, інакше — крок.',best:4,maps:[['>..#', '##.#', '##H#'], ['>....#', '####.#', '####.#', '####H#']]},
+  {name:'Поворот ліворуч',task:'Тепер дорога звертає ліворуч.',best:4,maps:[['##H#', '##.#', '>..#'], ['####H#', '####.#', '####.#', '>....#']]},
+  {name:'Равлик',task:'Дорога закручується. Твоя програма з умовою впорається?',best:4,maps:[['>...#', '###.#', '#H..#', '#####'], ['>.....#', '#####.#', '#####.#', '#H....#', '#######']]},
+  {name:'Велика подорож',task:'Фінал! Дві різні гірські дороги ведуть до печери. Одна програма — обидві мапи.',best:4,maps:[['>.....#', '#####.#', '#..C#.#', '#.###.#', '#.....#', '#######'], ['>........#', '########.#', '#C######.#', '#........#', '##########']]}
  ]}
 ];
 const LEVELS=[];CHAPTERS.forEach((c,ci)=>c.levels.forEach((l,li)=>LEVELS.push({...l,ci,num:LEVELS.length+1,blocks:c.blocks})));
@@ -502,8 +509,10 @@ const LEVELS=[];CHAPTERS.forEach((c,ci)=>c.levels.forEach((l,li)=>LEVELS.push({.
 /* ===================== ЗБЕРЕЖЕННЯ ===================== */
 const KEY='robot-courier-v1';
 const S=(()=>{let d={};try{d=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
-  return {owned:Array.isArray(d.owned)?d.owned:null,spent:+d.spent||0,robot:d.robot&&typeof d.robot==='object'?d.robot:null,snd:d.snd!==false,stars:d.stars&&typeof d.stars==='object'?d.stars:{},speed:[1,2,3].includes(d.speed)?d.speed:1,progs:d.progs&&typeof d.progs==='object'?d.progs:{},loose:d.loose&&typeof d.loose==='object'?d.loose:{}}})();
+  return {owned:Array.isArray(d.owned)?d.owned:null,spent:+d.spent||0,robot:d.robot&&typeof d.robot==='object'?d.robot:null,snd:d.snd!==false,stars:d.stars&&typeof d.stars==='object'?d.stars:{},speed:[1,2,3].includes(d.speed)?d.speed:1,progs:d.progs&&typeof d.progs==='object'?d.progs:{},loose:d.loose&&typeof d.loose==='object'?d.loose:{},bonus:d.bonus&&typeof d.bonus==='object'?d.bonus:{},v:d.v||1}})();
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+/* v1 мала 13 рівнів: 1–5 → 1–5, 6–9 → 8–11, 10–13 → 16–19; мапи змінились, тож старі програми скидаємо */
+if(S.v<2){const st={};Object.entries(S.stars).forEach(([n,v])=>{n=+n;st[n<=5?n:n<=9?n+2:n+6]=v});S.stars=st;S.progs={};S.loose={};S.v=2;persist()}
 
 /* ===================== ЗВУК ===================== */
 const Sound={ctx:null,
@@ -540,7 +549,7 @@ const PRICE={'color:butter':10,'color:lilac':10,'color:peach':15,'color:pink':20
  'head:square':10,'head:capsule':15,'head:dome':20,'eyes:happy':10,'eyes:visor':15,'eyes:cyclops':20,
  'top:double':10,'top:propeller':20,'top:bolt':25,'move:tracks':20,'move:hover':35,
  'box:letter':5,'box:bag':15,'box:redbox':45,'box:thermo':60};
-const earned=()=>Object.values(S.stars).reduce((a,st)=>a+(st>0?20+5*st:0),0);
+const earned=()=>Object.values(S.stars).reduce((a,st)=>a+(st>0?20+5*st:0),0)+Object.keys(S.bonus).length*5;
 const gears=()=>Math.max(0,earned()-(S.spent||0));
 const owns=(k,v)=>!PRICE[k+':'+v]||S.owned.includes(k+':'+v);
 function updGears(){const g=gears();$('gearN').textContent=g;const c=$('crGears');if(c)c.textContent=g;const ch=$('chipGears');if(ch)ch.textContent=`${g} ${gw(g)}`}
@@ -782,11 +791,11 @@ $('palette').addEventListener('click',e=>{const b=e.target.closest('.blk[data-ad
 /* ===================== СВІТ ===================== */
 const CELL=60,DX=[0,1,0,-1],DY=[-1,0,1,0];
 function parse(rows){
-  const w=Math.max(...rows.map(r=>r.length)),h=rows.length,grid=[],houses=[];let bot=null;
+  const w=Math.max(...rows.map(r=>r.length)),h=rows.length,grid=[],houses=[],bonus=[];let bot=null;
   rows.forEach((r,y)=>{grid.push([]);for(let x=0;x<w;x++){const ch=r[x]||'#';
     if('^>v<'.includes(ch)){bot={x,y,d:'^>v<'.indexOf(ch)};grid[y].push('.')}
-    else{grid[y].push(ch==='H'?'.':ch);if(ch==='H')houses.push({x,y,done:false})}}});
-  return {w,h,grid,houses,bot,rot:bot.d*90};
+    else{grid[y].push(ch==='#'?'#':'.');if(ch==='H'||ch==='C')houses.push({x,y,done:false,cave:ch==='C'});if(ch==='G')bonus.push({x,y,got:false})}}});
+  return {w,h,grid,houses,bonus,bot,rot:bot.d*90};
 }
 let worlds=[],mapIdx=0;
 function wall(W,x,y){return x<0||y<0||x>=W.w||y>=W.h||W.grid[y][x]==='#'}
@@ -808,8 +817,10 @@ function obstacle(x,y){
   if(r<.75)return `<g filter="url(#paper)"><rect x="${cx+5}" y="${cy+6}" width="${CELL-10}" height="${CELL-12}" rx="16" fill="#8fc7a1"/><circle cx="${cx+19}" cy="${cy+22}" r="8" fill="#7ab98e"/><circle cx="${cx+38}" cy="${cy+35}" r="9" fill="#7ab98e"/><circle cx="${cx+40}" cy="${cy+18}" r="3" fill="#bba8ee"/><circle cx="${cx+18}" cy="${cy+40}" r="3" fill="#bba8ee"/></g>`;
   return `<g filter="url(#paper)"><path d="M${cx+9} ${cy+44}l6 -24l15 -9l16 8l5 25z" fill="#b9b4c9"/><path d="M${cx+15} ${cy+20}l15 -9l16 8l-14 6z" fill="#d6d1e2"/><circle cx="${cx+20}" cy="${cy+40}" r="4" fill="#8fc39c"/></g>`;
 }
+function caveSVG(x,y){return `<g filter="url(#paper)"><path d="M${x+3} ${y+54}Q${x+5} ${y+16} ${x+30} ${y+8}Q${x+55} ${y+16} ${x+57} ${y+54}z" fill="#b9b4c9"/><path d="M${x+12} ${y+26}Q${x+20} ${y+12} ${x+34} ${y+11}l-6 8z" fill="#d6d1e2"/><path d="M${x+17} ${y+54}v-12a13 13 0 0 1 26 0v12z" fill="#3a3550"/><path d="M${x+15} ${y+54}v-12a15 15 0 0 1 30 0v12" fill="none" stroke="#c99b4f" stroke-width="3.5" stroke-linejoin="round"/><circle cx="${x+48}" cy="${y+46}" r="3.5" fill="#8fc39c"/><circle cx="${x+11}" cy="${y+48}" r="2.8" fill="#8fc39c"/></g>`}
 function houseSVG(h,i){
   const x=h.x*CELL,y=h.y*CELL,roof=ROOFS[i%ROOFS.length];
+  if(h.cave)return caveSVG(x,y)+`<g id="hc${i}" ${h.done?'':'style="display:none"'}><rect x="${x+36}" y="${y+42}" width="14" height="12" rx="2" fill="#e9c27a"/><rect x="${x+41.5}" y="${y+42}" width="3" height="12" fill="#c99b4f"/><circle cx="${x+50}" cy="${y+10}" r="9" fill="#3f9d6e"/><path d="M${x+45.5} ${y+10}l3.5 3.5 6 -7" class="stk" style="stroke:#fff;stroke-width:3"/></g>`;
   return `<g filter="url(#paper)"><rect x="${x+37}" y="${y+10}" width="7" height="12" fill="#b9b4c9"/><path d="M${x+8} ${y+30}L${x+30} ${y+10}L${x+52} ${y+30}z" fill="${roof}"/><rect x="${x+14}" y="${y+28}" width="32" height="24" rx="2" fill="#fffcf5"/><rect x="${x+25}" y="${y+36}" width="10" height="16" rx="2" fill="${shade(roof,-.15)}"/><circle cx="${x+33}" cy="${y+44}" r="1.2" fill="#3a3550"/><rect x="${x+17}" y="${y+33}" width="6" height="6" rx="1" fill="#bddcf3"/><rect x="${x+37}" y="${y+33}" width="6" height="6" rx="1" fill="#bddcf3"/></g>
   <g id="hc${i}" ${h.done?'':'style="display:none"'}><rect x="${x+40}" y="${y+40}" width="14" height="12" rx="2" fill="#e9c27a"/><rect x="${x+45.5}" y="${y+40}" width="3" height="12" fill="#c99b4f"/><circle cx="${x+50}" cy="${y+10}" r="9" fill="#3f9d6e"/><path d="M${x+45.5} ${y+10}l3.5 3.5 6 -7" class="stk" style="stroke:#fff;stroke-width:3"/></g>`;
 }
@@ -826,9 +837,10 @@ function drawMap(W){
   s+=`<rect x="${st.x*CELL+5}" y="${st.y*CELL+5}" width="${CELL-10}" height="${CELL-10}" rx="12" fill="#f2e7c9" stroke="#d9c79c" stroke-width="2" stroke-dasharray="5 5"/>`;
   for(let y=0;y<W.h;y++)for(let x=0;x<W.w;x++){
     if(W.grid[y][x]==='#')s+=obstacle(x,y);
-    else if(!isHouse(x,y)&&!(x===st.x&&y===st.y))s+=tileDeco(x,y);
+    else if(!isHouse(x,y)&&!(x===st.x&&y===st.y)&&!W.bonus.some(b=>b.x===x&&b.y===y))s+=tileDeco(x,y);
   }
   W.houses.forEach((h,i)=>{s+=houseSVG(h,i)});
+  W.bonus.forEach((b,i)=>{s+=`<g id="bg${i}" ${b.got?'style="display:none"':''}><circle cx="${b.x*CELL+30}" cy="${b.y*CELL+30}" r="18" fill="#f6e19c"/><use href="#i-gear" x="${b.x*CELL+15}" y="${b.y*CELL+15}" width="30" height="30" filter="url(#paper)"/></g>`});
   s+=`<g class="bot" id="bot" style="transform:translate(${W.bot.x*CELL+CELL/2}px,${W.bot.y*CELL+CELL/2}px)">${botInner(W)}</g>`;
   return s+'</svg>';
 }
@@ -881,6 +893,8 @@ function tick(){
     const nx=W.bot.x+DX[W.bot.d],ny=W.bot.y+DY[W.bot.d];
     if(wall(W,nx,ny)){hl(n.id,'err');const b=botEl();b.classList.remove('crash');void b.getBBox();b.classList.add('crash');Sound.crash();return fail('Бум! Попереду кущ або край мапи')}
     W.bot.x=nx;W.bot.y=ny;placeBot(W);Sound.step();
+    const bn=W.bonus.find(b=>b.x===nx&&b.y===ny&&!b.got);
+    if(bn){bn.got=true;const i=W.bonus.indexOf(bn);setTimeout(()=>{const c=$('bg'+i);if(c)c.style.display='none'},delay()*.8);Sound.tone(880,.08,'triangle',.06);Sound.tone(1320,.12,'triangle',.06,null,.07)}
     const h=W.houses.find(h=>h.x===nx&&h.y===ny&&!h.done);
     if(h){h.done=true;const i=W.houses.indexOf(h);setTimeout(()=>{const c=$('hc'+i);if(c)c.style.display=''},delay()*.8);Sound.deliver();
       if(allDone(W)&&worlds.length===1){return void(timer=setTimeout(()=>mapDone(true),delay()+150))}}
@@ -909,10 +923,12 @@ $('speedSeg').onclick=e=>{const b=e.target.closest('[data-s]');if(!b)return;S.sp
 function starsFor(c){return c<=L.best?3:c<=L.best+2?2:1}
 function win(){
   const c=count(P),st=starsFor(c),prev=S.stars[L.num]||0,e0=earned();
+  const bw=worlds[0].bonus,bonusNow=bw.length&&bw.every(b=>b.got),bonusNew=bonusNow&&!S.bonus[L.num];
+  if(bonusNew)S.bonus[L.num]=1;
   if(st>prev)S.stars[L.num]=st;persist();const gain=earned()-e0;updGears();if(gain){const gp=$('gearPill');gp.classList.remove('spin');void gp.offsetWidth;gp.classList.add('spin')}Sound.win();setMsg('Усі посилки доставлено!','ok');
   const next=LEVELS[L.num];
   $('winBody').innerHTML=`<svg viewBox="-46 -76 92 134" style="width:84px;height:auto;display:block;margin:0 auto 6px" filter="url(#paper)">${robotSVG(ROBOT,[0,0])}</svg><h2>Посилки доставлено!</h2><div class="stars">${[1,2,3].map(i=>`<svg viewBox="0 0 24 24" class="${i<=st?'on':''}" style="fill:${i<=st?'#f2b632':'var(--bg2)'};animation-delay:${i*.15}s"><use href="#i-star"/></svg>`).join('')}</div>${gain?`<p class="gain"><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg>+${gain} ${gw(gain)}</p>`:''}
-    <p>Блоків у програмі: <b>${c}</b>. ${st<3?`Найкоротша програма — ${L.best} ${L.best<5?'блоки':'блоків'}. Спробуєш скоротити?`:'Найкоротша програма — супер!'}</p>
+    <p>Блоків у програмі: <b>${c}</b>. ${st<3?`Найкоротша програма — ${L.best} ${L.best<5?'блоки':'блоків'}. Спробуєш скоротити?`:'Найкоротша програма — супер!'}</p>${bw.length?`<p>${bonusNow?'Бонусну шестерню зібрано!':'На мапі є бонусна шестерня — спробуй її забрати.'}</p>`:''}
     <div class="row">${next?`<button class="btn main" id="wNext">Наступний рівень</button>`:`<button class="btn main" id="wAll">До рівнів</button>`}<button class="btn" id="wAgain">Ще раз</button></div>`;
   const d=$('win');d.showModal();
   if(next)$('wNext').onclick=()=>{d.close();openLevel(next.num)};else $('wAll').onclick=()=>{d.close();openLevels()};
