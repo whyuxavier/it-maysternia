@@ -84,7 +84,7 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 8
 :root[data-theme="dark"] .plug .front{opacity:0;transform:scale(1.25);transition:transform .2s ease-out,opacity .12s .1s}
 :root[data-theme="dark"] .plug .side{opacity:1;transform:translate(0,3px) rotate(8deg);transition:opacity .1s .14s,transform .6s cubic-bezier(.3,1.6,.45,1) .14s}
 .plug:focus-visible,.ibtn:focus-visible,.btn:focus-visible,.tab:focus-visible,.card:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
-.ibtn{display:none!important;width:40px;height:40px;border-radius:14px;border:0;cursor:pointer;background:var(--lilac);color:var(--ink);font:800 18px Rubik,sans-serif;box-shadow:0 2px 0 var(--shadow)}
+.ibtn{display:none;width:40px;height:40px;border-radius:14px;border:0;cursor:pointer;background:var(--lilac);color:var(--ink);font:800 18px Rubik,sans-serif;box-shadow:0 2px 0 var(--shadow)}
 
 /* hero */
 .hero{position:relative;padding:56px 0 40px}
@@ -115,7 +115,7 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 8
 @keyframes pop{from{opacity:0;scale:.6}}
 
 /* catalog */
-.catalog{padding:30px 0 70px;scroll-margin-top:60px}
+.catalog{padding:26px 0 70px}
 .tabs{display:flex;flex-wrap:wrap;gap:8px;border-bottom:3px solid var(--line);margin-bottom:34px}
 .tab{position:relative;bottom:-3px;padding:12px 20px 10px;border:0;border-radius:16px 16px 0 0;cursor:pointer;font:700 16px Rubik,sans-serif;color:var(--ink);background:color-mix(in srgb,var(--tc) 45%,var(--bg));box-shadow:inset 0 -3px 0 var(--line);transition:transform .15s,background .2s}
 .tab:hover{transform:translateY(-2px)}
@@ -170,7 +170,13 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
 .dnav a[aria-current="true"]{background:color-mix(in srgb,var(--dot) 60%,transparent);box-shadow:0 2px 0 var(--shadow)}
 .dnav .dot{width:12px;height:12px;border-radius:4px;background:var(--dot);box-shadow:0 2px 0 var(--shadow);flex:none;transform:rotate(-8deg)}
 .dnav button:focus-visible,.dnav a:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
-@media (min-width:1280px){.dnav{display:flex}}
+@media (min-width:1280px){.dnav{display:flex}.tabs{display:none}}
+@media (max-width:1279px){.ibtn{display:block}}
+/* головна (hero) і окремий екран каталогу */
+body.home .catalog,body:not(.home) .hero{display:none}
+body.home .hero{min-height:calc(100vh - 140px);min-height:calc(100svh - 140px);display:flex;align-items:center}
+body.home .hero-grid{width:100%}
+body.home .dnav a[aria-current]{background:none;box-shadow:none}
 @media (max-width:1279px){.burger{display:block}}
 
 @media (max-width:860px){
@@ -192,7 +198,7 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
 }
 </style>
 </head>
-<body>
+<body class="home">
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -204,7 +210,7 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
 
 <header>
   <div class="wrap bar">
-    <a class="logo" href="#top" aria-label="ІТ-Майстерня">
+    <a class="logo" href="#" aria-label="ІТ-Майстерня — на головну">
       <svg viewBox="0 0 64 64" aria-hidden="true"><rect class="sk" x="5" y="12" width="46" height="46" rx="12" transform="rotate(-9 28 35)"/><rect class="pe" x="13" y="6" width="46" height="46" rx="12" filter="url(#paper)"/><path d="M27 17v26l7-6 5 10 5-2.4-5-10h9.5z" fill="#3b3450"/></svg>
       <span>ІТ-Майстерня</span>
     </a>
@@ -244,12 +250,8 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
         </svg>
       </button>
       <button class="ibtn" id="infoBtn" type="button" aria-label="Про сайт">i</button>
-      <button class="burger" id="burger" type="button" aria-label="Меню" aria-expanded="false" aria-controls="mnav"><span></span><span></span><span></span></button>
     </div>
   </div>
-  <nav class="mnav" id="mnav" aria-label="Розділи" hidden>
-    <div class="wrap"><div class="mnav-sheet" id="mnavList"></div></div>
-  </nav>
 </header>
 
 <main id="top">
@@ -260,8 +262,8 @@ dialog::backdrop{background:rgba(30,24,40,.45);backdrop-filter:blur(2px)}
         <div class="by">з Олександром Васильовичем</div>
         <p>Навчальні ігри, квести й тренажери з інформатики для 1–11 класу.</p>
         <div class="btns">
-          <a class="btn main" href="#catalog">Обрати клас</a>
-          <a class="btn" href="#catalog" data-go="teacher">Для вчителя</a>
+          <a class="btn main" href="#1-4">Обрати клас</a>
+          <a class="btn" href="#teacher">Для вчителя</a>
         </div>
       </div>
 
@@ -773,13 +775,12 @@ function renderGrid(){
     </a>`).join('');
 }
 function setTab(id){current=id;renderTabs();renderGrid()}
-tabsEl.addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)setTab(b.dataset.tab)});
+tabsEl.addEventListener('click',e=>{const b=e.target.closest('.tab');if(b){history.replaceState(null,'','#'+b.dataset.tab);setTab(b.dataset.tab)}});
 tabsEl.addEventListener('keydown',e=>{
   if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;
   const i=TABS.findIndex(t=>t.id===current), n=(i+(e.key==='ArrowRight'?1:-1)+TABS.length)%TABS.length;
-  setTab(TABS[n].id); tabsEl.querySelector(`[data-tab="${TABS[n].id}"]`).focus();
+  history.replaceState(null,'','#'+TABS[n].id);setTab(TABS[n].id); tabsEl.querySelector(`[data-tab="${TABS[n].id}"]`).focus();
 });
-document.querySelectorAll('[data-go]').forEach(a=>a.addEventListener('click',()=>setTab(a.dataset.go)));
 setTab(current);
 
 /* ===== Штекер-тема ===== */
@@ -807,32 +808,22 @@ info.addEventListener('click',e=>{if(e.target===info)info.close()});
 /* ===== Меню в шапці (комп'ютер) ===== */
 const dnav=document.getElementById('dnav');
 function renderDnav(){
-  dnav.innerHTML=TABS.map(t=>`<a href="#catalog" data-dtab="${t.id}" style="--dot:var(${t.color})"${t.id===current?' aria-current="true"':''}><span class="dot"></span>${t.label}</a>`).join('')+
+  dnav.innerHTML=TABS.map(t=>`<a href="#${t.id}" data-dtab="${t.id}" style="--dot:var(${t.color})"${t.id===current?' aria-current="true"':''}><span class="dot"></span>${t.label}</a>`).join('')+
     '<span class="dsep" aria-hidden="true"></span><button type="button" data-dinfo style="--dot:var(--lilac)"><span class="dot"></span>Про сайт</button>';
 }
-dnav.addEventListener('click',e=>{const a=e.target.closest('[data-dtab]');if(a){setTab(a.dataset.dtab);return;}if(e.target.closest('[data-dinfo]'))info.showModal();});
+dnav.addEventListener('click',e=>{if(e.target.closest('[data-dinfo]'))info.showModal();});
 const _setTab=setTab; setTab=function(id){_setTab(id);renderDnav()};
 renderDnav();
 
-/* ===== Бургер-меню (смартфони) ===== */
-const burger=document.getElementById('burger'), mnav=document.getElementById('mnav'), mlist=document.getElementById('mnavList');
-function renderMenu(){
-  mlist.innerHTML=TABS.map(t=>`<a href="#catalog" data-mtab="${t.id}" style="--dot:var(${t.color})"${t.id===current?' aria-current="true"':''}><span class="dot"></span>${t.label}</a>`).join('')+
-    '<hr><button type="button" data-minfo style="--dot:var(--lilac)"><span class="dot"></span>Про сайт</button>';
+/* ===== Маршрути: головна (#) і каталог (#1-4, #5-7, #8-11, #games, #teacher) ===== */
+function route(){
+  const id=location.hash.slice(1);
+  if(TABS.some(t=>t.id===id)){document.body.classList.remove('home');setTab(id)}
+  else document.body.classList.add('home');
+  window.scrollTo({top:0,behavior:'instant'});
 }
-function setMenu(open){
-  burger.setAttribute('aria-expanded',String(open));
-  if(open){renderMenu();mnav.hidden=false;}else{mnav.hidden=true;}
-}
-burger.addEventListener('click',()=>setMenu(mnav.hidden));
-mlist.addEventListener('click',e=>{
-  const a=e.target.closest('[data-mtab]');
-  if(a){setTab(a.dataset.mtab);setMenu(false);return;}
-  if(e.target.closest('[data-minfo]')){setMenu(false);info.showModal();}
-});
-document.addEventListener('click',e=>{if(!mnav.hidden&&!e.target.closest('#mnav,#burger'))setMenu(false)});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!mnav.hidden){setMenu(false);burger.focus();}});
-matchMedia("(min-width:1280px)").addEventListener('change',m=>{if(m.matches)setMenu(false)});
+addEventListener('hashchange',route);
+route();
 
 </script>
 </body>
