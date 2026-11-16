@@ -8,18 +8,26 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%233866f2%22/%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2221%22 fill=%22%23fff%22/%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2221%22 fill=%22none%22 stroke=%22%23ffc23d%22 stroke-width=%223%22/%3E%3Cpath d=%22M32 14l6 18H26z%22 fill=%22%23f2615a%22/%3E%3Cpath d=%22M32 50l-6-18h12z%22 fill=%22%231d2742%22/%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%223.5%22 fill=%22%23fff%22 stroke=%22%231d2742%22 stroke-width=%222%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Rubik:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f5f7ff; --card:#fff; --ink:#1d2742; --muted:#5d6785; --line:#e1e6f5;
+  --bg:#eef3fb; --card:#fff; --ink:#1d2742; --muted:#5d6785; --line:#e1e6f5;
   --blue:#3866f2; --blue-d:#2a52d1; --blue-soft:#e8eeff; --mint:#1fae86; --mint-soft:#dcf5ec;
   --sun:#ffc23d; --sun-soft:#fff3d6; --coral:#f2615a; --coral-soft:#ffe6e4; --violet:#8a5cf6; --violet-soft:#efe8ff;
   --r:18px; --shadow:0 10px 30px -12px rgba(29,39,66,.25);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
-body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;min-height:100vh}
+body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);background-image:radial-gradient(circle at 8% 10%,#ffe3dc 0,transparent 32%),radial-gradient(circle at 92% 12%,#d9ecff 0,transparent 34%),radial-gradient(circle at 85% 95%,#e6dcff 0,transparent 32%),radial-gradient(circle at 10% 92%,#d8f6e6 0,transparent 30%);background-attachment:fixed;color:var(--ink);line-height:1.5;min-height:100vh}
 button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+h1,h2,h3{font-family:Rubik,'Nunito',sans-serif}
+.ic{width:20px;height:20px;flex:none;vertical-align:middle}
+.cmenu .ic{width:18px;height:18px}
+.icb{display:inline-grid;place-items:center}
+.icb .ic{width:22px;height:22px}
+.step .ck .ic{width:18px;height:18px}
+.step .hb{display:grid;place-items:center;color:#e0a800}
+.sa-opt .e .ic{width:22px;height:22px;display:block}
 input,textarea,select{font:inherit;color:inherit}
 .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
 
@@ -360,6 +368,7 @@ details.box[open] summary{margin-bottom:10px}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="ic-folder" viewBox="0 0 24 24"><path fill="currentColor" d="M3 7a2 2 0 0 1 2-2h4.2l2 2.2H19a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol><symbol id="ic-paper" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" x="8" y="3" width="12" height="14" rx="2.5"/><rect fill="currentColor" x="4" y="7" width="12" height="14" rx="2.5"/></symbol><symbol id="ic-edit" viewBox="0 0 24 24"><path fill="currentColor" d="M15.3 4.3a2.3 2.3 0 0 1 3.3 0l1.1 1.1a2.3 2.3 0 0 1 0 3.3L9.4 19 4 20l1-5.4z"/></symbol><symbol id="ic-del" viewBox="0 0 24 24"><rect fill="currentColor" x="4" y="5" width="16" height="3" rx="1.2"/><rect fill="currentColor" x="9" y="2.5" width="6" height="3" rx="1"/><path fill="currentColor" d="M6 9.5h12l-1 10.2a2 2 0 0 1-2 1.8H9a2 2 0 0 1-2-1.8z"/></symbol><symbol id="ic-tick" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12.5l4.5 4.5L19 7"/></symbol><symbol id="ic-bulb" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.5a6.8 6.8 0 0 0-4 12.3c.6.5 1 1.1 1 1.9V17h6v-.3c0-.8.4-1.4 1-1.9a6.8 6.8 0 0 0-4-12.3z"/><rect fill="currentColor" x="9" y="18.4" width="6" height="2.2" rx="1.1"/><rect fill="currentColor" x="10.2" y="21.2" width="3.6" height="1.6" rx=".8"/></symbol><symbol id="ic-printer" viewBox="0 0 24 24"><rect fill="currentColor" x="7" y="3" width="10" height="5" rx="1.2"/><path fill="currentColor" d="M5 9h14a2.5 2.5 0 0 1 2.5 2.5V16H18v-2H6v2H2.5v-4.5A2.5 2.5 0 0 1 5 9z"/><rect fill="currentColor" x="7" y="15.5" width="10" height="5.5" rx="1.2"/></symbol><symbol id="ic-fsad" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" cx="12" cy="12" r="9"/><circle fill="currentColor" cx="9" cy="10" r="1.4"/><circle fill="currentColor" cx="15" cy="10" r="1.4"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M8.5 16.5c2-2 5-2 7 0"/></symbol><symbol id="ic-fok" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" cx="12" cy="12" r="9"/><circle fill="currentColor" cx="9" cy="10" r="1.4"/><circle fill="currentColor" cx="15" cy="10" r="1.4"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M8.5 14.5c2 2 5 2 7 0"/></symbol><symbol id="ic-fcool" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" cx="12" cy="12" r="9"/><path fill="currentColor" d="M6 8.6h12v1.6a2.6 2.6 0 0 1-2.6 2.6h-1a2.4 2.4 0 0 1-2.2-1.5h-.4a2.4 2.4 0 0 1-2.2 1.5h-1A2.6 2.6 0 0 1 6 10.2z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M8.5 15c2 2 5 2 7 0"/></symbol></defs></svg>
 
 <header>
   <div class="wrap hbar">
@@ -554,7 +563,7 @@ const SELF=[
   ["algo","Я можу скласти послідовність дій (алгоритм)"],
   ["algo","Я розумію, що таке повторення й умова"]
 ];
-const SOPTS=[["😕","Ще не вмію"],["🙂","З допомогою"],["😎","Вмію сам(а)"]];
+const SOPTS=[['<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-fsad"/></svg>',"Ще не вмію"],['<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-fok"/></svg>',"З допомогою"],['<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-fcool"/></svg>',"Вмію сам(а)"]];
 
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -681,7 +690,7 @@ function taskMouse(el,fin){
       e.preventDefault();e.stopPropagation();close();f.classList.add("sel");
       const r=pf.getBoundingClientRect();
       menu=document.createElement("div");menu.className="cmenu";
-      menu.innerHTML=`<button data-a="open">📂 Відкрити</button><button data-a="copy">📋 Копіювати</button><button data-a="ren">✏️ Перейменувати</button><button data-a="del">🗑️ Видалити</button>`;
+      menu.innerHTML=`<button data-a="open"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-folder"/></svg>Відкрити</button><button data-a="copy"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-paper"/></svg>Копіювати</button><button data-a="ren"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-edit"/></svg>Перейменувати</button><button data-a="del"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-del"/></svg>Видалити</button>`;
       let x=e.clientX-r.left,y=e.clientY-r.top;
       x=Math.min(x,r.width-180);y=Math.min(y,r.height-180);
       menu.style.left=Math.max(6,x)+"px";menu.style.top=Math.max(6,y)+"px";
@@ -1006,9 +1015,9 @@ function openMission(R,g){
   panel.innerHTML=`<div class="mhead"><span class="chip">${M.i} Практичне завдання · ${M.g}</span><span class="clock" id="clk">00:00</span></div>
   <h2 class="mt">${M.t}</h2>
   <div class="story"><span class="mic">💬</span><div>${M.story}</div></div>
-  <ul class="steps">${M.steps.map((s,i)=>`<li class="step" data-i="${i}"><button class="ck" aria-label="Виконано">✓</button><div class="tx">${s[0]}</div>${s[1]?`<button class="hb" aria-label="Підказка">💡</button><div class="hint">${s[1]}</div>`:"<span></span>"}</li>`).join("")}</ul>
+  <ul class="steps">${M.steps.map((s,i)=>`<li class="step" data-i="${i}"><button class="ck" aria-label="Виконано"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-tick"/></svg></button><div class="tx">${s[0]}</div>${s[1]?`<button class="hb" aria-label="Підказка"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-bulb"/></svg></button><div class="hint">${s[1]}</div>`:"<span></span>"}</li>`).join("")}</ul>
   <div class="row mt no-print" id="kidDone"><button class="btn btn-p" id="mFin">Я все зробив(ла)</button><button class="btn btn-g" id="mBack">До результатів</button></div>
-  <div id="teach" style="display:none" class="box"><h3>👩‍🏫 Оцінювання вчителем</h3><div class="crit">${M.crit.map((c,i)=>`<div class="crow" data-i="${i}"><span>${c[0]}</span><div class="seg">${Array.from({length:c[1]+1},(_,v)=>`<button data-v="${v}">${v}</button>`).join("")}</div></div>`).join("")}</div>
+  <div id="teach" style="display:none" class="box"><h3>Оцінювання вчителем</h3><div class="crit">${M.crit.map((c,i)=>`<div class="crow" data-i="${i}"><span>${c[0]}</span><div class="seg">${Array.from({length:c[1]+1},(_,v)=>`<button data-v="${v}">${v}</button>`).join("")}</div></div>`).join("")}</div>
   <textarea class="note" id="mNote" rows="2" placeholder="Коментар (необов'язково)"></textarea>
   <div class="row mt"><button class="btn btn-p" id="mSave" disabled>Зберегти у звіт</button></div></div>`;
   const clk=panel.querySelector("#clk");clearInterval(clockT);
@@ -1058,7 +1067,7 @@ function renderResult(R){
   const C=2*Math.PI*52,off=C*(1-R.total/100);
   $("#resPanel").innerHTML=`
   <div class="rtop"><div><h2>${esc(R.name)}${R.age?`, ${esc(R.age)} р.`:""}</h2><p class="sub">${d.toLocaleDateString("uk-UA")}${R.time?` · ⏱ ${R.time} хв`:""}</p></div>
-  <div class="row no-print"><button class="icb" id="cpy" title="Скопіювати звіт">📋</button><button class="icb" id="prt" title="Друк / PDF">🖨️</button></div></div>
+  <div class="row no-print"><button class="icb" id="cpy" title="Скопіювати звіт"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-paper"/></svg></button><button class="icb" id="prt" title="Друк / PDF"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-printer"/></svg></button></div></div>
   <div class="sum"><svg class="gauge" viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#fff" stroke-width="12"/><circle cx="60" cy="60" r="52" fill="none" stroke="${LC[cls]}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${off}" transform="rotate(-90 60 60)"/><text x="60" y="68" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="26" fill="#1d2742">${R.total}%</text></svg>
   <div class="gb"><div class="k">Починати з</div><div class="g">${rg} класу</div><span class="lv ${cls} l">${L} рівень</span></div></div>
   <div class="tiles">${Object.entries(R.areas).map(([a,v])=>{const [l,c]=lvl(v.fact),g=v.self-v.fact;return`<div class="tile" style="border-top-color:${LC[c]}" title="${AREAS[a].n}: ${l.toLowerCase()} рівень, самооцінка ${v.self}%">
@@ -1069,18 +1078,18 @@ function renderResult(R){
     <span class="me">🪞${face(v.self)}${g>=35?'<span class="up">↑</span>':g<=-35?'<span class="dn">↓</span>':""}</span></div>`}).join("")}</div>
   <div class="legend2"><span>🎯 почати з цього</span><span>💪 сильна сторона</span><span>🪞 самооцінка</span><span><b style="color:var(--coral)">↑</b> переоцінює</span><span><b style="color:var(--blue)">↓</b> недооцінює</span></div>
   <div class="box" id="misBox"></div>
-  <details class="box"><summary>📋 Деталі вправ</summary><div class="det-wrap"><table class="det"><thead><tr><th>Вправа</th><th>Бали</th><th>Час</th><th>Нотатки</th></tr></thead><tbody>${R.tasks.map(t=>`<tr><td>${AREAS[t.area].i} ${t.title}</td><td class="sc">${t.score??0}/${t.max}</td><td>${t.time!=null?t.time+" с":"—"}</td><td>${esc(t.notes||"")}</td></tr>`).join("")}</tbody></table></div></details>
+  <details class="box"><summary>Деталі вправ</summary><div class="det-wrap"><table class="det"><thead><tr><th>Вправа</th><th>Бали</th><th>Час</th><th>Нотатки</th></tr></thead><tbody>${R.tasks.map(t=>`<tr><td>${AREAS[t.area].i} ${t.title}</td><td class="sc">${t.score??0}/${t.max}</td><td>${t.time!=null?t.time+" с":"—"}</td><td>${esc(t.notes||"")}</td></tr>`).join("")}</tbody></table></div></details>
   <div class="row mt no-print"><button class="btn btn-p" id="again">Нова діагностика</button><button class="btn btn-g" id="home2">На головну</button></div>`;
   const mb=$("#misBox");
   if(R.mission){const m=R.mission;
-    mb.innerHTML=`<h3>🛠 Практичне завдання · ${MIS[m.grade].g}</h3><div class="mres"><span class="num">${m.score}/${m.max}</span><div><b>${esc(m.title)}</b><br><span style="color:var(--muted);font-weight:600">${misVerdict(m)}</span></div></div>
+    mb.innerHTML=`<h3>Практичне завдання · ${MIS[m.grade].g}</h3><div class="mres"><span class="num">${m.score}/${m.max}</span><div><b>${esc(m.title)}</b><br><span style="color:var(--muted);font-weight:600">${misVerdict(m)}</span></div></div>
     <div class="det-wrap mt"><table class="det"><tbody>${m.crit.map(c=>`<tr><td>${c[0]}</td><td class="sc">${c[1]}/${c[2]}</td></tr>`).join("")}<tr><td>Кроки, які дитина відмітила</td><td class="sc">${m.steps}/${m.stepsTotal}</td></tr><tr><td>Час</td><td class="sc">${m.time} хв</td></tr></tbody></table></div>${m.note?`<p class="mt"><b>Коментар:</b> ${esc(m.note)}</p>`:""}
     <div class="row mt no-print"><button class="btn btn-s" id="misAgain">Інше завдання</button></div>`;
     $("#misAgain").onclick=()=>{delete R.mission;renderResult(R)};
   }else{
     let sel=rg;
     const draw=()=>{const M=MIS[sel];
-      mb.innerHTML=`<h3>🛠 Практичне завдання ≈ 30 хв</h3><div class="mtabs no-print">${[5,6,7].map(g=>`<button class="mtab${g===sel?" sel":""}" data-g="${g}">${MIS[g].g}${g===rg?'<span class="rec">★</span>':""}</button>`).join("")}</div>
+      mb.innerHTML=`<h3>Практичне завдання ≈ 30 хв</h3><div class="mtabs no-print">${[5,6,7].map(g=>`<button class="mtab${g===sel?" sel":""}" data-g="${g}">${MIS[g].g}${g===rg?'<span class="rec">★</span>':""}</button>`).join("")}</div>
       <div class="mprev"><span class="mic">${M.i}</span><div><h4>${M.t}</h4><p>${M.prog} · ${M.steps.length} кроків</p></div></div>
       <div class="row mt no-print"><button class="btn btn-p" id="misGo">Почати завдання</button></div>`;
       mb.querySelectorAll(".mtab").forEach(b=>b.onclick=()=>{sel=+b.dataset.g;draw()});
@@ -1095,7 +1104,7 @@ function renderResult(R){
     const txt=`АйтіКомпас — ${R.name}${R.age?`, ${R.age} р.`:""}, ${d.toLocaleDateString("uk-UA")}
 Результат: ${R.total}% (${L.toLowerCase()} рівень) → починати з ${rg} класу
 ${Object.entries(R.areas).map(([a,v])=>`${AREAS[a].i} ${AREAS[a].sn}: ${v.fact}%`).join(" · ")}${wk.length?`\n🎯 Почати з: ${wk.join(", ")}`:""}${R.mission?`\n🛠 ${R.mission.title}: ${R.mission.score}/${R.mission.max} — ${misVerdict(R.mission)}`:""}`;
-    const done=()=>{$("#cpy").textContent="✓";setTimeout(()=>{const b=$("#cpy");if(b)b.textContent="📋"},1500)};
+    const done=()=>{$("#cpy").innerHTML='<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-tick"/></svg>';setTimeout(()=>{const b=$("#cpy");if(b)b.innerHTML='<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-paper"/></svg>'},1500)};
     if(navigator.clipboard)navigator.clipboard.writeText(txt).then(done,()=>{});
   };
 }
