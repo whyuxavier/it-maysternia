@@ -167,10 +167,13 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 .t-classic .tm{margin-top:-4vh;font-size:min(17vw,20vmin)}
 /* bomb */
 .t-bomb{background:radial-gradient(circle at 50% 55%,#fff3dc 0,#f6e2bd 55%,#e9cf9f 100%)}
-.t-bomb .bomb{position:absolute;left:50%;top:52%;width:min(70vmin,620px);transform:translate(-50%,-50%)}
+.t-bomb .bomb{position:absolute;left:50%;top:calc(50% - 44px);width:min(96vw,calc(100vh - 150px),860px);transform:translate(-50%,-50%)}
+.led{animation:tw .5s infinite alternate}
+.cloud{animation:cloud 26s linear infinite alternate}
+@keyframes cloud{to{transform:translateX(-160px)}}
 .t-bomb.last .bomb{animation:shake .25s infinite}
-@keyframes shake{25%{transform:translate(-51%,-50%) rotate(-2deg)}75%{transform:translate(-49%,-50%) rotate(2deg)}}
-.t-bomb .tm{visibility:hidden;height:0}.t-bomb .cap{margin-top:calc(min(70vmin,620px) * .62)}
+@keyframes shake{25%{transform:translate(-51%,-50%) rotate(-1deg)}75%{transform:translate(-49%,-50%) rotate(1deg)}}
+.t-bomb .tm{visibility:hidden;height:0}.t-bomb .cap{position:absolute;bottom:120px}
 .spark{animation:spark .15s infinite alternate}
 @keyframes spark{to{transform:scale(1.25) rotate(20deg)}}
 .boom{position:absolute;inset:0;z-index:6;display:grid;place-items:center;pointer-events:none}
@@ -179,14 +182,19 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 .stage.shakeAll{animation:shakeAll .5s}
 @keyframes shakeAll{20%{transform:translate(-12px,6px)}40%{transform:translate(10px,-8px)}60%{transform:translate(-8px,-4px)}80%{transform:translate(6px,8px)}}
 /* xmas */
-.t-xmas{background:linear-gradient(#1d2d55,#2f4c7e 70%,#e9eef8 70.2%);color:#fff}
+.t-xmas{background:linear-gradient(#1a2850,#2f4c7e);color:#fff}
+.stage{--cb:72px}
+.ground{position:absolute;left:0;bottom:0;width:100%;height:calc(var(--cb) + 15%)}
+.props{position:absolute;left:0;bottom:var(--cb);width:100%;height:calc(50% - var(--cb))}
+.t-classic .ring #ringDot{fill:#fffcf5;stroke:#2f2a40;stroke-width:3}
+@media (max-width:560px){.stage{--cb:126px}}
 .t-xmas .tm{text-shadow:0 4px 0 rgba(0,0,0,.25);margin-top:-12vh}
 .t-xmas .cap{color:#fff}
 .bulb{transition:fill .4s,opacity .4s}
 .twinkle{animation:tw 1.2s infinite alternate}
 @keyframes tw{to{opacity:.45}}
 /* halloween */
-.t-hall{background:linear-gradient(#2a1b47,#4b2a6b 72%,#2b2140 72.2%);color:#ffe9c7}
+.t-hall{background:linear-gradient(#24173f,#4b2a6b);color:#ffe9c7}
 .t-hall .tm{text-shadow:0 0 22px rgba(255,160,60,.6);margin-top:-14vh}
 .t-hall .cap{color:#ffe9c7}
 .bat{animation:bat 6s linear infinite}
@@ -601,35 +609,93 @@ $('presets').addEventListener('click',e=>{const b=e.target.closest('[data-p]');i
 
 let T=null;
 const fmt=s=>{s=Math.max(0,Math.ceil(s));return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`};
+/* ---------- Сцени таймерів (SVG) ---------- */
+const f1=n=>Math.round(n*10)/10;
+function starPath(cx,cy,R,r,n=5){let d='';for(let i=0;i<n*2;i++){const a=-Math.PI/2+i*Math.PI/n,q=i%2?r:R;d+=(i?'L':'M')+f1(cx+q*Math.cos(a))+' '+f1(cy+q*Math.sin(a))}return d+'Z'}
+/* довгий гніт із петлями навколо бомби: від ковпачка назовні */
+function fusePath(){
+  const cx=400,cy=430,turns=1.6,k=7;let d='M400 268L400 228';
+  for(let i=0;i<=900;i++){const s=i/900,th=-Math.PI/2+s*Math.PI*2*turns,R=196+118*s,rho=46*Math.min(1,s/.07)*(1+.12*Math.sin(s*23)),ph=th*k-Math.PI/2;
+    const x=cx+R*Math.cos(th)+rho*Math.cos(ph)+0,y=cy+R*Math.sin(th)+rho*(Math.sin(ph)+1);
+    d+='L'+f1(x)+' '+f1(y)}
+  return d;
+}
+/* ялинка: симетричні яруси з хвилястим низом, тінь праворуч */
+function treeSVG(cx,top,h,w,id){
+  const n=4,th=h/n*1.45;let tiers='',shade='',orn='',gar='';const cols=['#ee8f80','#f2d06b','#8ec5ee','#f4a3c4','#bba8ee'];
+  for(let k=n-1;k>=0;k--){
+    const y0=top+k*(h-th)/(n-1),y1=y0+th,hw=w/2*(.42+.58*(k+1)/n),b=5;
+    let d=`M${cx} ${f1(y0)}Q${f1(cx+hw*.28)} ${f1(y0+th*.55)} ${f1(cx+hw)} ${f1(y1)}`;
+    for(let j=0;j<b;j++){const xa=cx+hw-(2*hw)*(j+1)/b,xm=(cx+hw-(2*hw)*(j+.5)/b);d+=`Q${f1(xm)} ${f1(y1+th*.13)} ${f1(xa)} ${f1(y1)}`}
+    d+=`Q${f1(cx-hw*.28)} ${f1(y0+th*.55)} ${cx} ${f1(y0)}Z`;
+    tiers=`<path d="${d}" fill="#3f9563"/><path d="${d}" fill="#2f7a4f" clip-path="url(#${id}h)"/><path d="M${cx} ${f1(y0+8)}Q${f1(cx-hw*.2)} ${f1(y0+th*.55)} ${f1(cx-hw*.78)} ${f1(y1-4)}" fill="none" stroke="#6cc08d" stroke-width="5" stroke-linecap="round" opacity=".55"/>`+tiers;
+    gar+=`<path d="M${f1(cx-hw*.82)} ${f1(y1-th*.32)}Q${cx} ${f1(y1-th*.02)} ${f1(cx+hw*.82)} ${f1(y1-th*.42)}" fill="none" stroke="#f2d06b" stroke-width="4" stroke-dasharray="1 9" stroke-linecap="round"/>`;
+    [-.55,0,.55].forEach((p,m)=>{const ox=cx+hw*p,oy=y1-th*(m===1?.1:.18);orn+=`<circle cx="${f1(ox)}" cy="${f1(oy)}" r="${f1(8+k*1.2)}" fill="${cols[(k+m)%5]}"/><circle cx="${f1(ox-3)}" cy="${f1(oy-3)}" r="2.6" fill="#fff" opacity=".7"/>`});
+  }
+  return `<defs><clipPath id="${id}h"><rect x="${cx}" y="0" width="${w}" height="2000"/></clipPath></defs>
+    <rect x="${cx-16}" y="${f1(top+h+th*.05)}" width="32" height="${f1(h*.13)}" rx="4" fill="#8a5a3a"/><rect x="${cx}" y="${f1(top+h+th*.05)}" width="16" height="${f1(h*.13)}" fill="#6e4429"/>
+    ${tiers}${gar}${orn}<path id="${id}star" d="${starPath(cx,top-6,30,13)}" fill="#8a93b8" stroke="#fffcf5" stroke-width="3" stroke-linejoin="round"/>`;
+}
 function sceneHTML(th){
-  if(th==='classic')return `<svg class="ring" viewBox="0 0 200 200"><circle class="bgc" cx="100" cy="100" r="88"/><circle class="fg" id="ringFg" cx="100" cy="100" r="88" stroke-dasharray="552.9" stroke-dashoffset="0"/></svg>`;
-  if(th==='bomb')return `<svg class="bomb" viewBox="0 0 400 400">
-      <ellipse cx="200" cy="372" rx="120" ry="14" fill="rgba(0,0,0,.15)"/>
-      <circle cx="200" cy="230" r="140" fill="#2f2a40"/><circle cx="150" cy="170" r="34" fill="#fff" opacity=".12"/><circle cx="135" cy="160" r="14" fill="#fff" opacity=".2"/>
-      <rect x="168" y="70" width="64" height="34" rx="8" fill="#55506b"/><rect x="168" y="70" width="64" height="10" rx="5" fill="#6c6680"/>
-      <path id="fuse" d="M200 70C200 36 232 22 262 32S318 30 330 8" fill="none" stroke="#c99b4f" stroke-width="10" stroke-linecap="round"/>
-      <g id="sparkG"><g class="spark" style="transform-box:fill-box;transform-origin:center"><circle r="13" fill="#ffb02e"/><path d="M0 -26l5 15 15 -5 -10 12 13 9 -16 1 2 16 -9 -13 -9 13 2 -16 -16 -1 13 -9 -10 -12 15 5z" fill="#ffd166"/><circle r="6" fill="#fff6d6"/></g></g>
-      <rect x="100" y="210" width="200" height="72" rx="12" fill="#1a1020" stroke="#55506b" stroke-width="4"/><text id="bombTxt" x="200" y="263" text-anchor="middle" font-family="ui-monospace,Consolas,monospace" font-weight="800" font-size="50" fill="#ff5a4a" style="filter:drop-shadow(0 0 6px rgba(255,90,74,.7))">00:00</text>
-    </svg>`;
+  if(th==='classic'){let t='';for(let i=0;i<60;i++){const a=i/60*Math.PI*2,big=i%5===0,r1=big?72:76,r2=80;t+=`<line x1="${f1(100+r1*Math.cos(a))}" y1="${f1(100+r1*Math.sin(a))}" x2="${f1(100+r2*Math.cos(a))}" y2="${f1(100+r2*Math.sin(a))}" stroke="#2f2a40" stroke-width="${big?1.6:.7}" stroke-linecap="round" opacity="${big?.45:.25}"/>`}
+    return `<svg class="ring" viewBox="0 0 200 200"><circle class="bgc" cx="100" cy="100" r="88"/><circle class="fg" id="ringFg" cx="100" cy="100" r="88" stroke-dasharray="552.9" stroke-dashoffset="0"/>${t}<circle id="ringDot" cx="188" cy="100" r="11" fill="#fffcf5" stroke="#2f2a40" stroke-width="3"/></svg>`}
+  if(th==='bomb'){const fp=fusePath();
+    return `<svg class="bomb" viewBox="0 0 800 800">
+      <defs><radialGradient id="bg1" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#4a4363"/><stop offset=".55" stop-color="#2f2a40"/><stop offset="1" stop-color="#1c1828"/></radialGradient>
+        <radialGradient id="glow"><stop offset="0" stop-color="#ffd166" stop-opacity=".9"/><stop offset="1" stop-color="#ffb02e" stop-opacity="0"/></radialGradient>
+        <mask id="fm" maskUnits="userSpaceOnUse" x="0" y="0" width="800" height="800"><path id="fuseM" d="${fp}" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/></mask></defs>
+      <ellipse cx="400" cy="602" rx="150" ry="18" fill="rgba(0,0,0,.14)"/>
+      <path id="fuse" d="${fp}" fill="none" stroke="#7a6a5a" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round" opacity=".45"/>
+      <g mask="url(#fm)"><path d="${fp}" fill="none" stroke="#a97935" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="${fp}" fill="none" stroke="#e2b874" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="${fp}" fill="none" stroke="#7d5523" stroke-width="12" stroke-dasharray="2.5 8" stroke-linejoin="round"/></g>
+      <circle cx="400" cy="430" r="150" fill="url(#bg1)"/>
+      <path d="M290 380a125 125 0 0 1 70-88" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" opacity=".18"/><circle cx="318" cy="328" r="9" fill="#fff" opacity=".35"/>
+      <rect x="362" y="262" width="76" height="40" rx="9" fill="#55506b"/><rect x="362" y="262" width="76" height="12" rx="6" fill="#77718f"/>
+      <rect x="295" y="392" width="210" height="80" rx="14" fill="#140c18" stroke="#55506b" stroke-width="5"/>
+      <text id="bombTxt" x="400" y="452" text-anchor="middle" font-family="ui-monospace,Consolas,monospace" font-weight="800" font-size="56" fill="#ff5a4a" style="filter:drop-shadow(0 0 7px rgba(255,90,74,.75))">00:00</text>
+      <circle cx="318" cy="486" r="7" fill="#ff5a4a" class="led"/><circle cx="482" cy="486" r="7" fill="#86cfa8"/>
+      <path d="M300 300q-30-30 -10-60M500 300q30-30 10-60" fill="none" stroke="#ee8f80" stroke-width="5" stroke-linecap="round" opacity=".0"/>
+      <g id="fx"></g>
+      <g id="sparkG"><circle r="44" fill="url(#glow)"/><g class="spark" style="transform-box:fill-box;transform-origin:center"><path d="M0 -24l5 14 14 -5 -9 11 12 8 -15 1 2 15 -9 -12 -9 12 2 -15 -15 -1 12 -8 -9 -11 14 5z" fill="#ffd166"/><circle r="7" fill="#fff6d6"/></g></g>
+    </svg>`}
   if(th==='xmas'){
-    let bulbs='';const N=24;for(let i=0;i<N;i++){const x=40+i*(920/(N-1)),y=60+Math.sin(i/(N-1)*Math.PI)*50;bulbs+=`<path d="M${x} ${y-14}v8" stroke="#1d2d55" stroke-width="3"/><ellipse class="bulb twinkle" data-b="${i}" cx="${x}" cy="${y+4}" rx="9" ry="13" fill="${['#ee8f80','#f2d06b','#86cfa8','#8ec5ee','#f4a3c4'][i%5]}" style="animation-delay:${(i%5)*.2}s"/>`}
-    return `      <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMin slice" style="position:absolute;inset:0;width:100%;height:100%"><path d="M30 46Q500 140 970 46" fill="none" stroke="#1d2d55" stroke-width="3"/>${bulbs}</svg>
-      <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMax meet" style="position:absolute;left:0;right:0;bottom:0;width:100%;height:46%">
-        <ellipse cx="500" cy="590" rx="520" ry="40" fill="#fff"/>
-        <g id="tree"><path d="M820 160l90 120h-50l80 110h-60l90 120H640l90-120h-60l80-110h-50z" fill="#3f9563"/><rect x="805" y="510" width="30" height="50" fill="#8a5a3a"/>
-        <path id="star" d="M820 120l12 26 28 3-21 19 6 28-25-14-25 14 6-28-21-19 28-3z" fill="#6c7aa0"/>
-        <circle cx="800" cy="260" r="9" fill="#ee8f80"/><circle cx="850" cy="330" r="9" fill="#f2d06b"/><circle cx="780" cy="400" r="9" fill="#8ec5ee"/><circle cx="880" cy="450" r="9" fill="#f4a3c4"/><circle cx="760" cy="480" r="9" fill="#f2d06b"/></g>
-        <g><rect x="120" y="470" width="110" height="90" rx="6" fill="#ee8f80"/><rect x="166" y="470" width="18" height="90" fill="#f2d06b"/><rect x="110" y="455" width="130" height="24" rx="5" fill="#d9483f"/><path d="M175 455q-30-40-50-10q20 10 50 10q30 0 50-10q-20-30-50 10" fill="#f2d06b"/></g>
-        <g><rect x="250" y="500" width="80" height="60" rx="6" fill="#86cfa8"/><rect x="284" y="500" width="12" height="60" fill="#fffcf5"/></g>
+    let bulbs='';const N=24;for(let i=0;i<N;i++){const x=40+i*(920/(N-1)),y=60+Math.sin(i/(N-1)*Math.PI)*50;bulbs+=`<path d="M${f1(x)} ${f1(y-14)}v8" stroke="#1d2d55" stroke-width="3"/><ellipse class="bulb twinkle" data-b="${i}" cx="${f1(x)}" cy="${f1(y+4)}" rx="9" ry="13" fill="${['#ee8f80','#f2d06b','#86cfa8','#8ec5ee','#f4a3c4'][i%5]}" style="animation-delay:${(i%5)*.2}s"/><ellipse cx="${f1(x-3)}" cy="${f1(y)}" rx="2.5" ry="4" fill="#fff" opacity=".5"/>`}
+    let stars='';for(let i=0;i<26;i++){const x=(i*137)%1000,y=150+(i*71)%260;stars+=`<path class="${i%3?'':'twinkle'}" d="${starPath(x,y,i%4?3:6,i%4?1.2:2,4)}" fill="#fffcf5" opacity=".8" style="animation-delay:${i*.13}s"/>`}
+    let houses='';[[90,1],[200,.8],[700,.9],[600,.7]].forEach(([x,s],i)=>{houses+=`<g transform="translate(${x} ${f1(470-40*s)}) scale(${s})"><path d="M0 40L40 8L80 40V90H0Z" fill="#33426e"/><path d="M-6 42L40 4L86 42" fill="none" stroke="#fffcf5" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><rect x="54" y="6" width="12" height="22" fill="#33426e"/><rect x="14" y="50" width="18" height="18" rx="2" fill="#f2d06b"/><rect x="48" y="50" width="18" height="18" rx="2" fill="${i%2?'#f4ad86':'#f2d06b'}"/></g>`});
+    return `<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMin slice" style="position:absolute;inset:0;width:100%;height:100%">${stars}
+        <circle cx="880" cy="190" r="46" fill="#fff6dc"/><circle cx="902" cy="176" r="46" fill="#24376a"/>
+        <path d="M30 46Q500 140 970 46" fill="none" stroke="#1d2d55" stroke-width="3"/>${bulbs}</svg>
+      <svg class="ground" viewBox="0 0 1000 300" preserveAspectRatio="none"><path d="M0 40Q180 0 360 30T720 20T1000 30V300H0Z" fill="#c9d6ef"/><path d="M0 110Q250 70 520 105T1000 90V300H0Z" fill="#e9eef8"/><path d="M0 200Q300 170 600 196T1000 190V300H0Z" fill="#fffcf5"/></svg>
+      <svg class="props" viewBox="0 0 1000 600" data-wide="0 120 1000 480" data-narrow="560 140 440 460" preserveAspectRatio="xMidYMax meet">${houses}
+        <g transform="translate(0 0)">${treeSVG(800,190,330,300,'tr')}</g>
+        <g><rect x="690" y="520" width="70" height="56" rx="6" fill="#ee8f80"/><rect x="718" y="520" width="14" height="56" fill="#f2d06b"/><rect x="684" y="508" width="82" height="18" rx="4" fill="#d9483f"/><path d="M725 508q-22-30-38-8q14 8 38 8q24 0 38-8q-16-22-38 8" fill="#f2d06b"/>
+          <rect x="845" y="534" width="60" height="44" rx="6" fill="#8ec5ee"/><rect x="869" y="534" width="12" height="44" fill="#fffcf5"/><rect x="840" y="526" width="70" height="14" rx="4" fill="#6aa9d9"/></g>
+        <g id="snowman"><ellipse cx="230" cy="580" rx="70" ry="10" fill="#d7e0f2"/><circle cx="230" cy="530" r="52" fill="#fffcf5"/><circle cx="230" cy="452" r="38" fill="#fffcf5"/><circle cx="230" cy="392" r="28" fill="#fffcf5"/>
+          <path d="M210 422q20 12 40 0l4 10q-24 12-48 0z" fill="#ee8f80"/><path d="M246 428l14 34-14 2z" fill="#d9483f"/>
+          <rect x="205" y="350" width="50" height="10" rx="3" fill="#2f2a40"/><rect x="213" y="318" width="34" height="36" rx="4" fill="#2f2a40"/><rect x="213" y="340" width="34" height="7" fill="#ee8f80"/>
+          <circle cx="221" cy="388" r="3.5" fill="#2f2a40"/><circle cx="240" cy="388" r="3.5" fill="#2f2a40"/><path d="M230 395l22 5-22 3z" fill="#f4ad86"/>
+          <circle cx="230" cy="448" r="4" fill="#2f2a40"/><circle cx="230" cy="468" r="4" fill="#2f2a40"/><circle cx="230" cy="512" r="4" fill="#2f2a40"/>
+          <path d="M196 450l-48-30M152 422l-10-14M264 450l46-34M306 418l12-12" fill="none" stroke="#8a5a3a" stroke-width="6" stroke-linecap="round"/></g>
       </svg>`}
   if(th==='hall'){let bats='';for(let i=0;i<5;i++)bats+=`<svg class="bat" viewBox="0 0 60 24" style="position:absolute;top:${8+i*9}%;left:0;width:${50+i*8}px;animation-duration:${7+i*2}s;animation-delay:${-i*1.7}s"><path d="M30 10q-6-10-14-4q-6-6-16 2q8 0 10 6q6-4 12 2q4-4 8-6q4 2 8 6q6-6 12-2q2-6 10-6q-10-8-16-2q-8-6-14 4z" fill="#1a1028"/></svg>`;
-    return `${bats}<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMin slice" style="position:absolute;inset:0;width:100%;height:100%"><circle cx="850" cy="110" r="70" fill="#ffe9c7"/><circle cx="830" cy="95" r="12" fill="#f2dcb3"/><circle cx="870" cy="135" r="8" fill="#f2dcb3"/></svg>
-      <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMax meet" style="position:absolute;left:0;right:0;bottom:0;width:100%;height:50%">
-        <path d="M0 600V520q60-30 120-10l20-60 20 60q80-30 160 0V600z" fill="#1d1430"/><path d="M100 520v-40h30v40M780 520l30-90 30 90" fill="#1d1430"/>
-        <g id="pumpkin"><ellipse cx="500" cy="470" rx="190" ry="140" fill="#f08a30"/><path d="M500 340q-60 0-70 130t70 140M500 340q60 0 70 130t-70 140" fill="none" stroke="#d76e1c" stroke-width="10"/>
-          <path d="M500 335q-8-50 30-60" stroke="#4f8a3a" stroke-width="22" fill="none" stroke-linecap="round"/>
-          <path id="pface" d="M410 430l45-50 45 50zM500 430l45-50 45 50zM390 500q110 80 220 0l-30 20-25-22-30 24-25-24-30 24-25-22z" fill="#2a1b47"/></g>
-        <g id="candle"><rect id="wax" x="190" y="420" width="44" height="150" rx="8" fill="#fff4dc"/><path id="flame" class="flame" d="M212 390q-16 18 0 30q16-12 0-30z" fill="#ffb02e"/></g>
+    let stones='';[[120,1],[300,.8],[690,.9],[870,1.05]].forEach(([x,s],i)=>{stones+=`<g transform="translate(${x} ${f1(520-70*s)}) scale(${s})"><path d="M0 80V30a35 35 0 0 1 70 0V80Z" fill="#5d5378"/><path d="M35 0a35 35 0 0 1 35 30V80H48V30A28 28 0 0 0 35 2Z" fill="#4a4163"/><path d="${i%2?'M27 34h16M35 26v30':'M22 34h26M22 46h20'}" stroke="#2b2140" stroke-width="5" stroke-linecap="round"/></g>`});
+    return `${bats}<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMin slice" style="position:absolute;inset:0;width:100%;height:100%">
+        <circle cx="850" cy="120" r="110" fill="#ffe9c7" opacity=".12"/><circle cx="850" cy="120" r="72" fill="#ffe9c7"/><circle cx="828" cy="100" r="13" fill="#f2dcb3"/><circle cx="872" cy="146" r="9" fill="#f2dcb3"/><circle cx="868" cy="92" r="6" fill="#f2dcb3"/>
+        <path class="cloud" d="M700 150q20-28 52-14q22-24 54-4q34-6 40 20q24 10 0 22H700q-24-8 0-24z" fill="#3a2860" opacity=".85"/></svg>
+      <svg class="ground" viewBox="0 0 1000 300" preserveAspectRatio="none"><path d="M0 300V60q120-40 260-14q140-30 280 0q160-30 300-6q90-12 160 4V300Z" fill="#1d1430"/><path d="M0 120q120-22 240 0t240 0 240 0 280-4V300H0Z" fill="#cbb8ee" opacity=".1"/></svg>
+      <svg class="props" viewBox="0 0 1000 600" data-wide="0 260 1000 340" data-narrow="160 270 600 330" preserveAspectRatio="xMidYMax meet">
+        <path d="M70 520V320M70 380l-40-50M70 350l50-60M120 290l30-10M70 420l-30-20M30 330l-14-20" fill="none" stroke="#1d1430" stroke-width="14" stroke-linecap="round"/>
+        ${stones}
+        <path d="M600 600V530M640 600V522M680 600V516M720 600V512M760 600V510M800 600V510M840 600V512" stroke="#1d1430" stroke-width="10"/><path d="M590 548Q720 528 850 534" stroke="#1d1430" stroke-width="8" fill="none"/>
+        <g id="pumpkin"><ellipse cx="500" cy="590" rx="210" ry="20" fill="#120c1f" opacity=".6"/>
+          <ellipse cx="410" cy="480" rx="90" ry="118" fill="#d9701e"/><ellipse cx="590" cy="480" rx="90" ry="118" fill="#d9701e"/>
+          <ellipse cx="450" cy="476" rx="88" ry="126" fill="#ee8530"/><ellipse cx="550" cy="476" rx="88" ry="126" fill="#ee8530"/>
+          <ellipse cx="500" cy="474" rx="74" ry="130" fill="#f59a3e"/>
+          <path d="M470 360q10 40 6 110" stroke="#fbb25e" stroke-width="8" fill="none" stroke-linecap="round" opacity=".6"/>
+          <path d="M500 352q-6-52 34-66l10 14q-26 12-26 54z" fill="#4f8a3a"/><path d="M528 300q30-20 48 4" fill="none" stroke="#4f8a3a" stroke-width="5" stroke-linecap="round"/>
+          <path id="pface" d="M418 448l38-48 38 48zM506 448l38-48 38 48zM400 510q100 70 200 0l-8 26q-16 18-36 22l-6-22-22 26q-14 4-28 0l-22-26-6 22q-22-4-36-22z" fill="#2a1b47"/></g>
+        <g id="candle"><ellipse cx="212" cy="574" rx="44" ry="10" fill="#8a7a9c"/><rect id="wax" x="190" y="420" width="44" height="150" rx="8" fill="#fff4dc"/><path id="drip" d="M190 430q0 22 6 22t6-22M222 430q0 34 6 34t6-34" fill="#fff4dc"/><path id="flame" class="flame" d="M212 386q-18 20 0 34q18-14 0-34z" fill="#ffb02e"/></g>
       </svg><div id="ghostBox" style="position:absolute;left:5vw;top:8vh;pointer-events:none"></div>`}
 }
 /* Сніг: snow.js вантажиться лише для теми «Різдво» */
@@ -639,12 +705,14 @@ function snowOn(){
   import('./snow.js').then(m=>{if(id!==snowReq||$('stage').hidden)return;snow=m.mount(el,{alpha:.75});snow.wake()}).catch(()=>{el.hidden=true});
 }
 function snowOff(){snowReq++;if(snow){snow.destroy();snow=null}$('snow').hidden=true}
+function fitProps(){const narrow=innerWidth/innerHeight<.9;document.querySelectorAll('.props').forEach(s=>s.setAttribute('viewBox',s.dataset[narrow?'narrow':'wide']))}
+addEventListener('resize',fitProps);
 function openTimer(){
   snowOff();
   const st=$('stage');st.className='stage t-'+S.theme;$('scene').innerHTML=sceneHTML(S.theme);$('cap').textContent='';
   st.hidden=false;document.body.style.overflow='hidden';
   T={dur:S.dur,left:S.dur,end:performance.now()+S.dur*1000,paused:false,raf:0,lastS:null,done:false};
-  setPauseBtn();tickTimer();Sound.unlock();Sound.add();
+  fitProps();setPauseBtn();tickTimer();Sound.unlock();Sound.add();
   if(S.theme==='xmas')snowOn();
   if(document.documentElement.requestFullscreen&&!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{})}
 }
@@ -658,21 +726,37 @@ function tickTimer(){
   if(T.left<=0&&!T.done){finish();return}
   T.raf=requestAnimationFrame(tickTimer);
 }
+/* іскри й дим від гніту */
+function fx(p){
+  const g=$('fx');if(!g||!T)return;const now=performance.now(),dt=Math.min(.05,(now-(T.fxT||now))/1000);T.fxT=now;T.parts=T.parts||[];
+  if(!T.paused&&!T.done&&!matchMedia('(prefers-reduced-motion:reduce)').matches&&now-(T.spawn||0)>45){T.spawn=now;
+    const smoke=Math.random()<.45,e=document.createElementNS('http://www.w3.org/2000/svg',smoke?'circle':'rect');
+    const a=Math.random()*Math.PI*2,v=smoke?20+Math.random()*20:90+Math.random()*120;
+    const q={e,x:p.x,y:p.y,vx:smoke?(Math.random()-.5)*20:Math.cos(a)*v,vy:smoke?-40-Math.random()*30:Math.sin(a)*v-60,t:0,life:smoke?1.4:.45,smoke};
+    if(smoke){e.setAttribute('fill','#8a8296')}else{e.setAttribute('width','5');e.setAttribute('height','5');e.setAttribute('fill',Math.random()<.5?'#ffd166':'#ff9a3c')}
+    g.appendChild(e);T.parts.push(q)}
+  T.parts=T.parts.filter(q=>{q.t+=dt;if(q.t>q.life){q.e.remove();return false}
+    q.x+=q.vx*dt;q.y+=q.vy*dt;if(!q.smoke)q.vy+=260*dt;const k=q.t/q.life;
+    if(q.smoke){q.e.setAttribute('cx',f1(q.x));q.e.setAttribute('cy',f1(q.y));q.e.setAttribute('r',f1(6+18*k));q.e.setAttribute('opacity',f1(.45*(1-k)*10)/10)}
+    else{q.e.setAttribute('x',f1(q.x));q.e.setAttribute('y',f1(q.y));q.e.setAttribute('opacity',f1((1-k)*10)/10)}
+    return true});
+}
 function render(left){
   const th=S.theme,frac=T.dur?left/T.dur:0,st=$('stage');
   $('tm').textContent=fmt(left);st.classList.toggle('last',left<=10&&left>0);
   if(th==='classic'){const r=$('ringFg');if(r)r.setAttribute('stroke-dashoffset',(552.9*(1-frac)).toFixed(1))}
-  if(th==='bomb'){const bt=$('bombTxt');if(bt)bt.textContent=fmt(left);const f=$('fuse');if(f){const L=f.getTotalLength();f.style.strokeDasharray=`${L*frac} ${L}`;const p=f.getPointAtLength(L*frac);$('sparkG').setAttribute('transform',`translate(${p.x} ${p.y})`)}}
+  if(th==='bomb'){const bt=$('bombTxt');if(bt)bt.textContent=fmt(left);const m=$('fuseM'),f=$('fuse');if(m){if(!T.L)T.L=f.getTotalLength();const L=T.L,len=Math.max(0,L*frac);m.style.strokeDasharray=`${len} ${L+10}`;const p=f.getPointAtLength(len);$('sparkG').setAttribute('transform',`translate(${f1(p.x)} ${f1(p.y)})`);fx(p)}}
+  if(th==='classic'){const d=$('ringDot');if(d){const a=-frac*Math.PI*2;d.setAttribute('cx',f1(100+88*Math.cos(a)));d.setAttribute('cy',f1(100-88*Math.sin(a)))}}
   if(th==='xmas'){const N=24,on=Math.ceil(frac*N);document.querySelectorAll('.bulb').forEach(b=>{const i=+b.dataset.b;b.style.opacity=i<on?'':'.15';b.classList.toggle('twinkle',i<on)})}
-  if(th==='hall'){const w=$('wax'),fl=$('flame');if(w){const h=20+130*frac;w.setAttribute('y',570-h);w.setAttribute('height',h);fl.setAttribute('transform',`translate(0 ${150-h-30})`)}}
+  if(th==='hall'){const w=$('wax'),fl=$('flame'),dr=$('drip');if(w){const h=20+130*frac;w.setAttribute('y',570-h);w.setAttribute('height',h);fl.setAttribute('transform',`translate(0 ${150-h})`);dr.setAttribute('transform',`translate(0 ${150-h})`)}}
 }
 function finish(){
   T.done=true;T.left=0;render(0);const st=$('stage');st.classList.add('done');Sound.end(S.theme);
   const th=S.theme;
-  if(th==='bomb'){st.classList.add('shakeAll');$('sparkG').style.display='none';
+  if(th==='bomb'){st.classList.add('shakeAll');$('sparkG').style.display='none';$('fx').innerHTML='';
     const b=document.createElement('div');b.className='boom';b.innerHTML=`<svg viewBox="0 0 400 300"><path d="M200 10l30 70 70-40-20 70 90 10-80 40 60 60-90-20-10 90-50-70-60 60 0-80-80 10 50-60-60-50 90 0-20-80 60 40z" fill="#ffd166" stroke="#ff7a3d" stroke-width="10" stroke-linejoin="round"/><text x="200" y="175" text-anchor="middle" font-family="Rubik" font-weight="800" font-size="70" fill="#d4402f" transform="rotate(-6 200 160)">БАХ!</text></svg>`;st.appendChild(b);
     $('cap').textContent='Час вийшов!'}
-  else if(th==='xmas'){const s=document.getElementById('star');if(s){s.setAttribute('fill','#f2d06b');s.style.filter='drop-shadow(0 0 18px #ffe58a)'}document.querySelectorAll('.bulb').forEach(b=>{b.style.opacity='';b.classList.add('twinkle')});$('cap').textContent='Час вийшов! З святами!'}
+  else if(th==='xmas'){const s=document.getElementById('trstar');if(s){s.setAttribute('fill','#f2d06b');s.style.filter='drop-shadow(0 0 18px #ffe58a)'}document.querySelectorAll('.bulb').forEach(b=>{b.style.opacity='';b.classList.add('twinkle')});$('cap').textContent='Час вийшов! З святами!'}
   else if(th==='hall'){const fl=$('flame');if(fl)fl.style.display='none';const f=$('pface');if(f){f.setAttribute('fill','#ffd166');f.style.filter='drop-shadow(0 0 20px #ffb02e)'}
     $('ghostBox').innerHTML=`<svg class="ghost" viewBox="0 0 200 220" style="width:min(30vmin,240px)"><path d="M100 10c50 0 80 40 80 90v110l-25-18-25 18-30-20-30 20-25-18-25 18V100c0-50 30-90 80-90z" fill="#fffcf5"/><ellipse cx="72" cy="90" rx="13" ry="18" fill="#2a1b47"/><ellipse cx="128" cy="90" rx="13" ry="18" fill="#2a1b47"/><ellipse cx="100" cy="140" rx="18" ry="22" fill="#2a1b47"/></svg>`;
     $('cap').textContent='Бу! Час вийшов!'}
