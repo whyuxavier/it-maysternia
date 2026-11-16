@@ -190,6 +190,62 @@ body.upd .hero,body.upd .catalog{display:none}
 .uitem p{margin:0;color:var(--muted);font-size:14px;line-height:1.35}
 .ubadge{display:inline-block;margin-top:6px;padding:2px 9px;border-radius:9px;font:800 12px Nunito,sans-serif;color:#2e2638}
 @media (max-width:600px){.uday{grid-template-columns:1fr;gap:10px}.uitems{grid-template-columns:1fr}}
+/* ===== головна: маршрути, топ-3 тижня, нове ===== */
+.homex{display:none;padding:10px 0 60px}
+body.home .homex{display:block}
+body.home .hero{min-height:min(640px,calc(100svh - 140px))}
+.hblock+.hblock{margin-top:44px}
+.hhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.hhead h2{font-size:clamp(24px,3vw,30px)}
+.hhead p{margin:4px 0 0;color:var(--muted)}
+.hhead a{font:800 15px Nunito,sans-serif;color:var(--ink)}
+.hroutes{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.hroute{display:flex;flex-direction:column;gap:10px;padding:18px 18px 16px;border-radius:22px;background:var(--card);text-decoration:none;color:var(--ink);box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line);border-top:8px solid var(--dot);transition:transform .15s}
+.hroute:hover{transform:translateY(-3px) rotate(-.4deg)}
+.hroute .kicker,.route .kicker{font:800 12px Nunito,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.hroute h3{font-size:20px;margin:0}
+.hroute .next{font-size:14px;color:var(--muted)}
+.hroute .next b{color:var(--ink)}
+.hroute .go{align-self:flex-start;margin-top:4px;padding:9px 16px;border-radius:13px;background:var(--dot);font:800 15px Nunito,sans-serif;box-shadow:0 3px 0 var(--shadow)}
+.pbar{display:flex;align-items:center;gap:10px;font:800 13px Nunito,sans-serif;color:var(--muted)}
+.pbar span{flex:1;height:10px;border-radius:6px;background:var(--bg2);overflow:hidden}
+.pbar i{display:block;height:100%;border-radius:6px;background:var(--dot)}
+.top3 .card .rank{position:absolute;top:-10px;left:-8px;z-index:2;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--coral);color:#2e2638;font:800 18px Rubik,sans-serif;box-shadow:0 3px 0 var(--shadow);transform:rotate(-8deg)}
+.top3 .card:nth-child(2) .rank{background:var(--butter)}
+.top3 .card:nth-child(3) .rank{background:var(--mint)}
+.hnew{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+/* сторінка маршрутів */
+.route{padding:22px;border-radius:24px;background:var(--card);box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line);border-top:10px solid var(--dot)}
+.route+.route{margin-top:28px}
+.rhead{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;flex-wrap:wrap;margin-bottom:18px}
+.rhead h2{font-size:clamp(22px,3vw,28px);margin:2px 0 4px}
+.rhead p{margin:0;color:var(--muted)}
+.rhead .pbar{min-width:220px}
+.rsteps{list-style:none;margin:0;padding:0;display:grid;gap:12px;position:relative}
+.rstep{position:relative;display:grid;grid-template-columns:40px 120px minmax(0,1fr) auto;gap:14px;align-items:center;padding:10px 12px 10px 10px;border-radius:18px;background:var(--bg);box-shadow:0 0 0 1px var(--line)}
+.rstep:not(:last-child)::after{content:"";position:absolute;left:29px;top:calc(50% + 20px);height:calc(100% - 28px);border-left:3px dashed var(--line)}
+.rn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--card);font:800 17px Rubik,sans-serif;box-shadow:0 2px 0 var(--shadow),inset 0 0 0 2px var(--dot);position:relative;z-index:1}
+.rstep.done .rn{background:var(--dot)}
+.rstep.next{background:color-mix(in srgb,var(--dot) 28%,var(--card));box-shadow:0 3px 0 var(--shadow),0 0 0 2px var(--dot)}
+.rpic{display:block;border-radius:12px;overflow:hidden;background:var(--cbg);aspect-ratio:16/10}
+.rpic svg{display:block;width:100%;height:100%}
+.rt h3{font-size:18px;margin:0 0 2px}
+.rt p{margin:0;color:var(--muted);font-size:14.5px}
+.rt .nx{display:inline-block;margin-bottom:4px;padding:1px 8px;border-radius:8px;background:var(--dot);font:800 12px Nunito,sans-serif}
+.ract{display:flex;gap:8px;align-items:center}
+.ract .btn{padding:10px 15px;font-size:15px}
+.rchk{display:inline-flex;align-items:center;gap:7px;border:0;cursor:pointer;padding:10px 13px;border-radius:13px;background:var(--card);color:var(--ink);font:800 14px Nunito,sans-serif;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line)}
+.rchk svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.rchk[aria-pressed="true"]{background:var(--mint)}
+.rchk[aria-pressed="false"] svg{opacity:.25}
+@media (max-width:700px){
+  .rstep{grid-template-columns:34px minmax(0,1fr);gap:10px}
+  .rstep .rpic{display:none}
+  .rn{width:34px;height:34px;font-size:15px}
+  .rstep:not(:last-child)::after{left:26px}
+  .ract{grid-column:2}
+  .route{padding:16px}
+}
 /* бічна навігація каталогу (комп'ютер) */
 .cat-layout{display:block}
 .side{display:none}
@@ -421,6 +477,23 @@ main,footer{position:relative;z-index:1}
     </div>
   </section>
 
+  <section class="homex" aria-label="Що нового">
+    <div class="wrap">
+      <div class="hblock">
+        <div class="hhead"><div><h2>Маршрути</h2><p>Крок за кроком: що пройти спершу, а що потім.</p></div><a href="#routes">Усі маршрути</a></div>
+        <div class="hroutes" id="hRoutes"></div>
+      </div>
+      <div class="hblock">
+        <div class="hhead"><div><h2>Топ-3 тижня</h2><p>Що варто спробувати цього тижня.</p></div></div>
+        <div class="grid top3" id="hTop"></div>
+      </div>
+      <div class="hblock">
+        <div class="hhead"><div><h2>Нове</h2><p>Нещодавно додані й оновлені ресурси.</p></div><a href="#updates">Усі оновлення</a></div>
+        <div class="hnew" id="hNew"></div>
+      </div>
+    </div>
+  </section>
+
   <section class="catalog" id="catalog">
     <div class="wrap">
       <div class="cat-layout">
@@ -433,7 +506,7 @@ main,footer{position:relative;z-index:1}
 
   <section class="updates" id="updates">
     <div class="wrap">
-      <div class="uhead"><h2>Оновлення</h2><a class="btn" href="#1-4">До каталогу</a></div>
+      <div class="uhead"><h2>Оновлення</h2><a class="btn" href="#all">До каталогу</a></div>
       <div id="updList"></div>
     </div>
   </section>
@@ -934,10 +1007,71 @@ const byAge=(a,b)=>{const x=a.g||[0,0],y=b.g||[0,0];return x[0]-y[0]||x[1]-y[1]|
 /* розділи меню; порожні теми не показуємо */
 const NAV=[
  {id:'all',label:'Усе одразу',color:'--sky',ic:'Category'},
+ {id:'routes',label:'Маршрути',color:'--peach',ic:'Discovery'},
  ...TOPICS.filter(t=>APPS.some(a=>a.t===t.id)),
  {id:'games',label:'Ігри для перерви',color:'--coral',ic:'Game'},
  {id:'teacher',label:'Для вчителя',color:'--butter',ic:'Work'},
 ];
+/* ===== Маршрути: порядок ресурсів для групи класів.
+   Крок = [назва картки з APPS, коротка підказка]. Позначки «Пройдено» зберігаються в браузері учня. ===== */
+const ROUTES=[
+ {g:[1,4],color:'--peach',title:'Перші кроки з комп\'ютером',sub:'Від мишки й клавіатури до власних картинок',steps:[
+  ['Мій перший ПК','Познайомся з частинами комп\'ютера'],
+  ['Тренажер мишки та клавіатури','Навчися клікати, тягнути й друкувати'],
+  ['Клавіатурний пазл','Запам\'ятай, де стоять клавіші'],
+  ['MOUSE RACER','Перевір, як вправно керуєш мишкою'],
+  ['Пазл з твого фото','Завантаж фото й склади його по шматочках'],
+  ['Пікселька','Намалюй власну піксельну картинку']]},
+ {g:[5,8],color:'--mint',title:'Алгоритми, безпека й перший код',sub:'Від блоків до мови Python',steps:[
+  ['Keyboard Academy','Друкуй наосліп — у програмуванні знадобиться'],
+  ['Блок-схеми','Опиши алгоритм блоками'],
+  ['Робот-кур\'єр','Склади програму з циклами й умовами'],
+  ['Фішинг-детектор','Навчися розпізнавати шахраїв'],
+  ['Python з нуля','Перші програми мовою Python'],
+  ['Квест: Python, 8 клас','Перевір себе у квесті']]},
+ {g:[9,12],color:'--lilac',title:'Від документа до вебсайту',sub:'Документи, дані, Python і веб',steps:[
+  ['Місія «Документ»','Оформи справжній документ'],
+  ['Місія «Інтернет речей»','Розумні пристрої та дані'],
+  ['Квест: Python, 9 клас','Цикли, списки й вікна Tkinter'],
+  ['Excel Tournament','Формули й таблиці на швидкість'],
+  ['Місія «Аналітик даних»','Від запитання до висновку'],
+  ['Веб-програмування','HTML, CSS і JavaScript'],
+  ['Ghost in HTML','Виправ код і звільни привида'],
+  ['Баг-шторм','Фінал: лови помилки на швидкість']]},
+];
+/* Топ-3 тижня: впиши дату понеділка й три назви карток. Через 7 днів, якщо не оновити,
+   сайт сам щотижня обиратиме три інші ресурси. */
+const TOP3={from:'2026-11-16',items:['Робот-кур\'єр','Фішинг-детектор','Excel Tournament']};
+let RDONE={};try{RDONE=JSON.parse(localStorage.getItem('itm-route')||'{}')||{}}catch(e){}
+const saveR=()=>{try{localStorage.setItem('itm-route',JSON.stringify(RDONE))}catch(e){}};
+const appBy=t=>APPS.find(a=>a.title===t);
+const linkOf=a=>a.url||GH+a.repo+'/';
+const cls=g=>g[0]+'–'+g[1]+' клас';
+function rState(rt){const st=rt.steps.filter(s=>appBy(s[0]));const done=st.filter(s=>RDONE[s[0]]).length;return {st,done,next:st.find(s=>!RDONE[s[0]])}}
+const CHK='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+function routeHTML(rt){const {st,done,next}=rState(rt);
+  return `<div class="route" style="--dot:var(${rt.color})"><div class="rhead"><div><span class="kicker">Маршрут · ${cls(rt.g)}</span><h2>${rt.title}</h2><p>${rt.sub}</p></div>
+  <div class="pbar"><span><i style="width:${Math.round(done/st.length*100)}%"></i></span>${done} з ${st.length}</div></div>
+  <ol class="rsteps">${st.map((s,i)=>{const a=appBy(s[0]),d=!!RDONE[s[0]],nx=next&&next[0]===s[0];
+    return `<li class="rstep${d?' done':''}${nx?' next':''}"><span class="rn">${i+1}</span><a class="rpic" href="${linkOf(a)}" target="_blank" rel="noopener" style="--cbg:var(${a.bg})" tabindex="-1" aria-hidden="true"><svg viewBox="0 0 320 200">${(ART[a.art]||ART.default)()}</svg></a>
+    <div class="rt">${nx?'<span class="nx">Наступний крок</span>':''}<h3>${a.title}</h3><p>${s[1]}</p></div>
+    <div class="ract"><a class="btn${nx?' main':''}" href="${linkOf(a)}" target="_blank" rel="noopener">Відкрити</a><button type="button" class="rchk" data-done="${a.title.replace(/"/g,'&quot;')}" aria-pressed="${d}">${CHK}Пройдено</button></div></li>`}).join('')}</ol></div>`}
+function weekTop(){
+  const now=new Date(),from=new Date(TOP3.from+'T00:00:00');
+  if(now-from>=0&&now-from<7*864e5)return TOP3.items.map(appBy).filter(Boolean);
+  /* автоматичний вибір: однаковий для всіх протягом тижня */
+  const wk=Math.floor((now-new Date('2026-01-05T00:00:00'))/(7*864e5)),pool=APPS.filter(a=>!a.teacher);
+  const out=[];for(let i=0;out.length<3&&i<pool.length*3;i++){const a=pool[(wk*7+i*11)%pool.length];if(!out.includes(a))out.push(a)}return out}
+function renderHome(){
+  document.getElementById('hRoutes').innerHTML=ROUTES.map((rt,k)=>{const {st,done,next}=rState(rt);
+    return `<a class="hroute" href="#routes" data-age="${['1-4','5-8','9-12'][k]}" style="--dot:var(${rt.color})"><span class="kicker">${cls(rt.g)}</span><h3>${rt.title}</h3>
+    <div class="pbar"><span><i style="width:${Math.round(done/st.length*100)}%"></i></span>${done} з ${st.length}</div>
+    <span class="next">${next?`Далі: <b>${next[0]}</b>`:'Маршрут пройдено!'}</span><span class="go">${done?'Продовжити':'Почати'}</span></a>`}).join('');
+  document.getElementById('hTop').innerHTML=weekTop().map((a,i)=>card(a,'--coral').replace('<div class="pic">',`<span class="rank">${i+1}</span><div class="pic">`)).join('');
+  document.getElementById('hNew').innerHTML=UPDATES.flatMap(u=>u.items).slice(0,4).map(updItem).join('');
+}
+document.getElementById('hRoutes').addEventListener('click',e=>{const a=e.target.closest('[data-age]');if(!a)return;AGE=a.dataset.age;try{localStorage.setItem('itm-age',AGE)}catch(err){}});
+document.addEventListener('click',e=>{const b=e.target.closest('.rchk');if(!b)return;const t=b.dataset.done;if(RDONE[t])delete RDONE[t];else RDONE[t]=1;saveR();renderGrid();renderSide()});
 /* підпис розділу картки — для сторінки оновлень */
 const navOf=a=>NAV.find(n=>n.id===(a.fun?'games':a.teacher?'teacher':a.t));
 let AGE='all';try{AGE=localStorage.getItem('itm-age')||'all'}catch(e){}
@@ -961,7 +1095,8 @@ function renderAge(show){ageBar.hidden=!show;ageBar.innerHTML='<span class="al">
 ageBar.addEventListener('click',e=>{const b=e.target.closest('[data-age]');if(!b)return;AGE=b.dataset.age;try{localStorage.setItem('itm-age',AGE)}catch(e){}renderGrid();renderSide()});
 function renderGrid(){
   const id=current;let html='';
-  if(id==='games'){renderAge(true);html=section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)).sort(byAge))}
+  if(id==='routes'){renderAge(true);html=ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).map(routeHTML).join('')}
+  else if(id==='games'){renderAge(true);html=section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)).sort(byAge))}
   else if(id==='teacher'){renderAge(false);html=section('Для вчителя','Work','--butter',APPS.filter(a=>a.teacher).sort((a,b)=>(a.o||0)-(b.o||0)))}
   else{renderAge(true);
     const tps=id==='all'?TOPICS:TOPICS.filter(t=>t.id===id);
@@ -970,7 +1105,7 @@ function renderGrid(){
   if(!html)html='<p class="empty">Для цього класу тут поки нічого немає — обери інший клас.</p>';
   gridEl.innerHTML=html;
 }
-function navCount(n){if(n.id==='games')return APPS.filter(a=>a.fun&&fitA(a)).length;if(n.id==='teacher')return APPS.filter(a=>a.teacher).length;if(n.id==='all')return APPS.filter(a=>a.teacher||fitA(a)).length;return APPS.filter(a=>a.t===n.id&&fitA(a)).length}
+function navCount(n){if(n.id==='routes')return ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).length;if(n.id==='games')return APPS.filter(a=>a.fun&&fitA(a)).length;if(n.id==='teacher')return APPS.filter(a=>a.teacher).length;if(n.id==='all')return APPS.filter(a=>a.teacher||fitA(a)).length;return APPS.filter(a=>a.t===n.id&&fitA(a)).length}
 function renderSide(){const mc=document.getElementById('mcur');if(mc){const t=NAV.find(x=>x.id===current);mc.textContent=t?t.label:'';mc.hidden=current!=='all'}document.getElementById('mside').innerHTML=sideEl.innerHTML=NAV.map(t=>`<a href="#${t.id}" style="--dot:var(${t.color})"${t.id===current?' aria-current="true"':''}><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">${ICX[t.ic]||''}</svg></span><span class="lb">${t.label}</span><span class="n">${navCount(t)}</span></a>`).join('')};
 function setTab(id){current=id;renderGrid();renderSide()}
 /* старі посилання #1-4, #5-7, #8-11 → «Усе одразу» з потрібним класом */
@@ -1015,12 +1150,13 @@ const MONTHS=['січня','лютого','березня','квітня','тр�
 function renderUpdates(){
   document.getElementById('updList').innerHTML=UPDATES.map(u=>{
     const d=new Date(u.date+'T12:00:00');
-    return `<div class="uday"><div class="udate">${d.getDate()} ${MONTHS[d.getMonth()]}<small>${d.getFullYear()}</small></div><div class="uitems">${u.items.map(it=>{
+    return `<div class="uday"><div class="udate">${d.getDate()} ${MONTHS[d.getMonth()]}<small>${d.getFullYear()}</small></div><div class="uitems">${u.items.map(updItem).join('')}</div></div>`}).join('');
+}
+function updItem(it){
       const a=APPS.find(x=>x.title===it.t)||{title:it.t,desc:'',bg:'--bg2',art:'default'};
       const tab=navOf(a);
       return `<a class="uitem" href="${a.url||GH+a.repo+'/'}" target="_blank" rel="noopener" style="--cbg:var(${a.bg})"><div class="pic"><svg viewBox="0 0 320 200" aria-hidden="true">${(ART[a.art]||ART.default)()}</svg></div>
-        <div><h3>${a.title}</h3><p>${it.n||a.desc}</p><span class="ubadge" style="background:var(${it.k==='new'?'--mint':'--butter'})">${it.k==='new'?'Нове':'Оновлено'}</span>${tab?` <span class="ubadge" style="background:color-mix(in srgb,var(${tab.color}) 60%,transparent)">${tab.label}</span>`:''}</div></a>`}).join('')}</div></div>`}).join('');
-}
+        <div><h3>${a.title}</h3><p>${it.n||a.desc}</p><span class="ubadge" style="background:var(${it.k==='new'?'--mint':'--butter'})">${it.k==='new'?'Нове':'Оновлено'}</span>${tab?` <span class="ubadge" style="background:color-mix(in srgb,var(${tab.color}) 60%,transparent)">${tab.label}</span>`:''}</div></a>`}
 const LATEST=UPDATES[0].date;
 function seenUpd(){try{return localStorage.getItem('itm-upd')||''}catch(e){return''}}
 function markNew(){const fresh=seenUpd()<LATEST;document.getElementById('newDot').hidden=!fresh;document.getElementById('newTag').hidden=!fresh}
@@ -1041,7 +1177,7 @@ function route(){
   b.classList.remove('home','upd');
   if(id==='updates'){b.classList.add('upd');renderUpdates();try{localStorage.setItem('itm-upd',LATEST)}catch(e){}markNew()}
   else if(NAV.some(t=>t.id===id))setTab(id);
-  else b.classList.add('home');
+  else{b.classList.add('home');renderHome()}
   window.scrollTo({top:0,behavior:'instant'});
 }
 addEventListener('hashchange',()=>{oldHash();route()});
