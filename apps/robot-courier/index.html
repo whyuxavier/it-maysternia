@@ -383,7 +383,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
         <div class="maptabs" id="mapTabs"></div>
         <div class="mapbox" id="mapbox"></div>
         <div class="runbar">
-          <button class="btn go" id="bRun"><svg viewBox="0 0 24 24"><path class="ink" d="M7 4l13 8-13 8z"/></svg>Запустити</button>
+          <button class="btn go" id="bRun"><svg viewBox="0 0 24 24"><path class="ink" d="M5 3h2v19H5z"/><path class="ink" d="M7 4c4-2 6 2 12 0v9c-6 2-8-2-12 0z"/></svg>Старт</button>
           <button class="btn" id="bStep"><svg viewBox="0 0 24 24"><path class="ink" d="M5 4l10 8-10 8z"/><rect x="16" y="4" width="3.5" height="16" rx="1" class="ink"/></svg>Крок</button>
           <button class="btn" id="bReset"><svg viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M4 12a8 8 0 1 0 3-6.2"/><path class="stk" style="stroke-width:2.6" d="M4 3v5h5"/></svg>Спочатку</button>
         </div>
@@ -468,7 +468,7 @@ const ico=k=>`<span class="ico"><svg viewBox="0 0 24 24"><use href="#${BLOCKS[k]
    Мапа: '.' трава, '#' кущ, 'H' будинок, робот: '>' '<' '^' 'v' (куди дивиться). best — найкоротша програма (кількість блоків). */
 const CHAPTERS=[
  {title:'Лінійні алгоритми',sub:'Команди виконуються одна за одною.',blocks:['fwd','left','right'],levels:[
-  {name:'Перша доставка',task:'Додай три блоки «Крок вперед» і натисни «Запустити».',best:3,maps:[['>..H']]},
+  {name:'Перша доставка',task:'Додай три блоки «Крок вперед» і натисни «Старт».',best:3,maps:[['>..H']]},
   {name:'Перший поворот',task:'Поворот змінює напрямок, але робот лишається на місці.',best:5,maps:[['>.#','..H']]},
   {name:'Униз і праворуч',task:'Подумай, куди дивитиметься робот після повороту ліворуч.',best:6,maps:[['v...','.##.','...H']]},
   {name:'Дві посилки',task:'Доставиш обидві — рівень пройдено.',best:7,maps:[['>.H.','##.#','...H']]},
