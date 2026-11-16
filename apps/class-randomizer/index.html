@@ -148,7 +148,8 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 
 /* timer stage (fullscreen overlay) */
 .stage{position:fixed;inset:0;z-index:80;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;color:var(--ink)}
-.stage .scene{position:absolute;inset:0;pointer-events:none}
+.stage .scene{position:absolute;inset:0;pointer-events:none;z-index:1}
+#snow{position:fixed;inset:0;z-index:0;pointer-events:none}
 .stage .tm{position:relative;z-index:3;font:800 clamp(64px,17vw,220px) Rubik;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1}
 .stage .ctrl{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:5;flex-wrap:wrap;justify-content:center;width:calc(100% - 24px)}
 .stage .ctrl .btn{padding:11px 16px;color:var(--ink)}
@@ -181,8 +182,6 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 .t-xmas{background:linear-gradient(#1d2d55,#2f4c7e 70%,#e9eef8 70.2%);color:#fff}
 .t-xmas .tm{text-shadow:0 4px 0 rgba(0,0,0,.25);margin-top:-12vh}
 .t-xmas .cap{color:#fff}
-.snow i{position:absolute;top:-10px;border-radius:50%;background:#fff;opacity:.85;animation:snow linear infinite}
-@keyframes snow{to{transform:translate(30px,105vh)}}
 .bulb{transition:fill .4s,opacity .4s}
 .twinkle{animation:tw 1.2s infinite alternate}
 @keyframes tw{to{opacity:.45}}
@@ -355,6 +354,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
 </main>
 
 <div class="stage" id="stage" hidden>
+  <div id="snow" hidden></div>
   <div class="scene" id="scene"></div>
   <div class="tm" id="tm">05:00</div>
   <div class="cap" id="cap"></div>
@@ -611,10 +611,9 @@ function sceneHTML(th){
       <g id="sparkG"><g class="spark" style="transform-box:fill-box;transform-origin:center"><circle r="13" fill="#ffb02e"/><path d="M0 -26l5 15 15 -5 -10 12 13 9 -16 1 2 16 -9 -13 -9 13 2 -16 -16 -1 13 -9 -10 -12 15 5z" fill="#ffd166"/><circle r="6" fill="#fff6d6"/></g></g>
       <rect x="100" y="210" width="200" height="72" rx="12" fill="#1a1020" stroke="#55506b" stroke-width="4"/><text id="bombTxt" x="200" y="263" text-anchor="middle" font-family="ui-monospace,Consolas,monospace" font-weight="800" font-size="50" fill="#ff5a4a" style="filter:drop-shadow(0 0 6px rgba(255,90,74,.7))">00:00</text>
     </svg>`;
-  if(th==='xmas'){let sn='';for(let i=0;i<70;i++)sn+=`<i style="left:${Math.random()*100}%;width:${3+Math.random()*6}px;height:${3+Math.random()*6}px;animation-duration:${5+Math.random()*7}s;animation-delay:${-Math.random()*10}s"></i>`;
+  if(th==='xmas'){
     let bulbs='';const N=24;for(let i=0;i<N;i++){const x=40+i*(920/(N-1)),y=60+Math.sin(i/(N-1)*Math.PI)*50;bulbs+=`<path d="M${x} ${y-14}v8" stroke="#1d2d55" stroke-width="3"/><ellipse class="bulb twinkle" data-b="${i}" cx="${x}" cy="${y+4}" rx="9" ry="13" fill="${['#ee8f80','#f2d06b','#86cfa8','#8ec5ee','#f4a3c4'][i%5]}" style="animation-delay:${(i%5)*.2}s"/>`}
-    return `<div class="snow" style="position:absolute;inset:0">${sn}</div>
-      <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMin slice" style="position:absolute;inset:0;width:100%;height:100%"><path d="M30 46Q500 140 970 46" fill="none" stroke="#1d2d55" stroke-width="3"/>${bulbs}</svg>
+    return `      <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMin slice" style="position:absolute;inset:0;width:100%;height:100%"><path d="M30 46Q500 140 970 46" fill="none" stroke="#1d2d55" stroke-width="3"/>${bulbs}</svg>
       <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMax meet" style="position:absolute;left:0;right:0;bottom:0;width:100%;height:46%">
         <ellipse cx="500" cy="590" rx="520" ry="40" fill="#fff"/>
         <g id="tree"><path d="M820 160l90 120h-50l80 110h-60l90 120H640l90-120h-60l80-110h-50z" fill="#3f9563"/><rect x="805" y="510" width="30" height="50" fill="#8a5a3a"/>
@@ -633,11 +632,20 @@ function sceneHTML(th){
         <g id="candle"><rect id="wax" x="190" y="420" width="44" height="150" rx="8" fill="#fff4dc"/><path id="flame" class="flame" d="M212 390q-16 18 0 30q16-12 0-30z" fill="#ffb02e"/></g>
       </svg><div id="ghostBox" style="position:absolute;left:5vw;top:8vh;pointer-events:none"></div>`}
 }
+/* Сніг: snow.js вантажиться лише для теми «Різдво» */
+let snow=null,snowReq=0;
+function snowOn(){
+  const el=$('snow'),id=++snowReq;el.hidden=false;
+  import('./snow.js').then(m=>{if(id!==snowReq||$('stage').hidden)return;snow=m.mount(el,{alpha:.75});snow.wake()}).catch(()=>{el.hidden=true});
+}
+function snowOff(){snowReq++;if(snow){snow.destroy();snow=null}$('snow').hidden=true}
 function openTimer(){
+  snowOff();
   const st=$('stage');st.className='stage t-'+S.theme;$('scene').innerHTML=sceneHTML(S.theme);$('cap').textContent='';
   st.hidden=false;document.body.style.overflow='hidden';
   T={dur:S.dur,left:S.dur,end:performance.now()+S.dur*1000,paused:false,raf:0,lastS:null,done:false};
   setPauseBtn();tickTimer();Sound.unlock();Sound.add();
+  if(S.theme==='xmas')snowOn();
   if(document.documentElement.requestFullscreen&&!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{})}
 }
 function setPauseBtn(){$('tPause').querySelector('span').textContent=T&&T.paused?'Далі':'Пауза'}
@@ -670,7 +678,7 @@ function finish(){
     $('cap').textContent='Бу! Час вийшов!'}
   else $('cap').textContent='Час вийшов!';
 }
-function closeTimer(){if(T)cancelAnimationFrame(T.raf);T=null;$('stage').hidden=true;$('stage').querySelectorAll('.boom').forEach(b=>b.remove());document.body.style.overflow='';if(document.fullscreenElement)document.exitFullscreen().catch(()=>{})}
+function closeTimer(){snowOff();if(T)cancelAnimationFrame(T.raf);T=null;$('stage').hidden=true;$('stage').querySelectorAll('.boom').forEach(b=>b.remove());document.body.style.overflow='';if(document.fullscreenElement)document.exitFullscreen().catch(()=>{})}
 $('startTimer').onclick=openTimer;
 $('tClose').onclick=closeTimer;
 $('tPause').onclick=()=>{if(!T||T.done)return;if(T.paused){T.end=performance.now()+T.left*1000;T.paused=false}else{T.paused=true}setPauseBtn()};
