@@ -288,6 +288,19 @@ html,html[data-theme=dark]{color-scheme:normal}
 </style>
 <style>:root{--bg-tx:#3b3450;--bg2-tx:#3b3450;--panel-tx:#3b3450;--panel2-tx:#3b3450;--line-tx:#3b3450;--muted-tx:#d5c7f1;--mint-tx:#bfe3cf;--mint-d-tx:#bfe3cf;--violet-tx:#d5c7f1;--amber-tx:#f6c6a6;--red-tx:#f5bfd3;--ink-tx:#3b3450;--pc0:#bfe3cf;--pc1:#2b283e;--pc2:#322e48;--pc3:#403b5c;--pc4:#373350;--pc5:#2e2b43;--pc6:#f5bfd3;--pc7:#f6c6a6;--pc8:#2d2a41;--pc9:#d5c7f1;--pc10:#d5c7f1;--pc11:#f5bfd3;--pc12:#d5c7f1;--pc13:#bfe3cf;--pc14:#bddcf3;--pc15:#f6e19c;--pc16:#ca7285;--pc17:#8972ca;--pc18:#d5c7f1;--pc19:#caa372;--pc20:#f6c6a6;--pc21:#72caae;}</style>
 <script>document.documentElement.setAttribute("data-theme","dark")</script>
+<script>/* ІТ-Майстерня: ім'я та клас з профілю учня + запис результату для вчителя */
+(function(){
+function me(){try{var c=JSON.parse(localStorage.getItem('itm-me')||'null'),P=JSON.parse(localStorage.getItem('itm-profiles')||'{}');if(c&&P[c.id]&&Date.now()-c.t<90*60e3)return {id:c.id,p:P[c.id]}}catch(e){}return null}
+window.itmResult=function(q,grade,info){try{info=info||{};var m=me(),R=JSON.parse(localStorage.getItem('itm-results')||'{}');
+  var key=m?m.id:(info.name?('anon|'+String(info.name).trim().toLowerCase()+'|'+String(info.cls||'').trim().toLowerCase()):null);if(!key)return;
+  var row=R[key]=R[key]||{};row._name=m?m.p.name:info.name;row._cls=m?m.p.cls:(info.cls||'');
+  row[q]={g:grade,t:info.txt||'',d:Date.now()};localStorage.setItem('itm-results',JSON.stringify(R))}catch(e){}};
+var m=me();if(!m)return;var parts=m.p.name.split(/\s+/),first=parts[0],last=parts.slice(1).join(' ');
+var MAP={nm:m.p.name,fn:first,ln:last,cl:m.p.cls,nameIn:m.p.name,certName:m.p.name};
+function fill(){for(var id in MAP){var el=document.getElementById(id);if(el&&!el.value&&!el.dataset.itm&&MAP[id]){el.value=MAP[id];el.dataset.itm='1';el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}))}}}
+document.addEventListener('DOMContentLoaded',function(){fill();new MutationObserver(fill).observe(document.body,{childList:true,subtree:true})});
+})();
+</script>
 </head>
 <body>
 
@@ -1176,7 +1189,7 @@ function winModal(i){
 
 /* ===================== final & certificate ===================== */
 function openFinal(fresh){
-  $('#certName').value=S.name||'';show('final');
+  $('#certName').value=S.name||'';show('final');itmResult('Ghost in HTML',null,{name:S.name,txt:Object.values(S.rooms||{}).filter(r=>r.done).length+' з 12 кімнат'});
   const g=$('.final-ghost');g.classList.remove('fly');void g.getBoundingClientRect();g.classList.add('fly');
   drawCert();if(fresh)setTimeout(()=>play('boo'),300);
 }

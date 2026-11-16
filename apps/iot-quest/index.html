@@ -237,6 +237,19 @@ document.addEventListener('DOMContentLoaded',function(){pwTheme(t);var b=documen
 b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path class="moon" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/><g class="sun"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.8v2.6M12 19.6v2.6M1.8 12h2.6M19.6 12h2.6M4.8 4.8l1.8 1.8M17.4 17.4l1.8 1.8M4.8 19.2l1.8-1.8M17.4 6.6l1.8-1.8"/></g></svg>';
 b.onclick=function(){pwTheme(t==='dark'?'light':'dark')};var ib=document.querySelector('#infoBtn,#ib,.ib-info');if(ib&&getComputedStyle(ib).position!=='fixed'){b.classList.add('inl');ib.parentNode.insertBefore(b,ib)}else document.body.appendChild(b)})})();
 </script>
+<script>/* ІТ-Майстерня: ім'я та клас з профілю учня + запис результату для вчителя */
+(function(){
+function me(){try{var c=JSON.parse(localStorage.getItem('itm-me')||'null'),P=JSON.parse(localStorage.getItem('itm-profiles')||'{}');if(c&&P[c.id]&&Date.now()-c.t<90*60e3)return {id:c.id,p:P[c.id]}}catch(e){}return null}
+window.itmResult=function(q,grade,info){try{info=info||{};var m=me(),R=JSON.parse(localStorage.getItem('itm-results')||'{}');
+  var key=m?m.id:(info.name?('anon|'+String(info.name).trim().toLowerCase()+'|'+String(info.cls||'').trim().toLowerCase()):null);if(!key)return;
+  var row=R[key]=R[key]||{};row._name=m?m.p.name:info.name;row._cls=m?m.p.cls:(info.cls||'');
+  row[q]={g:grade,t:info.txt||'',d:Date.now()};localStorage.setItem('itm-results',JSON.stringify(R))}catch(e){}};
+var m=me();if(!m)return;var parts=m.p.name.split(/\s+/),first=parts[0],last=parts.slice(1).join(' ');
+var MAP={nm:m.p.name,fn:first,ln:last,cl:m.p.cls,nameIn:m.p.name,certName:m.p.name};
+function fill(){for(var id in MAP){var el=document.getElementById(id);if(el&&!el.value&&!el.dataset.itm&&MAP[id]){el.value=MAP[id];el.dataset.itm='1';el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}))}}}
+document.addEventListener('DOMContentLoaded',function(){fill();new MutationObserver(fill).observe(document.body,{childList:true,subtree:true})});
+})();
+</script>
 </head>
 <body><main id="app"></main>
 <script>
@@ -413,7 +426,7 @@ function renderQ(){HC.start();if(state.i>=Q.length){state.finished=true;save();r
 }
 
 function report(){HC.stop();
- const ok=state.res.filter(r=>r&&r.ok).length,grade=Math.max(1,Math.round(ok/Q.length*12));
+ const ok=state.res.filter(r=>r&&r.ok).length,grade=Math.max(1,Math.round(ok/Q.length*12));itmResult('Місія «Інтернет речей»',grade,{name:state.name,cls:state.cls,txt:ok+' з '+Q.length});
  const verdict=grade>=10?'Відмінно':grade>=7?'Добре':grade>=4?'Задовільно':'Потрібно повторити тему';
  const lv=LEVELS.map((n,k)=>{const qs=Q.map((q,i)=>i).filter(i=>Q[i].lv===k),c=qs.filter(i=>state.res[i]&&state.res[i].ok).length;return{n,c,t:qs.length}});
  const errs=Q.map((q,i)=>({q,i,r:state.res[i]})).filter(x=>!x.r||!x.r.ok);

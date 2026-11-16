@@ -261,6 +261,7 @@ body.teach .tmode{display:inline-flex}
 .pform input{padding:11px 13px;border-radius:13px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:700 16px Nunito,sans-serif}
 .pform .btn{justify-self:start;margin-top:8px}
 .pout{margin-top:12px;border:0;background:none;cursor:pointer;color:var(--muted);font:800 14px Nunito,sans-serif;text-decoration:underline}
+.sres{margin-top:12px;padding:10px 16px;font-size:15px}
 .srow.col{flex-direction:column;align-items:stretch}
 .slist{display:grid;gap:6px}
 .slist .si{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border-radius:12px;background:var(--card);font-weight:700}
@@ -271,6 +272,17 @@ body.teach .tmode{display:inline-flex}
 .rlogin{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px;padding:14px 16px;border-radius:18px;background:color-mix(in srgb,var(--butter) 45%,var(--card));box-shadow:0 0 0 1px var(--line)}
 .rlogin b{font:800 16px Rubik,sans-serif}
 .rlogin .btn{padding:10px 16px;font-size:15px}
+/* таблиця результатів */
+.res .rtable{overflow-x:auto;border-radius:18px;background:var(--card);box-shadow:0 4px 0 var(--shadow),0 0 0 1px var(--line)}
+.res table{border-collapse:collapse;width:100%;min-width:560px;font-size:14.5px}
+.res th,.res td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.res th{font:800 13px Nunito,sans-serif;color:var(--muted);background:var(--bg2);white-space:nowrap}
+.res td small{display:block;color:var(--muted);font-size:12px}
+.res td.mt{color:var(--muted)}
+.res tr:last-child td{border-bottom:0}
+.ract2{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.ract2 .btn{padding:11px 16px;font-size:15px}
+.rnote{margin:8px 0 0;font-size:14px;color:var(--muted)}
 /* налаштування */
 #setDlg{max-width:440px}
 .srow{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:16px;padding:14px;border-radius:16px;background:var(--bg)}
@@ -587,6 +599,7 @@ main,footer{position:relative;z-index:1}
   <h2 id="setT">Налаштування</h2>
   <div class="srow"><div><b>Режим вчителя</b><small>Поради «Як на уроці» біля кожного ресурсу</small></div>
     <button type="button" class="sw" id="swTeach" role="switch" aria-checked="false" aria-label="Режим вчителя"><i></i></button></div>
+  <a class="btn sres" id="sRes" href="#teacher" hidden>Результати учнів</a>
   <div class="srow col"><div><b>Учні на цьому комп'ютері</b><small>Прогрес зберігається лише в цьому браузері</small></div><div class="slist" id="sList"></div></div>
 </div></dialog>
 <dialog id="whoDlg" aria-labelledby="whoT"><div class="dlg who">
@@ -1151,11 +1164,11 @@ function setTeach(on){TEACH=on;try{on?localStorage.setItem('itm-teacher','1'):lo
 function teachHash(){if(location.hash==='#vchytel'){setTeach(true);history.replaceState(null,'','#all');return true}return false}
 document.getElementById('tExit').addEventListener('click',()=>{setTeach(false);route()});
 const setDlg=document.getElementById('setDlg'),swT=document.getElementById('swTeach');
-function syncSet(){swT.setAttribute('aria-checked',String(TEACH));
+function syncSet(){swT.setAttribute('aria-checked',String(TEACH));document.getElementById('sRes').hidden=!TEACH;
   document.getElementById('sList').innerHTML=Object.keys(PROF).sort().map(id=>`<div class="si"><span>${esc(PROF[id].name)} <small>${esc(PROF[id].cls)}</small></span><button type="button" data-del="${esc(id)}" aria-label="Видалити ${esc(PROF[id].name)}">×</button></div>`).join('')}
 document.getElementById('sList').addEventListener('click',e=>{const d=e.target.closest('[data-del]');if(!d)return;const id=d.dataset.del;if(ME===id){swapStore('');ME=null;RDONE=GUEST}else{try{if(localStorage.getItem('itm-owner')===id)swapStore('')}catch(err){}}delete PROF[id];saveR();syncWho();syncSet();route()});
 document.getElementById('mSet').addEventListener('click',()=>{setMenu(false);syncSet();setDlg.showModal()});
-setDlg.addEventListener('click',e=>{if(e.target===setDlg||e.target.closest('[data-x]'))setDlg.close()});
+setDlg.addEventListener('click',e=>{if(e.target===setDlg||e.target.closest('[data-x]')||e.target.closest('#sRes'))setDlg.close()});
 swT.addEventListener('click',()=>{setTeach(!TEACH);syncSet();route()});
 const tipDlg=document.getElementById('tipDlg');
 tipDlg.addEventListener('click',e=>{if(e.target===tipDlg||e.target.closest('[data-x]'))tipDlg.close()});
@@ -1169,6 +1182,28 @@ document.addEventListener('click',e=>{const b=e.target.closest('.tbtn');if(!b)re
   ${H('<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>','Що перевірити',t[3])}
   <a class="btn main open" href="${linkOf(a)}" target="_blank" rel="noopener">Відкрити ресурс</a>`;
   tipDlg.showModal()});
+/* ===== Результати учнів на цьому комп'ютері (лише в режимі вчителя).
+   Квести самі записують оцінку в itm-results; маршрути — з профілів. ===== */
+const RQ=['Квест: Python, 8 клас','Квест: Python, 9 клас','Місія «Документ»','Місія «Інтернет речей»','Місія «Аналітик даних»','Excel Tournament','Ghost in HTML'];
+function resRows(){let R={};try{R=JSON.parse(localStorage.getItem('itm-results')||'{}')||{}}catch(e){}
+  const ids=new Set([...Object.keys(PROF),...Object.keys(R)]);
+  return [...ids].map(id=>{const p=PROF[id],x=R[id]||{};return {id,name:p?p.name:(x._name||'—'),cls:p?p.cls:(x._cls||''),steps:p?Object.keys(p.done||{}).length:0,res:x}})
+    .sort((a,b)=>a.cls.localeCompare(b.cls,'uk')||a.name.localeCompare(b.name,'uk'))}
+function resultsHTML(){const rows=resRows(),qs=RQ.filter(q=>rows.some(r=>r.res[q]));
+  const cell=v=>!v?'<td class="mt">—</td>':`<td title="${esc(v.t)} · ${new Date(v.d).toLocaleDateString('uk-UA')}"><b>${v.g==null?esc(v.t):v.g}</b>${v.g!=null&&v.t?`<small>${esc(v.t)}</small>`:''}</td>`;
+  return `<div class="sec res"><h2 class="sech" style="--dot:var(--lilac)"><span class="ic"><svg viewBox="0 0 24 24">${ICX.Graph||''}</svg></span>Результати учнів на цьому комп'ютері<span class="n">${rows.length}</span></h2>
+  ${rows.length?`<div class="rtable"><table><thead><tr><th>Учень</th><th>Клас</th><th>Кроки маршруту</th>${qs.map(q=>`<th>${esc(q)}</th>`).join('')}</tr></thead><tbody>
+  ${rows.map(r=>`<tr><td>${esc(r.name)}</td><td>${esc(r.cls)}</td><td>${r.steps}</td>${qs.map(q=>cell(r.res[q])).join('')}</tr>`).join('')}</tbody></table></div>
+  <div class="ract2"><button type="button" class="btn main" id="resCsv">Зберегти у файл (CSV)</button><button type="button" class="btn" id="resClr">Очистити результати</button></div>
+  <p class="mt rnote">Збережіть файл на кожному комп'ютері класу — його можна відкрити в Excel чи Google Таблицях.</p>`
+  :'<p class="empty">Поки немає результатів. Учні входять через меню (ім\'я та клас), а квести самі записують оцінку.</p>'}</div>`}
+document.addEventListener('click',e=>{
+  if(e.target.closest('#resCsv')){const rows=resRows(),qs=RQ.filter(q=>rows.some(r=>r.res[q]));
+    const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+    const lines=[['Учень','Клас','Кроки маршруту',...qs].map(q).join(';'),...rows.map(r=>[r.name,r.cls,r.steps,...qs.map(k=>r.res[k]?(r.res[k].g==null?r.res[k].t:r.res[k].g):'')].map(q).join(';'))];
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'}));a.download=`результати-${new Date().toISOString().slice(0,10)}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+  if(e.target.closest('#resClr')&&confirm('Видалити всі результати квестів на цьому комп\'ютері? Профілі учнів лишаться.')){try{localStorage.removeItem('itm-results')}catch(err){}renderGrid()}
+});
 /* ===== Маршрути: порядок ресурсів для групи класів.
    Крок = [назва картки з APPS, коротка підказка]. Позначки «Пройдено» зберігаються в браузері учня. ===== */
 const ROUTES=[
@@ -1303,7 +1338,7 @@ function renderGrid(){
   const id=current;let html='';
   if(id==='routes'){renderAge(true);html=(ME?'':`<div class="rlogin"><div><b>Увійди, щоб зберігати свій прогрес</b><br><small>Кожен учень на цьому комп'ютері має свої позначки.</small></div><button type="button" class="btn main" onclick="openWho()">Увійти</button></div>`)+ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).map(routeHTML).join('')}
   else if(id==='games'){renderAge(true);html=section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))}
-  else if(id==='teacher'){renderAge(false);html=section('Для вчителя','Work','--butter',APPS.filter(a=>a.teacher).sort((a,b)=>(a.o||0)-(b.o||0)))}
+  else if(id==='teacher'){renderAge(false);html=section('Для вчителя','Work','--butter',APPS.filter(a=>a.teacher).sort((a,b)=>(a.o||0)-(b.o||0)))+(TEACH?resultsHTML():'')}
   else{renderAge(true);
     const tps=id==='all'?TOPICS:TOPICS.filter(t=>t.id===id);
     html+=tps.map(t=>section(t.label,t.ic,t.color,APPS.filter(a=>a.t===t.id&&fitA(a)))).join('');

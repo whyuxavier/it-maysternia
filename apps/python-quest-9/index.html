@@ -285,6 +285,19 @@ h1,h2,h3{font-family:var(--fd);letter-spacing:0}
 #themeBtn .sun path{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
 body.dark #themeBtn .moon,body:not(.dark) #themeBtn .sun{display:none}
 </style>
+<script>/* ІТ-Майстерня: ім'я та клас з профілю учня + запис результату для вчителя */
+(function(){
+function me(){try{var c=JSON.parse(localStorage.getItem('itm-me')||'null'),P=JSON.parse(localStorage.getItem('itm-profiles')||'{}');if(c&&P[c.id]&&Date.now()-c.t<90*60e3)return {id:c.id,p:P[c.id]}}catch(e){}return null}
+window.itmResult=function(q,grade,info){try{info=info||{};var m=me(),R=JSON.parse(localStorage.getItem('itm-results')||'{}');
+  var key=m?m.id:(info.name?('anon|'+String(info.name).trim().toLowerCase()+'|'+String(info.cls||'').trim().toLowerCase()):null);if(!key)return;
+  var row=R[key]=R[key]||{};row._name=m?m.p.name:info.name;row._cls=m?m.p.cls:(info.cls||'');
+  row[q]={g:grade,t:info.txt||'',d:Date.now()};localStorage.setItem('itm-results',JSON.stringify(R))}catch(e){}};
+var m=me();if(!m)return;var parts=m.p.name.split(/\s+/),first=parts[0],last=parts.slice(1).join(' ');
+var MAP={nm:m.p.name,fn:first,ln:last,cl:m.p.cls,nameIn:m.p.name,certName:m.p.name};
+function fill(){for(var id in MAP){var el=document.getElementById(id);if(el&&!el.value&&!el.dataset.itm&&MAP[id]){el.value=MAP[id];el.dataset.itm='1';el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}))}}}
+document.addEventListener('DOMContentLoaded',function(){fill();new MutationObserver(fill).observe(document.body,{childList:true,subtree:true})});
+})();
+</script>
 </head>
 <body>
 
@@ -519,7 +532,7 @@ $("fb").innerHTML=`<div class="fb ${c}"><div class="fb-h"><b>${d>0?"+":""}${d} X
 document.querySelectorAll(".opt,.ln").forEach(e=>e.style.pointerEvents="none");
 $("nextBtn").focus({preventScroll:true});$("fb").scrollIntoView({block:"nearest",behavior:calm?"auto":"smooth"})}
 
-function fin(){HC.stop();$("xpc").hidden=true;const full=S.log.filter(x=>x.d==10).length,part=S.log.filter(x=>x.d==5).length,wr=T.length-full-part,gr=Math.max(1,Math.round(12*(full+part/2)/T.length));const p=S.xp/MAX,rk=p>=.85?"🏆 Майстер коду":p>=.6?"💻 Програміст":p>=.35?"🔧 Практик":"🌱 Новачок";
+function fin(){HC.stop();$("xpc").hidden=true;const full=S.log.filter(x=>x.d==10).length,part=S.log.filter(x=>x.d==5).length,wr=T.length-full-part,gr=Math.max(1,Math.round(12*(full+part/2)/T.length));itmResult('Квест: Python, 9 клас',gr,{name:S.name,cls:S.cls,txt:'XP '+S.xp});const p=S.xp/MAX,rk=p>=.85?"🏆 Майстер коду":p>=.6?"💻 Програміст":p>=.35?"🔧 Практик":"🌱 Новачок";
 let rows="",rep=`Підсумковий квест: Python, 9 клас\n${S.name}, ${S.cls}\nОцінка: ${gr} з 12 (правильних: ${full}, частково: ${part}, неправильних: ${wr})\nXP: ${S.xp} з ${MAX} — ${rk}\n${HC.text()}\n`;
 LV.forEach((l,li)=>{const g=S.log.filter(x=>x.li==li),s=g.reduce((a,x)=>a+x.d,0),mx=l.k.length*10;rows+=`<div class="lvl-row"><span>${l.t}</span><span class="bar"><i style="width:${Math.max(0,s)/mx*100}%"></i></span><span class="v${s<0?" neg":""}">${s>0?"+":""}${s} XP</span></div>`;rep+=`${l.t}: ${s} XP\n`});
 const C=2*Math.PI*58,col=gr>=10?"var(--ok)":gr>=7?"var(--pr)":gr>=4?"var(--wa)":"var(--er)";
