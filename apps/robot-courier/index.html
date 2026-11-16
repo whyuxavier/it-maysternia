@@ -59,7 +59,7 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 .btn:disabled{opacity:.5;cursor:default;transform:none}
 .art{position:relative;justify-self:end;width:100%;max-width:560px}
 .creator{display:grid;grid-template-columns:190px 1fr;gap:18px;align-items:center;margin-top:10px}
-#creatorDlg{max-width:600px}
+#creatorDlg{max-width:680px}
 .hstage{position:relative;background:linear-gradient(#e6f2ea,#f4f0e4);border-radius:28px;box-shadow:0 6px 0 var(--shadow),0 0 0 1px var(--line);overflow:hidden;aspect-ratio:520/380}
 .hscene{position:absolute;inset:0;width:100%;height:100%}
 .hbot{position:absolute;left:30%;bottom:9%;width:28%;border:0;background:none;padding:0;cursor:pointer;animation:botDrive 1.1s cubic-bezier(.3,1.2,.5,1) .2s both}
@@ -76,13 +76,29 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 .cr-bot.bump{animation:bump .35s cubic-bezier(.3,1.6,.5,1)}
 @keyframes bump{40%{transform:translateY(-6px) scale(1.04)}}
 .cr-opts{display:grid;gap:9px}
+.gpill{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border-radius:13px;background:var(--card);font:800 15px Rubik;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line)}
+.gpill svg{width:20px;height:20px}
+.gpill.spin svg{animation:spin .6s ease}
+@keyframes spin{to{transform:rotate(180deg)}}
+.cr-msg{min-height:20px;font-weight:700;font-size:14px;margin:4px 0 0;color:var(--muted)}
+.cr-msg.ok{color:var(--ok)} .cr-msg.bad{color:var(--bad)}
+.opt{position:relative}
+.opt.locked>svg{opacity:.35;filter:grayscale(.85)}
+.opt.sw.locked{box-shadow:inset 0 0 0 20px rgba(255,252,245,.6),0 2px 0 var(--shadow)}
+.lock{position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);display:flex;align-items:center;gap:2px;background:var(--ink);color:#fff;font:800 10.5px Rubik;padding:1px 6px 1px 3px;border-radius:8px;white-space:nowrap;pointer-events:none}
+.lock svg{width:12px;height:12px}
+.opt.shake{animation:crash .35s}
+.opt.unl{animation:pop .45s cubic-bezier(.4,1.6,.5,1)}
+.gain{display:flex;align-items:center;justify-content:center;gap:8px;font:800 18px Rubik;margin:4px 0 8px;animation:pop .45s cubic-bezier(.4,1.6,.5,1) .5s both}
+.gain svg{width:30px;height:30px;animation:spin 1s ease .5s}
 .cr-row{display:grid;grid-template-columns:60px 1fr;align-items:center;gap:6px}
 .cr-row>span{font:800 13px Nunito;color:var(--muted)}
-.cr-ch{display:flex;flex-wrap:wrap;gap:6px}
+.cr-ch{display:flex;flex-wrap:wrap;gap:12px 6px}
+.cr-row:first-child .cr-ch{gap:12px 5px}
 .opt{width:44px;height:40px;border:0;border-radius:12px;background:var(--bg);cursor:pointer;padding:2px;box-shadow:0 2px 0 var(--shadow);display:grid;place-items:center;transition:transform .12s}
 .opt:hover{transform:translateY(-2px)}
 .opt svg{width:100%;height:100%;overflow:hidden}
-.opt.sw{width:27px;height:27px;border-radius:50%}
+.opt.sw{width:24px;height:24px;border-radius:50%}
 .opt[aria-pressed="true"]{outline:3px solid var(--coral);outline-offset:2px;background:var(--card)}
 .cr-foot{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
 .cr-foot .btn{padding:9px 14px;font-size:15px}
@@ -191,6 +207,10 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
   .mapbox svg{max-height:none}
 }
 @media (max-width:480px){
+  .gpill{padding:5px 8px;font-size:14px}
+  .cr-row{grid-template-columns:50px 1fr}
+  .cr-row:first-child .cr-ch{gap:12px 3px}
+  .dlg{padding:20px 16px}
   .logo span{font-size:17px}
   .pb{font-size:14px;padding:8px 10px 8px 8px}
   .lv{width:72px;height:72px;font-size:20px}
@@ -209,6 +229,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
   <symbol id="i-rep" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M20 12a8 8 0 0 1-13.7 5.6M4 12A8 8 0 0 1 17.7 6.4"/><path class="stk" style="stroke-width:2.6" d="M18 2.5v4h-4M6 21.5v-4h4"/></symbol>
   <symbol id="i-while" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M5 12a7 7 0 0 1 12-5l2 2"/><path class="stk" style="stroke-width:2.6" d="M19 4v5h-5"/><path class="ink" d="M8 21v-7l5-4 5 4v7z"/></symbol>
   <symbol id="i-if" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M12 3l9 9-9 9-9-9z"/><rect x="8" y="9" width="8" height="6" rx="1" class="ink"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><g fill="#9aa3b5" stroke="#6f7790" stroke-width=".8"><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(0 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(45 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(90 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(135 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(180 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(225 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(270 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(315 12 12)"/><circle cx="12" cy="12" r="7.6"/></g><circle cx="12" cy="12" r="3" fill="#fffcf5"/></symbol>
   <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6L2.5 9.3l6.6-.8z"/></symbol>
   <!-- робот (вид згори, дивиться вгору) -->
   <symbol id="house" viewBox="0 0 60 60">
@@ -226,6 +247,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
       <span>Робот-кур'єр</span>
     </button>
     <div class="tools">
+      <span class="gpill" id="gearPill" title="Шестерні"><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg><b id="gearN">0</b></span>
       <button class="ib" id="snd" type="button" aria-label="Звук"></button>
       <button class="ib i" id="infoBtn" type="button" aria-label="Про гру">i</button>
     </div>
@@ -256,7 +278,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
           <button class="hbot" id="heroBotBtn" type="button" aria-label="Налаштувати вигляд робота"><svg viewBox="-46 -76 92 134" id="heroBot" filter="url(#paper)"></svg></button>
           <button class="btn hcust" id="bCustom" type="button"><svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="3" class="ink"/><circle cx="16" cy="9" r="3" class="ink"/><circle cx="12" cy="16" r="3" class="ink"/></svg>Налаштувати робота</button>
         </div>
-        <span class="chip c1">13 рівнів</span>
+        <span class="chip c1" id="chipGears">0 шестерень</span>
         <span class="chip c3" id="chipStars">0 з 39 зірок</span>
       </div>
     </div>
@@ -295,7 +317,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
 <dialog id="creatorDlg" aria-labelledby="crT">
   <div class="dlg">
     <button class="close" type="button" data-close aria-label="Закрити">×</button>
-    <h2 id="crT">Мій робот</h2>
+    <h2 id="crT" style="display:flex;align-items:center;gap:10px">Мій робот <span class="gpill"><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg><b id="crGears">0</b></span></h2><p class="cr-msg" id="crMsg">Проходь рівні, збирай шестерні й відкривай нові деталі.</p>
     <div class="creator">
       <div class="cr-stage"><svg viewBox="-46 -76 92 134" id="crPreview" role="img" aria-label="Твій робот-кур'єр"></svg></div>
       <div>
@@ -318,6 +340,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
       <li>Не врізайся в кущі.</li>
       <li>Посилку доставлено, коли робот стоїть на будинку.</li>
       <li>Менше блоків — більше зірок.</li>
+      <li>За рівні отримуєш шестерні. Відкривай за них нові деталі робота.</li>
     </ul>
     <h3>Керування</h3>
     <ul>
@@ -371,7 +394,7 @@ const LEVELS=[];CHAPTERS.forEach((c,ci)=>c.levels.forEach((l,li)=>LEVELS.push({.
 /* ===================== ЗБЕРЕЖЕННЯ ===================== */
 const KEY='robot-courier-v1';
 const S=(()=>{let d={};try{d=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
-  return {robot:d.robot&&typeof d.robot==='object'?d.robot:null,snd:d.snd!==false,stars:d.stars&&typeof d.stars==='object'?d.stars:{},speed:[1,2,3].includes(d.speed)?d.speed:1,progs:d.progs&&typeof d.progs==='object'?d.progs:{}}})();
+  return {owned:Array.isArray(d.owned)?d.owned:null,spent:+d.spent||0,robot:d.robot&&typeof d.robot==='object'?d.robot:null,snd:d.snd!==false,stars:d.stars&&typeof d.stars==='object'?d.stars:{},speed:[1,2,3].includes(d.speed)?d.speed:1,progs:d.progs&&typeof d.progs==='object'?d.progs:{}}})();
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 
 /* ===================== ЗВУК ===================== */
@@ -394,16 +417,26 @@ sndBtn.onclick=()=>{S.snd=!S.snd;persist();drawSnd();Sound.unlock();Sound.add()}
 
 
 /* ===================== РОБОТ: ВИГЛЯД ===================== */
-const RCOL={sky:'#8ec5ee',coral:'#ee8f80',mint:'#86cfa8',butter:'#f2d06b',lilac:'#bba8ee',peach:'#f4ad86',graphite:'#8a87a3'};
+const RCOL={sky:'#8ec5ee',coral:'#ee8f80',mint:'#86cfa8',butter:'#f2d06b',lilac:'#bba8ee',peach:'#f4ad86',pink:'#f4a3c4',graphite:'#8a87a3',gold:'#d9a93a'};
 const ROPT=[
  {k:'color',lbl:'Колір',items:Object.keys(RCOL)},
- {k:'head',lbl:'Голова',items:['round','square','dome']},
- {k:'eyes',lbl:'Очі',items:['dots','visor','happy','cyclops']},
- {k:'top',lbl:'Антена',items:['ball','double','bolt','none']},
+ {k:'head',lbl:'Голова',items:['round','square','capsule','dome']},
+ {k:'eyes',lbl:'Очі',items:['dots','happy','visor','cyclops']},
+ {k:'top',lbl:'Антена',items:['ball','none','double','propeller','bolt']},
  {k:'move',lbl:'Ходова',items:['wheels','tracks','hover']},
- {k:'box',lbl:'Вантаж',items:['box','bag','letter']}
+ {k:'box',lbl:'Вантаж',items:['box','letter','bag','redbox','thermo']}
 ];
 const RDEF={color:'sky',head:'round',eyes:'dots',top:'ball',move:'wheels',box:'box'};
+/* Ціни в шестернях (0 або немає — доступно одразу). За рівень: 20 + 5 за кожну зірку. */
+const PRICE={'color:butter':10,'color:lilac':10,'color:peach':15,'color:pink':20,'color:graphite':20,'color:gold':35,
+ 'head:square':10,'head:capsule':15,'head:dome':20,'eyes:happy':10,'eyes:visor':15,'eyes:cyclops':20,
+ 'top:double':10,'top:propeller':20,'top:bolt':25,'move:tracks':20,'move:hover':35,
+ 'box:letter':5,'box:bag':15,'box:redbox':45,'box:thermo':60};
+const earned=()=>Object.values(S.stars).reduce((a,st)=>a+(st>0?20+5*st:0),0);
+const gears=()=>Math.max(0,earned()-(S.spent||0));
+const owns=(k,v)=>!PRICE[k+':'+v]||S.owned.includes(k+':'+v);
+function updGears(){const g=gears();$('gearN').textContent=g;const c=$('crGears');if(c)c.textContent=g;const ch=$('chipGears');if(ch)ch.textContent=`${g} ${gw(g)}`}
+function gw(g){return g%10===1&&g%100!==11?'шестерня':[2,3,4].includes(g%10)&&![12,13,14].includes(g%100)?'шестерні':'шестерень'}
 function shade(hex,a){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;const f=v=>Math.round(a<0?v*(1+a):v+(255-v)*a);return '#'+[f(r),f(g),f(b)].map(v=>v.toString(16).padStart(2,'0')).join('')}
 function robotSVG(c,look=[0,0]){
   c={...RDEF,...c};const col=RCOL[c.color]||RCOL.sky,dk=shade(col,-.25),lt=shade(col,.45),ink='#3a3550';
@@ -411,8 +444,11 @@ function robotSVG(c,look=[0,0]){
   if(c.move==='wheels')s+=`<circle cx="-16" cy="45" r="9" fill="${ink}"/><circle cx="-16" cy="45" r="3.5" fill="${lt}"/><circle cx="16" cy="45" r="9" fill="${ink}"/><circle cx="16" cy="45" r="3.5" fill="${lt}"/>`;
   if(c.move==='tracks')s+=`<rect x="-30" y="37" width="60" height="16" rx="8" fill="${ink}"/>`+[-20,-7,7,20].map(x=>`<circle cx="${x}" cy="45" r="4.5" fill="${lt}"/>`).join('');
   if(c.move==='hover')s+=`<ellipse cx="0" cy="52" rx="22" ry="4" fill="${col}" opacity=".45"/><path d="M-19 38h9l-4.5 10zM10 38h9l-4.5 10z" fill="#f4b860"/>`;
+  if(c.box==='thermo')s+=`<rect x="-33" y="-20" width="66" height="52" rx="9" fill="#f6c445"/><rect x="-33" y="-20" width="66" height="9" rx="6" fill="#e3ab25"/><rect x="-33" y="12" width="66" height="5" fill="#fffcf5" opacity=".75"/>`;
   s+=`<rect x="-36" y="6" width="12" height="22" rx="6" fill="${dk}"/><rect x="24" y="6" width="12" height="22" rx="6" fill="${dk}"/>`;
   s+=`<rect x="-26" y="-2" width="52" height="42" rx="12" fill="${col}"/><rect x="-22" y="30" width="44" height="7" rx="3.5" fill="${dk}" opacity=".35"/>`;
+  if(c.box==='thermo')s+=`<path d="M-16 -1v28M16 -1v28" stroke="#3a3550" stroke-width="5" stroke-linecap="round"/><rect x="-6" y="12" width="12" height="6" rx="2" fill="#3a3550"/>`;
+  if(c.box==='redbox')s+=`<rect x="-21" y="8" width="42" height="29" rx="3" fill="#d9483f"/><rect x="-21" y="8" width="42" height="6" rx="2" fill="#b83a33"/><rect x="-4" y="8" width="8" height="29" fill="#f4d6d2" opacity=".85"/><rect x="7" y="21" width="11" height="9" rx="1.5" fill="#fffcf5"/><path d="M9 24h7M9 27h5" stroke="#b83a33" stroke-width="1.2"/>`;
   if(c.box==='box')s+=`<rect x="-20" y="9" width="40" height="27" rx="3" fill="#e9c27a"/><rect x="-3" y="9" width="6" height="27" fill="#c99b4f"/><rect x="-20" y="9" width="40" height="5" rx="2" fill="#d9ae62"/>`;
   if(c.box==='bag')s+=`<path d="M-9 14a9 9 0 0 1 18 0" fill="none" stroke="${ink}" stroke-width="3"/><path d="M-18 14h36l-3 22h-30z" fill="#ee8f80"/><rect x="-6" y="21" width="12" height="7" rx="2" fill="#fffcf5"/>`;
   if(c.box==='letter')s+=`<rect x="-20" y="11" width="40" height="25" rx="3" fill="#fffcf5"/><path d="M-19 12l19 13 19-13" fill="none" stroke="#ee8f80" stroke-width="3" stroke-linejoin="round"/>`;
@@ -420,9 +456,11 @@ function robotSVG(c,look=[0,0]){
   s+=`<rect x="-7" y="-9" width="14" height="9" fill="${dk}"/>`;
   if(c.top==='ball')s+=`<path d="M0 -48v-14" stroke="${ink}" stroke-width="3"/><circle cx="0" cy="-64" r="5.5" fill="#ee8f80"/>`;
   if(c.top==='double')s+=`<path d="M-9 -46l-7 -15M9 -46l7 -15" stroke="${ink}" stroke-width="3"/><circle cx="-16" cy="-63" r="4.5" fill="#f2d06b"/><circle cx="16" cy="-63" r="4.5" fill="#f2d06b"/>`;
+  if(c.top==='propeller')s+=`<path d="M0 -48v-12" stroke="${ink}" stroke-width="3"/><ellipse cx="-11" cy="-62" rx="11" ry="3.6" fill="#ee8f80"/><ellipse cx="11" cy="-62" rx="11" ry="3.6" fill="#8ec5ee"/><circle cx="0" cy="-62" r="3.5" fill="${ink}"/>`;
   if(c.top==='bolt')s+=`<path d="M3 -72l-10 13h7l-4 11 11-14h-7z" fill="#f2d06b" stroke="${ink}" stroke-width="1.6" stroke-linejoin="round"/>`;
   if(c.head==='round')s+=`<circle cx="0" cy="-28" r="24" fill="${col}"/><path d="M-15 -44a20 20 0 0 1 14 -6" stroke="${lt}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
   if(c.head==='square')s+=`<rect x="-24" y="-50" width="48" height="42" rx="9" fill="${col}"/><path d="M-17 -45h12" stroke="${lt}" stroke-width="4" stroke-linecap="round"/>`;
+  if(c.head==='capsule')s+=`<rect x="-22" y="-54" width="44" height="47" rx="22" fill="${col}"/><path d="M-12 -47a16 16 0 0 1 10 -4" stroke="${lt}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
   if(c.head==='dome')s+=`<path d="M-26 -9v-15a26 26 0 0 1 52 0v15z" fill="${col}"/><path d="M-16 -40a19 19 0 0 1 12 -7" stroke="${lt}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
   s+=`<rect x="-30" y="-35" width="7" height="15" rx="3.5" fill="${dk}"/><rect x="23" y="-35" width="7" height="15" rx="3.5" fill="${dk}"/>`;
   s+=`<rect x="-17" y="-40" width="34" height="23" rx="10" fill="#2f2a40"/>`;
@@ -433,7 +471,7 @@ function robotSVG(c,look=[0,0]){
   return s;
 }
 let ROBOT={...RDEF};
-const CROP={head:'-34 -56 68 56',eyes:'-22 -44 44 30',top:'-30 -76 60 50',move:'-34 30 68 26',box:'-28 4 56 36'};
+const CROP={head:'-34 -56 68 56',eyes:'-22 -44 44 30',top:'-30 -76 60 50',move:'-34 30 68 26',box:'-36 -22 72 62'};
 function drawRobotEverywhere(){
   $('crPreview').innerHTML=`<g class="cr-bot" filter="url(#paper)">${robotSVG(ROBOT)}</g>`;
   $('logoBot').innerHTML=robotSVG(ROBOT);
@@ -441,9 +479,11 @@ function drawRobotEverywhere(){
 }
 function renderCreator(){
   $('crOpts').innerHTML=ROPT.map(o=>`<div class="cr-row"><span>${o.lbl}</span><div class="cr-ch">${o.items.map(it=>{
-    const on=ROBOT[o.k]===it;
-    if(o.k==='color')return `<button class="opt sw" data-k="color" data-v="${it}" style="background:${RCOL[it]}" aria-pressed="${on}" aria-label="${o.lbl} ${it}"></button>`;
-    return `<button class="opt" data-k="${o.k}" data-v="${it}" aria-pressed="${on}" aria-label="${o.lbl}: варіант"><svg viewBox="${CROP[o.k]}">${robotSVG({...ROBOT,[o.k]:it})}</svg></button>`;
+    const on=ROBOT[o.k]===it,own=owns(o.k,it),pr=PRICE[o.k+':'+it];
+    const lock=own?'':`<span class="lock"><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg>${pr}</span>`;
+    const lab=own?`${o.lbl}: варіант`:`${o.lbl}: закрито, ціна ${pr} шестерень`;
+    if(o.k==='color')return `<button class="opt sw${own?'':' locked'}" data-k="color" data-v="${it}" style="background:${RCOL[it]}" aria-pressed="${on}" aria-label="${lab}">${lock}</button>`;
+    return `<button class="opt${own?'':' locked'}" data-k="${o.k}" data-v="${it}" aria-pressed="${on}" aria-label="${lab}"><svg viewBox="${CROP[o.k]}">${robotSVG({...ROBOT,[o.k]:it})}</svg>${lock}</button>`;
   }).join('')}</div></div>`).join('');
 }
 function setRobot(k,v){
@@ -458,6 +498,7 @@ function show(id){stop();document.querySelectorAll('.screen').forEach(s=>s.class
 const totalStars=()=>Object.values(S.stars).reduce((a,b)=>a+b,0);
 const unlocked=n=>n===1||S.stars[n-1]>0||S.stars[n]>0;
 function updHome(){
+  updGears();
   $('chipStars').textContent=`${totalStars()} з ${LEVELS.length*3} зірок`;
   $('bPlayT').textContent=totalStars()?'Продовжити':'Грати';
 }
@@ -731,10 +772,10 @@ $('bSpeed').onclick=()=>{S.speed=S.speed%3+1;persist();$('speedT').textContent='
 /* ===================== ПЕРЕМОГА ===================== */
 function starsFor(c){return c<=L.best?3:c<=L.best+2?2:1}
 function win(){
-  const c=count(P),st=starsFor(c),prev=S.stars[L.num]||0;
-  if(st>prev)S.stars[L.num]=st;persist();Sound.win();setMsg('Усі посилки доставлено!','ok');
+  const c=count(P),st=starsFor(c),prev=S.stars[L.num]||0,e0=earned();
+  if(st>prev)S.stars[L.num]=st;persist();const gain=earned()-e0;updGears();if(gain){const gp=$('gearPill');gp.classList.remove('spin');void gp.offsetWidth;gp.classList.add('spin')}Sound.win();setMsg('Усі посилки доставлено!','ok');
   const next=LEVELS[L.num];
-  $('winBody').innerHTML=`<svg viewBox="-46 -76 92 134" style="width:84px;height:auto;display:block;margin:0 auto 6px" filter="url(#paper)">${robotSVG(ROBOT,[0,0])}</svg><h2>Посилки доставлено!</h2><div class="stars">${[1,2,3].map(i=>`<svg viewBox="0 0 24 24" class="${i<=st?'on':''}" style="fill:${i<=st?'#f2b632':'var(--bg2)'};animation-delay:${i*.15}s"><use href="#i-star"/></svg>`).join('')}</div>
+  $('winBody').innerHTML=`<svg viewBox="-46 -76 92 134" style="width:84px;height:auto;display:block;margin:0 auto 6px" filter="url(#paper)">${robotSVG(ROBOT,[0,0])}</svg><h2>Посилки доставлено!</h2><div class="stars">${[1,2,3].map(i=>`<svg viewBox="0 0 24 24" class="${i<=st?'on':''}" style="fill:${i<=st?'#f2b632':'var(--bg2)'};animation-delay:${i*.15}s"><use href="#i-star"/></svg>`).join('')}</div>${gain?`<p class="gain"><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg>+${gain} ${gw(gain)}</p>`:''}
     <p>Блоків у програмі: <b>${c}</b>. ${st<3?`Найкоротша програма — ${L.best} ${L.best<5?'блоки':'блоків'}. Спробуєш скоротити?`:'Найкоротша програма — супер!'}</p>
     <div class="row">${next?`<button class="btn main" id="wNext">Наступний рівень</button>`:`<button class="btn main" id="wAll">До рівнів</button>`}<button class="btn" id="wAgain">Ще раз</button></div>`;
   const d=$('win');d.showModal();
@@ -771,12 +812,25 @@ info.addEventListener('click',e=>{if(e.target===info||e.target.closest('[data-cl
 $('win').addEventListener('click',e=>{if(e.target===$('win'))$('win').close()});
 
 ROBOT={...RDEF,...(S.robot||{})};
+if(!S.owned){S.owned=[];Object.keys(ROBOT).forEach(k=>{if(PRICE[k+':'+ROBOT[k]])S.owned.push(k+':'+ROBOT[k])});persist()}
+Object.keys(ROBOT).forEach(k=>{const o=ROPT.find(x=>x.k===k);if(!o||!o.items.includes(ROBOT[k]))ROBOT[k]=RDEF[k]});
+updGears();
 renderCreator();drawRobotEverywhere();
 const crD=$('creatorDlg');
-$('bCustom').onclick=$('heroBotBtn').onclick=()=>{renderCreator();crD.showModal()};
+$('bCustom').onclick=$('heroBotBtn').onclick=()=>{renderCreator();updGears();$('crMsg').textContent='Проходь рівні, збирай шестерні й відкривай нові деталі.';$('crMsg').className='cr-msg';crD.showModal()};
 crD.addEventListener('click',e=>{if(e.target===crD||e.target.closest('[data-close]'))crD.close()});
-$('crOpts').addEventListener('click',e=>{const b=e.target.closest('.opt');if(b)setRobot(b.dataset.k,b.dataset.v)});
-$('crRandom').onclick=()=>{ROPT.forEach(o=>ROBOT[o.k]=o.items[Math.floor(Math.random()*o.items.length)]);setRobot('color',ROBOT.color)};
+$('crOpts').addEventListener('click',e=>{
+  const b=e.target.closest('.opt');if(!b)return;const k=b.dataset.k,v=b.dataset.v,msg=$('crMsg');
+  if(!owns(k,v)){
+    const pr=PRICE[k+':'+v],g=gears();
+    if(g<pr){b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');Sound.crash();msg.textContent=`Потрібно ще ${pr-g} — проходь рівні й збирай зірки!`;msg.className='cr-msg bad';return}
+    S.owned.push(k+':'+v);S.spent=(S.spent||0)+pr;persist();updGears();
+    Sound.win();msg.textContent=`Відкрито нову деталь! −${pr}`;msg.className='cr-msg ok';
+    setRobot(k,v);const nb=document.querySelector(`.opt[data-k="${k}"][data-v="${v}"]`);if(nb)nb.classList.add('unl');return;
+  }
+  setRobot(k,v);
+});
+$('crRandom').onclick=()=>{ROPT.forEach(o=>{const ok=o.items.filter(it=>owns(o.k,it));ROBOT[o.k]=ok[Math.floor(Math.random()*ok.length)]});setRobot('color',ROBOT.color)};
 updHome();
 </script>
 </body>
