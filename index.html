@@ -214,6 +214,24 @@ body.home .hero{min-height:min(640px,calc(100svh - 140px))}
 .top3 .card:nth-child(2) .rank{background:var(--butter)}
 .top3 .card:nth-child(3) .rank{background:var(--mint)}
 .hnew{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+/* режим вчителя: вмикається лише прихованим посиланням #vchytel */
+.tmode{display:none;align-items:center;gap:7px;border:0;cursor:pointer;padding:8px 12px;border-radius:13px;background:var(--lilac);color:#2e2638;font:800 14px Nunito,sans-serif;box-shadow:0 3px 0 var(--shadow)}
+body.teach .tmode{display:inline-flex}
+@media (max-width:600px){.tmode span{display:none}.tmode{padding:9px}}
+.tmode svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round}
+.tcard{position:relative;display:flex;flex-direction:column}
+.tcard>.card{flex:1}
+.tbtn{align-self:center;margin-top:-14px;position:relative;z-index:2;display:inline-flex;align-items:center;gap:6px;border:0;cursor:pointer;padding:7px 13px;border-radius:12px;background:var(--lilac);color:#2e2638;font:800 13.5px Nunito,sans-serif;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line)}
+.tbtn svg,.tip h4 svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.tbtn:hover{transform:translateY(-2px)}
+.top3>:nth-child(2) .rank{background:var(--butter)}
+.top3>:nth-child(3) .rank{background:var(--mint)}
+#tipDlg{max-width:560px}
+.tip .tgs{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}
+.tip .tgs span{padding:3px 10px;border-radius:10px;background:var(--bg2);font:800 13px Nunito,sans-serif}
+.tip h4{display:flex;align-items:center;gap:7px;margin:16px 0 4px;font:800 15px Rubik,sans-serif}
+.tip p{margin:0;line-height:1.5}
+.tip .open{margin-top:18px}
 /* сторінка маршрутів */
 .route{padding:22px;border-radius:24px;background:var(--card);box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line);border-top:10px solid var(--dot)}
 .route+.route{margin-top:28px}
@@ -358,6 +376,7 @@ main,footer{position:relative;z-index:1}
       <span>ІТ-Майстерня</span>
     </a>
         <div class="tools">
+      <button class="tmode" id="tExit" type="button" title="Вимкнути режим вчителя"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Режим вчителя</span></button>
       <button class="plug" id="plug" type="button" aria-label="Перемкнути тему">
         <svg viewBox="0 0 84 44" aria-hidden="true">
           <rect class="sockshade" x="44" y="5" width="36" height="34" rx="10"/>
@@ -513,6 +532,7 @@ main,footer{position:relative;z-index:1}
 </main>
 <footer>ІТ-Майстерня · 2026</footer>
 
+<dialog id="tipDlg" aria-labelledby="tipT"><div class="dlg tip" id="tipBody"></div></dialog>
 <dialog id="info" aria-labelledby="infoTitle">
   <div class="dlg">
     <button class="x" type="button" id="infoClose" aria-label="Закрити">×</button>
@@ -538,9 +558,9 @@ main,footer{position:relative;z-index:1}
    ШПАРГАЛКА: як додати новий застосунок / курс / квест
    ---------------------------------------------------------------------
    1. Скопіюй будь-який рядок зі списку APPS нижче й встав його в групу
-      з потрібним заголовком-коментарем (— Тема —). Усередині теми картки
-      самі стають від молодших класів до старших; ігри для перерви
-      й інструменти для вчителя — у порядку списку.
+      з потрібним заголовком-коментарем (— Тема —). Порядок у списку =
+      порядок на сайті: спершу важливе, далі за класами, наприкінці
+      ігри й творчість.
    2. Заміни поля. Куди потрапить картка — вирішує ОДНЕ з полів:
         t       — тема: 'first' (цифрова грамотність) | 'algo' (алгоритми і програмування,
                   тут і курси) | 'data' (дані та безпека)
@@ -568,42 +588,37 @@ main,footer{position:relative;z-index:1}
    Приклад:
    {t:'data', g:[9,9], title:'Місія «Мережі»', desc:'Квест про мережі', type:'Квест', art:'default', bg:'--sky', repo:'network-quest'},
    Курс: {t:'algo', g:[8,9], title:…, desc:…, type:'Курс', repo:'назва-репо'} — без url, курси живуть окремо
-   o:1 — якщо дві картки мають однакові класи, менше o стоїть першим.
 
    Своя картинка пізніше: додай функцію в об'єкт ART (за зразком інших,
    полотно 320×200) і впиши її назву в поле art.
    ===================================================================== */
 const GH = 'https://whyuxavier.github.io/';
 const APPS = [
-  /* — Мишка і клавіатура — */
+  /* — Цифрова грамотність: спершу основи, далі ігри, наприкінці творчість — */
+  {t:'first',g:[1,4],     title:'Мій перший ПК',                desc:'Знайомство з частинами комп\'ютера',             type:'Тренажер',    art:'firstpc',   bg:'--sky',    repo:'my-first-pc', url:GH+'it-maysternia/apps/my-first-pc/'},
   {t:'first',g:[1,4],     title:'Тренажер мишки та клавіатури', desc:'Перші кроки з комп\'ютером разом з котиком Фіфі', type:'Тренажер',    art:'pctrainer', bg:'--peach',  repo:'pc-trainer', url:GH+'it-maysternia/apps/pc-trainer/'},
-  {t:'first',g:[1,4],o:1, title:'Мій перший ПК',                desc:'Знайомство з частинами комп\'ютера',             type:'Тренажер',    art:'firstpc',   bg:'--sky',    repo:'my-first-pc', url:GH+'it-maysternia/apps/my-first-pc/'},
   {t:'first',g:[1,4],     title:'Клавіатурний пазл',            desc:'Збери клавіатуру з розсипаних клавіш',            type:'Гра',         art:'keys',      bg:'--sky',    repo:'key-puzzle', url:GH+'it-maysternia/apps/key-puzzle/'},
   {t:'first',g:[5,12],    title:'Keyboard Academy',             desc:'Вчимося друкувати наосліп',                      type:'Тренажер',    art:'academy',   bg:'--butter', repo:'keyboard-academy', url:GH+'it-maysternia/apps/keyboard-academy/'},
   {t:'first',g:[1,7],     title:'MOUSE RACER',                  desc:'Аркадні перегони де мишка - це твоє кермо',      type:'Гра',         art:'racer',     bg:'--mint',  repo:'mouse-racer', url:GH+'it-maysternia/apps/mouse-racer/'},
-
-  /* — Алгоритми і програмування — */
-  {t:'algo',g:[5,7],   title:'Робот-кур\'єр',                desc:'Склади програму з блоків і доставь посилки',     type:'Гра',         art:'robot',     bg:'--mint',   repo:'robot-courier', url:GH+'it-maysternia/apps/robot-courier/'},
-  {t:'algo',g:[5,7],   title:'Блок-схеми',                   desc:'Будуй алгоритми з блоків',                       type:'Редактор',    art:'flowchart', bg:'--lilac',  repo:'flowchart', url:GH+'it-maysternia/apps/flowchart/'},
-  {t:'algo',g:[8,8],   title:'Квест: Python, 8 клас',        desc:'Перші кроки в Python',                           type:'Квест',       art:'snake',     bg:'--mint',   repo:'python-quest-8', url:GH+'it-maysternia/apps/python-quest-8/'},
-  {t:'algo',g:[9,9],   title:'Квест: Python, 9 клас',        desc:'Цикли, списки, Turtle і Tkinter',                type:'Квест',       art:'python9',   bg:'--sky',    repo:'python-quest-9', url:GH+'it-maysternia/apps/python-quest-9/'},
-  {t:'algo',g:[10,12], title:'Ghost in HTML',                desc:'Виправ код і звільни привида',                   type:'Квест',       art:'ghost',     bg:'--sky',    repo:'ghost-in-html', url:GH+'it-maysternia/apps/ghost-in-html/'},
-  {t:'algo',g:[8,12],  title:'Баг-шторм',                    desc:'Виправ помилки, поки падають вікна',             type:'Гра',         art:'bugs',      bg:'--coral',  repo:'bug-storm', url:GH+'it-maysternia/apps/bug-storm/'},
-
-  /* — Документи, дані й безпека — */
-  {t:'data',g:[5,12],  title:'Фішинг-детектор',              desc:'Розпізнай шахраїв в іграх, чатах і листах',      type:'Квест',       art:'phishing',  bg:'--sky',    repo:'phishing-detector', url:GH+'it-maysternia/apps/phishing-detector/'},
-  {t:'data',g:[9,9],   title:'Місія «Документ»',             desc:'Списки, стовпці, колонтитули й зміст',           type:'Квест',       art:'textdoc',   bg:'--butter', repo:'text-document-quest', url:GH+'it-maysternia/apps/text-document-quest/'},
-  {t:'data',g:[9,9],   title:'Місія «Інтернет речей»',       desc:'Квест про розумні пристрої',                     type:'Квест',       art:'iot',       bg:'--lilac',  repo:'iot-quest', url:GH+'it-maysternia/apps/iot-quest/'},
-  {t:'data',g:[8,12],  title:'Excel Tournament',             desc:'Змагання з електронних таблиць',                 type:'Квест',         art:'excel',     bg:'--mint',   repo:'excel-tournament', url:GH+'it-maysternia/apps/excel-tournament/'},
-  {t:'data',g:[10,10], title:'Місія «Аналітик даних»',       desc:'Мода, медіана й середнє на практиці',            type:'Квест',       art:'data',      bg:'--lilac',  repo:'data-analysis-quest', url:GH+'it-maysternia/apps/data-analysis-quest/'},
-
-  /* — Малювання і творчість — */
   {t:'first',g:[1,4], title:'Пазл з твого фото',            desc:'Завантаж своє фото і склади його по шматочках',  type:'Гра',         art:'photopuzzle', bg:'--butter', repo:'photo-puzzle', url:GH+'it-maysternia/apps/photo-puzzle/'},
   {t:'first',g:[1,12], title:'Пікселька',                    desc:'Малюй піксельні картинки',                        type:'Редактор',    art:'pixel',     bg:'--lilac',  repo:'pixelka', url:GH+'it-maysternia/apps/pixelka/'},
 
-  /* — Курси (живуть у власних репозиторіях; тема «Алгоритми») — */
+  /* — Алгоритми і програмування: від блоків до коду, курси перед квестами, гра наприкінці — */
+  {t:'algo',g:[5,7],   title:'Блок-схеми',                   desc:'Будуй алгоритми з блоків',                       type:'Редактор',    art:'flowchart', bg:'--lilac',  repo:'flowchart', url:GH+'it-maysternia/apps/flowchart/'},
+  {t:'algo',g:[5,7],   title:'Робот-кур\'єр',                desc:'Склади програму з блоків і доставь посилки',     type:'Гра',         art:'robot',     bg:'--mint',   repo:'robot-courier', url:GH+'it-maysternia/apps/robot-courier/'},
   {t:'algo',g:[8,9],              title:'Python з нуля',                desc:'Модулі для 8 і 9 класу',                         type:'Курс',        art:'pybook',    bg:'--mint',   repo:'learn-python'},
+  {t:'algo',g:[8,8],   title:'Квест: Python, 8 клас',        desc:'Перші кроки в Python',                           type:'Квест',       art:'snake',     bg:'--mint',   repo:'python-quest-8', url:GH+'it-maysternia/apps/python-quest-8/'},
+  {t:'algo',g:[9,9],   title:'Квест: Python, 9 клас',        desc:'Цикли, списки, Turtle і Tkinter',                type:'Квест',       art:'python9',   bg:'--sky',    repo:'python-quest-9', url:GH+'it-maysternia/apps/python-quest-9/'},
   {t:'algo',g:[10,12],  title:'Веб-програмування',            desc:'HTML, CSS і JavaScript за 12 уроків',            type:'Курс',        art:'web',       bg:'--peach',  repo:'learn-web'},
+  {t:'algo',g:[10,12], title:'Ghost in HTML',                desc:'Виправ код і звільни привида',                   type:'Квест',       art:'ghost',     bg:'--sky',    repo:'ghost-in-html', url:GH+'it-maysternia/apps/ghost-in-html/'},
+  {t:'algo',g:[8,12],  title:'Баг-шторм',                    desc:'Виправ помилки, поки падають вікна',             type:'Гра',         art:'bugs',      bg:'--coral',  repo:'bug-storm', url:GH+'it-maysternia/apps/bug-storm/'},
+
+  /* — Дані та безпека: безпека — для всіх, далі місії за класами, турнір наприкінці — */
+  {t:'data',g:[5,12],  title:'Фішинг-детектор',              desc:'Розпізнай шахраїв в іграх, чатах і листах',      type:'Квест',       art:'phishing',  bg:'--sky',    repo:'phishing-detector', url:GH+'it-maysternia/apps/phishing-detector/'},
+  {t:'data',g:[9,9],   title:'Місія «Документ»',             desc:'Списки, стовпці, колонтитули й зміст',           type:'Квест',       art:'textdoc',   bg:'--butter', repo:'text-document-quest', url:GH+'it-maysternia/apps/text-document-quest/'},
+  {t:'data',g:[9,9],   title:'Місія «Інтернет речей»',       desc:'Квест про розумні пристрої',                     type:'Квест',       art:'iot',       bg:'--lilac',  repo:'iot-quest', url:GH+'it-maysternia/apps/iot-quest/'},
+  {t:'data',g:[10,10], title:'Місія «Аналітик даних»',       desc:'Мода, медіана й середнє на практиці',            type:'Квест',       art:'data',      bg:'--lilac',  repo:'data-analysis-quest', url:GH+'it-maysternia/apps/data-analysis-quest/'},
+  {t:'data',g:[8,12],  title:'Excel Tournament',             desc:'Змагання з електронних таблиць',                 type:'Квест',         art:'excel',     bg:'--mint',   repo:'excel-tournament', url:GH+'it-maysternia/apps/excel-tournament/'},
 
   /* — Ігри для перерви — */
   {fun:1,g:[1,12], title:'Танграм',                      desc:'Склади фігуру з семи частинок',                  type:'Гра',         art:'tangram',   bg:'--butter', repo:'tangram', url:GH+'it-maysternia/apps/tangram/'},
@@ -1003,7 +1018,6 @@ const CLASSES={'1-4':[1,4],'5-8':[5,8],'9-12':[9,12]};
 /* картка без g (поки не вказано клас) показується в усіх класах */
 const fits=(it,id)=>{if(!it.g)return true;const g=CLASSES[id];return it.g[0]<=g[1]&&it.g[1]>=g[0]};
 const grades=it=>it.g[0]===it.g[1]?it.g[0]+' клас':it.g[0]+'–'+it.g[1]+' клас';
-const byAge=(a,b)=>{const x=a.g||[0,0],y=b.g||[0,0];return x[0]-y[0]||x[1]-y[1]||(a.o||0)-(b.o||0)};
 /* розділи меню; порожні теми не показуємо */
 const NAV=[
  {id:'all',label:'Усе одразу',color:'--sky',ic:'Category'},
@@ -1012,6 +1026,59 @@ const NAV=[
  {id:'games',label:'Ігри для перерви',color:'--coral',ic:'Game'},
  {id:'teacher',label:'Для вчителя',color:'--butter',ic:'Work'},
 ];
+/* ===== Поради вчителю: як використати ресурс на уроці.
+   Видно лише в режимі вчителя — він вмикається посиланням …/it-maysternia/#vchytel
+   (учні його не бачать: у меню й на сторінках немає жодної згадки). Вимкнути — кнопкою в шапці.
+   Формат: 'Назва картки':[мета, коли на уроці, як організувати, що перевірити] ===== */
+const TIPS={
+ 'Мій перший ПК':['Назви й призначення частин комп\'ютера, пристрої введення й виведення.','Вивчення нового, 10–15 хв.','Спершу разом на проєкторі, потім самостійно. Попросіть показати ці пристрої в класі.','Дитина називає 4–5 пристроїв і пояснює, для чого кожен.'],
+ 'Тренажер мишки та клавіатури':['Клік, подвійний клік, перетягування, перші літери на клавіатурі.','Розминка 5–10 хв на початку уроку в 1–2 класі.','Індивідуально, по одному рівню за урок. Звук краще вимкнути або дати навушники.','Впевнено перетягує предмети й не губить курсор.'],
+ 'Клавіатурний пазл':['Розташування клавіш і рядів, українська й англійська розкладки.','Закріплення після знайомства з клавіатурою, 10 хв.','Змагання в парах на час; другий раунд — інша розкладка.','Скільки часу треба, щоб зібрати ряд без підказок.'],
+ 'Keyboard Academy':['Друк наосліп: постава, «домашній» ряд, правильні пальці.','Регулярно по 5–7 хв на початку уроку.','Кожен працює на своєму рівні; прогрес зберігається в браузері.','Раз на місяць — швидкість (знаків за хвилину) і точність.'],
+ 'MOUSE RACER':['Точність і швидкість керування мишею.','Нагорода наприкінці уроку або хвилинка відпочинку, 5 хв.','Лише миша. Добре заходить як «спершу справа — потім гонка».','Ігрова, без оцінювання.'],
+ 'Пазл з твого фото':['Робота з файлами: знайти й відкрити зображення, перетягування.','Практика в 1–4 класі, 10 хв.','Учні обирають малюнок у папці або фотографують свій.','Дитина сама знаходить і відкриває потрібний файл.'],
+ 'Пікселька':['Растрова графіка: піксель, координати, палітра; для старших — кодування зображень.','Практична робота 15–20 хв.','Завдання за зразком (наприклад, смайлик 16×16), збереження PNG і здача файлом.','Розмір і зразок дотримано, файл збережено правильно.'],
+ 'Блок-схеми':['Алгоритм у вигляді блок-схеми: слідування, розгалуження, цикл.','Пояснення нового на проєкторі + практика 15 хв.','Почніть з побутових алгоритмів (заварити чай), далі задачі з підручника.','Є «Початок» і «Кінець», умова має два виходи «так/ні».'],
+ "Робот-кур\'єр":['Лінійні алгоритми, цикли й умови; пошук коротшого розв\'язку.','Практична частина уроку, 20 хв. Розділи гри = теми уроків.','Кожен проходить свій розділ. Наприкінці обговоріть найкоротші програми.','Зірки в розділі й уміння пояснити свою програму вголос.'],
+ 'Python з нуля':['Основи Python модулями для 8 і 9 класу.','Один урок курсу = одна тема уроку; удома — повторення.','Учні працюють у своєму темпі; ви пояснюєте складні місця біля дошки.','Виконані практичні в курсі, далі — квест свого класу.'],
+ 'Квест: Python, 8 клас':['Підсумкова перевірка знань з Python за 8 клас.','Контрольний урок, 35–40 хв.','Індивідуально. Учні вводять ім\'я та клас — вони потрапляють у звіт.','Звіт наприкінці з оцінкою за 12-бальною шкалою.'],
+ 'Квест: Python, 9 клас':['Підсумок теми «Алгоритмізація і програмування» (9 клас).','Контрольний урок, 40 хв.','Індивідуально; підказки коштують XP — домовтеся про правила заздалегідь.','Звіт з балами й рівнями; зверніть увагу на використані підказки.'],
+ 'Веб-програмування':['HTML, CSS і JavaScript за 12 уроків.','Один-два уроки на тему курсу, практика в редакторі.','Покажіть приклад на проєкторі, далі учні повторюють і змінюють код.','Працюючі сторінки з практичних завдань.'],
+ 'Ghost in HTML':['Пошук і виправлення помилок у HTML, CSS і JS.','1–2 кімнати за урок або підсумковий проєкт після курсу.','Учень вводить ім\'я — наприкінці отримає сертифікат.','Кількість пройдених кімнат і сертифікат.'],
+ 'Баг-шторм':['Швидке налагодження коду HTML/CSS і Python.','Розминка або гра наприкінці уроку, 10 хв.','Змагання: хто протримається довше. Можна виводити на проєктор.','Ігрова; можна відзначити найкращих бонусом.'],
+ 'Фішинг-детектор':['Безпека в інтернеті: ознаки фішингу й шахрайства.','Урок безпеки або виховна година, 20–25 хв.','Після проходження обговоріть реальні випадки з життя учнів.','Учні називають щонайменше 3 ознаки підробки.'],
+ 'Місія «Документ»':['Підсумок розділу «Опрацювання текстових даних» (9 клас).','Контрольний урок, 35–40 хв.','Індивідуально; учні вводять ім\'я та клас.','Звіт наприкінці з оцінкою.'],
+ 'Місія «Інтернет речей»':['Інтернет речей: сенсори, розумні пристрої, дані (9 клас).','Урок-підсумок теми, 30–40 хв.','Спершу відео в квесті, потім 16 завдань. Навушники бажані.','Звіт з оцінкою наприкінці.'],
+ 'Місія «Аналітик даних»':['Етапи аналізу даних: від запитання до висновку (10 клас).','Підсумок теми «Аналіз даних», 40 хв.','Індивідуально; ключі видаються лише за 80% правильних відповідей.','Звіт, зібрані ключові слова й фінальний алгоритм.'],
+ 'Excel Tournament':['Формули, автозаповнення, сортування в таблиці.','Тренування — на уроці, турнір — як змагання, тестування — контрольна 30 хв.','Почніть з тренування; турнір запускайте для всього класу одночасно.','Режим тестування дає оцінку за 12-бальною шкалою.'],
+ 'Танграм':['Просторове мислення.','Перерва або останні 5 хв уроку.','Самостійно; швидші допомагають іншим.','Ігрова.'],
+ 'Намалюй коло':['Точність руху мишею чи пальцем.','Розминка на 2 хв.','Можна змагання «хто ближче до 100%».','Ігрова.'],
+ 'Block Puzzle':['Логіка й планування ходів.','Перерва або нагорода наприкінці уроку.','Самостійно.','Ігрова.'],
+ 'Сапер':['Логічне мислення й висновки з підказок.','Перерва; на гуртку — обговорення стратегії.','Попросіть пояснити, чому клітинка безпечна.','Ігрова.'],
+ 'WordShaker':['Словниковий запас і швидкість мислення.','Перерва або змагання в парах.','Укр/англ режими — можна поєднати з англійською.','Ігрова.'],
+ 'Інформатичний Еліас':['Повторення IT-термінів через пояснення своїми словами.','Наприкінці теми, 10–15 хв, на проєкторі.','Розділіть клас на команди (допоможе Рандомайзер), гра по черзі.','Чи вміють учні пояснити термін без підказок.'],
+ 'SERVER ROOM':['Пригода про будову серверної для 7+ класу.','Позаурочно, гурток або нагорода.','Самостійно, у своєму темпі.','Ігрова.'],
+ 'Рандомайзер класу':['Справедливий вибір учня, поділ на команди, таймер.','Будь-який етап уроку.','Внесіть список класу один раз — він збережеться в браузері.','—'],
+ 'Генератор QR-кодів':['Швидко дати учням посилання на ресурс.','Початок практичної роботи.','Виведіть QR на проєктор — учні сканують телефоном.','—'],
+ 'Кібертурнір':['Турнірна сітка для шкільних змагань.','Позакласні заходи.','Внесіть команди й ведіть сітку на проєкторі.','—'],
+};
+const BULB='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>';
+let TEACH=false;try{TEACH=localStorage.getItem('itm-teacher')==='1'}catch(e){}
+function setTeach(on){TEACH=on;try{on?localStorage.setItem('itm-teacher','1'):localStorage.removeItem('itm-teacher')}catch(e){}document.body.classList.toggle('teach',on)}
+function teachHash(){if(location.hash==='#vchytel'){setTeach(true);history.replaceState(null,'','#all');return true}return false}
+document.getElementById('tExit').addEventListener('click',()=>{setTeach(false);route()});
+const tipDlg=document.getElementById('tipDlg');
+tipDlg.addEventListener('click',e=>{if(e.target===tipDlg||e.target.closest('[data-x]'))tipDlg.close()});
+document.addEventListener('click',e=>{const b=e.target.closest('.tbtn');if(!b)return;const a=appBy(b.dataset.tip),t=TIPS[a.title];
+  const H=(ic,n,v)=>`<h4>${ic}${n}</h4><p>${v}</p>`;
+  document.getElementById('tipBody').innerHTML=`<button class="x" type="button" data-x aria-label="Закрити">×</button><h2 id="tipT">${a.title}</h2>
+  <div class="tgs"><span>${a.type}</span>${a.g?`<span>${grades(a)}</span>`:''}</div>
+  ${H('<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>','Мета',t[0])}
+  ${H('<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>','Коли на уроці',t[1])}
+  ${H('<svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M3 19c1-3 3-4 5-4s4 1 5 4M11 19c1-3 3-4 5-4s4 1 5 4"/></svg>','Як організувати',t[2])}
+  ${H('<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>','Що перевірити',t[3])}
+  <a class="btn main open" href="${linkOf(a)}" target="_blank" rel="noopener">Відкрити ресурс</a>`;
+  tipDlg.showModal()});
 /* ===== Маршрути: порядок ресурсів для групи класів.
    Крок = [назва картки з APPS, коротка підказка]. Позначки «Пройдено» зберігаються в браузері учня. ===== */
 const ROUTES=[
@@ -1081,9 +1148,10 @@ const gridEl=document.getElementById('grid'),sideEl=document.getElementById('sid
 let current='all';
 gridEl.className='secs';
 function card(a,color){const tag=a.type;
-  return `<a class="card" href="${a.url||GH+a.repo+'/'}" target="_blank" rel="noopener" style="--cbg:var(${a.bg});--tape:var(${color})">
+  const h=`<a class="card" href="${a.url||GH+a.repo+'/'}" target="_blank" rel="noopener" style="--cbg:var(${a.bg});--tape:var(${color})">
     <div class="pic"><svg viewBox="0 0 320 200" aria-hidden="true">${(ART[a.art]||ART.default)()}</svg></div>
-    <div class="txt"><h3>${a.title}</h3><p>${a.desc}</p><span class="tags"><span class="tag">${tag}</span>${a.g&&!a.fun?`<span class="tag gr">${grades(a)}</span>`:''}</span></div></a>`}
+    <div class="txt"><h3>${a.title}</h3><p>${a.desc}</p><span class="tags"><span class="tag">${tag}</span>${a.g&&!a.fun?`<span class="tag gr">${grades(a)}</span>`:''}</span></div></a>`;
+  return TEACH&&TIPS[a.title]?`<div class="tcard">${h}<button type="button" class="tbtn" data-tip="${a.title.replace(/"/g,'&quot;')}">${BULB}Як на уроці</button></div>`:h}
 function course(a){return `<a class="ccard" href="${a.url||GH+a.repo+'/'}" target="_blank" rel="noopener" style="--cbg:var(${a.bg})">
     <div class="pic"><svg viewBox="0 0 320 200" aria-hidden="true">${(ART[a.art]||ART.default)()}</svg></div>
     <div class="txt"><span class="kicker">Курс для учнів</span><h3>${a.title}</h3><p>${a.mods}</p><span class="tags"><span class="tag">Уроки з практикою</span><span class="tag gr">Працює з телефона</span></span></div>
@@ -1096,12 +1164,12 @@ ageBar.addEventListener('click',e=>{const b=e.target.closest('[data-age]');if(!b
 function renderGrid(){
   const id=current;let html='';
   if(id==='routes'){renderAge(true);html=ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).map(routeHTML).join('')}
-  else if(id==='games'){renderAge(true);html=section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)).sort(byAge))}
+  else if(id==='games'){renderAge(true);html=section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))}
   else if(id==='teacher'){renderAge(false);html=section('Для вчителя','Work','--butter',APPS.filter(a=>a.teacher).sort((a,b)=>(a.o||0)-(b.o||0)))}
   else{renderAge(true);
     const tps=id==='all'?TOPICS:TOPICS.filter(t=>t.id===id);
-    html+=tps.map(t=>section(t.label,t.ic,t.color,APPS.filter(a=>a.t===t.id&&fitA(a)).sort(byAge))).join('');
-    if(id==='all')html+=section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)).sort(byAge))+section('Для вчителя','Work','--butter',APPS.filter(a=>a.teacher).sort((a,b)=>(a.o||0)-(b.o||0)))}
+    html+=tps.map(t=>section(t.label,t.ic,t.color,APPS.filter(a=>a.t===t.id&&fitA(a)))).join('');
+    if(id==='all')html+=section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))+section('Для вчителя','Work','--butter',APPS.filter(a=>a.teacher).sort((a,b)=>(a.o||0)-(b.o||0)))}
   if(!html)html='<p class="empty">Для цього класу тут поки нічого немає — обери інший клас.</p>';
   gridEl.innerHTML=html;
 }
@@ -1180,8 +1248,8 @@ function route(){
   else{b.classList.add('home');renderHome()}
   window.scrollTo({top:0,behavior:'instant'});
 }
-addEventListener('hashchange',()=>{oldHash();route()});
-oldHash();markNew();route();
+addEventListener('hashchange',()=>{teachHash();oldHash();route()});
+teachHash();setTeach(TEACH);oldHash();markNew();route();
 
 /* ===== Сніг: лише на головній, лише в темній темі й лише взимку (snow.js вантажиться тільки тоді) ===== */
 (()=>{const el=document.getElementById('snow');let snow=null,loading=false;
