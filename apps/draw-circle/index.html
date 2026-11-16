@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Намалюй коло</title>
+<meta name="description" content="Гра на точність руки: намалюй ідеальне коло, фігури, малюнки без відриву руки.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f4f0e6'/%3E%3Cpath d='M0 21h64M0 43h64M21 0v64M43 0v64' stroke='%231d2532' stroke-opacity='.08' stroke-width='1.5'/%3E%3Ccircle cx='29' cy='35' r='18' fill='none' stroke='%23ff5a36' stroke-width='6' stroke-linecap='round' stroke-dasharray='98 15' transform='rotate(-40 29 35)'/%3E%3Ccircle cx='29' cy='35' r='3.5' fill='%231d2532'/%3E%3Cpath d='M41 23l12-12 5 5-12 12-7 2z' fill='%231d2532'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Unbounded:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root,html[data-theme=paper]{--bg:#f4f0e6;--ink:#1d2532;--muted:#6f7684;--panel:rgba(255,253,248,.84);--card:#fffdf8;--line:rgba(29,37,50,.11);--hover:rgba(29,37,50,.07);--grid:rgba(29,37,50,.075);--cell:34px;--accent:#ff5a36;--good:#0f9d77;color-scheme:light}
+html[data-theme=cells]{--bg:#fbfcfe;--ink:#1d2532;--muted:#6f7684;--panel:rgba(255,255,255,.86);--card:#fff;--line:rgba(29,37,50,.11);--hover:rgba(29,37,50,.07);--grid:rgba(70,120,200,.2);--cell:22px;--accent:#ff5a36;--good:#0f9d77;color-scheme:light}
+html[data-theme=chalk]{--bg:#22362e;--ink:#eef3ea;--muted:#a9b9ae;--panel:rgba(30,48,41,.84);--card:#2a4137;--line:rgba(255,255,255,.13);--hover:rgba(255,255,255,.08);--grid:rgba(255,255,255,.06);--cell:34px;--accent:#ffb347;--good:#7fe0b0;color-scheme:dark}
+html[data-theme=night]{--bg:#0f1217;--ink:#e9edf4;--muted:#8a93a3;--panel:rgba(24,28,36,.84);--card:#191d25;--line:rgba(255,255,255,.1);--hover:rgba(255,255,255,.07);--grid:rgba(255,255,255,.05);--cell:34px;--accent:#ff6b4a;--good:#3fd6a0;color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:Manrope,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;overscroll-behavior:none;transition:background .25s}
+body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:var(--cell) var(--cell);background-position:center center;-webkit-mask-image:radial-gradient(ellipse 72% 68% at 50% 50%,#000 25%,transparent 100%);mask-image:radial-gradient(ellipse 72% 68% at 50% 50%,#000 25%,transparent 100%);pointer-events:none}
+html[data-theme=cells] body::before{-webkit-mask-image:none;mask-image:none}
+#cv{position:fixed;inset:0;touch-action:none;cursor:crosshair;z-index:1}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block}
+.pill{background:var(--panel);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:999px;box-shadow:0 10px 30px -18px rgba(0,0,0,.35)}
+header{position:fixed;top:0;left:0;right:0;z-index:5;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:max(10px,env(safe-area-inset-top)) 12px 0;pointer-events:none}
+header>*{pointer-events:auto}
+.brand{justify-self:start;display:flex;align-items:center;gap:10px;padding:4px 14px 4px 4px;font-weight:800;font-size:15px;white-space:nowrap}
+.brand svg{width:36px;height:36px;display:block}
+.acts{justify-self:end;display:flex;gap:2px;padding:4px}
+.ib{width:42px;height:42px;border:0;border-radius:999px;background:transparent;display:grid;place-items:center;flex:none}
+.ib:hover{background:var(--hover)}
+.ib.on{background:var(--ink);color:var(--bg)}
+.ib.info{font-family:Unbounded,sans-serif;font-weight:700;font-size:15px}
+#prompt{position:fixed;left:50%;transform:translateX(-50%);z-index:4;font-weight:800;font-size:clamp(17px,2.3vw,26px);text-align:center;white-space:nowrap;max-width:calc(100% - 32px);overflow:hidden;text-overflow:ellipsis;pointer-events:none;display:flex;gap:10px;align-items:center}
+#prompt .rec{font-size:.62em;font-weight:700;color:var(--muted);padding:3px 10px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
+#bar{position:fixed;bottom:max(12px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:5;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:3px;padding:5px;border-radius:28px;max-width:calc(100% - 24px);width:max-content}
+#bar .sep{width:1px;height:26px;background:var(--line);margin:0 4px}
+#bar .lvl{min-width:58px;text-align:center;font-family:Unbounded,sans-serif;font-weight:600;font-size:14px}
+.ib.sh svg{width:26px;height:26px}
+.txtbtn{height:42px;padding:0 16px;border-radius:999px;border:0;background:var(--accent);color:#fff;font-weight:800;font-size:14px;white-space:nowrap}
+.txtbtn.ghost{background:var(--hover);color:var(--ink)}
+.sw{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);flex:none;padding:0}
+.sw.on{outline:3px solid var(--ink);outline-offset:2px}
+.cpick{width:30px;height:30px;border-radius:50%;overflow:hidden;border:2px solid var(--line);position:relative;flex:none;background:conic-gradient(red,#ff0,lime,cyan,blue,#f0f,red)}
+.cpick input{position:absolute;inset:-8px;opacity:0;cursor:pointer;width:50px;height:50px}
+.palette{position:relative;cursor:pointer;overflow:hidden}
+.palette i{position:absolute;right:6px;bottom:6px;width:12px;height:12px;border-radius:50%;border:2px solid var(--panel)}
+.palette input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+input[type=range]{width:110px;accent-color:var(--accent);height:42px}
+.symn{font-family:Unbounded,sans-serif;font-size:11px;position:absolute;right:4px;bottom:4px}
+.ib.rel{position:relative}
+dialog{border:0;border-radius:22px;padding:0;width:calc(100% - 32px);max-width:560px;margin:auto;background:var(--card);color:var(--ink);box-shadow:0 30px 80px -20px rgba(0,0,0,.5)}
+dialog::backdrop{background:rgba(10,14,20,.45);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.dlg{padding:22px;max-height:calc(100dvh - 48px);overflow:auto;-webkit-user-select:text;user-select:text}
+.dh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.dh h2{font-family:Unbounded,sans-serif;font-size:20px}
+.dlg h3{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:18px 0 8px}
+.dlg p,.dlg li{font-size:15px;line-height:1.5}
+.dlg ul{padding-left:18px;display:grid;gap:6px}
+.keys{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:14px;align-items:center}
+kbd{font-family:Unbounded,sans-serif;font-size:11px;padding:3px 7px;border-radius:6px;border:1px solid var(--line);background:var(--hover);white-space:nowrap}
+.gh{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:10px 16px;border-radius:999px;background:var(--ink);color:var(--bg);text-decoration:none;font-weight:800}
+.gh svg{width:18px;height:18px;fill:#f5b700}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.row>label{font-weight:700}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.thm{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:999px;border:1px solid var(--line);background:transparent;font-weight:700;font-size:14px}
+.thm i{width:24px;height:24px;border-radius:50%;border:1px solid var(--line)}
+.thm.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.seg{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{border:0;background:transparent;padding:7px 14px;border-radius:999px;font-weight:700;font-size:14px}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.switch{width:52px;height:30px;border-radius:999px;border:0;background:var(--hover);position:relative}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--muted);transition:.2s}
+.switch.on{background:var(--good)}
+.switch.on::after{left:25px;background:#fff}
+@media (max-width:760px){.brand span{display:none}.brand{padding:4px}}
+@media (max-width:420px){header{padding-left:8px;padding-right:8px;gap:4px}.ib{width:38px;height:38px}.brand svg{width:32px;height:32px}input[type=range]{width:84px}#bar{gap:0}#bar .ib{width:34px;height:36px}#bar .sep{margin:0 2px}.ib.sh svg{width:23px;height:23px}}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+
+<header>
+  <div class="brand pill" title="Намалюй коло">
+    <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="var(--ink)"/><circle cx="30" cy="34" r="15" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round" stroke-dasharray="80 15" transform="rotate(-40 30 34)"/><circle cx="30" cy="34" r="3" fill="var(--bg)"/><path d="M40 24l9-9 4 4-9 9-6 2z" fill="var(--bg)"/></svg>
+    <span>Намалюй коло</span>
+  </div>
+  <div class="acts pill">
+    <button class="ib" id="bSet" title="Налаштування"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 17h3M13 17h7"/><circle cx="16" cy="7" r="2.5"/><circle cx="10" cy="17" r="2.5"/></svg></button>
+    <button class="ib info" id="bInfo" title="Про гру (I)">i</button>
+  </div>
+</header>
+
+<div id="prompt"></div>
+
+<div id="bar" class="pill"></div>
+
+<dialog id="dInfo"><div class="dlg">
+  <div class="dh"><h2>Намалюй коло</h2><button class="ib" data-close title="Закрити"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <p>Перевір, наскільки рівно ти малюєш.</p>
+  <h3>Правила</h3>
+  <ul>
+    <li><b>Фігури</b> — намалюй фігуру одним рухом і отримай % точності.</li>
+    <li><b>Без відриву</b> — проведи всі лінії, не відриваючи руки. Якщо так не можна — тисни «Неможливо!».</li>
+  </ul>
+  <h3>Керування</h3>
+  <div class="keys">
+    <span><kbd>Мишка</kbd></span><span>затисни ліву кнопку й веди</span>
+    <span><kbd>Дотик</kbd></span><span>веди пальцем по екрану чи дошці</span>
+    <span><kbd>Пробіл</kbd> <kbd>R</kbd></span><span>почати заново</span>
+    <span><kbd>←</kbd> <kbd>→</kbd></span><span>попередня / наступна фігура чи рівень</span>
+    <span><kbd>1</kbd> <kbd>2</kbd></span><span>режими гри</span>
+    <span><kbd>H</kbd></span><span>підказка</span>
+    <span><kbd>M</kbd> <kbd>I</kbd> <kbd>Esc</kbd></span><span>звук · це вікно · закрити</span>
+  </div>
+  <a class="gh" href="https://github.com/whyuxavier/it-maysternia/tree/main/apps/draw-circle" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg>GitHub</a>
+</div></dialog>
+
+<dialog id="dSet"><div class="dlg">
+  <div class="dh"><h2>Налаштування</h2><button class="ib" data-close title="Закрити"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="row"><label>Режим</label><div class="seg" id="sMode"><button data-v="shape">Фігури</button><button data-v="euler">Без відриву</button></div></div>
+  <div class="row"><label>Тема</label><div class="chips" id="sThemes"></div></div>
+  <div class="row"><label>Колір лінії</label><div class="chips" id="sColors"></div></div>
+  <div class="row"><label>Товщина</label><input type="range" id="sSize" min="2" max="24" step="1"></div>
+  <div class="row"><label>Кольорова оцінка</label><button class="switch" id="sLive" aria-label="Кольорова оцінка"></button></div>
+  <div class="row"><label>Суворість</label><div class="seg" id="sStrict"><button data-v="0">Легко</button><button data-v="1">Норм</button><button data-v="2">Складно</button></div></div>
+  <div class="row"><label>Звук</label><button class="txtbtn ghost" id="bSound"></button></div>
+  <div class="row"><label>Повний екран</label><button class="txtbtn ghost" id="bFull">Увімкнути</button></div>
+  <div class="row" style="border:0"><label>Рекорди</label><button class="txtbtn ghost" id="sReset">Скинути</button></div>
+</div></dialog>
+
+<script>
+(()=>{
+'use strict';
+const $=s=>document.querySelector(s);
+const cv=$('#cv'),ctx=cv.getContext('2d');
+const bar=$('#bar'),promptEl=$('#prompt');
+const TAU=Math.PI*2, RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- storage ---------- */
+const ld=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
+const DEF={mode:'shape',shape:'circle',hint:false,level:0,color:'#ff5a36',size:13,theme:(matchMedia('(prefers-color-scheme: dark)').matches?'night':'paper'),sound:true,live:true,strict:1};
+const S=Object.assign({},DEF,ld('dc_settings2')||{});
+let BEST=ld('dc_best')||{}, DONE=ld('dc_done')||[];
+function save(){try{localStorage.setItem('dc_settings2',JSON.stringify(S));localStorage.setItem('dc_best',JSON.stringify(BEST));localStorage.setItem('dc_done',JSON.stringify(DONE))}catch(e){}}
+
+/* ---------- geometry helpers ---------- */
+const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+function resample(p,n){
+  if(p.length<2)return p.map(q=>({x:q.x,y:q.y}));
+  let L=0;for(let i=1;i<p.length;i++)L+=dist(p[i-1],p[i]);
+  const step=L/(n-1);if(!step)return Array.from({length:n},()=>({x:p[0].x,y:p[0].y}));
+  const out=[{x:p[0].x,y:p[0].y}];let acc=0,prev={x:p[0].x,y:p[0].y};
+  for(let i=1;i<p.length;i++){const cur=p[i];let d=dist(prev,cur);
+    while(acc+d>=step&&d>0){const t=(step-acc)/d,q={x:prev.x+t*(cur.x-prev.x),y:prev.y+t*(cur.y-prev.y)};out.push(q);prev=q;d=dist(prev,cur);acc=0;if(out.length>=n)break}
+    acc+=d;prev={x:cur.x,y:cur.y};}
+  while(out.length<n)out.push({x:p[p.length-1].x,y:p[p.length-1].y});
+  return out.slice(0,n);
+}
+function norm(p){let cx=0,cy=0;for(const q of p){cx+=q.x;cy+=q.y}cx/=p.length;cy/=p.length;let s=0;for(const q of p)s+=(q.x-cx)**2+(q.y-cy)**2;s=Math.sqrt(s/p.length)||1;return{pts:p.map(q=>({x:(q.x-cx)/s,y:(q.y-cy)/s})),cx,cy,s}}
+function nearest(p,T){let m=Infinity;for(let i=0;i<T.length;i++){const dx=p.x-T[i].x,dy=p.y-T[i].y,d=dx*dx+dy*dy;if(d<m)m=d}return Math.sqrt(m)}
+function chamfer(A,B){let a=0,b=0;for(const p of A)a+=nearest(p,B);for(const p of B)b+=nearest(p,A);return(a/A.length+b/B.length)/2}
+const rot=(T,a)=>{const c=Math.cos(a),s=Math.sin(a);return T.map(p=>({x:p.x*c-p.y*s,y:p.x*s+p.y*c}))};
+const place=(T,s,cx,cy)=>T.map(p=>({x:cx+p.x*s,y:cy+p.y*s}));
+
+/* ---------- shapes ---------- */
+function poly(n,r0=-Math.PI/2){const v=[];for(let i=0;i<=n;i++){const a=r0+i*TAU/n;v.push({x:Math.cos(a),y:Math.sin(a)})}return v}
+function starP(){const v=[];for(let i=0;i<=10;i++){const a=-Math.PI/2+i*Math.PI/5,r=i%2?.42:1;v.push({x:r*Math.cos(a),y:r*Math.sin(a)})}return v}
+function param(f,n=400){const v=[];for(let i=0;i<=n;i++)v.push(f(i/n*TAU));return v}
+const SHAPES={
+  circle:{name:'Коло',prompt:'Намалюй ідеальне коло',raw:param(t=>({x:Math.cos(t),y:Math.sin(t)})),sym:360},
+  triangle:{name:'Трикутник',prompt:'Намалюй рівносторонній трикутник',raw:poly(3),sym:120},
+  square:{name:'Квадрат',prompt:'Намалюй ідеальний квадрат',raw:poly(4,-Math.PI/4),sym:90},
+  hexagon:{name:'Шестикутник',prompt:'Намалюй правильний шестикутник',raw:poly(6),sym:60},
+  star:{name:'Зірка',prompt:'Намалюй п’ятикутну зірку',raw:starP(),sym:72},
+  heart:{name:'Серце',prompt:'Намалюй рівне серце',raw:param(t=>({x:16*Math.sin(t)**3,y:-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))})),range:24},
+  infinity:{name:'Нескінченність',prompt:'Намалюй знак нескінченності',raw:param(t=>{const s=Math.sin(t),c=Math.cos(t),d=1+s*s;return{x:c/d,y:s*c/d}}),range:20}
+};
+const SK=Object.keys(SHAPES);
+for(const k of SK){SHAPES[k].norm=norm(resample(SHAPES[k].raw,400)).pts}
+function shapeIcon(k){const p=resample(SHAPES[k].norm,70);return `<svg class="i" viewBox="-1.75 -1.75 3.5 3.5" style="stroke-width:.24"><path d="M${p.map(q=>q.x.toFixed(2)+' '+q.y.toFixed(2)).join('L')}Z"/></svg>`}
+
+/* ---------- euler levels ---------- */
+function ring(n,r,a0,cx=.5,cy=.5){const v=[];for(let k=0;k<n;k++){const a=(a0+k*360/n)*Math.PI/180;v.push([cx+r*Math.cos(a),cy+r*Math.sin(a)])}return v}
+const LEVELS=[
+  {name:'Трикутник',n:[[.5,.12],[.9,.85],[.1,.85]],e:[[0,1],[1,2],[2,0]]},
+  {name:'Метелик',n:[[.12,.15],[.12,.85],[.5,.5],[.88,.15],[.88,.85]],e:[[0,1],[1,2],[2,0],[2,3],[3,4],[4,2]]},
+  {name:'Конверт',n:[[.15,.92],[.85,.92],[.85,.45],[.15,.45],[.5,.06],[.5,.685]],e:[[0,1],[1,2],[2,3],[3,0],[0,5],[5,2],[1,5],[5,3],[3,4],[4,2]]},
+  {name:'Квадрат з діагоналями',n:[[.12,.12],[.88,.12],[.88,.88],[.12,.88],[.5,.5]],e:[[0,1],[1,2],[2,3],[3,0],[0,4],[4,2],[1,4],[4,3]]},
+  {name:'Зірка',n:ring(5,.45,-90,.5,.53),e:[[0,2],[2,4],[4,1],[1,3],[3,0]]},
+  {name:'Рибка',n:[[.06,.22],[.06,.78],[.36,.5],[.62,.2],[.94,.5],[.62,.8]],e:[[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,2],[3,5]]},
+  {name:'Віконце',n:(()=>{const v=[];for(let r=0;r<3;r++)for(let c=0;c<3;c++)v.push([.12+.38*c,.12+.38*r]);return v})(),e:(()=>{const e=[];for(let r=0;r<3;r++)for(let c=0;c<3;c++){const i=r*3+c;if(c<2)e.push([i,i+1]);if(r<2)e.push([i,i+3])}return e})()},
+  {name:'Ромб у квадраті',n:[[.1,.1],[.9,.1],[.9,.9],[.1,.9],[.5,.1],[.9,.5],[.5,.9],[.1,.5]],e:[[0,4],[4,1],[1,5],[5,2],[2,6],[6,3],[3,7],[7,0],[4,5],[5,6],[6,7],[7,4]]},
+  {name:'Гексаграма',n:[...ring(6,.46,-90),...ring(6,.46/Math.sqrt(3),-60)],e:(()=>{const e=[];for(let k=0;k<6;k++)e.push([k,6+k],[6+k,6+(k+1)%6],[6+(k+1)%6,(k+2)%6]);return e})()},
+  {name:'Кристал',n:[...ring(6,.44,-90),[.5,.5]],e:(()=>{const e=[];for(let k=0;k<6;k++)e.push([k,(k+1)%6],[k,6]);return e})()}
+];
+for(const L of LEVELS){const deg=L.n.map(()=>0);for(const[a,b]of L.e){deg[a]++;deg[b]++}L.deg=deg;L.odd=deg.map((d,i)=>d%2?i:-1).filter(i=>i>=0);L.impossible=L.odd.length>2;L.keys=new Set(L.e.map(([a,b])=>a<b?a+'-'+b:b+'-'+a))}
+const ekey=(a,b)=>a<b?a+'-'+b:b+'-'+a;
+
+/* ---------- colors / theme ---------- */
+let C={};
+function readColors(){const cs=getComputedStyle(document.documentElement);for(const k of['bg','ink','muted','accent','good'])C[k]=cs.getPropertyValue('--'+k).trim()}
+const isDark=()=>S.theme==='chalk'||S.theme==='night';
+const hueCol=h=>`hsl(${h} 82% ${isDark()?62:44}%)`;
+const hueOf=d=>120*(1-Math.min(1,d/.22));
+function applyTheme(){document.documentElement.dataset.theme=S.theme;readColors();dirty=true}
+
+/* ---------- sound ---------- */
+let AC=null,hum=null;
+function ac(){if(!S.sound)return null;if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}}if(AC.state==='suspended')AC.resume();return AC}
+function tone(f,d=.14,type='sine',v=.12,when=0){const a=ac();if(!a)return;const t=a.currentTime+when,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+.03)}
+function humStart(){humStop();const a=ac();if(!a)return;const o=a.createOscillator(),g=a.createGain();o.type='triangle';o.frequency.value=300;g.gain.setValueAtTime(.0001,a.currentTime);g.gain.exponentialRampToValueAtTime(.028,a.currentTime+.06);o.connect(g).connect(a.destination);o.start();hum={o,g,a}}
+function humSet(f){if(hum)hum.o.frequency.setTargetAtTime(f,hum.a.currentTime,.04)}
+function humStop(){if(!hum)return;const{o,g,a}=hum;g.gain.cancelScheduledValues(a.currentTime);g.gain.setTargetAtTime(.0001,a.currentTime,.04);o.stop(a.currentTime+.25);hum=null}
+const sWin=sc=>{const n=sc>=90?[523,659,784,1047]:sc>=70?[523,659,784]:[440,523];n.forEach((f,i)=>tone(f,.22,'sine',.12,i*.09))};
+const sRec=()=>[784,988,1175,1568].forEach((f,i)=>tone(f,.18,'triangle',.09,.4+i*.07));
+const sFail=()=>{tone(220,.22,'sawtooth',.05);tone(165,.3,'sawtooth',.05,.1)};
+const sTick=i=>tone(392*Math.pow(2,(i%12)/12),.09,'sine',.1);
+
+/* ---------- layout ---------- */
+let W=0,H=0,DPR=1,area={cx:0,cy:0,w:0,h:0,min:0},dirty=true;
+function resize(){
+  DPR=Math.min(window.devicePixelRatio||1,2.5);W=innerWidth;H=innerHeight;
+  for(const c of[cv]){c.width=Math.round(W*DPR);c.height=Math.round(H*DPR)}
+  cv.style.width=W+'px';cv.style.height=H+'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  computeArea();
+  if(SH.phase==='drawing')resetShape();
+  if(EU.drawing)resetEuler();
+  dirty=true;
+}
+function computeArea(){
+  const hb=$('header').getBoundingClientRect().bottom;
+  promptEl.style.top=(hb+12)+'px';
+  const top=hb+12+(promptEl.textContent.trim()?promptEl.offsetHeight+8:0);
+  const bot=bar.getBoundingClientRect().top-10;
+  area={cx:W/2,cy:(top+bot)/2,w:W,h:Math.max(120,bot-top)};area.min=Math.min(area.w-32,area.h);
+  dirty=true;
+}
+
+/* ---------- state ---------- */
+let SH={phase:'idle',pts:[],hues:[]};
+let EU={used:new Set(),cur:-1,drawing:false,ptr:null,status:null,msg:'',hint:false,showOdd:false};
+
+/* ============ SHAPE MODE ============ */
+const classic=()=>S.shape==='circle'&&!S.hint;
+function hintGeom(){const s=area.min*.3;return{s,T:place(SHAPES[S.shape].norm,s,area.cx,area.cy)}}
+function scoreOf(err){const k=[2.3,3.2,4.4][S.strict]??3.2;return Math.max(0,Math.min(100,100*(1-err*k)))}
+function tier(s){return s>=98?'Бездоганно!':s>=93?'Майже ідеально!':s>=85?'Чудово!':s>=72?'Добре!':s>=55?'Непогано':'Спробуй ще'}
+const bestKey=()=>S.shape+(S.hint?'_h':'');
+function resetShape(){humStop();SH={phase:'idle',pts:[],hues:[]};dirty=true}
+function shapeFail(msg){humStop();SH.phase='done';SH.res={ok:false,msg};sFail();dirty=true}
+function shapeStart(p){
+  hideSplash();
+  SH={phase:'drawing',pts:[p],hues:[],angle:0,maxAng:0,live:null,sum:0,res:null};
+  if(classic()){
+    const c={x:area.cx,y:area.cy};
+    if(dist(p,c)<Math.max(24,area.min*.06))return shapeFail('Відійди від центру');
+    SH.prevA=Math.atan2(p.y-c.y,p.x-c.x);SH.hues.push(120);
+  }else if(S.hint){SH.hg=hintGeom();const d=nearest(p,SH.hg.T)/SH.hg.s;SH.sum=d;SH.hues.push(hueOf(d))}
+  humStart();dirty=true;
+}
+function shapeMove(p){
+  if(SH.phase!=='drawing')return;
+  const last=SH.pts[SH.pts.length-1];if(dist(last,p)<1.2)return;
+  const sp=dist(last,p);SH.pts.push(p);
+  if(classic()){
+    const cx=area.cx,cy=area.cy,r=Math.hypot(p.x-cx,p.y-cy);
+    if(r<Math.max(24,area.min*.06))return shapeFail('Занадто близько до центру');
+    const a=Math.atan2(p.y-cy,p.x-cx);let d=a-SH.prevA;if(d>Math.PI)d-=TAU;if(d<-Math.PI)d+=TAU;SH.prevA=a;SH.angle+=d;
+    const ab=Math.abs(SH.angle);if(ab>SH.maxAng)SH.maxAng=ab;
+    if(SH.maxAng-ab>.6)return shapeFail('Не повертай назад');
+    let R=0;for(const q of SH.pts)R+=Math.hypot(q.x-cx,q.y-cy);R/=SH.pts.length;
+    let dev=0;SH.hues=SH.pts.map(q=>{const e=Math.abs(Math.hypot(q.x-cx,q.y-cy)-R)/R;dev+=e;return hueOf(e)});
+    SH.live=SH.pts.length>8?scoreOf(dev/SH.pts.length):null;
+    humSet(180+(SH.live??70)*4.5);
+    if(ab>=TAU)return shapeFinish();
+  }else if(S.hint){
+    const d=nearest(p,SH.hg.T)/SH.hg.s;SH.sum+=d;SH.hues.push(hueOf(d));
+    SH.live=SH.pts.length>8?scoreOf(SH.sum/SH.pts.length):null;humSet(180+(SH.live??70)*4.5);
+  }else humSet(240+Math.min(320,sp*12));
+  dirty=true;
+}
+function shapeEnd(){
+  if(SH.phase!=='drawing')return;
+  if(SH.pts.length<10){resetShape();return}
+  if(classic()){
+    const R=dist(SH.pts[0],{x:area.cx,y:area.cy});
+    if(Math.abs(SH.angle)>=TAU*.93&&dist(SH.pts[0],SH.pts[SH.pts.length-1])<R*.3)return shapeFinish();
+    return shapeFail('Замкни коло');
+  }
+  shapeFinish();
+}
+function shapeFinish(){
+  humStop();const P=SH.pts;let err,ideal=null,tx,ty;
+  if(classic()){
+    const cx=area.cx,cy=area.cy,Q=resample(P,256);let R=0;for(const q of Q)R+=Math.hypot(q.x-cx,q.y-cy);R/=Q.length;
+    if(R<30)return shapeFail('Замале коло');
+    let dev=0;for(const q of Q)dev+=Math.abs(Math.hypot(q.x-cx,q.y-cy)-R)/R;err=dev/Q.length;
+    ideal=param(t=>({x:cx+R*Math.cos(t),y:cy+R*Math.sin(t)}),160);tx=cx;ty=cy;
+  }else{
+    const N=norm(resample(P,120));
+    if(N.s<26)return shapeFail('Замала фігура — малюй більше');
+    if(dist(P[0],P[P.length-1])/N.s>.55)return shapeFail('Замкни фігуру');
+    if(S.hint){err=chamfer(resample(P,120),SH.hg.T)/SH.hg.s;tx=area.cx;ty=area.cy}
+    else{
+      const sh=SHAPES[S.shape],T=sh.norm;let lo,hi;
+      if(sh.sym){lo=0;hi=sh.sym}else{lo=-sh.range;hi=sh.range+.01}
+      let b={e:Infinity,a:0};
+      for(let a=lo;a<hi;a+=3){const e=chamfer(N.pts,rot(T,a*Math.PI/180));if(e<b.e)b={e,a}}
+      for(let a=b.a-3;a<=b.a+3;a+=.5){const e=chamfer(N.pts,rot(T,a*Math.PI/180));if(e<b.e)b={e,a}}
+      err=b.e;ideal=place(rot(T,b.a*Math.PI/180),N.s,N.cx,N.cy);
+      SH.hues=P.map(q=>hueOf(nearest(q,ideal)/N.s));tx=N.cx;ty=N.cy;
+    }
+  }
+  const sc=scoreOf(err),k=bestKey(),prev=BEST[k]||0,rec=sc>prev&&sc>0;
+  if(rec)BEST[k]=+sc.toFixed(1);save();
+  SH.phase='done';SH.res={ok:true,score:sc,msg:tier(sc),rec,prev,ideal,tx,ty,t0:performance.now()};
+  sWin(sc);if(rec&&prev>0)sRec();updatePrompt();dirty=true;
+}
+
+/* ============ EULER MODE ============ */
+function eGeom(){const L=LEVELS[S.level],box=Math.min(area.w-48,area.h-16,680)*.92;const x0=area.cx-box/2,y0=area.cy-box/2;return{L,box,P:L.n.map(([x,y])=>({x:x0+x*box,y:y0+y*box})),snap:Math.max(24,box*.055),nr:Math.max(8,box*.02)}}
+function resetEuler(keepMsg){EU.used=new Set();EU.cur=-1;EU.drawing=false;EU.ptr=null;if(!keepMsg){EU.status=null;EU.msg='';EU.showOdd=false}dirty=true}
+function eulerStart(p){
+  hideSplash();
+  if(EU.status==='win'){gotoLevel(S.level+1);return}
+  const g=eGeom();let bi=-1,bd=Infinity;g.P.forEach((q,i)=>{const d=dist(p,q);if(d<bd){bd=d;bi=i}});
+  EU.msg='';EU.status=null;
+  if(bd>g.snap*1.4){EU.msg='Почни з будь-якої точки';EU.status='info';dirty=true;return}
+  EU.used=new Set();EU.cur=bi;EU.drawing=true;EU.ptr=p;tone(330,.06,'sine',.08);dirty=true;
+}
+function eulerMove(p){
+  if(!EU.drawing)return;EU.ptr=p;const g=eGeom();
+  for(let j=0;j<g.P.length;j++){
+    if(j===EU.cur)continue;if(dist(p,g.P[j])>g.snap)continue;
+    const k=ekey(EU.cur,j);if(g.L.keys.has(k)&&!EU.used.has(k)){EU.used.add(k);EU.cur=j;sTick(EU.used.size);
+      if(EU.used.size===g.L.e.length)eulerWin('Готово!');break}
+  }
+  dirty=true;
+}
+function eulerEnd(){
+  if(!EU.drawing)return;EU.drawing=false;
+  if(EU.status==='win')return;
+  if(EU.used.size>0){resetEuler();EU.msg='Рука відірвалась — спробуй ще';EU.status='fail';sFail()}
+  else{EU.cur=-1}
+  dirty=true;
+}
+function eulerWin(msg){EU.drawing=false;EU.status='win';EU.msg=msg;if(!DONE.includes(S.level))DONE.push(S.level);save();sWin(95);updatePrompt();buildBar();dirty=true}
+function claimImpossible(){
+  hideSplash();const L=LEVELS[S.level];
+  if(EU.status==='win')return;
+  if(L.impossible){resetEuler();EU.showOdd=true;eulerWin('Так, неможливо!');EU.sub=`${L.odd.length} точки з непарною кількістю ліній`}
+  else{resetEuler();EU.msg='Ні — цей малюнок можна намалювати!';EU.status='fail';sFail();dirty=true}
+}
+function gotoLevel(i){S.level=(i+LEVELS.length)%LEVELS.length;save();EU.sub='';resetEuler();updatePrompt();buildBar()}
+
+/* ---------- drawing utils ---------- */
+function pathOf(P,close){ctx.beginPath();ctx.moveTo(P[0].x,P[0].y);for(let i=1;i<P.length;i++)ctx.lineTo(P[i].x,P[i].y);if(close)ctx.closePath()}
+function strokeStroke(P,hues){
+  if(!P.length)return;ctx.lineCap='round';ctx.lineJoin='round';ctx.lineWidth=S.size;
+  if(P.length===1){ctx.fillStyle=hues&&S.live?hueCol(hues[0]):S.color;ctx.beginPath();ctx.arc(P[0].x,P[0].y,S.size/2,0,TAU);ctx.fill();return}
+  if(hues&&S.live&&hues.length===P.length){for(let i=1;i<P.length;i++){ctx.strokeStyle=hueCol((hues[i]+hues[i-1])/2);ctx.beginPath();ctx.moveTo(P[i-1].x,P[i-1].y);ctx.lineTo(P[i].x,P[i].y);ctx.stroke()}}
+  else{ctx.strokeStyle=S.color;ctx.beginPath();ctx.moveTo(P[0].x,P[0].y);for(let i=1;i<P.length-1;i++){const mx=(P[i].x+P[i+1].x)/2,my=(P[i].y+P[i+1].y)/2;ctx.quadraticCurveTo(P[i].x,P[i].y,mx,my)}ctx.lineTo(P[P.length-1].x,P[P.length-1].y);ctx.stroke()}
+}
+function text(t,x,y,px,col,weight=700,fam='Unbounded, Manrope, sans-serif'){
+  ctx.font=`${weight} ${px}px ${fam}`;ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.lineJoin='round';ctx.lineWidth=Math.max(4,px*.16);ctx.strokeStyle=C.bg;ctx.strokeText(t,x,y);ctx.fillStyle=col;ctx.fillText(t,x,y);
+}
+const fmt=v=>v.toFixed(1)+'%';
+
+/* ---------- render ---------- */
+function render(){
+  ctx.clearRect(0,0,W,H);
+  if(S.mode==='shape')renderShape();else renderEuler();
+}
+function renderShape(){
+  const big=Math.max(34,Math.min(88,area.min*.13));
+  if(SH.phase==='idle'&&!S.hint){const g=hintGeom();ctx.save();ctx.globalAlpha=.28;ctx.strokeStyle=C.ink;ctx.lineWidth=3;ctx.setLineDash([10,10]);ctx.lineCap='round';pathOf(g.T,true);ctx.stroke();ctx.restore()}
+  if(SH.phase==='idle'&&!classic()){ctx.save();ctx.strokeStyle=C.ink;ctx.globalAlpha=.6;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(area.cx-9,area.cy);ctx.lineTo(area.cx+9,area.cy);ctx.moveTo(area.cx,area.cy-9);ctx.lineTo(area.cx,area.cy+9);ctx.stroke();ctx.restore()}
+  if(S.hint){const g=hintGeom();ctx.save();ctx.globalAlpha=.22;ctx.strokeStyle=C.ink;ctx.lineWidth=Math.max(2,S.size*.6);ctx.setLineDash([1,Math.max(8,S.size*1.6)]);ctx.lineCap='round';pathOf(g.T,true);ctx.stroke();ctx.restore()}
+  const showNum=(SH.phase==='drawing'&&SH.live!=null&&S.live)||(SH.phase==='done'&&SH.res&&SH.res.tx===area.cx&&SH.res.ty===area.cy);
+  if(classic()&&!showNum){ctx.fillStyle=C.ink;ctx.beginPath();ctx.arc(area.cx,area.cy,5,0,TAU);ctx.fill()}
+  if(SH.phase==='done'&&SH.res&&SH.res.ok&&SH.res.ideal){ctx.save();ctx.globalAlpha=.8;ctx.strokeStyle=C.good;ctx.lineWidth=2.5;ctx.setLineDash([8,8]);pathOf(SH.res.ideal,true);ctx.stroke();ctx.restore()}
+  strokeStroke(SH.pts,(classic()||S.hint||SH.phase==='done')?SH.hues:null);
+  if(SH.phase==='drawing'&&SH.live!=null&&S.live)text(fmt(SH.live),area.cx,area.cy,big,C.ink);
+  if(SH.phase==='done'&&SH.res){
+    const r=SH.res;
+    if(r.ok){
+      let k=1;if(!RM){k=Math.min(1,(performance.now()-r.t0)/750);k=1-Math.pow(1-k,3);if(k<1)dirty=true}
+      text(fmt(r.score*k),r.tx,r.ty,big,hueCol(hueOf((100-r.score)/100/([2.3,3.2,4.4][S.strict]||3.2))));
+      text(r.msg,r.tx,r.ty+big*.82,Math.max(16,big*.3),C.ink,800,'Manrope, sans-serif');
+      if(r.rec&&r.prev>0)text('★ Новий рекорд!',r.tx,r.ty+big*1.3,Math.max(14,big*.24),C.accent,800,'Manrope, sans-serif');
+    }else text(r.msg,area.cx,area.cy,Math.max(20,big*.42),C.accent,800,'Manrope, sans-serif');
+  }
+}
+function renderEuler(){
+  const g=eGeom(),L=g.L,lw=Math.max(5,S.size);
+  ctx.lineCap='round';
+  for(const[a,b]of L.e){const k=ekey(a,b),u=EU.used.has(k)||(EU.status==='win'&&!EU.showOdd);
+    ctx.save();
+    if(u){ctx.strokeStyle=S.color;ctx.lineWidth=lw}else{ctx.globalAlpha=.3;ctx.strokeStyle=C.ink;ctx.lineWidth=Math.max(3,lw*.55);ctx.setLineDash([2,lw*1.8])}
+    ctx.beginPath();ctx.moveTo(g.P[a].x,g.P[a].y);ctx.lineTo(g.P[b].x,g.P[b].y);ctx.stroke();ctx.restore()}
+  if(EU.drawing&&EU.cur>=0&&EU.ptr){ctx.save();ctx.globalAlpha=.45;ctx.strokeStyle=S.color;ctx.lineWidth=lw*.7;ctx.beginPath();ctx.moveTo(g.P[EU.cur].x,g.P[EU.cur].y);ctx.lineTo(EU.ptr.x,EU.ptr.y);ctx.stroke();ctx.restore()}
+  const hl=EU.hint||EU.showOdd;
+  g.P.forEach((q,i)=>{
+    const odd=L.deg[i]%2===1;
+    if(hl&&odd){ctx.save();ctx.strokeStyle=C.accent;ctx.lineWidth=3;ctx.beginPath();ctx.arc(q.x,q.y,g.nr*2,0,TAU);ctx.stroke();ctx.restore()}
+    ctx.beginPath();ctx.arc(q.x,q.y,g.nr,0,TAU);ctx.fillStyle=i===EU.cur?S.color:C.bg;ctx.fill();ctx.lineWidth=3;ctx.strokeStyle=i===EU.cur?S.color:C.ink;ctx.stroke();
+  });
+  if(EU.msg){
+    const big=Math.max(22,Math.min(46,area.min*.065)),y=area.cy+g.box/2+big*.2;
+    const col=EU.status==='win'?C.good:EU.status==='fail'?C.accent:C.muted;
+    if(EU.status==='win'){
+      ctx.save();ctx.fillStyle=C.bg;ctx.globalAlpha=.72;ctx.fillRect(0,area.cy-big*1.6,W,big*(EU.sub?3.6:3.2));ctx.restore();
+      text(EU.msg,area.cx,area.cy-big*.5,big,col);
+      if(EU.sub)text(EU.sub,area.cx,area.cy+big*.45,Math.max(14,big*.42),C.ink,700,'Manrope, sans-serif');
+      text('Торкнись — далі',area.cx,area.cy+big*(EU.sub?1.2:.6),Math.max(13,big*.36),C.muted,700,'Manrope, sans-serif');
+    }else text(EU.msg,area.cx,Math.min(y,H-120),Math.max(16,big*.6),col,800,'Manrope, sans-serif');
+  }
+}
+function frame(){if(dirty){dirty=false;render()}requestAnimationFrame(frame)}
+
+/* ---------- prompt ---------- */
+function updatePrompt(){
+  let h='';
+  if(S.mode==='shape'){const b=BEST[bestKey()];h=`<span>${SHAPES[S.shape].prompt}</span>${b?`<span class="rec">★ ${b.toFixed(1)}%</span>`:''}`}
+  else if(S.mode==='euler'){const L=LEVELS[S.level];h=`<span>${L.name}</span>${DONE.includes(S.level)?'<span class="rec">✓</span>':''}`}
+  promptEl.innerHTML=h;computeArea();
+}
+
+/* ---------- icons & bar ---------- */
+const I=d=>`<svg class="i" viewBox="0 0 24 24">${d}</svg>`;
+const IC={
+  hint:I('<circle cx="12" cy="12" r="8" stroke-dasharray="2.5 3.5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/>'),
+  reset:I('<path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4v4.5H9"/>'),
+  left:I('<path d="M15 5l-7 7 7 7"/>'),right:I('<path d="M9 5l7 7-7 7"/>'),
+  bulb:I('<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>'),
+  undo:I('<path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>'),
+  trash:I('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>'),
+  dl:I('<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>'),
+  sym:I('<path d="M12 3v18" stroke-dasharray="2 3"/><path d="M8 7l-4 5 4 5M16 7l4 5-4 5"/>'),
+  one:I('<path d="M3 16c2.5-8 5-8 6.5-1s4 7 6-1 4-6 5.5-4"/><circle cx="3" cy="16" r="1.5" fill="currentColor"/>'),
+  son:I('<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>'),
+  palette:I('<path d="M12 3a9 9 0 0 0 0 18c1.4 0 2-.9 2-1.8 0-.5-.2-.9-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.3" fill="currentColor"/><circle cx="10" cy="7" r="1.3" fill="currentColor"/><circle cx="15" cy="7.2" r="1.3" fill="currentColor"/>'),
+  soff:I('<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5 6M22 9l-5 6"/>')
+};
+const PAL=['#ff5a36','#1d2532','#ffffff','#2f7cf6','#0f9d77','#f5b700','#9b5de5','#e8467c'];
+function buildBar(){
+  let h='';
+  if(S.mode==='shape'){
+    h=SK.map(k=>`<button class="ib sh ${S.shape===k?'on':''}" data-act="shape" data-v="${k}" title="${SHAPES[k].name}" aria-label="${SHAPES[k].name}">${shapeIcon(k)}</button>`).join('')
+     +`<span class="sep"></span><button class="ib ${S.hint?'on':''}" data-act="hint" title="Контур-підказка (H)">${IC.hint}</button><button class="ib" data-act="reset" title="Заново (Пробіл)">${IC.reset}</button>`;
+  }else if(S.mode==='euler'){
+    h=`<button class="ib" data-act="prev" title="Попередній (←)">${IC.left}</button><span class="lvl">${S.level+1}/${LEVELS.length}</span><button class="ib" data-act="next" title="Наступний (→)">${IC.right}</button><span class="sep"></span><button class="ib ${EU.hint?'on':''}" data-act="ehint" title="Підказка (H)">${IC.bulb}</button><button class="ib" data-act="reset" title="Заново (Пробіл)">${IC.reset}</button><button class="txtbtn" data-act="imp">Неможливо!</button>`;
+  }
+  bar.innerHTML=h;requestAnimationFrame(computeArea);computeArea();
+}
+bar.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b||b.tagName==='INPUT')return;const a=b.dataset.act;
+  ac();
+  switch(a){
+    case'shape':S.shape=b.dataset.v;save();resetShape();buildBar();updatePrompt();break;
+    case'hint':toggleHint();break;
+    case'reset':doReset();break;
+    case'prev':gotoLevel(S.level-1);break;
+    case'next':gotoLevel(S.level+1);break;
+    case'ehint':toggleHint();break;
+    case'imp':claimImpossible();break;
+  }
+});
+function toggleHint(){if(S.mode==='shape'){S.hint=!S.hint;save();resetShape();buildBar();updatePrompt()}else if(S.mode==='euler'){EU.hint=!EU.hint;buildBar();dirty=true}}
+function doReset(){if(S.mode==='shape')resetShape();else{EU.sub='';resetEuler()}}
+
+/* ---------- mode ---------- */
+function setMode(m){
+  S.mode=m;save();humStop();
+  resetShape();resetEuler();
+  if(m!=='shape')hideSplash();
+  buildBar();updatePrompt();dirty=true;
+}
+function hideSplash(){}
+
+/* ---------- pointer ---------- */
+let active=null;
+const pt=e=>({x:e.clientX,y:e.clientY,pr:e.pressure,type:e.pointerType});
+cv.addEventListener('pointerdown',e=>{
+  if(active!==null)return;if(e.pointerType==='mouse'&&e.button!==0)return;
+  e.preventDefault();active=e.pointerId;try{cv.setPointerCapture(e.pointerId)}catch(_){}
+  ac();const p=pt(e);
+  if(S.mode==='shape')shapeStart(p);else eulerStart(p);
+});
+cv.addEventListener('pointermove',e=>{
+  if(e.pointerId!==active)return;
+  const evs=e.getCoalescedEvents?e.getCoalescedEvents():[];const list=evs.length?evs:[e];
+  for(const ev of list){const p=pt(ev);if(S.mode==='shape')shapeMove(p);else eulerMove(p)}
+});
+function endPtr(e){if(e.pointerId!==active)return;active=null;if(S.mode==='shape')shapeEnd();else eulerEnd()}
+cv.addEventListener('pointerup',endPtr);cv.addEventListener('pointercancel',endPtr);
+cv.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('gesturestart',e=>e.preventDefault());
+
+/* ---------- keyboard ---------- */
+addEventListener('keydown',e=>{
+  if(document.querySelector('dialog[open]'))return;
+  if(e.target.tagName==='INPUT')return;
+  const k=e.key.toLowerCase();
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  if(k===' '||k==='r'||k==='к'){e.preventDefault();doReset()}
+  else if(k==='1')setMode('shape');else if(k==='2')setMode('euler');
+  else if(k==='h'||k==='р')toggleHint();
+  else if(k==='m'||k==='ь')toggleSound();
+  else if(k==='i'||k==='ш')openD(dInfo);
+  else if(k==='arrowright'||k==='arrowleft'){const d=k==='arrowright'?1:-1;
+    if(S.mode==='shape'){S.shape=SK[(SK.indexOf(S.shape)+d+SK.length)%SK.length];save();resetShape();buildBar();updatePrompt()}
+    else if(S.mode==='euler')gotoLevel(S.level+d)}
+});
+
+/* ---------- header buttons & dialogs ---------- */
+const dInfo=$('#dInfo'),dSet=$('#dSet');
+function openD(d){if(typeof d.showModal==='function')d.showModal();else d.setAttribute('open','')}
+document.querySelectorAll('dialog').forEach(d=>{
+  d.addEventListener('click',e=>{if(e.target===d||e.target.closest('[data-close]'))d.close()});
+});
+$('#bInfo').onclick=()=>openD(dInfo);
+$('#bSet').onclick=()=>{syncSettings();openD(dSet)};
+function toggleSound(){S.sound=!S.sound;save();if(!S.sound)humStop();else tone(660,.1);syncSound()}
+function syncSound(){const b=$('#bSound');b.textContent=S.sound?'Звук: увімкнено':'Звук: вимкнено';b.classList.toggle('on',S.sound)}
+$('#bSound').onclick=toggleSound;
+const bFull=$('#bFull');
+if(!document.documentElement.requestFullscreen)bFull.closest('.row').style.display='none';
+function syncFull(){bFull.textContent=document.fullscreenElement?'Вимкнути':'Увімкнути'}
+bFull.onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen().catch(()=>{})};
+document.addEventListener('fullscreenchange',syncFull);
+syncFull();
+
+const THEMES=[['paper','Папір','#f4f0e6'],['cells','Зошит','#fbfcfe'],['chalk','Крейдова дошка','#22362e'],['night','Ніч','#0f1217']];
+function syncSettings(){
+  $('#sThemes').innerHTML=THEMES.map(([k,n,c])=>`<button class="thm ${S.theme===k?'on':''}" data-v="${k}"><i style="background:${c}"></i>${n}</button>`).join('');
+  $('#sColors').innerHTML=PAL.map(c=>`<button class="sw ${S.color===c?'on':''}" data-v="${c}" style="background:${c}" aria-label="${c}"></button>`).join('')+`<label class="cpick"><input type="color" id="sCustom" value="${S.color}"></label>`;
+  $('#sSize').value=S.size;$('#sLive').classList.toggle('on',S.live);
+  $('#sMode').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===S.mode));
+  syncSound();
+  $('#sStrict').querySelectorAll('button').forEach(b=>b.classList.toggle('on',+b.dataset.v===S.strict));
+}
+$('#sThemes').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(!b)return;S.theme=b.dataset.v;save();applyTheme();syncSettings()});
+$('#sColors').addEventListener('click',e=>{const b=e.target.closest('button[data-v]');if(!b)return;S.color=b.dataset.v;save();syncSettings();dirty=true});
+$('#sMode').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(!b)return;ac();setMode(b.dataset.v);syncSettings()});
+$('#sColors').addEventListener('input',e=>{if(e.target.id==='sCustom'){S.color=e.target.value;save();dirty=true}});
+$('#sSize').addEventListener('input',e=>{S.size=+e.target.value;save();dirty=true});
+$('#sLive').onclick=()=>{S.live=!S.live;save();syncSettings();dirty=true};
+$('#sStrict').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(!b)return;S.strict=+b.dataset.v;save();syncSettings()});
+$('#sReset').onclick=()=>{BEST={};DONE=[];save();updatePrompt();const b=$('#sReset');b.textContent='Скинуто ✓';setTimeout(()=>b.textContent='Скинути',1400)};
+
+/* ---------- init ---------- */
+applyTheme();
+if(!SHAPES[S.shape])S.shape='circle';
+if(S.mode!=='shape'&&S.mode!=='euler')S.mode='shape';
+if(!(S.level>=0&&S.level<LEVELS.length))S.level=0;
+addEventListener('resize',resize);
+resize();setMode(S.mode);
+if(S.mode!=='shape')hideSplash();
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{computeArea();dirty=true});
+window.__dc={S,SH:()=>SH,EU:()=>EU,area:()=>area,eGeom};
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
