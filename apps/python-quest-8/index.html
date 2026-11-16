@@ -171,6 +171,7 @@ html .card{background:var(--pw-card);border:0;border-radius:22px;box-shadow:0 5p
 html .btn{border:0;border-radius:14px;background:var(--pw-card);color:var(--pw-ink);font-weight:700;box-shadow:0 3px 0 var(--pw-shadow),0 0 0 1px var(--pw-line)}
 html .btn:hover{transform:translateY(-2px);background:var(--pw-card)}
 html .btn-main,html .btn-main:hover{background:var(--pw-coral);color:#3b3450}
+html[data-theme=dark] .btn:not(.btn-main){color:var(--pw-ink)}
 html .field{background:var(--q-field);border:1px solid var(--pw-line);border-radius:12px;color:var(--pw-ink)}
 html .code{background:var(--q-field);border-color:var(--pw-line);color:var(--q-code)}
 html .text-slate-400,html .text-slate-500{color:var(--pw-muted)}
@@ -234,8 +235,9 @@ document.addEventListener('DOMContentLoaded',function(){fill();new MutationObser
     <div id="wrap" class="card p-2 overflow-x-auto">
       <svg id="map" viewBox="0 0 1000 440" class="min-w-[820px] w-full" role="img" aria-label="Карта рівнів зі змійкою"></svg>
     </div>
-    <div class="mt-4 flex justify-center">
+    <div class="mt-4 flex flex-wrap justify-center gap-3">
       <button id="go" class="btn btn-main px-6 py-3"></button>
+      <button id="restart" class="btn px-6 py-3" type="button">Почати спочатку</button>
     </div>
   </section>
 
@@ -595,6 +597,12 @@ function showReport() {
   $('#copy').onclick = () => { navigator.clipboard && navigator.clipboard.writeText(reportText()); $('#copy').textContent = 'Скопійовано'; };
   $('#again').onclick = () => { localStorage.removeItem(STORAGE_KEY); HC.reset(); $('#fn').value = st.fn; $('#ln').value = st.ln; $('#cl').value = st.cl; preview(); show('s-start'); };
 }
+$('#restart').onclick = () => {
+  if (!confirm('Почати квест спочатку? Увесь прогрес рівнів буде видалено.')) return;
+  localStorage.removeItem(STORAGE_KEY); HC.reset();
+  Object.assign(st, {lvl:0, qi:0, res:[], busy:false, finished:false, openLevel:false});
+  $('#fn').value = st.fn; $('#ln').value = st.ln; $('#cl').value = st.cl; preview(); show('s-start');
+};
 restoreProgress();
 </script>
 <button class="ib-info" id="infoBtn" type="button" aria-label="Про квест" aria-haspopup="dialog" title="Про квест">i</button>
