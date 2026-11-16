@@ -29,6 +29,11 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 .bar{display:flex;align-items:center;justify-content:space-between;height:64px;gap:10px}
 .logo{display:flex;align-items:center;gap:10px;font:800 19px Rubik,sans-serif;white-space:nowrap}
 .logo svg{width:36px;height:36px}
+a.logo{color:inherit;text-decoration:none}
+body.home #toolSec,body:not(.home) .hero{display:none}
+body.home .hero{min-height:calc(100vh - 65px);min-height:calc(100svh - 65px);display:flex;align-items:center}
+body.home .hero-grid{width:100%}
+#toolSec{padding-top:14px}
 .tools{display:flex;gap:8px}
 .ib{width:42px;height:42px;border-radius:14px;border:0;cursor:pointer;background:var(--card);box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);display:grid;place-items:center}
 .ib svg{width:22px;height:22px}
@@ -239,7 +244,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
-<body>
+<body class="home">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <filter id="paper" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="3" stdDeviation="2" flood-color="#2f2a40" flood-opacity=".25"/></filter>
   <symbol id="i-wheel" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" class="stk" style="stroke-width:2.2"/><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4" class="stk" style="stroke-width:1.6"/><circle cx="12" cy="12" r="2.5" fill="#2f2a40"/></symbol>
@@ -250,7 +255,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
 
 <header>
   <div class="wrap bar">
-    <div class="logo"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="34" r="27" fill="#fffcf5"/><path d="M32 34V7a27 27 0 0 1 25.7 18.7z" fill="#ee8f80"/><path d="M32 34l25.7-8.3A27 27 0 0 1 48 56z" fill="#f2d06b"/><path d="M32 34l16 22a27 27 0 0 1-32 0z" fill="#86cfa8"/><path d="M32 34L16 56A27 27 0 0 1 6.3 25.7z" fill="#8ec5ee"/><path d="M32 34L6.3 25.7A27 27 0 0 1 32 7z" fill="#bba8ee"/><circle cx="32" cy="34" r="6" fill="#2f2a40"/><path d="M26 2h12l-6 10z" fill="#2f2a40"/></svg><span>Рандомайзер класу</span></div>
+    <a class="logo" href="#" id="homeLink" title="На головну"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="34" r="27" fill="#fffcf5"/><path d="M32 34V7a27 27 0 0 1 25.7 18.7z" fill="#ee8f80"/><path d="M32 34l25.7-8.3A27 27 0 0 1 48 56z" fill="#f2d06b"/><path d="M32 34l16 22a27 27 0 0 1-32 0z" fill="#86cfa8"/><path d="M32 34L16 56A27 27 0 0 1 6.3 25.7z" fill="#8ec5ee"/><path d="M32 34L6.3 25.7A27 27 0 0 1 32 7z" fill="#bba8ee"/><circle cx="32" cy="34" r="6" fill="#2f2a40"/><path d="M26 2h12l-6 10z" fill="#2f2a40"/></svg><span>Рандомайзер класу</span></a>
     <div class="tools">
       <button class="ib" id="snd" type="button" aria-label="Звук"></button>
       <button class="ib i" id="infoBtn" type="button" aria-label="Про інструмент">i</button>
@@ -778,15 +783,21 @@ function setTab(t){
   $('listPanel').hidden=t==='timer';$('tool').classList.toggle('single',t==='timer');
   if(t==='wheel')drawWheel();if(t==='timer')renderTimerSetup();
 }
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
-document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>{setTab(b.dataset.goto);$('toolSec').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'})});
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{history.replaceState(null,'','#'+b.dataset.tab);setTab(b.dataset.tab)});
+document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>{location.hash=b.dataset.goto});
+/* головна (hero) і окремий екран інструментів: #wheel, #teams, #timer */
+function route(){const t=location.hash.slice(1);
+  if(['wheel','teams','timer'].includes(t)){document.body.classList.remove('home');setTab(t)}
+  else document.body.classList.add('home');
+  scrollTo(0,0)}
+addEventListener('hashchange',route);
 
 /* ===================== КЛАВІАТУРА ===================== */
 document.addEventListener('keydown',e=>{
   if(['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName))return;
   if(!$('stage').hidden){if(e.key==='Escape'){closeTimer()}else if(e.key===' '){e.preventDefault();$('tPause').click()}return}
   if($('info').open||$('winDlg').open)return;
-  if(e.key===' '&&tab==='wheel'&&e.target.tagName!=='BUTTON'){e.preventDefault();spin()}
+  if(e.key===' '&&tab==='wheel'&&!document.body.classList.contains('home')&&e.target.tagName!=='BUTTON'){e.preventDefault();spin()}
 });
 
 /* ===================== [i] ===================== */
@@ -795,7 +806,7 @@ info.addEventListener('click',e=>{if(e.target===info||e.target.closest('[data-cl
 $('winDlg').addEventListener('click',e=>{if(e.target===$('winDlg'))$('winDlg').close()});
 
 function refresh(){renderClasses();renderNames();drawWheel();updPicked()}
-setTMode(S.tMode);refresh();setTab('wheel');
+setTMode(S.tMode);refresh();setTab('wheel');route();
 </script>
 </body>
 </html>
