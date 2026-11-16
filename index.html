@@ -232,6 +232,38 @@ body.teach .tmode{display:inline-flex}
 .tip h4{display:flex;align-items:center;gap:7px;margin:16px 0 4px;font:800 15px Rubik,sans-serif}
 .tip p{margin:0;line-height:1.5}
 .tip .open{margin-top:18px}
+/* учні на цьому комп'ютері */
+.whob{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;padding:5px 12px 5px 5px;border-radius:15px;background:var(--card);color:var(--ink);font:800 14.5px Nunito,sans-serif;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);max-width:200px}
+.whob:hover{transform:translateY(-2px)}
+.whob .av,.pbtn .av{flex:none;width:32px;height:32px;border-radius:11px;display:grid;place-items:center;background:var(--butter);font:800 14px Rubik,sans-serif;color:#2e2638}
+.whob .av svg{width:18px;height:18px;fill:currentColor}
+.whob .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.whob.in .av{background:var(--mint)}
+@media (max-width:600px){.whob .nm{display:none}.whob{padding:5px}}
+#whoDlg{max-width:480px}
+.who .wsub{margin:4px 0 14px;color:var(--muted)}
+.plist{display:grid;gap:8px;max-height:min(42vh,320px);overflow:auto;padding:2px}
+.plist:empty{display:none}
+.pbtn{display:flex;align-items:center;gap:12px;width:100%;border:0;cursor:pointer;text-align:left;padding:8px 12px 8px 8px;border-radius:15px;background:var(--bg);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+.pbtn:hover,.pbtn.me{background:color-mix(in srgb,var(--mint) 45%,var(--card))}
+.pbtn b{display:block;font:800 16px Rubik,sans-serif}
+.pbtn small{color:var(--muted);font-size:13px}
+.pform{margin-top:16px;padding-top:14px;border-top:2px dashed var(--line);display:grid;gap:6px}
+.pform h3{font-size:16px;margin:0 0 4px}
+.pform label{font:800 14px Nunito,sans-serif}
+.pform input{padding:11px 13px;border-radius:13px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:700 16px Nunito,sans-serif}
+.pform .btn{justify-self:start;margin-top:8px}
+.pout{margin-top:12px;border:0;background:none;cursor:pointer;color:var(--muted);font:800 14px Nunito,sans-serif;text-decoration:underline}
+.srow.col{flex-direction:column;align-items:stretch}
+.slist{display:grid;gap:6px}
+.slist .si{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border-radius:12px;background:var(--card);font-weight:700}
+.slist .si span{flex:1}
+.slist .si small{color:var(--muted)}
+.slist .si button{border:0;cursor:pointer;width:30px;height:30px;border-radius:10px;background:var(--bg2);color:var(--ink);font:800 16px Nunito}
+.slist:empty::before{content:"Поки нікого";color:var(--muted);font-size:14px}
+.rlogin{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px;padding:14px 16px;border-radius:18px;background:color-mix(in srgb,var(--butter) 45%,var(--card));box-shadow:0 0 0 1px var(--line)}
+.rlogin b{font:800 16px Rubik,sans-serif}
+.rlogin .btn{padding:10px 16px;font-size:15px}
 /* налаштування */
 #setDlg{max-width:440px}
 .srow{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:16px;padding:14px;border-radius:16px;background:var(--bg)}
@@ -385,6 +417,7 @@ main,footer{position:relative;z-index:1}
       <span>ІТ-Майстерня</span>
     </a>
         <div class="tools">
+      <button class="whob" id="whoBtn" type="button" aria-label="Учень"><span class="av" id="whoAv"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4 21c1-4.5 4.4-6.5 8-6.5s7 2 8 6.5z"/></svg></span><span class="nm" id="whoNm">Увійти</span></button>
       <button class="tmode" id="tExit" type="button" title="Вимкнути режим вчителя"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Режим вчителя</span></button>
       <button class="plug" id="plug" type="button" aria-label="Перемкнути тему">
         <svg viewBox="0 0 84 44" aria-hidden="true">
@@ -547,6 +580,20 @@ main,footer{position:relative;z-index:1}
   <h2 id="setT">Налаштування</h2>
   <div class="srow"><div><b>Режим вчителя</b><small>Поради «Як на уроці» біля кожного ресурсу</small></div>
     <button type="button" class="sw" id="swTeach" role="switch" aria-checked="false" aria-label="Режим вчителя"><i></i></button></div>
+  <div class="srow col"><div><b>Учні на цьому комп'ютері</b><small>Прогрес зберігається лише в цьому браузері</small></div><div class="slist" id="sList"></div></div>
+</div></dialog>
+<dialog id="whoDlg" aria-labelledby="whoT"><div class="dlg who">
+  <button class="x" type="button" data-x aria-label="Закрити">×</button>
+  <h2 id="whoT">Хто за комп'ютером?</h2>
+  <p class="wsub">Обери себе — і маршрути пам'ятатимуть саме твій прогрес.</p>
+  <div class="plist" id="pList"></div>
+  <form class="pform" id="pForm">
+    <h3 id="pFormT">Я тут уперше</h3>
+    <label for="pName">Ім'я та прізвище</label><input id="pName" autocomplete="off" required maxlength="40">
+    <label for="pCls">Клас</label><input id="pCls" autocomplete="off" required maxlength="8" placeholder="Наприклад, 6-А">
+    <button class="btn main" type="submit">Увійти</button>
+  </form>
+  <button class="pout" type="button" id="pOut" hidden>Вийти</button>
 </div></dialog>
 <dialog id="tipDlg" aria-labelledby="tipT"><div class="dlg tip" id="tipBody"></div></dialog>
 <dialog id="info" aria-labelledby="infoTitle">
@@ -1097,7 +1144,9 @@ function setTeach(on){TEACH=on;try{on?localStorage.setItem('itm-teacher','1'):lo
 function teachHash(){if(location.hash==='#vchytel'){setTeach(true);history.replaceState(null,'','#all');return true}return false}
 document.getElementById('tExit').addEventListener('click',()=>{setTeach(false);route()});
 const setDlg=document.getElementById('setDlg'),swT=document.getElementById('swTeach');
-function syncSet(){swT.setAttribute('aria-checked',String(TEACH))}
+function syncSet(){swT.setAttribute('aria-checked',String(TEACH));
+  document.getElementById('sList').innerHTML=Object.keys(PROF).sort().map(id=>`<div class="si"><span>${esc(PROF[id].name)} <small>${esc(PROF[id].cls)}</small></span><button type="button" data-del="${esc(id)}" aria-label="Видалити ${esc(PROF[id].name)}">×</button></div>`).join('')}
+document.getElementById('sList').addEventListener('click',e=>{const d=e.target.closest('[data-del]');if(!d)return;const id=d.dataset.del;if(ME===id){swapStore('');ME=null;RDONE=GUEST}else{try{if(localStorage.getItem('itm-owner')===id)swapStore('')}catch(err){}}delete PROF[id];saveR();syncWho();syncSet();route()});
 document.getElementById('mSet').addEventListener('click',()=>{setMenu(false);syncSet();setDlg.showModal()});
 setDlg.addEventListener('click',e=>{if(e.target===setDlg||e.target.closest('[data-x]'))setDlg.close()});
 swT.addEventListener('click',()=>{setTeach(!TEACH);syncSet();route()});
@@ -1143,8 +1192,55 @@ const ROUTES=[
 /* Топ-3 тижня: впиши дату понеділка й три назви карток. Через 7 днів, якщо не оновити,
    сайт сам щотижня обиратиме три інші ресурси. */
 const TOP3={from:'2026-11-16',items:['Робот-кур\'єр','Фішинг-детектор','Excel Tournament']};
-let RDONE={};try{RDONE=JSON.parse(localStorage.getItem('itm-route')||'{}')||{}}catch(e){}
-const saveR=()=>{try{localStorage.setItem('itm-route',JSON.stringify(RDONE))}catch(e){}};
+/* ===== Учні на цьому комп'ютері. Профіль = ім'я + клас; усе зберігається лише в браузері цього ПК.
+   Після 90 хв без дій сайт знову спитає «Хто за комп'ютером?» — зручно, коли змінюється клас. ===== */
+let PROF={};try{PROF=JSON.parse(localStorage.getItem('itm-profiles')||'{}')||{}}catch(e){}
+let ME=null;try{const c=JSON.parse(localStorage.getItem('itm-me')||'null');if(c&&PROF[c.id]&&Date.now()-c.t<90*60e3)ME=c.id}catch(e){}
+let GUEST={};try{GUEST=JSON.parse(localStorage.getItem('itm-route')||'{}')||{}}catch(e){}
+let RDONE=ME?PROF[ME].done:GUEST;
+const saveR=()=>{try{localStorage.setItem('itm-profiles',JSON.stringify(PROF));localStorage.setItem('itm-me',JSON.stringify(ME?{id:ME,t:Date.now()}:null));if(!ME)localStorage.setItem('itm-route',JSON.stringify(GUEST))}catch(e){}};
+const bandOf=c=>{const n=parseInt(c,10);return !n?null:n<=4?'1-4':n<=8?'5-8':'9-12'};
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const initials=n=>n.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+const NAMES=['Леся Українка','Тарас Шевченко','Іван Франко','Ліна Костенко','Сергій Корольов','Ігор Сікорський','Марія Приймаченко','Микола Амосов','Олена Пчілка','Борис Патон'];
+/* Прогрес в інших ресурсах (MOUSE RACER, квести, Робот-кур'єр…) теж окремий для кожного учня:
+   усі застосунки на одному сайті й ділять один localStorage, тож при зміні учня ми
+   відкладаємо дані попереднього в його профіль і повертаємо дані нового. */
+const SYS=/^(itm-|pw-theme$)/;
+function swapStore(to){
+  let from='';try{from=localStorage.getItem('itm-owner')||''}catch(e){return}
+  if(from===to)return;
+  try{const snap={},keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(!SYS.test(k))keys.push(k)}
+    keys.forEach(k=>{snap[k]=localStorage.getItem(k)});
+    if(from&&PROF[from])PROF[from].store=snap;else if(!from)localStorage.setItem('itm-guest-store',JSON.stringify(snap));
+    keys.forEach(k=>localStorage.removeItem(k));
+    let next={};if(to&&PROF[to])next=PROF[to].store||{};else if(!to){try{next=JSON.parse(localStorage.getItem('itm-guest-store')||'{}')||{}}catch(e){}}
+    Object.entries(next).forEach(([k,v])=>localStorage.setItem(k,v));
+    localStorage.setItem('itm-owner',to);localStorage.setItem('itm-profiles',JSON.stringify(PROF));
+  }catch(e){/* браузер переповнений — лишаємо як є */}}
+function login(id){swapStore(id);ME=id;RDONE=PROF[id].done;const b=bandOf(PROF[id].cls);if(b){AGE=b;try{localStorage.setItem('itm-age',AGE)}catch(e){}}saveR();syncWho();route()}
+function logout(){swapStore('');ME=null;RDONE=GUEST;saveR();syncWho();route()}
+function syncWho(){const p=ME&&PROF[ME],b=document.getElementById('whoBtn');b.classList.toggle('in',!!p);
+  document.getElementById('whoNm').textContent=p?p.name.split(/\s+/)[0]:'Увійти';
+  document.getElementById('whoAv').innerHTML=p?esc(initials(p.name)):'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4 21c1-4.5 4.4-6.5 8-6.5s7 2 8 6.5z"/></svg>';
+  b.title=p?`${p.name}, ${p.cls} — змінити учня`:'Увійти'}
+const whoDlg=document.getElementById('whoDlg');
+function openWho(){const ids=Object.keys(PROF).sort((a,b)=>(PROF[b].t||0)-(PROF[a].t||0));
+  const cnt=p=>Object.keys(p.done).length;
+  document.getElementById('pList').innerHTML=ids.map(id=>{const p=PROF[id];return `<button type="button" class="pbtn${id===ME?' me':''}" data-pid="${esc(id)}"><span class="av">${esc(initials(p.name))}</span><span><b>${esc(p.name)}</b><small>${esc(p.cls)} · пройдено кроків: ${cnt(p)}</small></span></button>`}).join('');
+  document.getElementById('pFormT').textContent=ids.length?'Мене тут немає':'Я тут уперше';
+  document.getElementById('pName').placeholder='Наприклад, '+NAMES[Math.floor(Math.random()*NAMES.length)];
+  document.getElementById('pOut').hidden=!ME;whoDlg.showModal()}
+document.getElementById('whoBtn').addEventListener('click',openWho);
+whoDlg.addEventListener('click',e=>{if(e.target===whoDlg||e.target.closest('[data-x]'))return whoDlg.close();
+  const p=e.target.closest('[data-pid]');if(p){PROF[p.dataset.pid].t=Date.now();whoDlg.close();login(p.dataset.pid)}});
+document.getElementById('pOut').addEventListener('click',()=>{whoDlg.close();logout()});
+document.getElementById('pForm').addEventListener('submit',e=>{e.preventDefault();
+  const name=document.getElementById('pName').value.trim().replace(/\s+/g,' '),cls=document.getElementById('pCls').value.trim().toUpperCase().replace(/\s+/g,'');
+  if(!name||!cls)return;const id=(name+'|'+cls).toLowerCase();
+  if(!PROF[id])PROF[id]={name,cls,done:{}};PROF[id].t=Date.now();e.target.reset();whoDlg.close();login(id)});
+/* активність продовжує сесію */
+let lastTouch=0;document.addEventListener('click',()=>{if(ME&&Date.now()-lastTouch>60e3){lastTouch=Date.now();saveR()}});
 const appBy=t=>APPS.find(a=>a.title===t);
 const linkOf=a=>a.url||GH+a.repo+'/';
 const cls=g=>g[0]+'–'+g[1]+' клас';
@@ -1164,7 +1260,8 @@ function weekTop(){
   const wk=Math.floor((now-new Date('2026-01-05T00:00:00'))/(7*864e5)),pool=APPS.filter(a=>!a.teacher);
   const out=[];for(let i=0;out.length<3&&i<pool.length*3;i++){const a=pool[(wk*7+i*11)%pool.length];if(!out.includes(a))out.push(a)}return out}
 function renderHome(){
-  document.getElementById('hRoutes').innerHTML=ROUTES.map((rt,k)=>{const {st,done,next}=rState(rt);
+  const mb=ME&&bandOf(PROF[ME].cls),bk=['1-4','5-8','9-12'];
+  document.getElementById('hRoutes').innerHTML=ROUTES.map((rt,k)=>[rt,k]).sort((x,y)=>(bk[y[1]]===mb)-(bk[x[1]]===mb)).map(([rt,k])=>{const {st,done,next}=rState(rt);
     return `<a class="hroute" href="#routes" data-age="${['1-4','5-8','9-12'][k]}" style="--dot:var(${rt.color})"><span class="kicker">${cls(rt.g)}</span><h3>${rt.title}</h3>
     <div class="pbar"><span><i style="width:${Math.round(done/st.length*100)}%"></i></span>${done} з ${st.length}</div>
     <span class="next">${next?`Далі: <b>${next[0]}</b>`:'Маршрут пройдено!'}</span><span class="go">${done?'Продовжити':'Почати'}</span></a>`}).join('');
@@ -1172,7 +1269,7 @@ function renderHome(){
   document.getElementById('hNew').innerHTML=UPDATES.flatMap(u=>u.items).slice(0,4).map(updItem).join('');
 }
 document.getElementById('hRoutes').addEventListener('click',e=>{const a=e.target.closest('[data-age]');if(!a)return;AGE=a.dataset.age;try{localStorage.setItem('itm-age',AGE)}catch(err){}});
-document.addEventListener('click',e=>{const b=e.target.closest('.rchk');if(!b)return;const t=b.dataset.done;if(RDONE[t])delete RDONE[t];else RDONE[t]=1;saveR();renderGrid();renderSide()});
+document.addEventListener('click',e=>{const b=e.target.closest('.rchk');if(!b)return;if(!ME){openWho();return}const t=b.dataset.done;if(RDONE[t])delete RDONE[t];else RDONE[t]=1;saveR();renderGrid();renderSide()});
 /* підпис розділу картки — для сторінки оновлень */
 const navOf=a=>NAV.find(n=>n.id===(a.fun?'games':a.teacher?'teacher':a.t));
 let AGE='all';try{AGE=localStorage.getItem('itm-age')||'all'}catch(e){}
@@ -1197,7 +1294,7 @@ function renderAge(show){ageBar.hidden=!show;ageBar.innerHTML='<span class="al">
 ageBar.addEventListener('click',e=>{const b=e.target.closest('[data-age]');if(!b)return;AGE=b.dataset.age;try{localStorage.setItem('itm-age',AGE)}catch(e){}renderGrid();renderSide()});
 function renderGrid(){
   const id=current;let html='';
-  if(id==='routes'){renderAge(true);html=ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).map(routeHTML).join('')}
+  if(id==='routes'){renderAge(true);html=(ME?'':`<div class="rlogin"><div><b>Увійди, щоб зберігати свій прогрес</b><br><small>Кожен учень на цьому комп'ютері має свої позначки.</small></div><button type="button" class="btn main" onclick="openWho()">Увійти</button></div>`)+ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).map(routeHTML).join('')}
   else if(id==='games'){renderAge(true);html=section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))}
   else if(id==='teacher'){renderAge(false);html=section('Для вчителя','Work','--butter',APPS.filter(a=>a.teacher).sort((a,b)=>(a.o||0)-(b.o||0)))}
   else{renderAge(true);
@@ -1283,7 +1380,9 @@ function route(){
   window.scrollTo({top:0,behavior:'instant'});
 }
 addEventListener('hashchange',()=>{teachHash();oldHash();route()});
-teachHash();setTeach(TEACH);oldHash();markNew();route();
+if(!ME)swapStore('');
+teachHash();setTeach(TEACH);syncWho();oldHash();markNew();route();
+if(!ME&&!TEACH&&Object.keys(PROF).length&&document.body.classList.contains('home'))openWho();
 
 /* ===== Сніг: лише на головній, лише в темній темі й лише взимку (snow.js вантажиться тільки тоді) ===== */
 (()=>{const el=document.getElementById('snow');let snow=null,loading=false;
