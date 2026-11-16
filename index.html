@@ -716,13 +716,15 @@ const ART = {
   },
   robot(){
     let g='';for(let i=0;i<5;i++)for(let j=0;j<3;j++)g+=R((i+j)%2?'mi':'cr',60+i*40,40+j*40,40,40,0,'opacity=".55"');
+    const bot=`<circle cx="-16" cy="45" r="9" fill="#3a3550"/><circle cx="-16" cy="45" r="3.5" fill="#c1dff6"/><circle cx="16" cy="45" r="9" fill="#3a3550"/><circle cx="16" cy="45" r="3.5" fill="#c1dff6"/><rect x="-36" y="6" width="12" height="22" rx="6" fill="#6b94b3"/><rect x="24" y="6" width="12" height="22" rx="6" fill="#6b94b3"/><rect x="-26" y="-2" width="52" height="42" rx="12" fill="#8ec5ee"/><rect x="-22" y="30" width="44" height="7" rx="3.5" fill="#6b94b3" opacity=".35"/><rect x="-20" y="9" width="40" height="27" rx="3" fill="#e9c27a"/><rect x="-3" y="9" width="6" height="27" fill="#c99b4f"/><rect x="-20" y="9" width="40" height="5" rx="2" fill="#d9ae62"/><circle cx="-24" cy="27" r="5.5" fill="#6b94b3"/><circle cx="24" cy="27" r="5.5" fill="#6b94b3"/><rect x="-7" y="-9" width="14" height="9" fill="#6b94b3"/><path d="M0 -48v-14" stroke="#3a3550" stroke-width="3"/><circle cx="0" cy="-64" r="5.5" fill="#ee8f80"/><circle cx="0" cy="-28" r="24" fill="#8ec5ee"/><path d="M-15 -44a20 20 0 0 1 14 -6" stroke="#c1dff6" stroke-width="4" fill="none" stroke-linecap="round"/><rect x="-30" y="-35" width="7" height="15" rx="3.5" fill="#6b94b3"/><rect x="23" y="-35" width="7" height="15" rx="3.5" fill="#6b94b3"/><rect x="-17" y="-40" width="34" height="23" rx="10" fill="#2f2a40"/><circle cx="-7" cy="-29" r="4.5" fill="#fff"/><circle cx="7" cy="-29" r="4.5" fill="#fff"/><circle cx="-7" cy="-29" r="2" fill="#2f2a40"/><circle cx="7" cy="-29" r="2" fill="#2f2a40"/>`; /* класичний робот із гри (RDEF) */
     return G(R('mi',52,32,216,136,16))+g+
-      G(R('li',140,80,36,36,10)+R('li',220,40,36,36,10))+
-      `<path d="M80 60H200V140" fill="none" style="stroke:var(--ink);stroke-width:3;stroke-dasharray:4 7;stroke-linecap:round"/>`+
-      G(`<path class="co" d="M184 132l16-14 16 14z"/>`+R('cr',188,130,24,18,2)+R('li',197,136,7,12,1))+
-      G(R('pe',62,52,24,20,6)+R('bu',66,56,16,12,2)+R('sk',62,44,24,14,6)+R('ink',66,47,16,7,3.5)+C('cr',70,50.5,2)+C('cr',78,50.5,2))+
+      G(R('li',180,40,36,36,10))+
+      `<path d="M100 150H228V108" fill="none" style="stroke:var(--ink);stroke-width:3;stroke-dasharray:4 7;stroke-linecap:round"/>`+
+      G(`<path class="co" d="M212 104l16-14 16 14z"/>`+R('cr',216,102,24,20,2)+R('li',225,109,7,13,1))+
+      G(bot,'translate(100 104) scale(.78)')+
       star(272,40,.7)+G(R('sk',0,0,30,26,7)+`<path d="M15 20V7M10 12l5-5 5 5" class="st" style="stroke-width:3"/>`,'translate(268 132) rotate(8)');
   },
+
   keys(){
     let k='';
     const miss=new Set(['0-3','1-5','2-1']);
