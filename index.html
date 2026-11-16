@@ -81,9 +81,9 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 8
 .plug .plughl{fill:none;stroke:rgba(255,255,255,.6);stroke-width:2;stroke-linecap:round}
 .plug .plugcore{fill:color-mix(in srgb,var(--coral) 60%,#2a1a20)}
 .plug .front{transform-box:view-box;transform-origin:62px 20px;opacity:1;transform:none;transition:opacity .15s .26s,transform .35s cubic-bezier(.3,1.7,.5,1) .26s}
-.plug .side{transform-box:view-box;transform-origin:6px 23px;opacity:0;transform:translateX(18px);transition:transform .28s ease-in,opacity .1s .2s}
+.plug .pside{transform-box:view-box;transform-origin:6px 23px;opacity:0;transform:translateX(18px);transition:transform .28s ease-in,opacity .1s .2s}
 :root[data-theme="dark"] .plug .front{opacity:0;transform:scale(1.25);transition:transform .2s ease-out,opacity .12s .1s}
-:root[data-theme="dark"] .plug .side{opacity:1;transform:translate(0,3px) rotate(8deg);transition:opacity .1s .14s,transform .6s cubic-bezier(.3,1.6,.45,1) .14s}
+:root[data-theme="dark"] .plug .pside{opacity:1;transform:translate(0,3px) rotate(8deg);transition:opacity .1s .14s,transform .6s cubic-bezier(.3,1.6,.45,1) .14s}
 .plug:focus-visible,.ibtn:focus-visible,.btn:focus-visible,.tab:focus-visible,.card:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
 .ibtn{display:none;width:40px;height:40px;border-radius:14px;border:0;cursor:pointer;background:var(--lilac);color:var(--ink);font:800 18px Rubik,sans-serif;box-shadow:0 2px 0 var(--shadow)}
 
@@ -290,7 +290,7 @@ body.home .hero-grid{width:100%}
   .mcur{display:block;font-size:24px;margin:0 0 12px}
 }
 #snow{position:fixed;inset:0;z-index:0;pointer-events:none}
-main,header,footer{position:relative;z-index:1}
+main,footer{position:relative;z-index:1}
 </style>
 </head>
 <body class="home">
@@ -320,7 +320,7 @@ main,header,footer{position:relative;z-index:1}
           <rect class="sockclip" x="60.3" y="29" width="3.4" height="2.4" rx="1"/>
           <circle class="sockhole" cx="57.2" cy="20" r="2.2"/>
           <circle class="sockhole" cx="66.8" cy="20" r="2.2"/>
-          <g class="side">
+          <g class="pside">
             <path class="cable" d="M-30 25C-12 25-4 23 6 23"/>
             <rect class="pin" x="30" y="16.4" width="13" height="3.2" rx="1.6"/>
             <rect class="pin" x="30" y="25.4" width="13" height="3.2" rx="1.6"/>
