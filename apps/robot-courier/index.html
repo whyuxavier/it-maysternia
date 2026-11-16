@@ -76,10 +76,22 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 .cr-bot.bump{animation:bump .35s cubic-bezier(.3,1.6,.5,1)}
 @keyframes bump{40%{transform:translateY(-6px) scale(1.04)}}
 .cr-opts{display:grid;gap:9px}
-.gpill{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border-radius:13px;background:var(--card);font:800 15px Rubik;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line)}
+.gpill{border:0;cursor:pointer;color:var(--ink);display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border-radius:13px;background:var(--card);font:800 15px Rubik;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line)}
 .gpill svg{width:20px;height:20px}
 .gpill.spin svg{animation:spin .6s ease}
 @keyframes spin{to{transform:rotate(180deg)}}
+.howto{display:grid;gap:8px}
+.howto>div{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.pb.mini{color:var(--ink);display:inline-flex;padding:4px 10px 4px 4px;font-size:13px;cursor:default;box-shadow:0 2px 0 var(--shadow);border-radius:11px;gap:6px}
+.pb.mini .ico{width:24px;height:24px}
+.pb.mini .ico svg{width:17px;height:17px}
+.howto2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.howto2 figure{margin:0;background:var(--bg);border-radius:14px;padding:8px;text-align:center}
+.howto2 svg{width:100%;height:auto;display:block}
+.howto2 figure:last-child{grid-column:1/-1;display:flex;align-items:center;gap:10px;text-align:left}
+.howto2 figure:last-child svg{width:150px;flex:none}
+.howto2 figcaption{font-size:13px;font-weight:700;color:var(--muted);line-height:1.3;margin-top:4px}
+#info{max-width:520px}
 .cr-msg{min-height:20px;font-weight:700;font-size:14px;margin:4px 0 0;color:var(--muted)}
 .cr-msg.ok{color:var(--ok)} .cr-msg.bad{color:var(--bad)}
 .opt{position:relative}
@@ -102,6 +114,7 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 .opt[aria-pressed="true"]{outline:3px solid var(--coral);outline-offset:2px;background:var(--card)}
 .cr-foot{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
 .cr-foot .btn{padding:9px 14px;font-size:15px}
+.chip.c1{border:0;cursor:pointer;color:var(--ink)}
 .chip{position:absolute;padding:6px 12px;border-radius:12px;background:var(--card);font:800 14px Nunito;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);white-space:nowrap;animation:pop .4s cubic-bezier(.4,1.6,.5,1) .8s both;z-index:2}
 .chip.c1{top:-14px;left:22px;transform:rotate(-4deg)}
 .chip.c3{top:-14px;right:22px;transform:rotate(3deg);animation-delay:.9s}
@@ -247,7 +260,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
       <span>Робот-кур'єр</span>
     </button>
     <div class="tools">
-      <span class="gpill" id="gearPill" title="Шестерні"><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg><b id="gearN">0</b></span>
+      <button class="gpill" id="gearPill" type="button" title="Мій робот" aria-label="Шестерні — відкрити налаштування робота"><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg><b id="gearN">0</b></button>
       <button class="ib" id="snd" type="button" aria-label="Звук"></button>
       <button class="ib i" id="infoBtn" type="button" aria-label="Про гру">i</button>
     </div>
@@ -278,7 +291,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
           <button class="hbot" id="heroBotBtn" type="button" aria-label="Налаштувати вигляд робота"><svg viewBox="-46 -76 92 134" id="heroBot" filter="url(#paper)"></svg></button>
           <button class="btn hcust" id="bCustom" type="button"><svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="3" class="ink"/><circle cx="16" cy="9" r="3" class="ink"/><circle cx="12" cy="16" r="3" class="ink"/></svg>Налаштувати робота</button>
         </div>
-        <span class="chip c1" id="chipGears">0 шестерень</span>
+        <button class="chip c1" id="chipGears" type="button">0 шестерень</button>
         <span class="chip c3" id="chipStars">0 з 39 зірок</span>
       </div>
     </div>
@@ -333,22 +346,29 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
   <div class="dlg">
     <button class="close" type="button" data-close aria-label="Закрити">×</button>
     <h2 id="infoT">Робот-кур'єр</h2>
-    <p>Склади програму з блоків, щоб робот доставив посилки.</p>
+    <p>Склади програму з блоків — і твій робот рознесе посилки. Проходь рівні, збирай шестерні й відкривай для робота нові деталі та кольори.</p>
     <h3>Правила</h3>
     <ul>
-      <li>Робот виконує блоки згори вниз.</li>
-      <li>Не врізайся в кущі.</li>
-      <li>Посилку доставлено, коли робот стоїть на будинку.</li>
-      <li>Менше блоків — більше зірок.</li>
-      <li>За рівні отримуєш шестерні. Відкривай за них нові деталі робота.</li>
+      <li>Блоки виконуються згори вниз.</li>
+      <li>Посилку доставлено, коли робот стоїть на будинку. Кущі й каміння не можна проїхати.</li>
+      <li>Менше блоків — більше зірок і шестерень.</li>
     </ul>
-    <h3>Керування</h3>
-    <ul>
-      <li>Натисни або перетягни блок у програму.</li>
-      <li>Перетягуй блоки, щоб змінити порядок. Витягни за межі — видалиться.</li>
-      <li>Натисни на поворот у програмі — ліворуч ↔ праворуч.</li>
-      <li>Клавіатура: ↑ ← → додають блоки, Enter — запуск.</li>
-    </ul>
+    <h3>Команди</h3>
+    <div class="howto">
+      <div><span class="pb k-fwd mini"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-fwd"/></svg></span>Крок вперед</span><span>на 1 клітинку</span></div>
+      <div><span class="pb k-left mini"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-left"/></svg></span>Ліворуч</span><span class="pb k-right mini"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-right"/></svg></span>Праворуч</span><span>поворот на місці</span></div>
+      <div><span class="pb k-rep mini"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-rep"/></svg></span>Повторити 3</span><span>кілька разів</span></div>
+      <div><span class="pb k-while mini"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-while"/></svg></span>Поки не вдома</span><span>повторює, доки не дійде</span></div>
+      <div><span class="pb k-if mini"><span class="ico"><svg viewBox="0 0 24 24"><use href="#i-if"/></svg></span>Якщо кущ</span><span>перевіряє, що попереду</span></div>
+    </div>
+    <h3>Як керувати</h3>
+    <div class="howto2">
+      <figure><svg viewBox="0 0 120 70" aria-hidden="true"><rect x="6" y="8" width="50" height="16" rx="5" fill="var(--move)"/><rect x="62" y="30" width="52" height="34" rx="8" fill="none" stroke="var(--coral)" stroke-width="2" stroke-dasharray="4 3"/><rect x="66" y="40" width="44" height="14" rx="5" fill="var(--move)" opacity=".5"/><path d="M40 22q14 4 30 18" class="stk" style="stroke-width:2.5" stroke-dasharray="3 4"/><path d="M66 34l5 7 2-8z" class="ink"/><path d="M44 28l9 22 4-8 8 7 3-3-8-7 8-3z" fill="#fff" stroke="#2f2a40" stroke-width="2" stroke-linejoin="round"/></svg><figcaption>Натисни або перетягни блок у програму</figcaption></figure>
+      <figure><svg viewBox="0 0 120 70" aria-hidden="true"><rect x="10" y="12" width="44" height="14" rx="5" fill="var(--turn)"/><rect x="10" y="32" width="44" height="14" rx="5" fill="var(--move)"/><rect x="66" y="20" width="44" height="14" rx="5" fill="var(--turn)" opacity=".5" transform="rotate(-8 88 27)"/><path d="M56 20q6 -8 12 -2" class="stk" style="stroke-width:2.5" stroke-dasharray="3 4"/><g transform="translate(78 42)"><path d="M2 6h16M6 6V3h8v3M4 6l1.5 14h9L16 6" class="stk" style="stroke-width:2.2"/></g></svg><figcaption>Тягни, щоб переставити. За межі — видалиться</figcaption></figure>
+      <figure><svg viewBox="0 0 120 70" aria-hidden="true"><rect x="6" y="24" width="44" height="22" rx="6" fill="var(--turn)"/><path d="M22 41v-6a5 5 0 0 0-5-5h-6" class="stk" style="stroke-width:2.4"/><path d="M14 27l-3 3 3 3" class="stk" style="stroke-width:2.4"/><path d="M54 30h12M62 26l4 4-4 4M66 40H54M58 36l-4 4 4 4" class="stk" style="stroke-width:2.4"/><rect x="70" y="24" width="44" height="22" rx="6" fill="var(--turn)"/><path d="M86 41v-6a5 5 0 0 1 5-5h6" class="stk" style="stroke-width:2.4"/><path d="M94 27l3 3-3 3" class="stk" style="stroke-width:2.4"/></svg><figcaption>Натисни на поворот — він зміниться</figcaption></figure>
+      <figure><svg viewBox="0 0 120 70" aria-hidden="true"><g font-family="Rubik" font-weight="800" font-size="13" text-anchor="middle"><rect x="40" y="22" width="26" height="24" rx="5" class="pp" stroke="#2f2a40" stroke-width="1.8"/><text x="53" y="39">↑</text><rect x="10" y="34" width="26" height="24" rx="5" class="pp" stroke="#2f2a40" stroke-width="1.8"/><text x="23" y="51">←</text><rect x="70" y="34" width="26" height="24" rx="5" class="pp" stroke="#2f2a40" stroke-width="1.8"/><text x="83" y="51">→</text><rect x="74" y="6" width="40" height="24" rx="5" fill="var(--mint)" stroke="#2f2a40" stroke-width="1.8"/><text x="94" y="23" font-size="10">Enter</text></g></svg><figcaption>Стрілки додають блоки, Enter — запуск</figcaption></figure>
+      <figure><svg viewBox="0 0 120 70" aria-hidden="true"><rect x="6" y="18" width="58" height="30" rx="10" class="pp" stroke="#2f2a40" stroke-opacity=".15"/><g transform="translate(11 22) scale(.92)"><use href="#i-gear" width="24" height="24"/></g><text x="38" y="39" font-family="Rubik" font-weight="800" font-size="15">35</text><path d="M68 30h10M74 26l4 4-4 4" class="stk" style="stroke-width:2.4"/><g transform="translate(96 40) scale(.24)"></g></svg><figcaption>Натисни на шестерні — налаштуй робота</figcaption></figure>
+    </div>
     <a class="gh" href="https://github.com/whyuxavier/it-maysternia" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6L2.5 9.3l6.6-.8z"/></svg>GitHub</a>
   </div>
 </dialog>
@@ -797,7 +817,7 @@ function openLevel(n){
 
 /* ===================== КЛАВІАТУРА ===================== */
 document.addEventListener('keydown',e=>{
-  if(cur!=='play'||$('info').open||$('win').open||e.target.tagName==='INPUT')return;
+  if(cur!=='play'||$('info').open||$('win').open||$('creatorDlg').open||e.target.tagName==='INPUT')return;
   const has=k=>L.blocks.includes(k);
   if(e.key==='ArrowUp'&&has('fwd')){e.preventDefault();addBlock('fwd')}
   else if(e.key==='ArrowLeft'){e.preventDefault();addBlock('left')}
@@ -807,7 +827,7 @@ document.addEventListener('keydown',e=>{
 });
 
 /* ===================== [i] ===================== */
-const info=$('info');$('infoBtn').onclick=()=>info.showModal();
+const info=$('info');$('infoBtn').onclick=()=>{const g=info.querySelector('.howto2 figure:last-child svg>g:last-of-type');if(g)g.innerHTML=robotSVG(ROBOT);info.showModal()};
 info.addEventListener('click',e=>{if(e.target===info||e.target.closest('[data-close]'))info.close()});
 $('win').addEventListener('click',e=>{if(e.target===$('win'))$('win').close()});
 
@@ -817,7 +837,7 @@ Object.keys(ROBOT).forEach(k=>{const o=ROPT.find(x=>x.k===k);if(!o||!o.items.inc
 updGears();
 renderCreator();drawRobotEverywhere();
 const crD=$('creatorDlg');
-$('bCustom').onclick=$('heroBotBtn').onclick=()=>{renderCreator();updGears();$('crMsg').textContent='Проходь рівні, збирай шестерні й відкривай нові деталі.';$('crMsg').className='cr-msg';crD.showModal()};
+$('bCustom').onclick=$('heroBotBtn').onclick=$('gearPill').onclick=$('chipGears').onclick=()=>{renderCreator();updGears();$('crMsg').textContent='Проходь рівні, збирай шестерні й відкривай нові деталі.';$('crMsg').className='cr-msg';crD.showModal()};
 crD.addEventListener('click',e=>{if(e.target===crD||e.target.closest('[data-close]'))crD.close()});
 $('crOpts').addEventListener('click',e=>{
   const b=e.target.closest('.opt');if(!b)return;const k=b.dataset.k,v=b.dataset.v,msg=$('crMsg');
