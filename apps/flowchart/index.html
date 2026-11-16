@@ -1,3 +1,6 @@
+<!doctype html>
+<html lang="uk">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Блок-схема</title>
@@ -7,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Unbounded:wght@600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: header strip · palette rail (left) · graph-paper canvas · Python drawer (right) */
+/* Layout: header strip · palette rail (left) · graph-paper canvas */
 :root{
   --paper:#f4f5fa; --grid:rgba(111,138,214,.10); --grid2:rgba(111,138,214,.19);
   --panel:#fbfcff; --line:rgba(60,64,100,.13); --ink:#23242e; --muted:#676a7d; --ed:#fcfcff;
@@ -39,8 +42,8 @@ body{height:100%;margin:0;overflow:hidden;background:var(--paper);color:var(--in
 button{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
-.app{height:100%;position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:auto minmax(0,1fr);
-  grid-template-areas:"top top top" "pal stage code"}
+.app{height:100%;position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);
+  grid-template-areas:"top top" "pal stage"}
 
 /* header */
 .top{grid-area:top;display:flex;align-items:center;gap:12px;padding-block:8px;
@@ -96,24 +99,10 @@ button{font:inherit;color:inherit}
 .zoom output{min-width:44px;text-align:center;font:500 12px var(--font-code);color:var(--muted);font-variant-numeric:tabular-nums}
 .toast{position:absolute;left:50%;top:14px;transform:translateX(-50%);padding:8px 14px;border-radius:9px;background:var(--ink);color:var(--panel);font-weight:600;font-size:13px;z-index:6;pointer-events:none}
 
-/* code panel */
-.code{grid-area:code;width:320px;display:flex;flex-direction:column;gap:10px;padding-block:14px;
-  padding-left:14px;padding-right:max(14px,env(safe-area-inset-right,0px));border-left:1px solid var(--line);background:var(--panel);min-height:0}
-.code.closed{display:none}
-.code-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.code h2{margin:0;font:600 14px/1.2 var(--font-brand);text-wrap:balance}
-.code .x{display:none}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{padding:5px 10px;border:1px solid var(--line);border-radius:20px;background:none;cursor:pointer;font-size:12.5px;font-weight:600}
-.chip:hover{border-color:var(--accent);color:var(--accent)}
-#code{flex:1;min-height:160px;resize:none;width:100%;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--ed);color:var(--ink);
-  font:400 13.5px/1.6 var(--font-code);tab-size:4;white-space:pre;overflow:auto}
-#code:focus{outline:none;border-color:var(--accent)}
-.err{margin:0;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--danger) 12%,transparent);color:var(--danger);font-size:13px;font-weight:600}
-.primary{height:42px;border:0;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--mint));color:var(--on-accent);font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
-.primary:hover{filter:brightness(1.08)}
-.primary svg{width:18px;height:18px}
-
+.exw{position:relative}
+.menu{position:absolute;right:0;top:42px;z-index:9;min-width:200px;display:grid;padding:6px;border:1px solid var(--line);border-radius:14px;background:var(--panel);box-shadow:0 12px 32px rgba(20,24,40,.18)}
+.menu button{padding:9px 12px;border:0;border-radius:10px;background:none;text-align:left;font-weight:600;cursor:pointer}
+.menu button:hover{background:var(--accent-soft);color:var(--accent)}
 /* info */
 .ov{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:16px;background:rgba(10,16,40,.45)}
 .dlg{width:min(460px,100%);max-height:100%;overflow:auto;padding:22px;border-radius:16px;background:var(--panel);border:1px solid var(--line);box-shadow:0 20px 60px rgba(10,16,40,.3)}
@@ -132,12 +121,6 @@ kbd{font:500 12px var(--font-code);padding:1px 5px;border:1px solid var(--line);
 .ai{margin-top:14px!important;font-size:12px;color:var(--muted)}
 .dlg-x{float:right;margin:-6px -6px 0 0}
 
-@media (max-width:900px){
-  .code{position:absolute;top:0;right:0;bottom:0;z-index:8;width:min(360px,100%);box-shadow:-12px 0 40px rgba(10,16,40,.2)}
-  .app .code{grid-area:auto}
-  .code-wrap{position:absolute;inset:0}
-  .code .x{display:inline-flex}
-}
 @media (max-width:640px){
   .app{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"top" "stage" "pal"}
   .palette{width:auto;flex-direction:row;gap:4px;padding-block:6px;padding-right:max(8px,env(safe-area-inset-right,0px));padding-left:max(8px,env(safe-area-inset-left,0px));
@@ -152,10 +135,11 @@ kbd{font:500 12px var(--font-code);padding:1px 5px;border:1px solid var(--line);
   .brand b{font-size:14px}
   .tools{gap:4px}
 }
-@media (max-width:380px){.brand b{display:none}}
+@media (max-width:480px){.brand b{display:none}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
-
+</head>
+<body>
 <div class="app" id="app">
   <header class="top">
     <div class="brand">
@@ -168,7 +152,7 @@ kbd{font:500 12px var(--font-code);padding:1px 5px;border:1px solid var(--line);
       <button class="tb icon" id="bDel" title="Видалити (Delete)" aria-label="Видалити" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg></button>
       <span class="sep"></span>
       <button class="tb" id="bPng" title="Зберегти як картинку PNG"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span>PNG</span></button>
-      <button class="tb wide on" id="bCode" title="Код Python → схема" aria-expanded="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><b style="font-weight:700">Py</b></button>
+      <div class="exw"><button class="tb wide" id="bEx" aria-haspopup="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="10" height="5" rx="2.5"/><path d="M9 8v3"/><path d="m9 11 5 4-5 4-5-4z"/></svg><span>Приклади</span></button><div class="menu" id="exMenu" hidden></div></div>
       <button class="tb info" id="bInfo" aria-label="Про проєкт">i</button>
     </div>
   </header>
@@ -179,7 +163,6 @@ kbd{font:500 12px var(--font-code);padding:1px 5px;border:1px solid var(--line);
     <button class="blk" data-type="proc"><svg viewBox="0 0 48 30"><rect class="s f-proc" x="2" y="5" width="44" height="20" rx="2"/></svg>Дія</button>
     <button class="blk" data-type="io"><svg viewBox="0 0 48 30"><polygon class="s f-io" points="9,5 46,5 39,25 2,25"/></svg>Введення / виведення</button>
     <button class="blk" data-type="dec"><svg viewBox="0 0 48 30"><polygon class="s f-dec" points="24,1 47,15 24,29 1,15"/></svg>Умова</button>
-    <button class="blk" data-type="loop"><svg viewBox="0 0 48 30"><polygon class="s f-loop" points="10,5 38,5 46,15 38,25 10,25 2,15"/></svg>Цикл</button>
     <p class="pal-hint"><i></i>тягни, щоб з'єднати</p>
   </aside>
 
@@ -198,30 +181,19 @@ kbd{font:500 12px var(--font-code);padding:1px 5px;border:1px solid var(--line);
     <div class="toast" id="toast" hidden></div>
   </main>
 
-  <section class="code" id="codePanel" aria-label="Python у схему">
-    <div class="code-head">
-      <h2>Python → схема</h2>
-      <button class="tb icon x" id="bCodeX" aria-label="Закрити"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-    </div>
-    <div class="chips" id="chips"></div>
-    <textarea id="code" spellcheck="false" aria-label="Код Python"></textarea>
-    <p class="err" id="codeErr" hidden></p>
-    <button class="primary" id="bBuild"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Побудувати схему</button>
-  </section>
 </div>
 
 <div class="ov" id="info" hidden>
   <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="infoT">
     <button class="tb icon dlg-x" id="infoX" aria-label="Закрити"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     <h2 id="infoT">Блок-схема</h2>
-    <p>Редактор блок-схем алгоритмів: збирай схему з блоків або встав код Python — схема побудується сама.</p>
+    <p>Склади алгоритм із блоків: від початку до кінця, з умовами та повтореннями — як у Scratch, тільки на папері.</p>
     <h3>Блоки</h3>
     <div class="legend">
       <svg viewBox="0 0 48 30"><rect class="s f-term" x="2" y="5" width="44" height="20" rx="10"/></svg><span>початок і кінець алгоритму</span>
       <svg viewBox="0 0 48 30"><rect class="s f-proc" x="2" y="5" width="44" height="20" rx="2"/></svg><span>дія, обчислення</span>
       <svg viewBox="0 0 48 30"><polygon class="s f-io" points="9,5 46,5 39,25 2,25"/></svg><span>введення або виведення даних</span>
-      <svg viewBox="0 0 48 30"><polygon class="s f-dec" points="24,1 47,15 24,29 1,15"/></svg><span>умова: так / ні</span>
-      <svg viewBox="0 0 48 30"><polygon class="s f-loop" points="10,5 38,5 46,15 38,25 10,25 2,15"/></svg><span>цикл з параметром (for)</span>
+      <svg viewBox="0 0 48 30"><polygon class="s f-dec" points="24,1 47,15 24,29 1,15"/></svg><span>умова: питання з відповіддю так / ні</span>
     </div>
     <h3>Правила</h3>
     <ul>
@@ -230,12 +202,8 @@ kbd{font:500 12px var(--font-code);padding:1px 5px;border:1px solid var(--line);
       <li>Щоб з'єднати, тягни кружечок на краю блоку до іншого блоку.</li>
       <li>Повторний клік по виділеному блоку чи стрілці — змінити текст.</li>
       <li><kbd>Delete</kbd> — видалити, <kbd>Ctrl</kbd>+<kbd>Z</kbd> — скасувати, коліщатко — масштаб.</li>
-      <li>Python: встав код і натисни «Побудувати схему».</li>
+      <li>«Приклади» — готові схеми, з яких можна почати.</li>
     </ul>
-    <a class="gh" href="https://github.com/whyuxavier/it-maysternia/tree/main/apps/flowchart" target="_blank" rel="noopener">
-      <svg class="star" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
-      whyuxavier/flowchart
-    </a>
     <p class="ai">Створено з використанням ШІ.</p>
   </div>
 </div>
@@ -245,33 +213,9 @@ kbd{font:500 12px var(--font-code);padding:1px 5px;border:1px solid var(--line);
 const $=s=>document.querySelector(s);
 const svg=$('#svg'),world=$('#world'),gE=$('#gE'),gN=$('#gN'),gT=$('#gT'),stage=$('#stage'),editor=$('#editor');
 const OUT={term:['b'],proc:['b'],io:['b'],dec:['b','l','r'],loop:['b','r']};
-const KEY='blok-skhema-v1';
+const KEY='blok-skhema-5klas';
 const LIVE={ink:'var(--ink)',nodeInk:'var(--node-ink)',paper:'var(--paper)',accent:'var(--accent)',term:'var(--f-term)',proc:'var(--f-proc)',io:'var(--f-io)',dec:'var(--f-dec)',loop:'var(--f-loop)',font:'Manrope,"Segoe UI",system-ui,sans-serif'};
 const LIGHT={ink:'#23242e',nodeInk:'#23242e',paper:'#ffffff',accent:'#6f8ad6',term:'#dcf1ea',proc:'#e3e9f8',io:'#ebe5f8',dec:'#f8ecd0',loop:'#f7dfe3',font:'Manrope,Arial,sans-serif'};
-const EX=[
- ['Парне?',`n = int(input("Введи число: "))
-if n % 2 == 0:
-    print("Парне")
-else:
-    print("Непарне")`],
- ['Сума 1…n',`n = int(input())
-s = 0
-i = 1
-while i <= n:
-    s = s + i
-    i = i + 1
-print(s)`],
- ['Множення (for)',`x = int(input())
-for i in range(1, 11):
-    print(x, "*", i, "=", x * i)`],
- ['Оцінка',`bal = int(input())
-if bal >= 10:
-    print("Високий")
-elif bal >= 7:
-    print("Достатній")
-else:
-    print("Середній")`]
-];
 
 let S={nodes:[],edges:[],seq:1};
 let view={x:0,y:0,k:1};
@@ -399,7 +343,7 @@ function applyView(){
   if(editing) placeEditor();
 }
 function updateUI(){$('#bDel').disabled=!sel;$('#bUndo').disabled=!hist.length}
-function save(){try{localStorage.setItem(KEY,JSON.stringify({S,code:$('#code').value}))}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({S}))}catch(e){}}
 function snap(){hist.push(JSON.stringify(S));if(hist.length>80)hist.shift()}
 function changed(){render();save()}
 function undo(){if(!hist.length)return;S=JSON.parse(hist.pop());sel=null;closeEditor(false);changed()}
@@ -522,7 +466,7 @@ svg.addEventListener('wheel',e=>{e.preventDefault();const r=rect();zoomAt(e.clie
 /* ---------- actions ---------- */
 function defaultText(type){
   if(type==='term') return S.nodes.some(n=>n.type==='term'&&/початок/i.test(n.text))?'Кінець':'Початок';
-  return {proc:'Дія',io:'Ввести x',dec:'x > 0',loop:'i in range(5)'}[type];
+  return {proc:'Зробити крок',io:'Сказати «Привіт!»',dec:'Торкається краю?'}[type];
 }
 function addNode(type){
   closeEditor(true); snap();
@@ -588,45 +532,14 @@ $('#bPng').onclick=()=>{
   img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(src);
 };
 
-/* ---------- Python → flowchart ---------- */
-function stripComment(t){let q=null;for(let i=0;i<t.length;i++){const c=t[i];if(q){if(c==='\\')i++;else if(c===q)q=null}else if(c==='"'||c==="'")q=c;else if(c==='#')return t.slice(0,i)}return t}
-function parse(src){
-  const L=[];
-  src.replace(/\t/g,'    ').split('\n').forEach((raw,i)=>{const t=stripComment(raw).replace(/\s+$/,'');if(t.trim())L.push({ind:t.length-t.trimStart().length,t:t.trim(),no:i+1})});
-  if(!L.length) throw new Error('Напиши або встав код.');
-  let i=0;
-  const child=(ind,no)=>{if(i<L.length&&L[i].ind>ind)return block(L[i].ind);throw new Error(`Рядок ${no}: після «:» потрібен рядок з відступом.`)};
-  function block(ind){
-    const out=[];
-    while(i<L.length&&L[i].ind===ind){
-      const {t,no}=L[i];i++;let m;
-      if(m=t.match(/^if\s+(.+):$/)){
-        const node={k:'if',c:m[1].trim(),then:child(ind,no),else:[]};out.push(node);let cur=node;
-        while(i<L.length&&L[i].ind===ind){
-          const l=L[i];let m2;
-          if(m2=l.t.match(/^elif\s+(.+):$/)){i++;const n2={k:'if',c:m2[1].trim(),then:child(ind,l.no),else:[]};cur.else=[n2];cur=n2}
-          else if(/^else\s*:$/.test(l.t)){i++;cur.else=child(ind,l.no);break}
-          else break;
-        }
-      }else if(m=t.match(/^while\s+(.+):$/)) out.push({k:'while',c:m[1].trim(),body:child(ind,no)});
-      else if(m=t.match(/^for\s+(.+?)\s+in\s+(.+):$/)) out.push({k:'for',c:`${m[1]} in ${m[2].trim()}`,body:child(ind,no)});
-      else if(/^(elif|else)\b/.test(t)) throw new Error(`Рядок ${no}: «${t.split(/[\s:]/)[0]}» без «if» перед ним.`);
-      else if(/:$/.test(t)){out.push(simple(t.slice(0,-1)));if(i<L.length&&L[i].ind>ind)out.push(...block(L[i].ind))}
-      else out.push(simple(t));
-    }
-    return out;
-  }
-  const tree=block(L[0].ind);
-  if(i<L.length) throw new Error(`Рядок ${L[i].no}: перевір відступи.`);
-  return tree;
-}
-function simple(t){
-  let m;
-  if(m=t.match(/^([^\s=()]+(?:\s*,\s*[^\s=()]+)*)\s*=\s*(?:[\w.]+\s*\(\s*)*input\s*\(/)) return {k:'s',type:'io',text:'Ввести '+m[1].replace(/\s*,\s*/g,', ')};
-  if(/^input\s*\(/.test(t)) return {k:'s',type:'io',text:'Ввести'};
-  if(m=t.match(/^print\s*\((.*)\)$/)) return {k:'s',type:'io',text:('Вивести '+m[1].trim()).trim()};
-  return {k:'s',type:'proc',text:t};
-}
+/* ---------- examples ---------- */
+const A=t=>({k:'s',type:'proc',text:t}),IO=t=>({k:'s',type:'io',text:t});
+const EXAMPLES=[
+ ['Ранок школяра',[A('Прокинутися'),A('Почистити зуби'),A('Поснідати'),A('Піти до школи')]],
+ ['Чи йде дощ?',[A('Подивитися у вікно'),{k:'if',c:'Іде дощ?',then:[A('Взяти парасольку')],else:[A('Одягнути кепку')]},A('Вийти з дому')]],
+ ['Кіт у Scratch',[A('Поставити кота на старт'),{k:'while',c:'Не торкається краю?',body:[A('Іти 10 кроків'),A('Наступний костюм')]},IO('Сказати «Фініш!»')]],
+ ['Більше чи менше',[IO('Ввести число'),{k:'if',c:'Число > 10?',then:[IO('Вивести «Велике»')],else:[IO('Вивести «Мале»')]}]]
+];
 function generate(tree){
   const G={nodes:[],edges:[],seq:1},GAP=36;
   const mk=(type,text)=>{const n={id:G.seq++,type,text,x:0,y:0};G.nodes.push(n);return n};
@@ -670,24 +583,12 @@ function generate(tree){
   link([{id:st.id,port:'b'}],r.first);en.y=r.bottom+GAP+22;link(r.exits,en.id);
   return G;
 }
-function build(){
-  const err=$('#codeErr');
-  try{const G=generate(parse($('#code').value));snap();S=G;sel=null;err.hidden=true;changed();fit();if(innerWidth<=900)setCode(false)}
-  catch(e){err.textContent=e.message;err.hidden=false}
-}
-$('#bBuild').onclick=build;
-const chips=$('#chips');
-EX.forEach(([name,code])=>{const b=document.createElement('button');b.className='chip';b.textContent=name;b.onclick=()=>{$('#code').value=code;$('#codeErr').hidden=true;save()};chips.appendChild(b)});
-$('#code').addEventListener('keydown',e=>{
-  if(e.key==='Tab'){e.preventDefault();const t=e.target,s=t.selectionStart;t.setRangeText('    ',s,t.selectionEnd,'end')}
-  else if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();build()}
-});
-$('#code').addEventListener('input',()=>{clearTimeout(window.__sv);window.__sv=setTimeout(save,500)});
+const exMenu=$('#exMenu');
+EXAMPLES.forEach(([name,tree])=>{const b=document.createElement('button');b.textContent=name;b.onclick=()=>{exMenu.hidden=true;snap();S=generate(tree);sel=null;changed();fit()};exMenu.appendChild(b)});
+$('#bEx').onclick=e=>{e.stopPropagation();exMenu.hidden=!exMenu.hidden};
+document.addEventListener('pointerdown',e=>{if(!exMenu.hidden&&!e.target.closest('#exMenu,#bEx'))exMenu.hidden=true});
 
-/* ---------- panels ---------- */
-function setCode(open){$('#codePanel').classList.toggle('closed',!open);$('#bCode').classList.toggle('on',open);$('#bCode').setAttribute('aria-expanded',open)}
-$('#bCode').onclick=()=>setCode($('#codePanel').classList.contains('closed'));
-$('#bCodeX').onclick=()=>setCode(false);
+/* ---------- info ---------- */
 function closeInfo(){$('#info').hidden=true;$('#bInfo').focus()}
 $('#bInfo').onclick=()=>{$('#info').hidden=false;$('#infoX').focus()};
 $('#infoX').onclick=closeInfo;
@@ -695,15 +596,15 @@ $('#info').addEventListener('click',e=>{if(e.target.id==='info')closeInfo()});
 
 /* ---------- start ---------- */
 let saved=null;try{saved=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}
-$('#code').value=saved&&typeof saved.code==='string'?saved.code:EX[0][1];
-if(innerWidth<=900) setCode(false);
 function boot(){
   cache=new Map();
   if(saved&&saved.S&&Array.isArray(saved.S.nodes)&&saved.S.nodes.length){S=saved.S;render()}
-  else{S=generate(parse($('#code').value));render()}
+  else{S=generate(EXAMPLES[1][1]);render()}
   fit();
 }
 (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(boot,boot);
 applyView();
 })();
 </script>
+</body>
+</html>

@@ -241,6 +241,10 @@ body.home .hero-grid{width:100%}
   *,*::before,*::after{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}
 }
+/* компактні картки */
+.grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:24px 18px}
+.card{padding:10px;border-radius:18px}.card h3{font-size:17px}.card p{font-size:14px;margin:4px 0 10px}
+@media (max-width:600px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 12px}.card{padding:7px;border-radius:14px}.card .pic{border-radius:10px}.card p{display:none}.card h3{font-size:14.5px}.card .txt{padding:8px 3px 3px}.card .tag{font-size:11px;padding:2px 7px}.card::before{width:50px;margin-left:-25px;height:16px;top:-8px}}
 </style>
 </head>
 <body class="home">
