@@ -276,6 +276,18 @@ body.home .hero-grid{width:100%}
 .agebar button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
 .empty{color:var(--muted);font-size:17px}
 @media (max-width:600px){.secs .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 12px}.ccard .tags{display:none}.ccard{padding:10px}.clist{gap:12px}}
+
+/* бургер-меню на смартфоні: розділи в меню, вкладки сховані */
+.tabs{display:none!important}
+.mcur{display:none}
+.mcur[hidden]{display:none!important}
+.mside,.mhr{display:none}
+@media (max-width:1023px){
+  .mside{display:block;position:static;padding:0;box-shadow:none;background:none;transform:none}
+  .mhr{display:block}
+  .mnav-sheet{width:min(320px,calc(100vw - 32px));max-height:calc(100vh - 90px);overflow:auto}
+  .mcur{display:block;font-size:24px;margin:0 0 12px}
+}
 </style>
 </head>
 <body class="home">
@@ -333,6 +345,7 @@ body.home .hero-grid{width:100%}
   </div>
   <nav class="mnav" id="mnav" aria-label="Меню" hidden>
     <div class="wrap"><div class="mnav-sheet">
+      <div class="side mside" id="mside"></div><hr class="mhr">
       <button type="button" id="mAbout" style="--dot:var(--lilac)"><span class="dot"></span>Про сайт</button>
       <a href="#updates" id="mUpd" style="--dot:var(--mint)"><span class="dot"></span>Оновлення<span class="newtag" id="newTag" hidden>нове</span></a>
     </div></div>
@@ -1001,6 +1014,7 @@ function setMenu(open){menuBtn.setAttribute('aria-expanded',String(open));mnav.h
 menuBtn.addEventListener('click',()=>setMenu(mnav.hidden));
 document.getElementById('mAbout').addEventListener('click',()=>{setMenu(false);info.showModal()});
 document.getElementById('mUpd').addEventListener('click',()=>setMenu(false));
+document.getElementById('mside').addEventListener('click',e=>{if(e.target.closest('a'))setMenu(false)});
 document.addEventListener('click',e=>{if(!mnav.hidden&&!e.target.closest('#mnav,#menuBtn'))setMenu(false)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!mnav.hidden){setMenu(false);menuBtn.focus()}});
 
@@ -1084,6 +1098,7 @@ function course(a){return `<a class="ccard" href="${a.url||GH+a.repo+'/'}" targe
     <div class="txt"><span class="kicker">Курс · ${grades(a)}</span><h3>${a.title}</h3><p>${a.mods}</p><span class="tags"><span class="tag">Уроки з практикою</span><span class="tag gr">Працює з телефона</span></span></div>
     <span class="go">Почати</span></a>`}
 function section(title,ic,color,list){if(!list.length)return'';return `<div class="sec"><h2 class="sech" style="--dot:var(${color})"><span class="ic"><svg viewBox="0 0 24 24">${ICX[ic]||''}</svg></span>${title}<span class="n">${list.length}</span></h2><div class="grid">${list.map(a=>card(a,color)).join('')}</div></div>`}
+const mcur=document.createElement('h2');mcur.id='mcur';mcur.className='mcur';gridEl.parentNode.insertBefore(mcur,gridEl);
 const ageBar=document.createElement('div');ageBar.className='agebar';gridEl.parentNode.insertBefore(ageBar,gridEl);
 function renderAge(show){ageBar.hidden=!show;ageBar.innerHTML='<span class="al">Клас:</span>'+[['all','Усі'],['1-4','1–4'],['5-8','5–8'],['9-12','9–12']].map(([k,l])=>`<button type="button" data-age="${k}" aria-pressed="${AGE===k}">${l}</button>`).join('')}
 ageBar.addEventListener('click',e=>{const b=e.target.closest('[data-age]');if(!b)return;AGE=b.dataset.age;try{localStorage.setItem('itm-age',AGE)}catch(e){}renderGrid();renderSide()});
@@ -1100,7 +1115,7 @@ renderGrid=function(){
   gridEl.innerHTML=html;
 };
 function navCount(n){if(n.id==='courses')return ITEMS.filter(a=>a.course).length;if(n.id==='games')return ITEMS.filter(a=>a.fun).length;if(n.id==='teacher')return ITEMS.filter(a=>a.teacher).length;if(n.id==='all')return ITEMS.filter(a=>a.t&&fitA(a)).length;return ITEMS.filter(a=>a.t===n.id&&fitA(a)).length}
-renderSide=function(){sideEl.innerHTML=TABS.map(t=>`<a href="#${t.id}" style="--dot:var(${t.color})"${t.id===current?' aria-current="true"':''}><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">${SIDE_IC[t.id]||''}</svg></span><span class="lb">${t.label}</span><span class="n">${navCount(t)}</span></a>`).join('')};
+renderSide=function(){const mc=document.getElementById('mcur');if(mc){const t=TABS.find(x=>x.id===current);mc.textContent=t?t.label:'';mc.hidden=!['all','courses'].includes(current)}document.getElementById('mside').innerHTML=sideEl.innerHTML=TABS.map(t=>`<a href="#${t.id}" style="--dot:var(${t.color})"${t.id===current?' aria-current="true"':''}><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">${SIDE_IC[t.id]||''}</svg></span><span class="lb">${t.label}</span><span class="n">${navCount(t)}</span></a>`).join('')};
 /* старі посилання #5-7 і #8-11 ведуть у нові розділи */
 /* старі посилання #1-4, #5-7, #8-11 → «Усе одразу» з потрібним класом */
 const OLD={'1-4':'1-4','5-7':'5-8','8-11':'9-12','5-8':'5-8','9-12':'9-12'};
