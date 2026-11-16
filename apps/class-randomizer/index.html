@@ -723,31 +723,41 @@ const Fuse={cv:null,ctx:null,raf:0,on:false,
     let a=seed>>>0;const rnd=()=>{a=(a+0x6D2B79F5)>>>0;let t=a;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296};
     const asp=Math.max(.5,Math.min(2.3,this.cw/Math.max(1,this.ch-90)));
     this.H=1000;this.W=Math.round(1000*asp);const W=this.W,H=this.H,cx=W/2,cy=H/2;this.bx=cx;this.by=cy;this.br=58;
-    const P=[],m=70,excl=300;
-    // старт за краєм екрана
-    const side=rnd()<.5?-1:1;P.push([side<0?-60:W+60,H*(.2+.6*rnd())]);
-    const n=Math.round(Math.max(9,Math.min(36,7+(T?T.dur:120)/9))*(.7+.3*asp));let prev=P[0];
-    for(let i=0;i<n;i++){
-      let p,tries=0;
-      do{p=[m+rnd()*(W-2*m),m+rnd()*(H-2*m)];tries++}
-      while(tries<60&&(Math.hypot(p[0]-cx,p[1]-cy)<excl||Math.hypot(p[0]-prev[0],p[1]-prev[1])<260||Math.hypot(p[0]-prev[0],p[1]-prev[1])>Math.max(W,H)*.75));
-      // інколи маленька петелька
-      if(rnd()<.35){const r=40+rnd()*45,a0=rnd()*6.283,dir=rnd()<.5?1:-1;
-        for(let k=0;k<5;k++){const q=a0+dir*k*1.35;P.push([p[0]+r*Math.cos(q),p[1]+r*Math.sin(q)])}}
-      else P.push(p);
-      prev=p;
+    /* «рульовий» генератор: кут повороту на кожному кроці обмежений, тож гострих кутів немає за побудовою */
+    const step=4,Rmin=42,maxT=step/Rmin,m=70,excl=290,X=[],Y=[];let tg=null,tgN=0;
+    const turnTo=(th,des,lim)=>{let d=des-th;while(d>Math.PI)d-=6.2832;while(d<-Math.PI)d+=6.2832;return th+Math.max(-lim,Math.min(lim,d))};
+    const side=rnd()<.5?-1:1;let x=side<0?-30:W+30,y=H*(.25+.5*rnd()),th=side<0?(rnd()-.5)*.8:Math.PI+(rnd()-.5)*.8,tr=0,loop=0,loopDir=1;
+    const Lw=Math.max(3500,Math.min(36000,2500+(T?T.dur:120)*112))*(.75+.25*asp);let len=0,inside=false;
+    while(len<Lw){
+      X.push(x);Y.push(y);
+      const lx=x+190*Math.cos(th),ly=y+190*Math.sin(th),out=lx<m||lx>W-m||ly<m||ly>H-m,nearB=Math.hypot(lx-cx,ly-cy)<excl;
+      if(x>m&&x<W-m&&y>m&&y<H-m)inside=true;
+      if(loop>0){th+=loopDir*maxT*.9;loop-=maxT*.9;if(inside&&(out||nearB))loop=0}
+      else if(inside&&(out||tgN>0)){
+        if(!tg||tgN<=0){let q;do{q=[W*(.12+.76*rnd()),H*(.12+.76*rnd())]}while(Math.hypot(q[0]-cx,q[1]-cy)<excl+40);tg=q;tgN=140+(rnd()*120|0)}
+        tgN--;th=turnTo(th,Math.atan2(tg[1]-y,tg[0]-x),maxT*.8);if(Math.hypot(tg[0]-x,tg[1]-y)<60)tgN=0}
+      else if(nearB){const a=Math.atan2(y-cy,x-cx),t1=a+Math.PI/3,t2=a-Math.PI/3;const d1=Math.abs(Math.atan2(Math.sin(t1-th),Math.cos(t1-th))),d2=Math.abs(Math.atan2(Math.sin(t2-th),Math.cos(t2-th)));th=turnTo(th,d1<d2?t1:t2,maxT)}
+      else{tr+=(rnd()-.5)*.03;tr*=.98;tr=Math.max(-maxT*.85,Math.min(maxT*.85,tr));th+=tr;
+        if(inside&&rnd()<.0035){loop=6.2832*(1+rnd()*.25);loopDir=rnd()<.5?1:-1}}
+      x+=step*Math.cos(th);y+=step*Math.sin(th);len+=step;
     }
-    // спіраль навколо бомби
-    const last=P[P.length-1];let ang=Math.atan2(last[1]-cy,last[0]-cx);const turns=2.2,steps=Math.round(turns*9),dir=rnd()<.5?1:-1;
-    for(let k=1;k<=steps;k++){const f=k/steps,r=(excl-20)*(1-f)+(this.br+48)*f+(rnd()-.5)*26*(1-f);ang+=dir*2*Math.PI*turns/steps;P.push([cx+r*Math.cos(ang),cy+r*Math.sin(ang)*.92])}
-    P.push([cx+dir*30,cy-this.br-46]);P.push([cx,cy-this.br-14]);
-    // згладжування Catmull-Rom
-    const X=[],Y=[];const g=i=>P[Math.max(0,Math.min(P.length-1,i))];
-    for(let i=0;i<P.length-1;i++){const p0=g(i-1),p1=g(i),p2=g(i+1),p3=g(i+2),seg=Math.max(6,Math.ceil(Math.hypot(p2[0]-p1[0],p2[1]-p1[1])/12));
-      for(let s=0;s<seg;s++){const t=s/seg,t2=t*t,t3=t2*t;
-        X.push(.5*((2*p1[0])+(-p0[0]+p2[0])*t+(2*p0[0]-5*p1[0]+4*p2[0]-p3[0])*t2+(-p0[0]+3*p1[0]-3*p2[0]+p3[0])*t3));
-        Y.push(.5*((2*p1[1])+(-p0[1]+p2[1])*t+(2*p0[1]-5*p1[1]+4*p2[1]-p3[1])*t2+(-p0[1]+3*p1[1]-3*p2[1]+p3[1])*t3))}}
-    const e=P[P.length-1];X.push(e[0]);Y.push(e[1]);
+    /* спіраль до бомби */
+    const rEnd=124;let vx=x-cx,vy=y-cy;const dir=(Math.cos(th)*vy-Math.sin(th)*vx)<0?1:-1;
+    const aEnd=-Math.PI/2-dir*Math.asin(48/rEnd);let r0=Math.min(330,Math.hypot(vx,vy)),swept=0,prevA=Math.atan2(vy,vx);
+    const totalSweep=6.2832*2.2;
+    for(let guard=0;guard<20000;guard++){
+      X.push(x);Y.push(y);
+      vx=x-cx;vy=y-cy;const r=Math.hypot(vx,vy),a=Math.atan2(vy,vx);let da=a-prevA;while(da>Math.PI)da-=6.2832;while(da<-Math.PI)da+=6.2832;swept+=da*dir;prevA=a;
+      const f=Math.min(1,Math.max(0,swept/totalSweep)),rt=r0+(rEnd-r0)*f;
+      const tx=-dir*vy/r,ty=dir*vx/r,corr=Math.max(-1,Math.min(1,(r-rt)/70));
+      th=turnTo(th,Math.atan2(ty-corr*vy/r,tx-corr*vx/r),maxT);
+      x+=step*Math.cos(th);y+=step*Math.sin(th);
+      if(f>=1){let dd=Math.atan2(Math.sin(a-aEnd),Math.cos(a-aEnd))*dir;if(Math.abs(dd)<.5&&dd>=0)break}
+    }
+    /* чверть кола вниз до ковпачка */
+    const qn=Math.round((Math.PI/2)/(step/48));for(let k=0;k<qn;k++){X.push(x);Y.push(y);th=turnTo(th,Math.PI/2,step/48*1.05);x+=step*Math.cos(th);y+=step*Math.sin(th)}
+    const capY=cy-this.br-14;for(let k=0;k<40;k++){X.push(x);Y.push(y);const d=Math.hypot(cx-x,capY-y);if(d<step)break;th=turnTo(th,Math.atan2(capY-y,cx-x),maxT);x+=step*Math.cos(th);y+=step*Math.sin(th)}
+    for(let it=0;it<6;it++){const ox=X.slice(),oy=Y.slice();for(let i=1;i<X.length-1;i++){X[i]=(ox[i-1]+2*ox[i]+ox[i+1])/4;Y[i]=(oy[i-1]+2*oy[i]+oy[i+1])/4}}
     const S=[0];for(let i=1;i<X.length;i++)S.push(S[i-1]+Math.hypot(X[i]-X[i-1],Y[i]-Y[i-1]));
     this.X=X;this.Y=Y;this.S=S;this.L=S[S.length-1];
   },
@@ -766,10 +776,10 @@ const Fuse={cv:null,ctx:null,raf:0,on:false,
     const s0=this.fit(),follow=S.bombCam!=='all'&&!this.reduce;let tx,ty,ts;
     if(this.boom){tx=this.bx;ty=this.by;ts=s0*1.25}
     else if(!follow||now-this.t0<900){tx=W/2;ty=H/2;ts=s0}
-    else{const near=Math.max(0,Math.min(1,1-(this.L-sB)/900));tx=sp.x+(this.bx-sp.x)*near*.55;ty=sp.y+(this.by-sp.y)*near*.55;ts=s0*(2.4-1.0*near)}
-    const k=1-Math.exp(-dt*(this.boom?4:7)),ks=1-Math.exp(-dt*2.2);this.cam.x+=(tx-this.cam.x)*k;this.cam.y+=(ty-this.cam.y)*k;this.cam.s*=Math.exp((Math.log(ts)-Math.log(this.cam.s))*ks);
+    else{const near=Math.max(0,Math.min(1,1-(this.L-sB)/900));let ax=0,ay=0;for(let q=-4;q<=4;q++){const pp=this.at(Math.max(0,Math.min(this.L,sB+q*45)));ax+=pp.x;ay+=pp.y}ax/=9;ay/=9;tx=ax+(this.bx-ax)*near*.55;ty=ay+(this.by-ay)*near*.55;ts=s0*(2.4-1.0*near)}
+    const k=1-Math.exp(-dt*(this.boom?3:4)),ks=1-Math.exp(-dt*2.2);this.cam.x+=(tx-this.cam.x)*k;this.cam.y+=(ty-this.cam.y)*k;this.cam.s*=Math.exp((Math.log(ts)-Math.log(this.cam.s))*ks);
     let shx=0,shy=0;if(this.boom&&this.boom.t<.9){const q=(1-this.boom.t/.9)*14;shx=(Math.random()-.5)*q;shy=(Math.random()-.5)*q}
-    else if(left<=10&&left>0&&!paused){shx=(Math.random()-.5)*1.6;shy=(Math.random()-.5)*1.6}
+    else if(left<=10&&left>0&&!paused){shx=Math.sin(now/37)*1.2;shy=Math.cos(now/43)*1.2}
     /* фон */
     c.setTransform(dpr,0,0,dpr,0,0);
     const bg=c.createRadialGradient(this.cw/2,this.ch/2,0,this.cw/2,this.ch/2,Math.hypot(this.cw,this.ch)/2);
@@ -810,7 +820,7 @@ const Fuse={cv:null,ctx:null,raf:0,on:false,
       c.globalAlpha=1;return true});
     if(!this.boom&&!done){
       const gl=c.createRadialGradient(sp.x,sp.y,0,sp.x,sp.y,46);gl.addColorStop(0,'rgba(255,214,110,.75)');gl.addColorStop(1,'rgba(255,140,40,0)');c.fillStyle=gl;c.beginPath();c.arc(sp.x,sp.y,46,0,6.283);c.fill();
-      c.save();c.translate(sp.x,sp.y);c.rotate(now/90);c.fillStyle='#ffd166';c.beginPath();for(let i=0;i<16;i++){const r=i%2?5:14+Math.random()*5,a=i*Math.PI/8;c.lineTo(r*Math.cos(a),r*Math.sin(a))}c.closePath();c.fill();
+      c.save();c.translate(sp.x,sp.y);c.rotate(now/90);c.fillStyle='#ffd166';c.beginPath();for(let i=0;i<16;i++){const r=i%2?5:14+4*Math.sin(now/70+i*1.7),a=i*Math.PI/8;c.lineTo(r*Math.cos(a),r*Math.sin(a))}c.closePath();c.fill();
       c.fillStyle='#fff6d6';c.beginPath();c.arc(0,0,4.5,0,6.283);c.fill();c.restore();
     }
     /* вибух */
