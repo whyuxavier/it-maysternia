@@ -560,7 +560,7 @@ main,footer{position:relative;z-index:1}
 
   <section class="homex" aria-label="Що нового">
     <div class="wrap">
-      <div class="hblock">
+      <div class="hblock" id="hRoutesBlk" hidden>
         <div class="hhead"><div><h2>Маршрути</h2><p>Крок за кроком: що пройти спершу, а що потім.</p></div><a href="#routes">Усі маршрути</a></div>
         <div class="hroutes" id="hRoutes"></div>
       </div>
@@ -605,7 +605,7 @@ main,footer{position:relative;z-index:1}
 <dialog id="whoDlg" aria-labelledby="whoT"><div class="dlg who">
   <button class="x" type="button" data-x aria-label="Закрити">×</button>
   <h2 id="whoT">Хто за комп'ютером?</h2>
-  <p class="wsub">Обери себе — і маршрути пам'ятатимуть саме твій прогрес.</p>
+  <p class="wsub">Обери себе — і сайт пам'ятатиме саме твій прогрес.</p>
   <div class="plist" id="pList"></div>
   <form class="pform" id="pForm">
     <h3 id="pFormT">Я тут уперше</h3>
@@ -1124,10 +1124,12 @@ const CLASSES={'1-4':[1,4],'5-8':[5,8],'9-12':[9,12]};
 /* картка без g (поки не вказано клас) показується в усіх класах */
 const fits=(it,id)=>{if(!it.g)return true;const g=CLASSES[id];return it.g[0]<=g[1]&&it.g[1]>=g[0]};
 const grades=it=>it.g[0]===it.g[1]?it.g[0]+' клас':it.g[0]+'–'+it.g[1]+' клас';
+/* Маршрути поки сховані: true — показати знову (меню, головна, сторінка #routes, стовпець у результатах) */
+const SHOW_ROUTES=false;
 /* розділи меню; порожні теми не показуємо */
 const NAV=[
  {id:'all',label:'Усе одразу',color:'--sky',ic:'Category'},
- {id:'routes',label:'Маршрути',color:'--peach',ic:'Discovery'},
+ ...(SHOW_ROUTES?[{id:'routes',label:'Маршрути',color:'--peach',ic:'Discovery'}]:[]),
  {id:'projects',label:'Проєкти',color:'--coral',ic:'Paper'},
  ...TOPICS.filter(t=>APPS.some(a=>a.t===t.id)),
  {id:'games',label:'Ігри для перерви',color:'--coral',ic:'Game'},
@@ -1208,15 +1210,15 @@ function resRows(){let R={};try{R=JSON.parse(localStorage.getItem('itm-results')
 function resultsHTML(){const rows=resRows(),qs=RQ.filter(q=>rows.some(r=>r.res[q]));
   const cell=v=>!v?'<td class="mt">—</td>':`<td title="${esc(v.t)} · ${new Date(v.d).toLocaleDateString('uk-UA')}"><b>${v.g==null?esc(v.t):v.g}</b>${v.g!=null&&v.t?`<small>${esc(v.t)}</small>`:''}</td>`;
   return `<div class="sec res"><h2 class="sech" style="--dot:var(--lilac)"><span class="ic"><svg viewBox="0 0 24 24">${ICX.Graph||''}</svg></span>Результати учнів на цьому комп'ютері<span class="n">${rows.length}</span></h2>
-  ${rows.length?`<div class="rtable"><table><thead><tr><th>Учень</th><th>Клас</th><th>Кроки маршруту</th>${qs.map(q=>`<th>${esc(q)}</th>`).join('')}</tr></thead><tbody>
-  ${rows.map(r=>`<tr><td>${esc(r.name)}</td><td>${esc(r.cls)}</td><td>${r.steps}</td>${qs.map(q=>cell(r.res[q])).join('')}</tr>`).join('')}</tbody></table></div>
+  ${rows.length?`<div class="rtable"><table><thead><tr><th>Учень</th><th>Клас</th>${SHOW_ROUTES?'<th>Кроки маршруту</th>':''}${qs.map(q=>`<th>${esc(q)}</th>`).join('')}</tr></thead><tbody>
+  ${rows.map(r=>`<tr><td>${esc(r.name)}</td><td>${esc(r.cls)}</td>${SHOW_ROUTES?`<td>${r.steps}</td>`:''}${qs.map(q=>cell(r.res[q])).join('')}</tr>`).join('')}</tbody></table></div>
   <div class="ract2"><button type="button" class="btn main" id="resCsv">Зберегти у файл (CSV)</button><button type="button" class="btn" id="resClr">Очистити результати</button></div>
   <p class="mt rnote">Збережіть файл на кожному комп'ютері класу — його можна відкрити в Excel чи Google Таблицях.</p>`
   :'<p class="empty">Поки немає результатів. Учні входять через меню (ім\'я та клас), а квести самі записують оцінку.</p>'}</div>`}
 document.addEventListener('click',e=>{
   if(e.target.closest('#resCsv')){const rows=resRows(),qs=RQ.filter(q=>rows.some(r=>r.res[q]));
     const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
-    const lines=[['Учень','Клас','Кроки маршруту',...qs].map(q).join(';'),...rows.map(r=>[r.name,r.cls,r.steps,...qs.map(k=>r.res[k]?(r.res[k].g==null?r.res[k].t:r.res[k].g):'')].map(q).join(';'))];
+    const lines=[['Учень','Клас',...(SHOW_ROUTES?['Кроки маршруту']:[]),...qs].map(q).join(';'),...rows.map(r=>[r.name,r.cls,...(SHOW_ROUTES?[r.steps]:[]),...qs.map(k=>r.res[k]?(r.res[k].g==null?r.res[k].t:r.res[k].g):'')].map(q).join(';'))];
     const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'}));a.download=`результати-${new Date().toISOString().slice(0,10)}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
   if(e.target.closest('#resClr')&&confirm('Видалити всі результати квестів на цьому комп\'ютері? Профілі учнів лишаться.')){try{localStorage.removeItem('itm-results')}catch(err){}renderGrid()}
 });
@@ -1323,6 +1325,7 @@ function weekTop(){
   const out=[];for(let i=0;out.length<3&&i<pool.length*3;i++){const a=pool[(wk*7+i*11)%pool.length];if(!out.includes(a))out.push(a)}return out}
 function renderHome(){
   const mb=ME&&bandOf(PROF[ME].cls),bk=['1-4','5-8','9-12'];
+  document.getElementById('hRoutesBlk').hidden=!SHOW_ROUTES;
   document.getElementById('hRoutes').innerHTML=ROUTES.map((rt,k)=>[rt,k]).sort((x,y)=>(bk[y[1]]===mb)-(bk[x[1]]===mb)).map(([rt,k])=>{const {st,done,next}=rState(rt);
     return `<a class="hroute" href="#routes" data-age="${['1-4','5-8','9-12'][k]}" style="--dot:var(${rt.color})"><span class="kicker">${cls(rt.g)}</span><h3>${rt.title}</h3>
     <div class="pbar"><span><i style="width:${Math.round(done/st.length*100)}%"></i></span>${done} з ${st.length}</div>
