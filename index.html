@@ -704,6 +704,11 @@ const APPS = [
   {t:'data',g:[10,10], title:'Місія «Аналітик даних»',       desc:'Мода, медіана й середнє на практиці',            type:'Квест',       art:'data',      bg:'--lilac',  repo:'data-analysis-quest', url:GH+'it-maysternia/apps/data-analysis-quest/'},
   {t:'data',g:[8,12],  title:'Excel Tournament',             desc:'Змагання з електронних таблиць',                 type:'Квест',         art:'excel',     bg:'--mint',   repo:'excel-tournament', url:GH+'it-maysternia/apps/excel-tournament/'},
 
+  /* — Проєкти: проблемна ситуація з життя, кроки й критерії (сторінка apps/projects) — */
+  {proj:1,g:[1,4],   title:'Проєкт «Піксельна листівка»',   desc:'Створи листівку для рідних на комп\'ютері',  type:'Проєкт', art:'projCard',   bg:'--peach', repo:'it-maysternia', url:GH+'it-maysternia/apps/projects/#card'},
+  {proj:1,g:[5,8],   title:'Проєкт «Пам\'ятка безпеки»',     desc:'Допоможи молодшим не потрапити до шахраїв',   type:'Проєкт', art:'projSafety', bg:'--sky',   repo:'it-maysternia', url:GH+'it-maysternia/apps/projects/#safety'},
+  {proj:1,g:[9,12],  title:'Проєкт «Бюджет екскурсії»',     desc:'Порахуй і порівняй два варіанти поїздки',     type:'Проєкт', art:'projTrip',   bg:'--mint',  repo:'it-maysternia', url:GH+'it-maysternia/apps/projects/#trip'},
+
   /* — Ігри для перерви — */
   {fun:1,g:[1,12], title:'Танграм',                      desc:'Склади фігуру з семи частинок',                  type:'Гра',         art:'tangram',   bg:'--butter', repo:'tangram', url:GH+'it-maysternia/apps/tangram/'},
   {fun:1,g:[1,12], title:'Намалюй коло',                desc:'Намалюй фігуру одним рухом',                     type:'Гра',         art:'circle',    bg:'--peach',  repo:'draw-circle', url:GH+'it-maysternia/apps/draw-circle/'},
@@ -732,7 +737,12 @@ const pencil=(x,y,a,len=70)=>G(R('bu',0,0,len,14,3)+R('pe',-7,0,10,14,3)+`<path 
 const win=(x,y,w,h,body='cr',bar='li')=>R(body,x,y,w,h,9)+`<path class="${bar}" d="M${x} ${y+18}V${y+9}a9 9 0 0 1 9-9h${w-18}a9 9 0 0 1 9 9v9z"/>`+C('co',x+11,y+9,3)+C('bu',x+20,y+9,3)+C('mi',x+29,y+9,3);
 const line=(x,y,w,c='li')=>R(c,x,y,w,6,3);
 
+const PROJ_BASE=()=>ground('mi')+G(R('pe',70,22,128,148,14)+R('cr',82,36,104,124,8)+R('co',108,14,52,20,7)+C('cr',134,22,3.5))+
+  G([0,1,2].map(i=>R('mi',94,54+i*32,16,16,4)+R(['li','sk','pe'][i],118,58+i*32,54,8,4)+`<path d="M97 ${62+i*32}l4 4 7-8" class="st" style="stroke-width:3;stroke-linecap:round;stroke-linejoin:round;fill:none"/>`).join('')+R('cr',94,150,16,4,2));
 const ART = {
+  projCard(){return PROJ_BASE()+G(R('cr',208,58,84,62,8,'transform="rotate(6 250 89)"')+`<path class="co" d="M250 106c-11-7-16-12-16-18a8 8 0 0 1 16-2 8 8 0 0 1 16 2c0 6-5 11-16 18z" transform="rotate(6 250 89)"/>`+R('mi',218,66,8,8,1,'transform="rotate(6 250 89)"')+R('sk',276,104,8,8,1,'transform="rotate(6 250 89)"'))},
+  projSafety(){return PROJ_BASE()+G(`<path class="sk" d="M250 44l38 14v28c0 24-17 40-38 50-21-10-38-26-38-50V58z"/>`+R('ink',236,82,28,22,5)+`<path d="M241 82v-6a9 9 0 0 1 18 0v6" class="st" style="stroke-width:5;fill:none"/>`+C('bu',250,93,3.5))},
+  projTrip(){return PROJ_BASE()+G(R('cr',206,50,96,86,10)+R('sk',220,100,14,24,3)+R('co',242,80,14,44,3)+R('bu',264,92,14,32,3)+R('ink',216,62,40,6,3))+G(C('bu',292,140,14)+C('bu',276,148,12))},
   default(){
     return ground('mi')+
       G(R('cr',96,34,128,118,14)+R('li',96,34,128,22,14)+R('li',96,46,128,10,0)+C('co',110,45,3.5)+C('bu',120,45,3.5)+C('mi',130,45,3.5)+
@@ -1118,6 +1128,7 @@ const grades=it=>it.g[0]===it.g[1]?it.g[0]+' клас':it.g[0]+'–'+it.g[1]+' �
 const NAV=[
  {id:'all',label:'Усе одразу',color:'--sky',ic:'Category'},
  {id:'routes',label:'Маршрути',color:'--peach',ic:'Discovery'},
+ {id:'projects',label:'Проєкти',color:'--coral',ic:'Paper'},
  ...TOPICS.filter(t=>APPS.some(a=>a.t===t.id)),
  {id:'games',label:'Ігри для перерви',color:'--coral',ic:'Game'},
  {id:'teacher',label:'Для вчителя',color:'--butter',ic:'Work'},
@@ -1127,6 +1138,9 @@ const NAV=[
    Вимкнути — там само або кнопкою в шапці.
    Формат: 'Назва картки':[мета, коли на уроці, як організувати, що перевірити] ===== */
 const TIPS={
+ 'Проєкт «Піксельна листівка»':['Керування мишею, графічний редактор, збереження файлу — у справжньому завданні.','Підсумок теми, 1–2 уроки.','Учні працюють за кроками на сторінці проєкту; наприкінці друкуєте листівки.','Самооцінка зірочками за «Я вмію…» на сторінці проєкту.'],
+ 'Проєкт «Пам\'ятка безпеки»':['Безпека в мережі через створення продукту для реальної аудиторії.','2 уроки після Фішинг-детектора.','Можна в парах; найкращі пам\'ятки покажіть молодшому класу.','Критерії на 12 балів на сторінці проєкту.'],
+ 'Проєкт «Бюджет екскурсії»':['Формули, діаграми й висновки на даних — проблемна ситуація з життя класу.','2–3 уроки, підсумок теми про електронні таблиці.','Реальні ціни з сайтів; можна в парах. Сильнішим — умова ЯКЩО/IF.','Критерії на 12 балів на сторінці проєкту.'],
  'Мій перший ПК':['Назви й призначення частин комп\'ютера, пристрої введення й виведення.','Вивчення нового, 10–15 хв.','Спершу разом на проєкторі, потім самостійно. Попросіть показати ці пристрої в класі.','Дитина називає 4–5 пристроїв і пояснює, для чого кожен.'],
  'Тренажер мишки та клавіатури':['Клік, подвійний клік, перетягування, перші літери на клавіатурі.','Розминка 5–10 хв на початку уроку в 1–2 класі.','Індивідуально, по одному рівню за урок. Звук краще вимкнути або дати навушники.','Впевнено перетягує предмети й не губить курсор.'],
  'Клавіатурний пазл':['Розташування клавіш і рядів, українська й англійська розкладки.','Закріплення після знайомства з клавіатурою, 10 хв.','Змагання в парах на час; другий раунд — інша розкладка.','Скільки часу треба, щоб зібрати ряд без підказок.'],
@@ -1186,7 +1200,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.tbtn');if(!b)re
   tipDlg.showModal()});
 /* ===== Результати учнів на цьому комп'ютері (лише в режимі вчителя).
    Квести самі записують оцінку в itm-results; маршрути — з профілів. ===== */
-const RQ=['Квест: Python, 8 клас','Квест: Python, 9 клас','Місія «Документ»','Місія «Інтернет речей»','Місія «Аналітик даних»','Excel Tournament','Ghost in HTML'];
+const RQ=['Проєкт: Піксельна листівка','Проєкт: Пам\'ятка безпеки для молодших','Проєкт: Бюджет класної екскурсії','Квест: Python, 8 клас','Квест: Python, 9 клас','Місія «Документ»','Місія «Інтернет речей»','Місія «Аналітик даних»','Excel Tournament','Ghost in HTML'];
 function resRows(){let R={};try{R=JSON.parse(localStorage.getItem('itm-results')||'{}')||{}}catch(e){}
   const ids=new Set([...Object.keys(PROF),...Object.keys(R)]);
   return [...ids].map(id=>{const p=PROF[id],x=R[id]||{};return {id,name:p?p.name:(x._name||'—'),cls:p?p.cls:(x._cls||''),steps:p?Object.keys(p.done||{}).length:0,res:x}})
@@ -1215,14 +1229,16 @@ const ROUTES=[
   ['Клавіатурний пазл','Запам\'ятай, де стоять клавіші'],
   ['MOUSE RACER','Перевір, як вправно керуєш мишкою'],
   ['Пазл з твого фото','Завантаж фото й склади його по шматочках'],
-  ['Пікселька','Намалюй власну піксельну картинку']]},
+  ['Пікселька','Намалюй власну піксельну картинку'],
+  ['Проєкт «Піксельна листівка»','Фінал: створи справжню листівку для рідних']]},
  {g:[5,8],color:'--mint',title:'Алгоритми, безпека й перший код',sub:'Від блоків до мови Python',steps:[
   ['Keyboard Academy','Друкуй наосліп — у програмуванні знадобиться'],
   ['Блок-схеми','Опиши алгоритм блоками'],
   ['Робот-кур\'єр','Склади програму з циклами й умовами'],
   ['Фішинг-детектор','Навчися розпізнавати шахраїв'],
   ['Python з нуля · 8 клас','Курс Python для 8 класу'],
-  ['Квест: Python, 8 клас','Перевір себе у квесті']]},
+  ['Квест: Python, 8 клас','Перевір себе у квесті'],
+  ['Проєкт «Пам\'ятка безпеки»','Фінал: пам\'ятка безпеки для молодших']]},
  {g:[9,12],color:'--lilac',title:'Від документа до вебсайту',sub:'Документи, дані, Python і веб',steps:[
   ['Місія «Документ»','Оформи справжній документ'],
   ['Місія «Інтернет речей»','Розумні пристрої та дані'],
@@ -1232,7 +1248,8 @@ const ROUTES=[
   ['Місія «Аналітик даних»','Від запитання до висновку'],
   ['Веб-програмування','HTML, CSS і JavaScript'],
   ['Ghost in HTML','Виправ код і звільни привида'],
-  ['Баг-шторм','Фінал: лови помилки на швидкість']]},
+  ['Баг-шторм','Лови помилки на швидкість'],
+  ['Проєкт «Бюджет екскурсії»','Фінал: таблиця, діаграма й висновок для батьків']]},
 ];
 /* Топ-3 тижня: впиши дату понеділка й три назви карток. Через 7 днів, якщо не оновити,
    сайт сам щотижня обиратиме три інші ресурси. */
@@ -1340,16 +1357,17 @@ ageBar.addEventListener('click',e=>{const b=e.target.closest('[data-age]');if(!b
 function renderGrid(){
   const id=current;let html='';
   if(id==='routes'){renderAge(true);html=(ME?'':`<div class="rlogin"><div><b>Увійди, щоб зберігати свій прогрес</b><br><small>Кожен учень на цьому комп'ютері має свої позначки.</small></div><button type="button" class="btn main" onclick="openWho()">Увійти</button></div>`)+ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).map(routeHTML).join('')}
+  else if(id==='projects'){renderAge(true);html=section('Проєкти','Paper','--coral',APPS.filter(a=>a.proj&&fitA(a)))}
   else if(id==='games'){renderAge(true);html=section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))}
   else if(id==='teacher'){renderAge(false);html=section('Для вчителя','Work','--butter',APPS.filter(a=>a.teacher).sort((a,b)=>(a.o||0)-(b.o||0)))+(TEACH?resultsHTML():'')}
   else{renderAge(true);
     const tps=id==='all'?TOPICS:TOPICS.filter(t=>t.id===id);
     html+=tps.map(t=>section(t.label,t.ic,t.color,APPS.filter(a=>a.t===t.id&&fitA(a)))).join('');
-    if(id==='all')html+=section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))+section('Для вчителя','Work','--butter',APPS.filter(a=>a.teacher).sort((a,b)=>(a.o||0)-(b.o||0)))}
+    if(id==='all')html+=section('Проєкти','Paper','--coral',APPS.filter(a=>a.proj&&fitA(a)))+section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))+section('Для вчителя','Work','--butter',APPS.filter(a=>a.teacher).sort((a,b)=>(a.o||0)-(b.o||0)))}
   if(!html)html='<p class="empty">Для цього класу тут поки нічого немає — обери інший клас.</p>';
   gridEl.innerHTML=html;
 }
-function navCount(n){if(n.id==='routes')return ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).length;if(n.id==='games')return APPS.filter(a=>a.fun&&fitA(a)).length;if(n.id==='teacher')return APPS.filter(a=>a.teacher).length;if(n.id==='all')return APPS.filter(a=>a.teacher||fitA(a)).length;return APPS.filter(a=>a.t===n.id&&fitA(a)).length}
+function navCount(n){if(n.id==='projects')return APPS.filter(a=>a.proj&&fitA(a)).length;if(n.id==='routes')return ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).length;if(n.id==='games')return APPS.filter(a=>a.fun&&fitA(a)).length;if(n.id==='teacher')return APPS.filter(a=>a.teacher).length;if(n.id==='all')return APPS.filter(a=>a.teacher||fitA(a)).length;return APPS.filter(a=>a.t===n.id&&fitA(a)).length}
 function renderSide(){const mc=document.getElementById('mcur');if(mc){const t=NAV.find(x=>x.id===current);mc.textContent=t?t.label:'';mc.hidden=current!=='all'}document.getElementById('mside').innerHTML=sideEl.innerHTML=NAV.map(t=>`<a href="#${t.id}" style="--dot:var(${t.color})"${t.id===current?' aria-current="true"':''}><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">${ICX[t.ic]||''}</svg></span><span class="lb">${t.label}</span><span class="n">${navCount(t)}</span></a>`).join('')};
 function setTab(id){current=id;renderGrid();renderSide()}
 /* старі посилання #1-4, #5-7, #8-11 → «Усе одразу» з потрібним класом */
