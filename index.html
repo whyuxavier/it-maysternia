@@ -406,6 +406,7 @@ body.home .hero-grid{width:100%}
 @media (max-width:600px){.secs .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 12px}.ccard .tags{display:none}.ccard{padding:10px}.clist{gap:12px}}
 
 /* бургер-меню на смартфоні: розділи в меню */
+.secsub{margin:-8px 0 14px;color:var(--muted);font-size:14.5px}
 .mcur{display:none}
 .mcur[hidden]{display:none!important}
 .mside,.mhr{display:none}
@@ -713,6 +714,7 @@ dialog{border-radius:26px;box-shadow:var(--soft2),0 0 0 1px var(--line)}
                   тут і курси) | 'data' (дані та безпека)
         fun:1     — гра для перерви
         teacher:1 — для вчителя
+        exam:1    — підсумковий квест з оцінкою (разом із t): йде в «Підсумкові квести», а не в тему
         g     — для яких класів: [від, до], напр. g:[5,7] (для фільтра «Клас»);
                 для тем обов'язкове, для ігор — бажане, для вчителя — не потрібне
         title — назва, як на самому сайті
@@ -754,19 +756,19 @@ const APPS = [
   {t:'algo',g:[5,7],   title:'Робот-кур\'єр',                desc:'Склади програму з блоків і достав посилки',     type:'Гра',         art:'robot',     bg:'--mint',   repo:'robot-courier', url:GH+'it-maysternia/apps/robot-courier/'},
   {t:'algo',g:[5,7],   title:'Блок-схеми',                   desc:'Будуй алгоритми з блоків',                       type:'Редактор',    art:'flowchart', bg:'--lilac',  repo:'flowchart', url:GH+'it-maysternia/apps/flowchart/'},
   {t:'algo',g:[8,8],   title:'Python з нуля · 8 клас',       desc:'Курс Python для 8 класу',                      type:'Курс',        art:'pybook',    bg:'--mint',   repo:'learn-python'},
-  {t:'algo',g:[8,8],   title:'Квест: Python, 8 клас',        desc:'Перші кроки в Python',                           type:'Квест',       art:'snake',     bg:'--mint',   repo:'python-quest-8', url:GH+'it-maysternia/apps/python-quest-8/'},
+  {t:'algo',exam:1,g:[8,8],   title:'Квест: Python, 8 клас',        desc:'Перші кроки в Python',                           type:'Квест',       art:'snake',     bg:'--mint',   repo:'python-quest-8', url:GH+'it-maysternia/apps/python-quest-8/'},
   {t:'algo',g:[9,9],   title:'Python з нуля · 9 клас',       desc:'Курс Python для 9 класу',                      type:'Курс',        art:'pybook',    bg:'--sky',    repo:'learn-python-9'},
-  {t:'algo',g:[9,9],   title:'Квест: Python, 9 клас',        desc:'Цикли, списки, Turtle і Tkinter',                type:'Квест',       art:'python9',   bg:'--sky',    repo:'python-quest-9', url:GH+'it-maysternia/apps/python-quest-9/'},
+  {t:'algo',exam:1,g:[9,9],   title:'Квест: Python, 9 клас',        desc:'Цикли, списки, Turtle і Tkinter',                type:'Квест',       art:'python9',   bg:'--sky',    repo:'python-quest-9', url:GH+'it-maysternia/apps/python-quest-9/'},
   {t:'algo',g:[10,12], title:'Веб-програмування',            desc:'HTML, CSS і JavaScript за 12 уроків',            type:'Курс',        art:'web',       bg:'--peach',  repo:'learn-web'},
-  {t:'algo',g:[10,12], title:'Ghost in HTML',                desc:'Виправ код і звільни привида',                   type:'Квест',       art:'ghost',     bg:'--sky',    repo:'ghost-in-html', url:GH+'it-maysternia/apps/ghost-in-html/'},
+  {t:'algo',exam:1,g:[10,12], title:'Ghost in HTML',                desc:'Виправ код і звільни привида',                   type:'Квест',       art:'ghost',     bg:'--sky',    repo:'ghost-in-html', url:GH+'it-maysternia/apps/ghost-in-html/'},
   {t:'algo',g:[8,12],  title:'Баг-шторм',                    desc:'Виправ помилки, поки падають вікна',             type:'Гра',         art:'bugs',      bg:'--coral',  repo:'bug-storm', url:GH+'it-maysternia/apps/bug-storm/'},
 
   /* — Дані та безпека: безпека — для всіх, далі місії за класами, турнір наприкінці — */
   {t:'data',g:[5,12],  title:'Фішинг-детектор',              desc:'Розпізнай шахраїв в іграх, чатах і листах',      type:'Квест',       art:'phishing',  bg:'--sky',    repo:'phishing-detector', url:GH+'it-maysternia/apps/phishing-detector/'},
-  {t:'data',g:[9,9],   title:'Місія «Документ»',             desc:'Списки, стовпці, колонтитули й зміст',           type:'Квест',       art:'textdoc',   bg:'--butter', repo:'text-document-quest', url:GH+'it-maysternia/apps/text-document-quest/'},
-  {t:'data',g:[9,9],   title:'Місія «Інтернет речей»',       desc:'Квест про розумні пристрої',                     type:'Квест',       art:'iot',       bg:'--lilac',  repo:'iot-quest', url:GH+'it-maysternia/apps/iot-quest/'},
-  {t:'data',g:[10,10], title:'Місія «Аналітик даних»',       desc:'Мода, медіана й середнє на практиці',            type:'Квест',       art:'data',      bg:'--lilac',  repo:'data-analysis-quest', url:GH+'it-maysternia/apps/data-analysis-quest/'},
-  {t:'data',g:[8,12],  title:'Excel Tournament',             desc:'Змагання з електронних таблиць',                 type:'Квест',         art:'excel',     bg:'--mint',   repo:'excel-tournament', url:GH+'it-maysternia/apps/excel-tournament/'},
+  {t:'data',exam:1,g:[9,9],   title:'Місія «Документ»',             desc:'Списки, стовпці, колонтитули й зміст',           type:'Квест',       art:'textdoc',   bg:'--butter', repo:'text-document-quest', url:GH+'it-maysternia/apps/text-document-quest/'},
+  {t:'data',exam:1,g:[9,9],   title:'Місія «Інтернет речей»',       desc:'Квест про розумні пристрої',                     type:'Квест',       art:'iot',       bg:'--lilac',  repo:'iot-quest', url:GH+'it-maysternia/apps/iot-quest/'},
+  {t:'data',exam:1,g:[10,10], title:'Місія «Аналітик даних»',       desc:'Мода, медіана й середнє на практиці',            type:'Квест',       art:'data',      bg:'--lilac',  repo:'data-analysis-quest', url:GH+'it-maysternia/apps/data-analysis-quest/'},
+  {t:'data',exam:1,g:[8,12],  title:'Excel Tournament',             desc:'Змагання з електронних таблиць',                 type:'Квест',         art:'excel',     bg:'--mint',   repo:'excel-tournament', url:GH+'it-maysternia/apps/excel-tournament/'},
 
   /* — Проєкти: проблемна ситуація з життя, кроки й критерії (сторінка apps/projects) — */
   {proj:1,g:[1,4],   title:'Проєкт «Піксельна листівка»',   desc:'Створи листівку для рідних на комп\'ютері',  type:'Проєкт', art:'projCard',   bg:'--peach', repo:'it-maysternia', url:GH+'it-maysternia/apps/projects/#card'},
@@ -1056,6 +1058,7 @@ const NAV=[
  ...(SHOW_ROUTES?[{id:'routes',label:'Маршрути',color:'--peach',ic:'Discovery'}]:[]),
  {id:'projects',label:'Проєкти',color:'--coral',ic:'Paper'},
  ...TOPICS.filter(t=>APPS.some(a=>a.t===t.id)),
+ {id:'exams',label:'Підсумкові квести',color:'--lilac',ic:'Ticket'},
  {id:'games',label:'Ігри для перерви',color:'--coral',ic:'Game'},
  {id:'teacher',label:'Для вчителя',color:'--butter',ic:'Work'},
 ];
@@ -1179,7 +1182,7 @@ const ROUTES=[
 ];
 /* Топ-3 тижня: впиши дату понеділка й три назви карток. Через 7 днів, якщо не оновити,
    сайт сам щотижня обиратиме три інші ресурси. */
-const TOP3={from:'2026-11-16',items:['Робот-кур\'єр','Фішинг-детектор','Excel Tournament']};
+const TOP3={from:'2026-11-16',items:['Робот-кур\'єр','Фішинг-детектор','Баг-шторм']};
 /* ===== Учні на цьому комп'ютері. Профіль = ім'я + клас; усе зберігається лише в браузері цього ПК.
    Після 90 хв без дій сайт знову спитає «Хто за комп'ютером?» — зручно, коли змінюється клас. ===== */
 let PROF={};try{PROF=JSON.parse(localStorage.getItem('itm-profiles')||'{}')||{}}catch(e){}
@@ -1245,7 +1248,7 @@ function weekTop(){
   const now=new Date(),from=new Date(TOP3.from+'T00:00:00');
   if(now-from>=0&&now-from<7*864e5)return TOP3.items.map(appBy).filter(Boolean);
   /* автоматичний вибір: однаковий для всіх протягом тижня */
-  const wk=Math.floor((now-new Date('2026-01-05T00:00:00'))/(7*864e5)),pool=APPS.filter(a=>!a.teacher);
+  const wk=Math.floor((now-new Date('2026-01-05T00:00:00'))/(7*864e5)),pool=APPS.filter(a=>!a.teacher&&!a.exam);
   const out=[];for(let i=0;out.length<3&&i<pool.length*3;i++){const a=pool[(wk*7+i*11)%pool.length];if(!out.includes(a))out.push(a)}return out}
 function renderHome(){
   const mb=ME&&bandOf(PROF[ME].cls),bk=['1-4','5-8','9-12'];
@@ -1260,7 +1263,7 @@ function renderHome(){
 document.getElementById('hRoutes').addEventListener('click',e=>{const a=e.target.closest('[data-age]');if(!a)return;AGE=a.dataset.age;try{localStorage.setItem('itm-age',AGE)}catch(err){}});
 document.addEventListener('click',e=>{const b=e.target.closest('.rchk');if(!b)return;if(!ME){openWho();return}const t=b.dataset.done;if(RDONE[t])delete RDONE[t];else RDONE[t]=1;saveR();renderGrid();renderSide()});
 /* підпис розділу картки — для сторінки оновлень */
-const navOf=a=>NAV.find(n=>n.id===(a.fun?'games':a.teacher?'teacher':a.t));
+const navOf=a=>NAV.find(n=>n.id===(a.fun?'games':a.teacher?'teacher':a.exam?'exams':a.t));
 let AGE='all';try{AGE=localStorage.getItem('itm-age')||'all'}catch(e){}
 if(!CLASSES[AGE])AGE='all';
 const fitA=it=>AGE==='all'||fits(it,AGE);
@@ -1276,25 +1279,27 @@ function course(a){return `<a class="ccard" href="${a.url||GH+a.repo+'/'}" targe
     <div class="pic"><svg viewBox="0 0 320 200" aria-hidden="true">${(ART[a.art]||ART.default)()}</svg></div>
     <div class="txt"><span class="kicker">Курс для учнів</span><h3>${a.title}</h3><p>${a.mods}</p><span class="tags"><span class="tag">Уроки з практикою</span><span class="tag gr">Працює з телефона</span></span></div>
     <span class="go">Почати</span></a>`}
-function section(title,ic,color,list){if(!list.length)return'';return `<div class="sec"><h2 class="sech" style="--dot:var(${color})"><span class="ic"><svg viewBox="0 0 24 24">${ICX[ic]||''}</svg></span>${title}<span class="n">${list.length}</span></h2><div class="grid">${list.map(a=>card(a,color)).join('')}</div></div>`}
+function section(title,ic,color,list,sub){if(!list.length)return'';return `<div class="sec"><h2 class="sech" style="--dot:var(${color})"><span class="ic"><svg viewBox="0 0 24 24">${ICX[ic]||''}</svg></span>${title}<span class="n">${list.length}</span></h2>${sub?`<p class="secsub">${sub}</p>`:''}<div class="grid">${list.map(a=>card(a,color)).join('')}</div></div>`}
 const mcur=document.createElement('h2');mcur.id='mcur';mcur.className='mcur';gridEl.parentNode.insertBefore(mcur,gridEl);
 const ageBar=document.createElement('div');ageBar.className='agebar';gridEl.parentNode.insertBefore(ageBar,gridEl);
 function renderAge(show){ageBar.hidden=!show;ageBar.innerHTML='<span class="al">Клас:</span>'+[['all','Усі'],['1-4','1–4'],['5-8','5–8'],['9-12','9–12']].map(([k,l])=>`<button type="button" data-age="${k}" aria-pressed="${AGE===k}">${l}</button>`).join('')}
 ageBar.addEventListener('click',e=>{const b=e.target.closest('[data-age]');if(!b)return;AGE=b.dataset.age;try{localStorage.setItem('itm-age',AGE)}catch(e){}renderGrid();renderSide()});
+const EXAMS=()=>section('Підсумкові квести','Ticket','--lilac',APPS.filter(a=>a.exam&&fitA(a)),'Одна спроба — у кінці оцінка. Відкривай, коли скаже вчитель.');
 function renderGrid(){
   const id=current;let html='';
   if(id==='routes'){renderAge(true);html=(ME?'':`<div class="rlogin"><div><b>Увійди, щоб зберігати свій прогрес</b><br><small>Кожен учень на цьому комп'ютері має свої позначки.</small></div><button type="button" class="btn main" onclick="openWho()">Увійти</button></div>`)+ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).map(routeHTML).join('')}
   else if(id==='projects'){renderAge(true);html=section('Проєкти','Paper','--coral',APPS.filter(a=>a.proj&&fitA(a)))}
+  else if(id==='exams'){renderAge(true);html=EXAMS()}
   else if(id==='games'){renderAge(true);html=section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))}
   else if(id==='teacher'){renderAge(false);html=section('Для вчителя','Work','--butter',APPS.filter(a=>a.teacher).sort((a,b)=>(a.o||0)-(b.o||0)))+(TEACH?resultsHTML():'')}
   else{renderAge(true);
     const tps=id==='all'?TOPICS:TOPICS.filter(t=>t.id===id);
-    html+=tps.map(t=>section(t.label,t.ic,t.color,APPS.filter(a=>a.t===t.id&&fitA(a)))).join('');
-    if(id==='all')html+=section('Проєкти','Paper','--coral',APPS.filter(a=>a.proj&&fitA(a)))+section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))+section('Для вчителя','Work','--butter',APPS.filter(a=>a.teacher).sort((a,b)=>(a.o||0)-(b.o||0)))}
+    html+=tps.map(t=>section(t.label,t.ic,t.color,APPS.filter(a=>a.t===t.id&&!a.exam&&fitA(a)))).join('');
+    if(id==='all')html+=section('Проєкти','Paper','--coral',APPS.filter(a=>a.proj&&fitA(a)))+EXAMS()+section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))+section('Для вчителя','Work','--butter',APPS.filter(a=>a.teacher).sort((a,b)=>(a.o||0)-(b.o||0)))}
   if(!html)html='<p class="empty">Для цього класу тут поки нічого немає — обери інший клас.</p>';
   gridEl.innerHTML=html;
 }
-function navCount(n){if(n.id==='projects')return APPS.filter(a=>a.proj&&fitA(a)).length;if(n.id==='routes')return ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).length;if(n.id==='games')return APPS.filter(a=>a.fun&&fitA(a)).length;if(n.id==='teacher')return APPS.filter(a=>a.teacher).length;if(n.id==='all')return APPS.filter(a=>a.teacher||fitA(a)).length;return APPS.filter(a=>a.t===n.id&&fitA(a)).length}
+function navCount(n){if(n.id==='projects')return APPS.filter(a=>a.proj&&fitA(a)).length;if(n.id==='routes')return ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).length;if(n.id==='exams')return APPS.filter(a=>a.exam&&fitA(a)).length;if(n.id==='games')return APPS.filter(a=>a.fun&&fitA(a)).length;if(n.id==='teacher')return APPS.filter(a=>a.teacher).length;if(n.id==='all')return APPS.filter(a=>a.teacher||fitA(a)).length;return APPS.filter(a=>a.t===n.id&&!a.exam&&fitA(a)).length}
 function renderSide(){const mc=document.getElementById('mcur');if(mc){const t=NAV.find(x=>x.id===current);mc.textContent=t?t.label:'';mc.hidden=current!=='all'}document.getElementById('mside').innerHTML=sideEl.innerHTML=NAV.map(t=>`<a href="#${t.id}" style="--dot:var(${t.color})"${t.id===current?' aria-current="true"':''}><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">${ICX[t.ic]||''}</svg></span><span class="lb">${t.label}</span><span class="n">${navCount(t)}</span></a>`).join('')};
 function setTab(id){current=id;renderGrid();renderSide()}
 /* старі посилання #1-4, #5-7, #8-11 → «Усе одразу» з потрібним класом */
