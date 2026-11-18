@@ -3338,7 +3338,7 @@ async function drawCert(){
   x.fillStyle='#f3cf6b';x.beginPath();x.arc(mx,my,82,0,7);x.fill();x.lineWidth=10;x.strokeStyle='#d4a540';x.stroke();
   x.fillStyle='#fff';x.beginPath();for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,r=k%2?22:50;x.lineTo(mx+r*Math.cos(a),my+r*Math.sin(a))}x.fill();
   /* котик */
-  try{let svg=SK().hero(true);if(!/xmlns=/.test(svg))svg=svg.replace('<svg','<svg xmlns="http://www.w3.org/2000/svg"');
+  try{let svg=SK().hero();if(!/xmlns=/.test(svg))svg=svg.replace('<svg','<svg xmlns="http://www.w3.org/2000/svg"');
     const im=new Image();await new Promise((ok,no)=>{im.onload=ok;im.onerror=no;im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)});
     x.drawImage(im,1252,708,226,249)}catch(e){}
   const T=(t,y,font,col,maxW=1000)=>{x.font=font;x.fillStyle=col;x.textAlign='center';x.textBaseline='alphabetic';let sz=parseInt(font.match(/(\d+)px/)[1]);while(x.measureText(t).width>maxW&&sz>20){sz-=2;x.font=font.replace(/\d+px/,sz+'px')}x.fillText(t,W/2,y)};
