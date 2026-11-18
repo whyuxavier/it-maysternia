@@ -857,6 +857,7 @@ header{background:color-mix(in srgb,var(--page) 82%,transparent);border-bottom:1
 .nextapp:hover{transform:translateY(-2px)}
 .nextapp.ok{background:var(--accent);color:#2e2638;box-shadow:0 4px 0 var(--accent-sh);font-size:17px;padding:12px 18px}
 .nextwin{text-decoration:none;display:inline-flex;align-items:center;gap:8px}.nextwin svg{width:26px;height:26px}
+.certs:empty{display:none}
 .certs{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
 .cert{display:inline-flex;align-items:center;gap:10px;padding:8px 14px 8px 10px;border-radius:16px;background:var(--soft);color:var(--ink);box-shadow:0 3px 0 var(--soft-sh);text-align:left;font:inherit;cursor:pointer;opacity:.85}
 .cert svg{width:34px;height:34px;flex:none}
@@ -936,7 +937,7 @@ header{background:color-mix(in srgb,var(--page) 82%,transparent);border-bottom:1
       <p>Котик Фіфі й Папужка вчать дітей 6–10 років користуватися мишкою та клавіатурою.</p>
       <ul>
         <li>Рівні відкриваються по черзі, за кожен — до трьох зірочок.</li>
-        <li>Пройди всі рівні розділу — і отримаєш іменний сертифікат: його можна завантажити або надрукувати.</li>
+        <li>Пройди всі рівні тренажера — і отримаєш іменний сертифікат: його можна завантажити або надрукувати.</li>
         <li>Без програшів — помилку можна просто виправити. Час рахується лише в перегонах, з першої клавіші.</li>
         <li>На планшеті довге натискання замінює праву кнопку.</li>
         <li>Опанували мишку й клавіатуру? Далі — <a href="../my-first-pc/" target="_blank" rel="noopener">ФіфіПК: мій перший комп’ютер</a>.</li>
@@ -3292,27 +3293,27 @@ const certIds=p=>{const out=[];CERT_PARTS.filter(x=>p.key==='all'||x.key===p.key
 const certDone=p=>{const ids=certIds(p);return [ids.filter(([m,c,i])=>starsOf(m,c,i)>0).length,ids.length]};
 const certReady=p=>{const [a,b]=certDone(p);return b>0&&a===b};
 const certStars=p=>certIds(p).reduce((s,[m,c,i])=>s+starsOf(m,c,i),0);
-const CERT_ALL=()=>({key:'all',title:'Усі розділи',what:'усіх рівнів тренажера',skill:CERT_APP.allSkill});
-const certList=()=>{const l=[...CERT_PARTS];if(CERT_PARTS.length>1&&certReady(CERT_ALL()))l.push(CERT_ALL());return l};
+const CERT_ALL=()=>({key:'all',title:'Усі розділи',what:'всіх рівнів тренажера',skill:CERT_APP.allSkill});
+const certList=()=>certReady(CERT_ALL())?[CERT_ALL()]:[];
 const MEDAL=on=>`<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M12 2h7l3 12h-7zM28 2h-7l-3 12h7z" fill="${on?'#e07a6a':'#d9d3e6'}"/><circle cx="20" cy="25" r="12" fill="${on?'#f3cf6b':'#e6e1ef'}" stroke="${on?'#d4a540':'#cfc8dd'}" stroke-width="3"/><path d="M20 18l2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.7z" fill="${on?'#fff':'#cfc8dd'}"/></svg>`;
 function renderCerts(){
   let row=document.getElementById('certRow');
   if(!row){row=document.createElement('div');row.id='certRow';row.className='certs';document.querySelector('#s-home .modes').after(row)}
   row.innerHTML=certList().map(p=>{const [a,b]=certDone(p),ok=a===b;
-    return `<button type="button" class="cert${ok?' ok':''}" data-cert="${p.key}" title="${ok?'Отримати сертифікат':'Пройди всі рівні, щоб отримати сертифікат'}">${MEDAL(ok)}<span><b>Сертифікат</b><small>${CERT_PARTS.length>1||p.key==='all'?p.title+' · ':''}${ok?'отримати':a+' / '+b}</small></span></button>`}).join('')+nextHTML();
+    return `<button type="button" class="cert${ok?' ok':''}" data-cert="${p.key}" title="${ok?'Отримати сертифікат':'Пройди всі рівні, щоб отримати сертифікат'}">${MEDAL(ok)}<span><b>Сертифікат</b><small>${ok?'отримати':a+' / '+b}</small></span></button>`}).join('')+nextHTML();
 }
-function nextHTML(){const n=CERT_APP.next;if(!n)return'';const ok=!n.back&&certReady(CERT_ALL());
+function nextHTML(){const n=CERT_APP.next;if(!n)return'';if(n.back||!certReady(CERT_ALL()))return'';const ok=true;
   return `<a class="nextapp${ok?' ok':''}${n.back?' back':''}" href="${n.href}">${n.back?ARR_L:''}<span>${ok?n.done:n.idle}</span>${n.back?'':ARR_R}</a>`}
 const ARR_R='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',ARR_L='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H6M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const _renderHome=renderHome;renderHome=function(){_renderHome();renderCerts()};
 const partOf=(m,cid)=>CERT_PARTS.find(x=>x.m===m&&x.cats().some(c=>c.id===cid));
 const _win=win;win=function(st,extra){
-  const p=S.cur&&partOf(S.cur.m,S.cur.cid),was=p&&certReady(p);
+  const p=S.cur&&partOf(S.cur.m,S.cur.cid)&&CERT_ALL(),was=p&&certReady(p);
   _win(st,extra);
   if(p&&!was&&certReady(p)){const wc=document.getElementById('winCard');
     const mo=new MutationObserver(()=>{const r=wc.querySelector('.btnrow');if(!r||r.querySelector('[data-cert]'))return;mo.disconnect();
       r.insertAdjacentHTML('afterbegin',`<button class="big icon cert-win" data-cert="${p.key}">${MEDAL(true)}<span>Сертифікат</span></button>`);
-      const n=CERT_APP.next;if(n&&!n.back&&certReady(CERT_ALL()))r.insertAdjacentHTML('beforeend',`<a class="big icon nextwin" href="${n.href}"><span>${n.name}</span>${ARR_R}</a>`)});
+      const n=CERT_APP.next;if(n&&!n.back)r.insertAdjacentHTML('beforeend',`<a class="big icon nextwin" href="${n.href}"><span>${n.name}</span>${ARR_R}</a>`)});
     mo.observe(wc,{childList:true,subtree:true})}
 };
 function certName(){
