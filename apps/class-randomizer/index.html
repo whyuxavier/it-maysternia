@@ -116,6 +116,18 @@ body.home .hero-grid{width:100%}
 .sw input:checked{background:var(--mint)}
 .sw input:checked::after{left:21px}
 
+/* task wheel */
+.ttext{width:100%;min-height:250px;resize:vertical;padding:10px 12px;border-radius:12px;border:0;background:var(--bg);box-shadow:inset 0 0 0 1px var(--line);font:700 15px/1.55 Nunito;color:var(--ink)}
+.ttext:focus{outline:3px solid var(--sky)}
+.classbar select optgroup{font-style:normal;color:var(--muted)}
+.who{min-height:34px;font:800 clamp(18px,3vw,24px) Rubik;text-align:center;opacity:0;transition:opacity .25s}
+.who.on{opacity:1}.who b{background:linear-gradient(transparent 60%,var(--butter) 60%);padding:0 .1em}
+.more{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px}
+.more summary{cursor:pointer;font-weight:800;font-size:14px;color:var(--muted)}
+.more .row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.winner .wt{font:800 clamp(26px,5.5vw,42px)/1.2 Rubik;margin:6px 0 4px;word-break:break-word}
+.winner .wname{font-weight:800;font-size:18px}
+
 /* winner */
 .winner{text-align:center}
 .winner .wn{font:800 clamp(34px,7vw,56px) Rubik;margin:6px 0 4px;word-break:break-word}
@@ -223,6 +235,8 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
 
 @media (max-width:900px){
   .tool{grid-template-columns:1fr}
+  #taskPanel{order:2}
+  .ttext{min-height:190px}
 }
 @media (max-width:760px){
   .hero{padding:20px 0 10px}
@@ -235,6 +249,10 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
   .tabs{gap:5px;flex-wrap:nowrap}
   .tab{padding:9px 9px 7px;font-size:13.5px;gap:5px;white-space:nowrap}
   .tab svg{width:16px;height:16px}
+}
+@media (max-width:420px){
+  .tab{padding:9px 8px 7px;font-size:13px}
+  .tab svg{display:none}
   .chip{font-size:12px}
   .stage .ctrl .btn{padding:10px 12px;font-size:14px}
 }
@@ -244,7 +262,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
 <body class="home">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <filter id="paper" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="3" stdDeviation="2" flood-color="#2f2a40" flood-opacity=".25"/></filter>
-  <symbol id="ic-edit" viewBox="0 0 24 24"><path fill="currentColor" d="M15.3 4.3a2.3 2.3 0 0 1 3.3 0l1.1 1.1a2.3 2.3 0 0 1 0 3.3L9.4 19 4 20l1-5.4z"/></symbol><symbol id="ic-del" viewBox="0 0 24 24"><rect fill="currentColor" x="4" y="5" width="16" height="3" rx="1.2"/><rect fill="currentColor" x="9" y="2.5" width="6" height="3" rx="1"/><path fill="currentColor" d="M6 9.5h12l-1 10.2a2 2 0 0 1-2 1.8H9a2 2 0 0 1-2-1.8z"/></symbol><symbol id="ic-play" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.2c0-.8.9-1.3 1.6-.9l11 7a1.1 1.1 0 0 1 0 1.8l-11 7c-.7.4-1.6-.1-1.6-.9z"/></symbol><symbol id="ic-plus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.8" d="M12 5v14M5 12h14"/></symbol><symbol id="ic-tick" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12.5l4.5 4.5L19 7"/></symbol><symbol id="ic-paper" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" x="8" y="3" width="12" height="14" rx="2.5"/><rect fill="currentColor" x="4" y="7" width="12" height="14" rx="2.5"/></symbol><symbol id="ic-close" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.8" d="M6 6l12 12M18 6L6 18"/></symbol><symbol id="ic-hide" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle fill="currentColor" cx="12" cy="12" r="3"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" d="M4 20L20 4"/></symbol><symbol id="ic-video" viewBox="0 0 24 24"><rect fill="currentColor" x="2.5" y="6" width="13" height="12" rx="3"/><path fill="currentColor" d="M16.5 10.5l5-3v9l-5-3z"/></symbol><symbol id="ic-scan" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></symbol><symbol id="ic-swap" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" d="M4.5 12a7.5 7.5 0 1 0 2.6-5.7"/><path fill="currentColor" d="M3 3.6v6h6z"/></symbol><symbol id="ic-volu" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9.5A1.5 1.5 0 0 1 4.5 8H7l4.6-3.6c.7-.5 1.6 0 1.6.8v13.6c0 .8-.9 1.3-1.6.8L7 16H4.5A1.5 1.5 0 0 1 3 14.5z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M16 9a4.2 4.2 0 0 1 0 6M18.6 6.5a7.6 7.6 0 0 1 0 11"/></symbol><symbol id="ic-voloff" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9.5A1.5 1.5 0 0 1 4.5 8H7l4.6-3.6c.7-.5 1.6 0 1.6.8v13.6c0 .8-.9 1.3-1.6.8L7 16H4.5A1.5 1.5 0 0 1 3 14.5z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M16 9.5l5 5M21 9.5l-5 5"/></symbol><symbol id="ic-users" viewBox="0 0 24 24"><circle fill="currentColor" cx="9" cy="8" r="3.6"/><path fill="currentColor" d="M2.5 20a6.5 6.5 0 0 1 13 0z"/><circle fill="currentColor" cx="17" cy="9" r="2.8"/><path fill="currentColor" d="M16.2 13.3A5.3 5.3 0 0 1 21.5 20h-4.3a8 8 0 0 0-1-6.7z"/></symbol><symbol id="ic-time" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" cx="12" cy="12.5" r="8.3"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M12 8.5v4.3l2.8 1.8"/></symbol><symbol id="ic-pause" viewBox="0 0 24 24"><rect fill="currentColor" x="5.5" y="4" width="4.6" height="16" rx="1.6"/><rect fill="currentColor" x="13.9" y="4" width="4.6" height="16" rx="1.6"/></symbol><symbol id="i-wheel" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" cx="12" cy="12" r="9"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/><circle fill="currentColor" cx="12" cy="12" r="2.8"/></symbol>
+  <symbol id="ic-edit" viewBox="0 0 24 24"><path fill="currentColor" d="M15.3 4.3a2.3 2.3 0 0 1 3.3 0l1.1 1.1a2.3 2.3 0 0 1 0 3.3L9.4 19 4 20l1-5.4z"/></symbol><symbol id="ic-del" viewBox="0 0 24 24"><rect fill="currentColor" x="4" y="5" width="16" height="3" rx="1.2"/><rect fill="currentColor" x="9" y="2.5" width="6" height="3" rx="1"/><path fill="currentColor" d="M6 9.5h12l-1 10.2a2 2 0 0 1-2 1.8H9a2 2 0 0 1-2-1.8z"/></symbol><symbol id="ic-play" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.2c0-.8.9-1.3 1.6-.9l11 7a1.1 1.1 0 0 1 0 1.8l-11 7c-.7.4-1.6-.1-1.6-.9z"/></symbol><symbol id="ic-plus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.8" d="M12 5v14M5 12h14"/></symbol><symbol id="ic-tick" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12.5l4.5 4.5L19 7"/></symbol><symbol id="ic-paper" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" x="8" y="3" width="12" height="14" rx="2.5"/><rect fill="currentColor" x="4" y="7" width="12" height="14" rx="2.5"/></symbol><symbol id="ic-close" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.8" d="M6 6l12 12M18 6L6 18"/></symbol><symbol id="ic-hide" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle fill="currentColor" cx="12" cy="12" r="3"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" d="M4 20L20 4"/></symbol><symbol id="ic-video" viewBox="0 0 24 24"><rect fill="currentColor" x="2.5" y="6" width="13" height="12" rx="3"/><path fill="currentColor" d="M16.5 10.5l5-3v9l-5-3z"/></symbol><symbol id="ic-scan" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></symbol><symbol id="ic-swap" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" d="M4.5 12a7.5 7.5 0 1 0 2.6-5.7"/><path fill="currentColor" d="M3 3.6v6h6z"/></symbol><symbol id="ic-volu" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9.5A1.5 1.5 0 0 1 4.5 8H7l4.6-3.6c.7-.5 1.6 0 1.6.8v13.6c0 .8-.9 1.3-1.6.8L7 16H4.5A1.5 1.5 0 0 1 3 14.5z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M16 9a4.2 4.2 0 0 1 0 6M18.6 6.5a7.6 7.6 0 0 1 0 11"/></symbol><symbol id="ic-voloff" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9.5A1.5 1.5 0 0 1 4.5 8H7l4.6-3.6c.7-.5 1.6 0 1.6.8v13.6c0 .8-.9 1.3-1.6.8L7 16H4.5A1.5 1.5 0 0 1 3 14.5z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M16 9.5l5 5M21 9.5l-5 5"/></symbol><symbol id="ic-users" viewBox="0 0 24 24"><circle fill="currentColor" cx="9" cy="8" r="3.6"/><path fill="currentColor" d="M2.5 20a6.5 6.5 0 0 1 13 0z"/><circle fill="currentColor" cx="17" cy="9" r="2.8"/><path fill="currentColor" d="M16.2 13.3A5.3 5.3 0 0 1 21.5 20h-4.3a8 8 0 0 0-1-6.7z"/></symbol><symbol id="ic-time" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" cx="12" cy="12.5" r="8.3"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M12 8.5v4.3l2.8 1.8"/></symbol><symbol id="ic-pause" viewBox="0 0 24 24"><rect fill="currentColor" x="5.5" y="4" width="4.6" height="16" rx="1.6"/><rect fill="currentColor" x="13.9" y="4" width="4.6" height="16" rx="1.6"/></symbol><symbol id="i-task" viewBox="0 0 24 24"><rect fill="currentColor" x="4" y="2.5" width="16" height="19" rx="3"/><path fill="none" stroke="var(--card,#fffcf5)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 8.5l1.5 1.5 3-3M8 15l1.5 1.5 3-3M15 9h1.5M15 15.5h1.5"/></symbol><symbol id="i-wheel" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" cx="12" cy="12" r="9"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/><circle fill="currentColor" cx="12" cy="12" r="2.8"/></symbol>
   <symbol id="i-team" viewBox="0 0 24 24"><circle fill="currentColor" cx="9" cy="8" r="3.6"/><path fill="currentColor" d="M2.5 20a6.5 6.5 0 0 1 13 0z"/><circle fill="currentColor" cx="17" cy="9" r="2.8"/><path fill="currentColor" d="M16.2 13.3A5.3 5.3 0 0 1 21.5 20h-4.3a8 8 0 0 0-1-6.7z"/></symbol>
   <symbol id="i-timer" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" cx="12" cy="13.5" r="7.8"/><rect fill="currentColor" x="9" y="2" width="6" height="3" rx="1.2"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M12 13.5V9.5"/></symbol>
   <symbol id="i-mic" viewBox="0 0 24 24"><rect fill="currentColor" x="8.5" y="2.5" width="7" height="12" rx="3.5"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M5 11a7 7 0 0 0 14 0M12 18v3.5M8.5 21.5h7"/></symbol>
@@ -265,9 +283,10 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
     <div class="wrap hero-grid">
       <div>
         <h1>Пульт <span>уроку</span></h1>
-        <p class="lead">Колесо імен, чесний поділ на команди й таймер для уроку — бомба, Різдво чи Геловін. Імена можна просто надиктувати.</p>
+        <p class="lead">Колесо імен і колесо завдань, чесний поділ на команди й таймер для уроку — бомба, Різдво чи Геловін. Імена можна просто надиктувати.</p>
         <div class="hbtns">
           <button class="btn main" data-goto="wheel"><svg viewBox="0 0 24 24"><use href="#i-wheel"/></svg>Колесо імен</button>
+          <button class="btn" data-goto="tasks"><svg viewBox="0 0 24 24"><use href="#i-task"/></svg>Завдання</button>
           <button class="btn" data-goto="teams"><svg viewBox="0 0 24 24"><use href="#i-team"/></svg>Команди</button>
           <button class="btn" data-goto="timer"><svg viewBox="0 0 24 24"><use href="#i-timer"/></svg>Таймер</button>
         </div>
@@ -293,6 +312,7 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
   <section class="wrap" id="toolSec">
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" data-tab="wheel" style="--tc:var(--butter)"><svg viewBox="0 0 24 24"><use href="#i-wheel"/></svg>Колесо імен</button>
+      <button class="tab" role="tab" data-tab="tasks" style="--tc:var(--lilac)"><svg viewBox="0 0 24 24"><use href="#i-task"/></svg>Завдання</button>
       <button class="tab" role="tab" data-tab="teams" style="--tc:var(--mint)"><svg viewBox="0 0 24 24"><use href="#i-team"/></svg>Команди</button>
       <button class="tab" role="tab" data-tab="timer" style="--tc:var(--sky)"><svg viewBox="0 0 24 24"><use href="#i-timer"/></svg>Таймер</button>
     </div>
@@ -316,6 +336,23 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
         <p class="hintx">Натисни на ім'я — учень «відсутній» і не потрапить у колесо та команди.</p>
       </aside>
 
+      <aside class="panel" id="taskPanel" hidden>
+        <h3>Набір</h3>
+        <div class="classbar">
+          <select id="setSel" aria-label="Набір завдань"></select>
+          <button class="btn sm" id="setAdd" title="Новий набір" aria-label="Новий набір"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-plus"/></svg></button>
+          <button class="btn sm" id="setRen" title="Перейменувати набір" aria-label="Перейменувати набір"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-edit"/></svg></button>
+          <button class="btn sm" id="setDel" title="Видалити набір" aria-label="Видалити набір"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-del"/></svg></button>
+        </div>
+        <textarea class="ttext" id="setText" spellcheck="false" aria-label="Варіанти, по одному в рядку" placeholder="Один варіант у рядку"></textarea>
+        <div class="lstats"><span id="setCnt"></span><button class="btn sm" id="setReset" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-swap"/></svg>Як було</button></div>
+        <p class="hintx">Один варіант у рядку, до 40. Допиши <b>(рідко)</b> — варіант випадатиме рідше.</p>
+        <details class="more"><summary>Поділитися з колегами</summary>
+          <div class="row"><button class="btn sm" id="setExport"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-paper"/></svg>Зберегти у файл</button><button class="btn sm" id="setImport"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-plus"/></svg>Відкрити файл</button></div>
+          <input type="file" id="setFile" accept=".json,.txt,application/json,text/plain" hidden>
+        </details>
+      </aside>
+
       <div id="mainPanel">
         <!-- WHEEL -->
         <div class="panel" id="p-wheel">
@@ -329,6 +366,24 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
               <button class="btn main" id="spinBtn"><svg viewBox="0 0 24 24"><use href="#i-wheel"/></svg>Крутити</button>
               <label class="sw"><input type="checkbox" id="noRep">Без повторів</label>
               <button class="btn sm" id="resetPicked" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-users"/></svg>Повернути всіх (<span id="pickedN">0</span>)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TASKS -->
+        <div class="panel" id="p-tasks" hidden>
+          <div class="wheelbox">
+            <div class="who" id="taskWho" aria-live="polite"></div>
+            <div class="wheelwrap">
+              <svg class="pointer" id="tPointer" viewBox="0 0 44 52" aria-hidden="true"><path d="M4 4h36L22 48z" fill="#2f2a40"/><path d="M11 9h22L22 32z" fill="#bba8ee"/></svg>
+              <canvas id="taskWheel" width="1040" height="1040" aria-label="Колесо завдань"></canvas>
+              <button class="hub" id="tHub" type="button">Крути!</button>
+            </div>
+            <div class="wopts">
+              <button class="btn main" id="tSpinBtn"><svg viewBox="0 0 24 24"><use href="#i-wheel"/></svg>Крутити</button>
+              <label class="sw" title="Спершу випадає учень із колеса імен, потім — завдання"><input type="checkbox" id="tWithName">Учень + завдання</label>
+              <label class="sw"><input type="checkbox" id="tNoRep">Без повторів</label>
+              <button class="btn sm" id="tResetPicked" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-swap"/></svg>Повернути всі (<span id="tPickedN">0</span>)</button>
             </div>
           </div>
         </div>
@@ -385,17 +440,18 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
   <div class="dlg">
     <button class="close" type="button" data-close aria-label="Закрити">×</button>
     <h2 id="infoT">Пульт уроку</h2>
-    <p>Інструмент для вчителя: випадковий вибір учня, поділ на команди й таймер для уроку.</p>
+    <p>Інструмент для вчителя: випадковий вибір учня й завдання, поділ на команди й таймер для уроку.</p>
     <h3>Як користуватися</h3>
     <ul>
       <li><b>Учні:</b> впиши ім'я або натисни мікрофон і продиктуй імена через паузу. Кожне ім'я стане окремим. Списки зберігаються для кожного класу.</li>
       <li><b>Колесо:</b> «Крутити» — і стрілка зупиниться на випадковому імені. «Без повторів» прибирає вже вибраних.</li>
+      <li><b>Завдання:</b> обери готовий набір (рефлексія, фізхвилинка, терміни з теми…) або створи свій — по одному варіанту в рядку. «Учень + завдання» спершу обирає учня, потім завдання. Свої набори можна зберегти у файл і передати колегам.</li>
       <li><b>Команди:</b> обери кількість команд або учнів у команді — розподіл випадковий і рівномірний.</li>
       <li><b>Таймер:</b> обери тему й час — таймер відкриється на весь екран.</li>
     </ul>
     <h3>Керування</h3>
     <ul>
-      <li>Пробіл — крутити колесо або пауза таймера, Esc — закрити таймер.</li>
+      <li>Пробіл — крутити колесо (імен чи завдань) або пауза таймера, Esc — закрити таймер.</li>
       <li>Голосове введення працює в Chrome та Edge (потрібен інтернет і дозвіл на мікрофон).</li>
     </ul>
     <a class="gh" href="https://github.com/whyuxavier/it-maysternia" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6L2.5 9.3l6.6-.8z"/></svg>GitHub</a>
@@ -569,6 +625,133 @@ function confetti(){
 $('spinBtn').onclick=spin;$('hub').onclick=spin;
 $('noRep').checked=S.noRep;$('noRep').onchange=e=>{S.noRep=e.target.checked;persist();drawWheel()};
 $('resetPicked').onclick=()=>{cls().picked=[];persist();renderNames();drawWheel()};
+
+/* ===================== КОЛЕСО ЗАВДАНЬ ===================== */
+const TPRE=[
+  {key:'tasks',g:'Готові набори',name:'Завдання на уроці',text:'Поясни термін\nНаведи приклад\nПостав запитання класу\nЗнайди помилку\nРозкажи за 30 секунд\nПоясни, як другові з 3 класу\nБонус: пропусти хід (рідко)'},
+  {key:'refl',g:'Готові набори',name:'Рефлексія',text:'Що нового я дізнався?\nЩо було найскладніше?\nДе це знадобиться в житті?\nЩо поясню другові?\nОціни урок від 1 до 5\nЯке питання лишилося?'},
+  {key:'move',g:'Готові набори',name:'Фізхвилинка',text:'5 присідань\nПотягнися вгору\nПоморгай 10 разів\nДивись у вікно 20 секунд\nПокрути плечима\nРозітри долоні\nПостій на одній нозі'},
+  {key:'who',g:'Готові набори',name:'Хто відповідає',text:'Перший ряд\nСередній ряд\nОстанній ряд\nХто біля вікна\nХто в чомусь синьому\nУ кого день народження взимку\nВчитель обирає (рідко)'},
+  {key:'fmt',g:'Готові набори',name:'Формат відповіді',text:'Усно\nНа дошці\nОдним реченням\nТрьома словами\nЖестами без слів\nМалюнком\nЗа 30 секунд'},
+  {key:'bonus',g:'Готові набори',name:'Бонуси й сюрпризи',text:'+1 бал команді\nПідказка від вчителя\nДопомога друга\nЗахист від питання\nОбмін питанням\nПропусти хід\n+2 бали (рідко)'},
+  {key:'roles',g:'Готові набори',name:'Ролі в проєкті',text:'Капітан\nПрограміст\nДизайнер\nТестувальник\nПрезентатор\nХронометрист'},
+  {key:'t-alg',g:'Терміни з теми',name:'Алгоритми',text:'Алгоритм\nВиконавець\nКоманда\nСлідування\nРозгалуження\nЦикл\nУмова\nЗмінна\nБлок-схема\nПідпрограма'},
+  {key:'t-py',g:'Терміни з теми',name:'Python',text:'print()\ninput()\nЗмінна\nТипи int і str\nif / else\nЦикл for\nЦикл while\nrange()\nСписок\nФункція\nПомилка в коді'},
+  {key:'t-web',g:'Терміни з теми',name:'HTML і CSS',text:'Тег\nАтрибут\nПосилання <a>\nЗображення <img>\nЗаголовок <h1>\nСписок <ul>\nСелектор\nКлас\nmargin і padding\nКолір і фон'},
+  {key:'t-xls',g:'Терміни з теми',name:'Excel',text:'Клітинка\nАдреса клітинки\nДіапазон\nФормула\nФункція СУМ\nАбсолютне посилання $\nАвтозаповнення\nСортування\nФільтр\nДіаграма'},
+  {key:'t-sec',g:'Терміни з теми',name:'Безпека в мережі',text:'Надійний пароль\nФішинг\nДвофакторна автентифікація\nВірус\nАнтивірус\nЦифровий слід\nПерсональні дані\nКібербулінг\nРезервна копія\nОновлення програм'}
+];
+const TG=['Готові набори','Терміни з теми'];
+(()=>{let d={};try{d=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+  S.tsets=Array.isArray(d.tsets)?d.tsets:[];S.tcur=d.tcur;S.tNoRep=d.tNoRep;S.tWithName=d.tWithName;
+  TPRE.forEach(p=>{if(!S.tsets.some(x=>x.key===p.key))S.tsets.push({id:'p-'+p.key,key:p.key,name:p.name,text:p.text,picked:[]})});
+  S.tsets.forEach(x=>{if(!Array.isArray(x.picked))x.picked=[]});
+  if(!S.tsets.some(x=>x.id===S.tcur))S.tcur=S.tsets[0].id;
+  S.tNoRep=!!S.tNoRep;S.tWithName=!!S.tWithName;})();
+const tset=()=>S.tsets.find(x=>x.id===S.tcur);
+const RARE=/\s*\((рідко|рiдко)\)\s*$/i;
+function tItems(x=tset()){return x.text.split('\n').map(l=>l.trim()).filter(Boolean).slice(0,40).map(l=>({t:l.replace(RARE,''),k:l,w:RARE.test(l)?.4:1}))}
+function tPool(){const x=tset();return tItems(x).filter(i=>!(S.tNoRep&&x.picked.includes(i.k)))}
+function renderSets(){
+  const opt=x=>`<option value="${x.id}" ${x.id===S.tcur?'selected':''}>${esc(x.name)}</option>`;
+  const pre=g=>TPRE.filter(p=>p.g===g).map(p=>S.tsets.find(x=>x.key===p.key)).filter(Boolean);
+  const mine=S.tsets.filter(x=>!x.key);
+  $('setSel').innerHTML=TG.map(g=>`<optgroup label="${g}">${pre(g).map(opt).join('')}</optgroup>`).join('')+(mine.length?`<optgroup label="Мої набори">${mine.map(opt).join('')}</optgroup>`:'');
+  const x=tset();$('setDel').disabled=!!x.key;$('setDel').title=x.key?'Готовий набір не видаляється — його можна змінити':'Видалити набір';
+}
+function renderTasks(){renderSets();const x=tset();if(document.activeElement!==$('setText'))$('setText').value=x.text;updTaskInfo();drawTaskWheel()}
+function updTaskInfo(){const x=tset(),all=tItems(x).length,p=tPool().length,pre=x.key&&TPRE.find(q=>q.key===x.key);
+  $('setCnt').textContent=S.tNoRep&&p!==all?`На колесі: ${p} з ${all}`:`Варіантів: ${all}`;
+  $('setReset').hidden=!(pre&&pre.text!==x.text);
+  const k=x.picked.length;$('tResetPicked').hidden=!(S.tNoRep&&k);$('tPickedN').textContent=k}
+$('setSel').onchange=e=>{S.tcur=e.target.value;persist();$('setText').value=tset().text;renderTasks()};
+$('setText').addEventListener('input',e=>{const x=tset(),lines=e.target.value.split('\n');
+  if(lines.filter(l=>l.trim()).length>40)toast('Максимум 40 варіантів — зайві не потраплять на колесо');
+  x.text=e.target.value;const ks=tItems(x).map(i=>i.k);x.picked=x.picked.filter(k=>ks.includes(k));persist();updTaskInfo();drawTaskWheel()});
+$('setAdd').onclick=()=>{const n=prompt('Назва нового набору, наприклад «Терміни: Scratch»:','');if(!n||!n.trim())return;
+  const x={id:'u'+Date.now(),name:n.trim().slice(0,40),text:'',picked:[]};S.tsets.push(x);S.tcur=x.id;persist();renderTasks();$('setText').focus()};
+$('setRen').onclick=()=>{const x=tset(),n=prompt('Нова назва набору:',x.name);if(!n||!n.trim())return;x.name=n.trim().slice(0,40);persist();renderSets()};
+$('setDel').onclick=()=>{const x=tset();if(x.key)return;if(!confirm(`Видалити набір «${x.name}»?`))return;S.tsets=S.tsets.filter(y=>y!==x);S.tcur=S.tsets[0].id;persist();renderTasks()};
+$('setReset').onclick=()=>{const x=tset(),p=TPRE.find(q=>q.key===x.key);if(!p)return;x.text=p.text;x.picked=[];persist();$('setText').value=x.text;renderTasks();toast('Набір повернуто як було')};
+$('tNoRep').checked=S.tNoRep;$('tNoRep').onchange=e=>{S.tNoRep=e.target.checked;persist();updTaskInfo();drawTaskWheel()};
+$('tWithName').checked=S.tWithName;$('tWithName').onchange=e=>{S.tWithName=e.target.checked;persist();
+  if(S.tWithName&&!cls().st.length)toast('Спершу додай учнів у «Колесі імен»')};
+$('tResetPicked').onclick=()=>{tset().picked=[];persist();updTaskInfo();drawTaskWheel()};
+/* поділитися: файл .json (або .txt — по варіанту в рядку) */
+$('setExport').onclick=()=>{const x=tset(),data={app:'pult-uroku',v:1,sets:[{name:x.name,items:x.text.split('\n').map(l=>l.trim()).filter(Boolean)}]};
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,1)],{type:'application/json'}));
+  a.download=('Набір — '+x.name).replace(/[\\/:*?"<>|]+/g,' ')+'.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)};
+$('setImport').onclick=()=>$('setFile').click();
+$('setFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{const txt=await f.text();let sets=[];
+    if(/\.json$/i.test(f.name)||txt.trim().startsWith('{')){const d=JSON.parse(txt);sets=(d.sets||[]).filter(s=>s&&Array.isArray(s.items))}
+    else sets=[{name:f.name.replace(/\.[^.]+$/,''),items:txt.split(/\r?\n/)}];
+    if(!sets.length)throw 0;let last;
+    sets.forEach(s=>{const items=s.items.map(i=>String(i).trim().slice(0,80)).filter(Boolean).slice(0,40);
+      last={id:'u'+Date.now()+Math.random().toString(36).slice(2,6),name:String(s.name||'Набір').slice(0,40),text:items.join('\n'),picked:[]};S.tsets.push(last)});
+    S.tcur=last.id;persist();$('setText').value=last.text;renderTasks();toast(sets.length>1?`Додано наборів: ${sets.length}`:`Додано набір «${last.name}»`)}
+  catch(err){toast('Не вдалося прочитати файл')}};
+
+const tcv=$('taskWheel'),tcx=tcv.getContext('2d');let trot=0,tspinning=false;
+function tAngles(P){const sum=P.reduce((s,i)=>s+i.w,0);let a=0;return P.map(i=>{const r=[a,a+i.w/sum*Math.PI*2];a=r[1];return r})}
+function fitText(c,t,maxW,fsMax){
+  for(let fs=fsMax;fs>=30;fs-=2){c.font=`800 ${fs}px Rubik, sans-serif`;if(c.measureText(t).width<=maxW)return {fs,lines:[t]}}
+  const w=t.split(' ');
+  if(w.length>1){let best=null;for(let k=1;k<w.length;k++){const a=w.slice(0,k).join(' '),b=w.slice(k).join(' ');c.font='800 40px Rubik, sans-serif';
+      const m=Math.max(c.measureText(a).width,c.measureText(b).width);if(!best||m<best.m)best={m,lines:[a,b]}}
+    for(let fs=Math.min(fsMax,40);fs>=22;fs-=2){c.font=`800 ${fs}px Rubik, sans-serif`;if(best.lines.every(l=>c.measureText(l).width<=maxW))return {fs,lines:best.lines}}}
+  c.font='800 26px Rubik, sans-serif';let s=t;while(c.measureText(s).width>maxW&&s.length>3)s=s.slice(0,-2)+'…';return {fs:26,lines:[s]}
+}
+function drawTaskWheel(){
+  const W=tcv.width,R=W/2-6,P=tPool(),c=tcx;c.clearRect(0,0,W,W);
+  c.save();c.translate(W/2,W/2);c.rotate(trot);
+  if(!P.length){c.fillStyle='#ebe4d6';c.beginPath();c.arc(0,0,R,0,7);c.fill();c.restore();
+    c.fillStyle='#6c6680';c.font='800 40px Rubik, sans-serif';c.textAlign='center';c.fillText(tItems().length?'Усі варіанти вже випали':'Додай варіанти',W/2,W/2-140);return}
+  const A=tAngles(P),n=P.length;
+  P.forEach((it,i)=>{const [a0,a1]=A[i],a=a1-a0;
+    c.fillStyle=COLORS[(n%COLORS.length===1&&i===n-1)?2:i%COLORS.length];
+    c.beginPath();c.moveTo(0,0);c.arc(0,0,R,a0,a1);c.closePath();c.fill();
+    c.strokeStyle='rgba(255,252,245,.9)';c.lineWidth=4;c.stroke();
+    c.save();c.rotate(a0+a/2);c.fillStyle='#2f2a40';c.textAlign='right';c.textBaseline='middle';
+    const fsMax=Math.max(22,Math.min(50,Math.floor(a*R*.5)));
+    const f=fitText(c,it.t,R*.74,fsMax);c.font=`800 ${f.fs}px Rubik, sans-serif`;
+    if(f.lines.length===2&&a*R*.62<f.fs*2.1){let t=it.t;while(c.measureText(t).width>R*.74&&t.length>3)t=t.slice(0,-2)+'…';c.fillText(t,R-28,2)}
+    else f.lines.forEach((l,k)=>c.fillText(l,R-28,2+(k-(f.lines.length-1)/2)*f.fs*1.08));
+    c.restore()});
+  c.restore();
+}
+function tSpin(){
+  if(tspinning||spinning)return;const P=tPool();
+  if(!P.length){toast(tItems().length?'Усі варіанти вже випали — натисни «Повернути всі»':'Спершу додай варіанти в набір');return}
+  let who=null;
+  if(S.tWithName){const np=pool();if(!np.length){toast(cls().st.length?'Усі учні вже відповіли — поверни їх у «Колесі імен»':'Спершу додай учнів у «Колесі імен»');return}
+    who=np[Math.floor(Math.random()*np.length)]}
+  Sound.unlock();tspinning=true;$('tSpinBtn').disabled=true;
+  const w=$('taskWho');if(who){w.innerHTML=`Відповідає: <b>${esc(who.n)}</b>`;w.classList.add('on');Sound.add()}else{w.classList.remove('on');w.innerHTML=''}
+  const A=tAngles(P),sum=P.reduce((s,i)=>s+i.w,0);let r=Math.random()*sum,win=0;for(;win<P.length-1;win++){r-=P[win].w;if(r<0)break}
+  const [a0,a1]=A[win],mid=(a0+a1)/2;
+  const target=-Math.PI/2-mid+(Math.random()-.5)*(a1-a0)*.6;
+  let end=target;while(end<trot+Math.PI*2*5)end+=Math.PI*2;
+  const start=trot,dur=who?4200+Math.random()*700:4600+Math.random()*900,t0=performance.now();let last=null;
+  const ease=t=>1-Math.pow(1-t,4);
+  const step=now=>{const t=Math.min(1,(now-t0)/dur);trot=start+(end-start)*ease(t);drawTaskWheel();
+    const ang=(((-Math.PI/2-trot)%(Math.PI*2))+Math.PI*2)%(Math.PI*2),seg=A.findIndex(([x,y])=>ang>=x&&ang<y);
+    if(seg!==last){last=seg;Sound.tick();const p=$('tPointer');p.classList.remove('tick');void p.getBBox();p.classList.add('tick')}
+    if(t<1)requestAnimationFrame(step);else{tspinning=false;$('tSpinBtn').disabled=false;trot%=Math.PI*2;showTask(P[win],who)}};
+  requestAnimationFrame(step);
+}
+function showTask(it,who){
+  Sound.win();confetti();
+  const x=tset();if(S.tNoRep&&!x.picked.includes(it.k)){x.picked.push(it.k);persist()}
+  const c=cls();if(who&&S.noRep&&!c.picked.includes(who.id)){c.picked.push(who.id);persist()}
+  $('winBody').innerHTML=`${who?`<p class="wname">${esc(who.n)}</p>`:`<p style="font-weight:800">${esc(x.name)}</p>`}<div class="wt">${esc(it.t)}</div>
+    <div class="row"><button class="btn main" id="wAgain"><svg viewBox="0 0 24 24"><use href="#i-wheel"/></svg>Ще раз</button><button class="btn" id="wOk"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-tick"/></svg>Готово</button></div>`;
+  const d=$('winDlg');d.showModal();
+  $('wOk').onclick=()=>d.close();
+  $('wAgain').onclick=()=>{d.close();setTimeout(tSpin,150)};
+}
+$('winDlg').addEventListener('close',()=>{if(tab==='tasks'){updTaskInfo();drawTaskWheel()}});
+$('tSpinBtn').onclick=tSpin;$('tHub').onclick=tSpin;
 
 /* ===================== КОМАНДИ ===================== */
 const TEAMS=[['Байти','#f2d06b'],['Піксели','#86cfa8'],['Курсори','#8ec5ee'],['Роутери','#ee8f80'],['Алгоритми','#bba8ee'],['Кодери','#f4ad86'],['Сервери','#7fd0c8'],['Біти','#f4a3c4'],['Процесори','#f2d06b'],['Хмаринки','#8ec5ee'],['Вайфайчики','#86cfa8'],['Флешки','#ee8f80']];
@@ -885,15 +1068,15 @@ $('tFull').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen().
 let tab='wheel';
 function setTab(t){
   tab=t;document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===t)));
-  ['wheel','teams','timer'].forEach(k=>$('p-'+k).hidden=k!==t);
-  $('listPanel').hidden=t==='timer';$('tool').classList.toggle('single',t==='timer');
-  if(t==='wheel')drawWheel();if(t==='timer')renderTimerSetup();
+  ['wheel','tasks','teams','timer'].forEach(k=>$('p-'+k).hidden=k!==t);
+  $('listPanel').hidden=t==='timer'||t==='tasks';$('taskPanel').hidden=t!=='tasks';$('tool').classList.toggle('single',t==='timer');
+  if(t==='wheel')drawWheel();if(t==='tasks')renderTasks();if(t==='timer')renderTimerSetup();
 }
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{history.replaceState(null,'','#'+b.dataset.tab);setTab(b.dataset.tab)});
 document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>{location.hash=b.dataset.goto});
-/* головна (hero) і окремий екран інструментів: #wheel, #teams, #timer */
+/* головна (hero) і окремий екран інструментів: #wheel, #tasks, #teams, #timer */
 function route(){const t=location.hash.slice(1);
-  if(['wheel','teams','timer'].includes(t)){document.body.classList.remove('home');setTab(t)}
+  if(['wheel','tasks','teams','timer'].includes(t)){document.body.classList.remove('home');setTab(t)}
   else document.body.classList.add('home');
   scrollTo(0,0)}
 addEventListener('hashchange',route);
@@ -903,6 +1086,7 @@ document.addEventListener('keydown',e=>{
   if(['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName))return;
   if(!$('stage').hidden){if(e.key==='Escape'){closeTimer()}else if(e.key===' '){e.preventDefault();$('tPause').click()}return}
   if($('info').open||$('winDlg').open)return;
+  if(e.key===' '&&tab==='tasks'&&!document.body.classList.contains('home')&&e.target.tagName!=='BUTTON'){e.preventDefault();tSpin();return}
   if(e.key===' '&&tab==='wheel'&&!document.body.classList.contains('home')&&e.target.tagName!=='BUTTON'){e.preventDefault();spin()}
 });
 
