@@ -882,6 +882,28 @@ header{background:color-mix(in srgb,var(--page) 82%,transparent);border-bottom:1
 .pbub p{margin:0;font:800 28px/1.25 var(--hfont);color:#3b3450;text-align:center}
 
 #pcCats{grid-template-columns:minmax(0,820px)}
+/* сертифікат */
+.certs{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.cert{display:inline-flex;align-items:center;gap:10px;padding:8px 14px 8px 10px;border-radius:16px;background:var(--soft);color:var(--ink);box-shadow:0 3px 0 var(--soft-sh);text-align:left;font:inherit;cursor:pointer;opacity:.85}
+.cert svg{width:34px;height:34px;flex:none}
+.cert b{display:block;font-size:15px;line-height:1.1}.cert small{font-size:13px;font-weight:700;opacity:.75}
+.cert.ok{background:#fff3cf;color:#3b3450;box-shadow:0 4px 0 #e2c368;opacity:1;animation:certPulse 1.6s ease-out 1}
+.cert:hover{transform:translateY(-2px)}.cert:active{transform:translateY(3px);box-shadow:none}
+@keyframes certPulse{0%{transform:scale(.9)}50%{transform:scale(1.06)}100%{transform:none}}
+.cert-win svg{width:30px;height:30px}
+.certdlg{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:rgba(30,25,45,.5);padding:14px}
+.certdlg[hidden]{display:none}
+.certbox{position:relative;width:min(760px,100%);max-height:100%;overflow:auto;background:var(--card,#fff);color:var(--ink);border-radius:22px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.certbox h2{margin:0 0 12px;font-size:24px}
+.certx{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:12px;background:var(--soft);color:var(--ink);font-size:18px;font-weight:900}
+.certname{display:grid;gap:6px;font-weight:800;font-size:15px;margin-bottom:12px}
+.certname input{font:700 18px var(--font,inherit);padding:10px 12px;border-radius:12px;border:2px solid var(--line,#ddd);background:#fff;color:#3b3450}
+.certprev img{width:100%;aspect-ratio:1600/1131;display:block;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.12);background:#fffaf1}
+.certbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.certbtns .big{font-size:20px;padding:12px 26px}.certbtns .small{font-size:18px}
+@media (prefers-reduced-motion:reduce){.cert.ok{animation:none}}
+.cert.shake{animation:certShake .4s}
+@keyframes certShake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 </style>
 </head>
 <body>
@@ -940,6 +962,7 @@ header{background:color-mix(in srgb,var(--page) 82%,transparent);border-bottom:1
       <p>Котик Фіфі показує дітям 6–10 років, як працювати в Windows: папки, вікна, меню, браузер і клавіатура.</p>
       <ul>
         <li>Рівні відкриваються по черзі, за кожен — до трьох зірочок.</li>
+        <li>Пройди всі рівні розділу — і отримаєш іменний сертифікат: його можна завантажити або надрукувати.</li>
         <li>Без програшів — помилку можна просто виправити, а після трьох помилок Фіфі покаже ще раз.</li>
         <li>На планшеті довге натискання замінює праву кнопку.</li>
         <li>Вправи лише імітують Windows — нічого на комп’ютері не змінюється.</li>
@@ -4154,6 +4177,103 @@ function applyTheme(){
 
 $('#bResume').innerHTML=ICON.play+'<span>Продовжити</span>';
 applyTheme();renderSound();renderLefty();showScreen('home');
+const CERT_APP={name:'ФіфіПК · мій перший комп’ютер',allSkill:'Тепер ти знаєш комп’ютер і впевнено працюєш у Windows!'};
+const CERT_PARTS=[
+ {key:'parts',m:'pc',title:'Пристрої',what:'розділу «З чого складається комп’ютер»',skill:'Тепер ти знаєш, з чого складається комп’ютер!',cats:()=>CATS.pc.filter(c=>c.id==='parts')},
+ {key:'pcm',m:'pc',title:'Мишка у Windows',what:'розділу «Мишка у Windows»',skill:'Тепер ти впевнено працюєш з вікнами, папками й файлами!',cats:()=>CATS.pc.filter(c=>c.id==='pcm')},
+ {key:'pck',m:'pc',title:'Клавіатура у Windows',what:'розділу «Клавіатура у Windows»',skill:'Тепер ти друкуєш, перейменовуєш і користуєшся гарячими клавішами!',cats:()=>CATS.pc.filter(c=>c.id==='pck')}];
+
+/* ================= сертифікат за всі рівні розділу ================= */
+/* CERT_APP і CERT_PARTS задаються вище для кожного тренажера */
+const certIds=p=>{const out=[];CERT_PARTS.filter(x=>p.key==='all'||x.key===p.key).forEach(x=>x.cats().forEach(c=>c.levels.forEach((l,i)=>out.push([x.m,c.id,i]))));return out};
+const certDone=p=>{const ids=certIds(p);return [ids.filter(([m,c,i])=>starsOf(m,c,i)>0).length,ids.length]};
+const certReady=p=>{const [a,b]=certDone(p);return b>0&&a===b};
+const certStars=p=>certIds(p).reduce((s,[m,c,i])=>s+starsOf(m,c,i),0);
+const CERT_ALL=()=>({key:'all',title:'Усі розділи',what:'усіх рівнів тренажера',skill:CERT_APP.allSkill});
+const certList=()=>{const l=[...CERT_PARTS];if(CERT_PARTS.length>1&&certReady(CERT_ALL()))l.push(CERT_ALL());return l};
+const MEDAL=on=>`<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M12 2h7l3 12h-7zM28 2h-7l-3 12h7z" fill="${on?'#e07a6a':'#d9d3e6'}"/><circle cx="20" cy="25" r="12" fill="${on?'#f3cf6b':'#e6e1ef'}" stroke="${on?'#d4a540':'#cfc8dd'}" stroke-width="3"/><path d="M20 18l2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.7z" fill="${on?'#fff':'#cfc8dd'}"/></svg>`;
+function renderCerts(){
+  let row=document.getElementById('certRow');
+  if(!row){row=document.createElement('div');row.id='certRow';row.className='certs';document.querySelector('#s-home .modes').after(row)}
+  row.innerHTML=certList().map(p=>{const [a,b]=certDone(p),ok=a===b;
+    return `<button type="button" class="cert${ok?' ok':''}" data-cert="${p.key}" title="${ok?'Отримати сертифікат':'Пройди всі рівні, щоб отримати сертифікат'}">${MEDAL(ok)}<span><b>Сертифікат</b><small>${CERT_PARTS.length>1||p.key==='all'?p.title+' · ':''}${ok?'отримати':a+' / '+b}</small></span></button>`}).join('');
+}
+const _renderHome=renderHome;renderHome=function(){_renderHome();renderCerts()};
+const partOf=(m,cid)=>CERT_PARTS.find(x=>x.m===m&&x.cats().some(c=>c.id===cid));
+const _win=win;win=function(st,extra){
+  const p=S.cur&&partOf(S.cur.m,S.cur.cid),was=p&&certReady(p);
+  _win(st,extra);
+  if(p&&!was&&certReady(p)){const wc=document.getElementById('winCard');
+    const mo=new MutationObserver(()=>{const r=wc.querySelector('.btnrow');if(!r||r.querySelector('[data-cert]'))return;mo.disconnect();
+      r.insertAdjacentHTML('afterbegin',`<button class="big icon cert-win" data-cert="${p.key}">${MEDAL(true)}<span>Сертифікат</span></button>`)});
+    mo.observe(wc,{childList:true,subtree:true})}
+};
+function certName(){
+  try{const n=localStorage.getItem('kt_certname');if(n)return n}catch(e){}
+  try{const P=JSON.parse(localStorage.getItem('itm-profiles')||'{}'),c=JSON.parse(localStorage.getItem('itm-me')||'null');if(c&&P[c.id])return P[c.id].name}catch(e){}
+  return '';
+}
+const certDlg=document.createElement('div');certDlg.className='certdlg';certDlg.id='certDlg';certDlg.hidden=true;
+certDlg.innerHTML=`<div class="certbox" role="dialog" aria-modal="true" aria-label="Сертифікат">
+  <button type="button" class="certx" data-cclose aria-label="Закрити">✕</button>
+  <h2>Твій сертифікат</h2>
+  <label class="certname">Ім'я та прізвище<input id="certIn" maxlength="40" autocomplete="off"></label>
+  <div class="certprev"><img id="certImg" alt="Сертифікат"></div>
+  <div class="certbtns"><button type="button" class="big" id="certPng">Завантажити</button><button type="button" class="small" id="certPrint">Друкувати</button></div>
+</div>`;
+document.body.appendChild(certDlg);
+let CUR_CERT=null,certT=0;
+function certPart(k){return k==='all'?CERT_ALL():CERT_PARTS.find(x=>x.key===k)}
+async function drawCert(){
+  const p=CUR_CERT,name=(document.getElementById('certIn').value||'').trim()||'Юний користувач',W=1600,H=1131;
+  try{await Promise.all(['800 90px Rubik','800 40px Nunito','700 34px Nunito'].map(f=>document.fonts.load(f)))}catch(e){}
+  const cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');
+  const rr=(X,Y,w,h,r)=>{x.beginPath();x.roundRect(X,Y,w,h,r)};
+  x.fillStyle='#fffaf1';x.fillRect(0,0,W,H);
+  let sd=7;const rnd=()=>(sd=(sd*9301+49297)%233280)/233280;
+  const cols=['#bfe3cf','#bddcf3','#d5c7f1','#f6c6a6','#f5bfd3','#f6e19c'];
+  for(let k=0;k<70;k++){const px=rnd()*W,py=rnd()*H;if(px>40&&px<W-40&&py>40&&py<H-40)continue;x.fillStyle=cols[k%6];x.beginPath();x.arc(px,py,6+rnd()*14,0,7);x.fill()}
+  x.lineWidth=16;x.strokeStyle='#f3cf6b';rr(54,54,W-108,H-108,46);x.stroke();
+  x.lineWidth=3;x.strokeStyle='#d4a540';rr(84,84,W-168,H-168,34);x.stroke();
+  /* медаль */
+  const mx=250,my=250;x.fillStyle='#e07a6a';[[-1],[1]].forEach(([s])=>{x.beginPath();x.moveTo(mx+s*14,my);x.lineTo(mx+s*62,my+150);x.lineTo(mx+s*34,my+138);x.lineTo(mx+s*22,my+170);x.lineTo(mx-s*18,my+40);x.fill()});
+  x.fillStyle='#f3cf6b';x.beginPath();x.arc(mx,my,82,0,7);x.fill();x.lineWidth=10;x.strokeStyle='#d4a540';x.stroke();
+  x.fillStyle='#fff';x.beginPath();for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,r=k%2?22:50;x.lineTo(mx+r*Math.cos(a),my+r*Math.sin(a))}x.fill();
+  /* котик */
+  try{let svg=SK().hero(true);if(!/xmlns=/.test(svg))svg=svg.replace('<svg','<svg xmlns="http://www.w3.org/2000/svg"');
+    const im=new Image();await new Promise((ok,no)=>{im.onload=ok;im.onerror=no;im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)});
+    x.drawImage(im,1252,708,226,249)}catch(e){}
+  const T=(t,y,font,col,maxW=1000)=>{x.font=font;x.fillStyle=col;x.textAlign='center';x.textBaseline='alphabetic';let sz=parseInt(font.match(/(\d+)px/)[1]);while(x.measureText(t).width>maxW&&sz>20){sz-=2;x.font=font.replace(/\d+px/,sz+'px')}x.fillText(t,W/2,y)};
+  x.letterSpacing='12px';T('СЕРТИФІКАТ',268,'800 112px Rubik','#3b3450',900);x.letterSpacing='0px';
+  T(CERT_APP.name,336,'800 38px Nunito','#8a82a3');
+  T('вручається',430,'700 36px Nunito','#6f6787');
+  T(name,532,'800 88px Rubik','#e07a6a',1000);
+  x.strokeStyle='#e8dcc4';x.lineWidth=4;x.beginPath();x.moveTo(380,562);x.lineTo(1220,562);x.stroke();
+  T('за проходження '+p.what,640,'800 42px Nunito','#3b3450',1080);
+  T(p.skill,700,'700 36px Nunito','#6f6787',860);
+  const [,lv]=certDone(p),st=certStars(p);
+  T('Рівнів: '+lv+'   ·   Зірочок: '+st+' з '+lv*3,782,'800 34px Nunito','#b0882c');
+  const d=new Date(),ds=String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+d.getFullYear();
+  x.textAlign='center';x.font='800 34px Nunito';x.fillStyle='#3b3450';x.fillText(ds,370,940);
+  x.strokeStyle='#cfc4ae';x.lineWidth=3;[[230,510],[680,920]].forEach(([a,b])=>{x.beginPath();x.moveTo(a,960);x.lineTo(b,960);x.stroke()});
+  x.font='700 26px Nunito';x.fillStyle='#8a82a3';x.fillText('дата',370,998);x.fillText('підпис учителя',800,998);
+  x.font='800 28px Rubik';x.fillStyle='#b8b0cc';x.fillText('ІТ-Майстерня',1365,998);
+  return cv.toDataURL('image/png');
+}
+async function refreshCert(){const t=++certT,u=await drawCert();if(t===certT)document.getElementById('certImg').src=u}
+function openCert(k){CUR_CERT=certPart(k);if(!CUR_CERT)return;const inp=document.getElementById('certIn');inp.value=certName();certDlg.hidden=false;refreshCert();try{sfx.win()}catch(e){}}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-cert]');if(b){e.preventDefault();e.stopPropagation();
+  if(!b.classList.contains('ok')&&!b.classList.contains('cert-win')){try{sfx.click()}catch(_){}b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');return}
+  openCert(b.dataset.cert)}},true);
+certDlg.addEventListener('click',e=>{if(e.target===certDlg||e.target.closest('[data-cclose]'))certDlg.hidden=true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!certDlg.hidden){certDlg.hidden=true;e.stopPropagation()}},true);
+document.getElementById('certIn').addEventListener('input',e=>{try{localStorage.setItem('kt_certname',e.target.value.trim())}catch(_){}clearTimeout(certDlg._t);certDlg._t=setTimeout(refreshCert,250)});
+document.getElementById('certIn').addEventListener('keydown',e=>e.stopPropagation());
+document.getElementById('certPng').onclick=async()=>{const u=await drawCert(),a=document.createElement('a');a.href=u;a.download='Сертифікат '+CERT_APP.name.split(' ')[0]+' — '+((document.getElementById('certIn').value||'').trim()||'учень')+'.png';document.body.appendChild(a);a.click();a.remove()};
+document.getElementById('certPrint').onclick=async()=>{const u=await drawCert(),f=document.createElement('iframe');f.style.cssText='position:fixed;width:0;height:0;border:0;right:0;bottom:0';
+  f.srcdoc=`<!doctype html><html><head><style>@page{size:A4 landscape;margin:0}html,body{margin:0;height:100%}img{width:100%;height:100%;object-fit:contain;display:block}</style></head><body><img src="${u}"></body></html>`;
+  f.onload=()=>{setTimeout(()=>{f.contentWindow.focus();f.contentWindow.print();setTimeout(()=>f.remove(),1500)},200)};document.body.appendChild(f)};
+renderCerts();
 })();
 
 </script>
