@@ -785,7 +785,7 @@ const APPS = [
   {fun:1,g:[5,12], title:'SERVER ROOM',                  desc:'Полагодь серверну разом з професором',           type:'Гра',         art:'server',    bg:'--lilac',  repo:'server-room', url:GH+'it-maysternia/apps/server-room/'},
 
   /* — Для вчителя — */
-  {teacher:1, title:'Пульт уроку',               desc:'Колесо імен, команди й таймер для уроку',        type:'Інструмент',  art:'randomizer',bg:'--mint',   repo:'class-randomizer', url:GH+'it-maysternia/apps/class-randomizer/'},
+  {teacher:1, title:'Пульт уроку',               desc:'Колесо імен і завдань, команди й таймер',     type:'Інструмент',  art:'randomizer',bg:'--mint',   repo:'class-randomizer', url:GH+'it-maysternia/apps/class-randomizer/'},
   {teacher:1, title:'Таймер для уроку',          desc:'Таймер на весь екран з темами',                  type:'Інструмент',  art:'timer',     bg:'--sky',    repo:'class-randomizer', url:GH+'it-maysternia/apps/class-randomizer/#timer'},
   {teacher:1, title:'Генератор QR-кодів',        desc:'QR-код для посилання на весь екран',             type:'Інструмент',  art:'qr',        bg:'--butter', repo:'qr-creator'},
   {teacher:1, title:'Кібертурнір',               desc:'Турнірна сітка для шкільних змагань',            type:'Інструмент',  art:'cyber',     bg:'--lilac',  repo:'cyber-tournament', url:GH+'it-maysternia/apps/cyber-tournament/'},
@@ -1332,6 +1332,7 @@ info.addEventListener('click',e=>{if(e.target===info)info.close()});
 /* ===== Оновлення (прихована сторінка #updates) =====
    Новий запис додавай ЗВЕРХУ: дата, що зроблено (new — новий ресурс, upd — оновлення), назви карток як у APPS. */
 const UPDATES=[
+  {date:'2026-11-18', items:[{t:'Пульт уроку', k:'upd', n:'Колесо завдань: рефлексія, фізхвилинка, терміни з тем і свої набори'}]},
   {date:'2026-11-16', items:[{t:'Таймер для уроку', k:'new', n:'Окрема картка для таймера з Пульта уроку'},{t:'Пульт уроку', k:'new', n:'Колесо імен з голосовим введенням, команди й таймер: бомба, Різдво, Геловін'}]},
   {date:'2026-11-15', items:[{t:'Робот-кур\'єр', k:'new', n:'Алгоритми з блоків, цикли й умови, генератор вигляду робота'},
                              {t:'Фішинг-детектор', k:'new', n:'Справжнє чи підробка: листи, SMS, сайти й історія «Телефон друга»'},
