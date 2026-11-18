@@ -714,7 +714,7 @@ dialog{border-radius:26px;box-shadow:var(--soft2),0 0 0 1px var(--line)}
                   тут і курси) | 'data' (дані та безпека)
         fun:1     — гра для перерви
         teacher:1 — для вчителя
-        exam:1    — підсумковий квест з оцінкою (разом із t): йде в «Підсумкові квести», а не в тему
+        exam:1    — тест на оцінку (разом із t): йде у вкладку «Тести», а не в тему
         g     — для яких класів: [від, до], напр. g:[5,7] (для фільтра «Клас»);
                 для тем обов'язкове, для ігор — бажане, для вчителя — не потрібне
         title — назва, як на самому сайті
@@ -756,18 +756,18 @@ const APPS = [
   {t:'algo',g:[5,7],   title:'Робот-кур\'єр',                desc:'Склади програму з блоків і достав посилки',     type:'Гра',         art:'robot',     bg:'--mint',   repo:'robot-courier', url:GH+'it-maysternia/apps/robot-courier/'},
   {t:'algo',g:[5,7],   title:'Блок-схеми',                   desc:'Будуй алгоритми з блоків',                       type:'Редактор',    art:'flowchart', bg:'--lilac',  repo:'flowchart', url:GH+'it-maysternia/apps/flowchart/'},
   {t:'algo',g:[8,8],   title:'Python з нуля · 8 клас',       desc:'Курс Python для 8 класу',                      type:'Курс',        art:'pybook',    bg:'--mint',   repo:'learn-python'},
-  {t:'algo',exam:1,g:[8,8],   title:'Квест: Python, 8 клас',        desc:'Перші кроки в Python',                           type:'Квест',       art:'snake',     bg:'--mint',   repo:'python-quest-8', url:GH+'it-maysternia/apps/python-quest-8/'},
+  {t:'algo',exam:1,g:[8,8],   title:'Тест: Python, 8 клас',        desc:'Перші кроки в Python',                           type:'Тест',       art:'snake',     bg:'--mint',   repo:'python-quest-8', url:GH+'it-maysternia/apps/python-quest-8/'},
   {t:'algo',g:[9,9],   title:'Python з нуля · 9 клас',       desc:'Курс Python для 9 класу',                      type:'Курс',        art:'pybook',    bg:'--sky',    repo:'learn-python-9'},
-  {t:'algo',exam:1,g:[9,9],   title:'Квест: Python, 9 клас',        desc:'Цикли, списки, Turtle і Tkinter',                type:'Квест',       art:'python9',   bg:'--sky',    repo:'python-quest-9', url:GH+'it-maysternia/apps/python-quest-9/'},
+  {t:'algo',exam:1,g:[9,9],   title:'Тест: Python, 9 клас',        desc:'Цикли, списки, Turtle і Tkinter',                type:'Тест',       art:'python9',   bg:'--sky',    repo:'python-quest-9', url:GH+'it-maysternia/apps/python-quest-9/'},
   {t:'algo',g:[10,12], title:'Веб-програмування',            desc:'HTML, CSS і JavaScript за 12 уроків',            type:'Курс',        art:'web',       bg:'--peach',  repo:'learn-web'},
   {t:'algo',g:[10,12], title:'Ghost in HTML',                desc:'Виправ код і звільни привида',                   type:'Квест',       art:'ghost',     bg:'--sky',    repo:'ghost-in-html', url:GH+'it-maysternia/apps/ghost-in-html/'},
   {t:'algo',g:[8,12],  title:'Баг-шторм',                    desc:'Виправ помилки, поки падають вікна',             type:'Гра',         art:'bugs',      bg:'--coral',  repo:'bug-storm', url:GH+'it-maysternia/apps/bug-storm/'},
 
   /* — Дані та безпека: безпека — для всіх, далі місії за класами, турнір наприкінці — */
   {t:'data',g:[5,12],  title:'Фішинг-детектор',              desc:'Розпізнай шахраїв в іграх, чатах і листах',      type:'Квест',       art:'phishing',  bg:'--sky',    repo:'phishing-detector', url:GH+'it-maysternia/apps/phishing-detector/'},
-  {t:'data',exam:1,g:[9,9],   title:'Місія «Документ»',             desc:'Списки, стовпці, колонтитули й зміст',           type:'Квест',       art:'textdoc',   bg:'--butter', repo:'text-document-quest', url:GH+'it-maysternia/apps/text-document-quest/'},
-  {t:'data',exam:1,g:[9,9],   title:'Місія «Інтернет речей»',       desc:'Квест про розумні пристрої',                     type:'Квест',       art:'iot',       bg:'--lilac',  repo:'iot-quest', url:GH+'it-maysternia/apps/iot-quest/'},
-  {t:'data',exam:1,g:[10,10], title:'Місія «Аналітик даних»',       desc:'Мода, медіана й середнє на практиці',            type:'Квест',       art:'data',      bg:'--lilac',  repo:'data-analysis-quest', url:GH+'it-maysternia/apps/data-analysis-quest/'},
+  {t:'data',exam:1,g:[9,9],   title:'Місія «Документ»',             desc:'Списки, стовпці, колонтитули й зміст',           type:'Тест',       art:'textdoc',   bg:'--butter', repo:'text-document-quest', url:GH+'it-maysternia/apps/text-document-quest/'},
+  {t:'data',exam:1,g:[9,9],   title:'Місія «Інтернет речей»',       desc:'Тест про розумні пристрої',                     type:'Тест',       art:'iot',       bg:'--lilac',  repo:'iot-quest', url:GH+'it-maysternia/apps/iot-quest/'},
+  {t:'data',exam:1,g:[10,10], title:'Місія «Аналітик даних»',       desc:'Мода, медіана й середнє на практиці',            type:'Тест',       art:'data',      bg:'--lilac',  repo:'data-analysis-quest', url:GH+'it-maysternia/apps/data-analysis-quest/'},
   {t:'data',g:[8,12],  title:'Excel Tournament',             desc:'Змагання з електронних таблиць',                 type:'Квест',         art:'excel',     bg:'--mint',   repo:'excel-tournament', url:GH+'it-maysternia/apps/excel-tournament/'},
 
   /* — Проєкти: проблемна ситуація з життя, кроки й критерії (сторінка apps/projects) — */
@@ -1055,7 +1055,7 @@ const NAV=[
  ...(SHOW_ROUTES?[{id:'routes',label:'Маршрути',color:'--peach',ic:'Discovery'}]:[]),
  {id:'projects',label:'Проєкти',color:'--coral',ic:'Paper'},
  ...TOPICS.filter(t=>APPS.some(a=>a.t===t.id)),
- {id:'exams',label:'Підсумкові квести',color:'--lilac',ic:'Ticket'},
+ {id:'exams',label:'Тести',color:'--lilac',ic:'Ticket'},
  {id:'games',label:'Ігри для перерви',color:'--coral',ic:'Game'},
  {id:'teacher',label:'Для вчителя',color:'--butter',ic:'Work'},
 ];
@@ -1078,8 +1078,8 @@ const TIPS={
  "Робот-кур\'єр":['Лінійні алгоритми, цикли й умови; пошук коротшого розв\'язку.','Практична частина уроку, 20 хв. Розділи гри = теми уроків.','Кожен проходить свій розділ. Наприкінці обговоріть найкоротші програми.','Зірки в розділі й уміння пояснити свою програму вголос.'],
  'Python з нуля · 8 клас':['Основи Python для 8 класу.','Один урок курсу = одна тема уроку; удома — повторення.','Учні працюють у своєму темпі; ви пояснюєте складні місця біля дошки.','Виконані практичні в курсі, далі — квест 8 класу.'],
  'Python з нуля · 9 клас':['Основи Python для 9 класу.','Один урок курсу = одна тема уроку; удома — повторення.','Учні працюють у своєму темпі; ви пояснюєте складні місця біля дошки.','Виконані практичні в курсі, далі — квест 9 класу.'],
- 'Квест: Python, 8 клас':['Підсумкова перевірка знань з Python за 8 клас.','Контрольний урок, 35–40 хв.','Індивідуально. Учні вводять ім\'я та клас — вони потрапляють у звіт.','Звіт наприкінці з оцінкою за 12-бальною шкалою.'],
- 'Квест: Python, 9 клас':['Підсумок теми «Алгоритмізація і програмування» (9 клас).','Контрольний урок, 40 хв.','Індивідуально; підказки коштують XP — домовтеся про правила заздалегідь.','Звіт з балами й рівнями; зверніть увагу на використані підказки.'],
+ 'Тест: Python, 8 клас':['Підсумкова перевірка знань з Python за 8 клас.','Контрольний урок, 35–40 хв.','Індивідуально. Учні вводять ім\'я та клас — вони потрапляють у звіт.','Звіт наприкінці з оцінкою за 12-бальною шкалою.'],
+ 'Тест: Python, 9 клас':['Підсумок теми «Алгоритмізація і програмування» (9 клас).','Контрольний урок, 40 хв.','Індивідуально; підказки коштують XP — домовтеся про правила заздалегідь.','Звіт з балами й рівнями; зверніть увагу на використані підказки.'],
  'Веб-програмування':['HTML, CSS і JavaScript за 12 уроків.','Один-два уроки на тему курсу, практика в редакторі.','Покажіть приклад на проєкторі, далі учні повторюють і змінюють код.','Працюючі сторінки з практичних завдань.'],
  'Ghost in HTML':['Пошук і виправлення помилок у HTML, CSS і JS.','1–2 кімнати за урок або підсумковий проєкт після курсу.','Учень вводить ім\'я — наприкінці отримає сертифікат.','Кількість пройдених кімнат і сертифікат.'],
  'Баг-шторм':['Швидке налагодження коду HTML/CSS і Python.','Розминка або гра наприкінці уроку, 10 хв.','Змагання: хто протримається довше. Можна виводити на проєктор.','Ігрова; можна відзначити найкращих бонусом.'],
@@ -1126,7 +1126,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.tbtn');if(!b)re
   tipDlg.showModal()});
 /* ===== Результати учнів на цьому комп'ютері (лише в режимі вчителя).
    Квести самі записують оцінку в itm-results; маршрути — з профілів. ===== */
-const RQ=['Проєкт: Піксельна листівка','Проєкт: Пам\'ятка безпеки для молодших','Проєкт: Бюджет класної екскурсії','Квест: Python, 8 клас','Квест: Python, 9 клас','Місія «Документ»','Місія «Інтернет речей»','Місія «Аналітик даних»','Excel Tournament','Ghost in HTML'];
+const RQ=['Проєкт: Піксельна листівка','Проєкт: Пам\'ятка безпеки для молодших','Проєкт: Бюджет класної екскурсії','Тест: Python, 8 клас','Тест: Python, 9 клас','Місія «Документ»','Місія «Інтернет речей»','Місія «Аналітик даних»','Excel Tournament','Ghost in HTML'];
 function resRows(){let R={};try{R=JSON.parse(localStorage.getItem('itm-results')||'{}')||{}}catch(e){}
   const ids=new Set([...Object.keys(PROF),...Object.keys(R)]);
   return [...ids].map(id=>{const p=PROF[id],x=R[id]||{};return {id,name:p?p.name:(x._name||'—'),cls:p?p.cls:(x._cls||''),steps:p?Object.keys(p.done||{}).length:0,res:x}})
@@ -1163,13 +1163,13 @@ const ROUTES=[
   ['Робот-кур\'єр','Склади програму з циклами й умовами'],
   ['Фішинг-детектор','Навчися розпізнавати шахраїв'],
   ['Python з нуля · 8 клас','Курс Python для 8 класу'],
-  ['Квест: Python, 8 клас','Перевір себе у квесті'],
+  ['Тест: Python, 8 клас','Перевір себе в тесті'],
   ['Проєкт «Пам\'ятка безпеки»','Фінал: пам\'ятка безпеки для молодших']]},
  {g:[9,12],color:'--lilac',title:'Від документа до вебсайту',sub:'Документи, дані, Python і веб',steps:[
   ['Місія «Документ»','Оформи справжній документ'],
   ['Місія «Інтернет речей»','Розумні пристрої та дані'],
   ['Python з нуля · 9 клас','Курс Python для 9 класу'],
-  ['Квест: Python, 9 клас','Цикли, списки й вікна Tkinter'],
+  ['Тест: Python, 9 клас','Цикли, списки й вікна Tkinter'],
   ['Excel Tournament','Формули й таблиці на швидкість'],
   ['Місія «Аналітик даних»','Від запитання до висновку'],
   ['Веб-програмування','HTML, CSS і JavaScript'],
@@ -1281,7 +1281,7 @@ const mcur=document.createElement('h2');mcur.id='mcur';mcur.className='mcur';gri
 const ageBar=document.createElement('div');ageBar.className='agebar';gridEl.parentNode.insertBefore(ageBar,gridEl);
 function renderAge(show){ageBar.hidden=!show;ageBar.innerHTML='<span class="al">Клас:</span>'+[['all','Усі'],['1-4','1–4'],['5-8','5–8'],['9-12','9–12']].map(([k,l])=>`<button type="button" data-age="${k}" aria-pressed="${AGE===k}">${l}</button>`).join('')}
 ageBar.addEventListener('click',e=>{const b=e.target.closest('[data-age]');if(!b)return;AGE=b.dataset.age;try{localStorage.setItem('itm-age',AGE)}catch(e){}renderGrid();renderSide()});
-const EXAMS=()=>section('Підсумкові квести','Ticket','--lilac',APPS.filter(a=>a.exam&&fitA(a)),'Одна спроба — у кінці оцінка. Відкривай, коли скаже вчитель.');
+const EXAMS=()=>section('Тести','Ticket','--lilac',APPS.filter(a=>a.exam&&fitA(a)),'Перевір знання: одна спроба — у кінці оцінка. Відкривай, коли скаже вчитель.');
 function renderGrid(){
   const id=current;let html='';
   if(id==='routes'){renderAge(true);html=(ME?'':`<div class="rlogin"><div><b>Увійди, щоб зберігати свій прогрес</b><br><small>Кожен учень на цьому комп'ютері має свої позначки.</small></div><button type="button" class="btn main" onclick="openWho()">Увійти</button></div>`)+ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).map(routeHTML).join('')}
