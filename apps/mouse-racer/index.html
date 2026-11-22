@@ -2,6 +2,83 @@
 <html lang="uk">
 <head>
 <meta charset="utf-8">
+<script>
+/* ===== ІТ-Майстерня: вхід учня. Прогрес кожного учня зберігається окремо на цьому комп'ютері (спільно з головною сторінкою). ===== */
+(function(){
+  var LS;try{LS=window.localStorage;LS.getItem('x')}catch(e){return}
+  var SYS=/^(itm-|pw-theme$)/,TTL=90*60e3;
+  function J(k,d){try{return JSON.parse(LS.getItem(k))||d}catch(e){return d}}
+  var PROF=J('itm-profiles',{}),me=J('itm-me',null),ME=me&&PROF[me.id]&&Date.now()-me.t<TTL?me.id:null;
+  function swap(to){var from=LS.getItem('itm-owner')||'';if(from===to)return;
+    var keys=[],snap={},i;for(i=0;i<LS.length;i++){var k=LS.key(i);if(!SYS.test(k))keys.push(k)}
+    keys.forEach(function(k){snap[k]=LS.getItem(k)});
+    if(from&&PROF[from])PROF[from].store=snap;else if(!from)LS.setItem('itm-guest-store',JSON.stringify(snap));
+    keys.forEach(function(k){LS.removeItem(k)});
+    var next=to&&PROF[to]?(PROF[to].store||{}):(!to?J('itm-guest-store',{}):{});
+    Object.keys(next).forEach(function(k){LS.setItem(k,next[k])});
+    LS.setItem('itm-owner',to);LS.setItem('itm-profiles',JSON.stringify(PROF))}
+  try{swap(ME||'');LS.setItem('itm-me',JSON.stringify(ME?{id:ME,t:Date.now()}:null))}catch(e){}
+  var last=Date.now();function alive(){if(!ME||Date.now()-last<60e3)return;last=Date.now();try{LS.setItem('itm-me',JSON.stringify({id:ME,t:last}))}catch(e){}}
+  addEventListener('pointerdown',alive,true);addEventListener('keydown',alive,true);
+  function go(to){try{swap(to);LS.setItem('itm-me',JSON.stringify(to?{id:to,t:Date.now()}:null))}catch(e){}
+    var S=Storage.prototype,set=S.setItem,rem=S.removeItem,clr=S.clear;
+    S.setItem=function(k,v){if(this===LS&&!SYS.test(k))return;return set.call(this,k,v)};
+    S.removeItem=function(k){if(this===LS&&!SYS.test(k))return;return rem.call(this,k)};S.clear=function(){if(this!==LS)return clr.call(this)};
+    location.reload()}
+  var esc=function(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+  var ini=function(n){return n.trim().split(/\s+/).slice(0,2).map(function(w){return w[0]}).join('').toUpperCase()};
+  var ICON='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4.2" fill="currentColor"/><path d="M3.8 21a8.2 8.2 0 0 1 16.4 0z" fill="currentColor"/></svg>';
+  var CSS='.itmw-btn{display:inline-flex;align-items:center;gap:7px;height:40px;max-width:190px;padding:0 13px 0 9px;border-radius:13px;border:0;cursor:pointer;font:800 14px/1 Nunito,Rubik,system-ui,sans-serif;color:inherit;background:rgba(128,128,150,.16);box-shadow:inset 0 0 0 1.5px rgba(128,128,150,.28);white-space:nowrap;flex:none}'+
+  '.itmw-btn:hover{background:rgba(128,128,150,.26)}.itmw-btn svg{width:20px;height:20px;flex:none}.itmw-btn span{overflow:hidden;text-overflow:ellipsis}'+
+  '.itmw-btn i{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#8f7dff;color:#fff;font:800 11px Rubik,sans-serif;font-style:normal;flex:none}'+
+  '.itmw-btn.in{padding-left:7px}@media (max-width:640px){.itmw-btn span{display:none}.itmw-btn{padding:0 8px;max-width:none}}'+
+  '.itmw-dlg{border:0;padding:0;border-radius:24px;width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 24px);background:#fff;color:#2f2a4a;box-shadow:0 30px 70px rgba(10,8,30,.45);font:600 15px/1.45 Nunito,system-ui,sans-serif}'+
+  '.itmw-dlg::backdrop{background:rgba(20,16,40,.55)}.itmw-in{position:relative;padding:22px}'+
+  '.itmw-dlg h2{margin:0 40px 4px 0;font:800 22px Rubik,sans-serif}.itmw-dlg p{margin:0 0 14px;color:#6c6790}'+
+  '.itmw-x{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:11px;border:0;background:#f0eef8;color:#2f2a4a;font:700 20px sans-serif;cursor:pointer}'+
+  '.itmw-q{width:100%;margin:0 0 8px;padding:10px 12px;border-radius:12px;border:2px solid #e4e0f2;font:700 15px Nunito,sans-serif;color:#2f2a4a;background:#fff}'+
+  '.itmw-list{display:grid;gap:6px;max-height:240px;overflow:auto;margin:0 0 14px}'+
+  '.itmw-p{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border-radius:13px;border:0;background:#f5f3fb;color:#2f2a4a;cursor:pointer;text-align:left;font:700 15px Nunito,sans-serif}'+
+  '.itmw-p:hover{background:#ece8fb}.itmw-p.on{box-shadow:inset 0 0 0 2px #8f7dff}.itmw-p i{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#d5c7f1;font:800 12px Rubik,sans-serif;font-style:normal;flex:none}.itmw-p small{margin-left:auto;color:#6c6790;font-weight:800}'+
+  '.itmw-f{display:grid;gap:6px;padding:14px;border-radius:16px;background:#f5f3fb}.itmw-f h3{margin:0 0 2px;font:700 15px Rubik,sans-serif}.itmw-f label{font-weight:800;font-size:13px;color:#6c6790}'+
+  '.itmw-f input{padding:10px 12px;border-radius:12px;border:2px solid #e4e0f2;font:700 16px Nunito,sans-serif;color:#2f2a4a;background:#fff;outline:none}.itmw-f input:focus{border-color:#8f7dff}'+
+  '.itmw-go{margin-top:6px;height:46px;border:0;border-radius:14px;background:#8f7dff;color:#fff;font:800 16px Nunito,sans-serif;cursor:pointer}.itmw-go:hover{filter:brightness(1.06)}'+
+  '.itmw-out{display:block;margin:14px auto 0;border:0;background:none;color:#6c6790;font:800 14px Nunito,sans-serif;text-decoration:underline;cursor:pointer}';
+  function dlg(){
+    var d=document.getElementById('itmwDlg');if(d)return d;
+    d=document.createElement('dialog');d.id='itmwDlg';d.className='itmw-dlg';d.setAttribute('aria-labelledby','itmwT');document.body.appendChild(d);
+    d.addEventListener('click',function(e){if(e.target===d||e.target.closest('.itmw-x'))return d.close();
+      var p=e.target.closest('[data-pid]');if(p){d.close();if(p.dataset.pid!==ME)go(p.dataset.pid)}
+      if(e.target.closest('.itmw-out')){d.close();go('')}});
+    d.addEventListener('input',function(e){if(!e.target.classList.contains('itmw-q'))return;var q=e.target.value.trim().toLowerCase();
+      d.querySelectorAll('.itmw-p').forEach(function(b){b.hidden=q&&b.dataset.s.indexOf(q)<0})});
+    d.addEventListener('submit',function(e){e.preventDefault();
+      var n=d.querySelector('#itmwN').value.trim().replace(/\s+/g,' '),c=d.querySelector('#itmwC').value.trim().toUpperCase().replace(/\s+/g,'');
+      if(!n||!c)return;var id=(n+'|'+c).toLowerCase();if(!PROF[id])PROF[id]={name:n,cls:c,done:{}};PROF[id].t=Date.now();
+      try{LS.setItem('itm-profiles',JSON.stringify(PROF))}catch(_){}d.close();if(id!==ME)go(id)});
+    d.addEventListener('keydown',function(e){e.stopPropagation()});
+    return d}
+  function open(){PROF=J('itm-profiles',{});var d=dlg(),ids=Object.keys(PROF).sort(function(a,b){return (PROF[b].t||0)-(PROF[a].t||0)});
+    d.innerHTML='<div class="itmw-in"><button class="itmw-x" type="button" aria-label="Закрити">×</button><h2 id="itmwT">Хто за комп\'ютером?</h2><p>Обери себе — прогрес збережеться саме для тебе.</p>'+
+      (ids.length>8?'<input class="itmw-q" type="search" placeholder="Пошук за іменем" aria-label="Пошук учня">':'')+
+      (ids.length?'<div class="itmw-list">'+ids.map(function(id){var p=PROF[id];return '<button type="button" class="itmw-p'+(id===ME?' on':'')+'" data-pid="'+esc(id)+'" data-s="'+esc((p.name+' '+p.cls).toLowerCase())+'"><i>'+esc(ini(p.name))+'</i>'+esc(p.name)+'<small>'+esc(p.cls)+'</small></button>'}).join('')+'</div>':'')+
+      '<form class="itmw-f"><h3>'+(ids.length?'Мене немає у списку':'Я тут уперше')+'</h3><label for="itmwN">Ім\'я та прізвище</label><input id="itmwN" autocomplete="off" required maxlength="40"><label for="itmwC">Клас</label><input id="itmwC" autocomplete="off" required maxlength="8" placeholder="Наприклад, 6-А"><button class="itmw-go" type="submit">Увійти</button></form>'+
+      (ME?'<button type="button" class="itmw-out">Вийти</button>':'')+'</div>';
+    d.showModal()}
+  window.ITMW={me:function(){return ME&&PROF[ME]?{id:ME,name:PROF[ME].name,cls:PROF[ME].cls}:null},open:open,
+    mount:function(parent,before){
+      function put(){var host=typeof parent==='string'?document.querySelector(parent):parent;
+        var s=document.createElement('style');s.textContent=CSS;document.head.appendChild(s);
+        var b=document.createElement('button');b.type='button';b.className='itmw-btn'+(ME?' in':'');var p=ME&&PROF[ME];
+        b.title=p?p.name+', '+p.cls+' — змінити учня':'Увійти, щоб зберігати свій прогрес';b.setAttribute('aria-label',b.title);
+        b.innerHTML=p?'<i>'+esc(ini(p.name))+'</i><span>'+esc(p.name.split(' ')[0])+'</span>':ICON+'<span>Увійти</span>';
+        b.addEventListener('click',function(e){e.stopPropagation();open()});
+        if(!host){b.style.cssText='position:fixed;left:12px;bottom:12px;z-index:9999;background:#fff;color:#2f2a4a';document.body.appendChild(b);return}
+        var ref=before?host.querySelector(before):host.firstChild;host.insertBefore(b,ref||host.firstChild)}
+      if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',put);else put()}};
+})();
+ITMW.mount('#top','#bSound');
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>MOUSE RACER</title>
 <meta name="description" content="MOUSE RACER — аркадні перегони, де керуєш лише мишею або дотиком.">
