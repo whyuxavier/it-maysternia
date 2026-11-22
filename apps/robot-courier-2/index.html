@@ -73,8 +73,9 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 .lead{font-size:clamp(17px,2vw,19px);color:var(--muted);margin:14px 0 22px;max-width:34ch}
 .btns{display:flex;flex-wrap:wrap;gap:10px}
 .art{position:relative;justify-self:end;width:100%;max-width:560px}
-.hstage{position:relative;background:var(--card);border-radius:28px;box-shadow:0 6px 0 var(--shadow),0 0 0 1px var(--line);overflow:hidden;aspect-ratio:560/430}
+.hstage{display:block;width:100%;padding:0;border:0;cursor:pointer;transition:transform .2s;position:relative;background:var(--card);border-radius:28px;box-shadow:0 6px 0 var(--shadow),0 0 0 1px var(--line);overflow:hidden;aspect-ratio:560/430}
 .hstage>svg{position:absolute;inset:0;width:100%;height:100%}
+.hstage:hover{transform:translateY(-3px)}
 .hcust{position:absolute;right:4%;bottom:5%;padding:9px 14px;font-size:15px}
 .chip{position:absolute;padding:6px 12px;border-radius:12px;background:var(--card2);font:800 14px Nunito;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);white-space:nowrap;animation:pop .4s cubic-bezier(.4,1.6,.5,1) .8s both;z-index:2}
 .chip.c1{top:-14px;left:22px;transform:rotate(-4deg);border:0;cursor:pointer;color:var(--ink)}
@@ -101,9 +102,12 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 
 /* гра */
 .gwrap.playw{padding-top:16px}
-.play{display:grid;grid-template-columns:196px minmax(0,1.15fr) minmax(300px,1fr);gap:16px;align-items:start}
+.wrap.playw{max-width:1560px}
+.play{display:grid;grid-template-columns:184px minmax(0,1fr) minmax(0,1.3fr);gap:16px;align-items:start}
 .colh{display:flex;align-items:center;gap:8px;min-height:38px;margin-bottom:8px}
-.colh h3{font-size:15px;color:var(--muted);flex:1;min-width:0}
+.colh h3{font-size:15px;color:var(--muted);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bUndo span,#bClear span{display:none}
+#bUndo,#bClear{padding:7px 9px}
 .lvname{display:flex;align-items:center;gap:8px;flex:1;min-width:0;border:0;background:none;padding:0;cursor:pointer;font:800 17px Rubik,sans-serif;text-align:left}
 .lvname span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lvname svg{width:20px;height:20px;flex:none;opacity:.8}
@@ -118,7 +122,7 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 .stat b{color:var(--ink);font-family:Rubik;font-size:15px}
 .stat svg{width:17px;height:17px}
 .mapbox{position:relative;background:var(--card);border-radius:22px;padding:12px;box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line)}
-.mapbox svg{width:100%;height:auto;display:block;max-height:58vh}
+.mapbox svg{width:100%;height:auto;display:block;max-height:calc(100vh - 290px);min-height:240px}
 .mapbox .msg{position:absolute;left:50%;top:20px;transform:translateX(-50%);padding:7px 14px;border-radius:12px;font-weight:800;font-size:14px;background:var(--ink);color:var(--bg);pointer-events:none;opacity:0;transition:opacity .2s;white-space:nowrap;z-index:2}
 .mapbox .msg.show{opacity:1}
 .runbar{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
@@ -126,12 +130,24 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 8
 
 /* палітра команд — ті самі блоки-пазли, але з кодом */
 .palcol{position:sticky;top:80px}
-.palette{background:var(--card);border-radius:22px;padding:12px 10px 14px 12px;box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line);max-height:calc(100vh - 150px);overflow:auto}
+.palette{background:var(--card);border-radius:22px;padding:12px 8px 14px 6px;box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line);max-height:calc(100vh - 150px);overflow:auto;direction:rtl}
+.palette>*{direction:ltr}
+/* скролбари в стилі сайту */
+@supports not selector(::-webkit-scrollbar){*{scrollbar-width:thin;scrollbar-color:#4a4e5a transparent}}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#4a4e5a;border-radius:10px;border:3px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background-color:#636878}
+/* команди — просто текст, клік вставляє в код */
+.pcmd{display:block;width:100%;border:0;background:none;cursor:pointer;text-align:left;padding:5px 8px;border-radius:9px;font:600 13.5px var(--mono);color:var(--k);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcmd:hover{background:var(--bg2)}
+.pcmd:active{background:var(--card2)}
 .cat+.cat{margin-top:14px}
 .cat h4{display:flex;align-items:center;gap:7px;margin:0 0 9px;font:800 12px Rubik,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
 .cat h4 i{width:11px;height:11px;border-radius:4px;flex:none}
 .cat.locked h4{opacity:.55}
-.pbl{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.pbl{display:flex;flex-direction:column;gap:2px}
+.cat{padding-left:6px}
 .lockn{display:flex;gap:7px;align-items:center;padding:8px 10px;border-radius:12px;background:var(--bg2);font-size:13px;font-weight:700;color:var(--muted);line-height:1.25}
 .lockn svg{width:16px;height:16px;flex:none}
 
@@ -330,7 +346,7 @@ kbd{font:700 12px var(--mono);padding:2px 6px;border-radius:6px;background:var(-
   .play{grid-template-columns:minmax(0,1fr)}
   .palcol{position:static}
   .palcol .colh{display:none}
-  .palette{max-height:none;display:flex;gap:18px;overflow-x:auto;align-items:flex-start;padding-bottom:16px}
+  .palette{max-height:none;display:flex;gap:18px;overflow-x:auto;align-items:flex-start;padding-bottom:12px;direction:ltr}
   .cat{flex:none}.cat+.cat{margin-top:0}
   .lockn{max-width:150px}
   .ib.ctl span{display:none}.ib.ctl{width:42px;padding:0;justify-content:center}
@@ -418,7 +434,7 @@ kbd{font:700 12px var(--mono);padding:2px 6px;border-radius:6px;background:var(-
         </div>
       </div>
       <div class="art">
-        <div class="hstage" id="heroArt"></div>
+        <button class="hstage" id="heroArt" type="button" aria-label="Налаштувати вигляд робота" title="Налаштувати робота"></button>
         <button class="chip c1" id="chipGears" type="button">0 шестерень</button>
         <span class="chip c3" id="chipStars">0 з 48 зірок</span>
       </div>
@@ -1225,9 +1241,9 @@ const PCATS=[
  {n:'Рух',k:'mv',from:1,items:L=>L.cmds.filter(c=>['move_forward','turn_left','turn_right'].includes(c)).map(c=>[c+'()',c==='move_forward'?'mv':'turn',ICO[c],c+'()']).concat(L.sec>=2&&L.cmds.includes('move_forward')?[['move_forward(n)','mv','i-fwd','move_forward(|)']]:[])},
  {n:'Посилки',k:'box',from:1,items:L=>L.cmds.filter(c=>c==='pick_up'||c==='deliver').map(c=>[c+'()','box','i-pkg',c+'()'])},
  {n:'Датчики',k:'sens',from:4,items:L=>L.cmds.filter(c=>SENS.includes(c)).map(c=>[c+'()','sens','i-eye',c+'()'])},
- {n:'Цикли',k:'loop',from:3,items:L=>[['for … range','loop','i-rep','for i in range(|):']].concat(L.sec>=4?[['while …','loop','i-while','while |:']]:[]),c:true},
- {n:'Умови',k:'cond',from:4,items:L=>(L.sec>=5?[['if …','cond','i-if','if |:'],['else','cond','i-if','else:']]:[]).concat(CUR>=12?[['elif …','cond','i-if','elif |:']]:[]).concat([['not','cond','i-if','not ']])},
- {n:'Функції',k:'fn',from:6,items:L=>[['def …','fn','i-fn','def |():']]}
+ {n:'Цикли',k:'loop',from:3,items:L=>[['for i in range():','loop','i-rep','for i in range(|):']].concat(L.sec>=4?[['while :','loop','i-while','while |:']]:[]),c:true},
+ {n:'Умови',k:'cond',from:4,items:L=>(L.sec>=5?[['if :','cond','i-if','if |:'],['else:','cond','i-if','else:']]:[]).concat(CUR>=12?[['elif :','cond','i-if','elif |:']]:[]).concat([['not','cond','i-if','not ']])},
+ {n:'Функції',k:'fn',from:6,items:L=>[['def ():','fn','i-fn','def |():']]}
 ];
 let PITEMS=[];
 function renderPalette(){
@@ -1237,7 +1253,7 @@ function renderPalette(){
     const its=L.sec>=c.from?c.items(L):[];
     if(!its.length){const s=SECS.find(s=>s.n===c.from);return `<div class="cat locked">${h}<div class="lockn"><svg viewBox="0 0 24 24"><use href="#i-lock"/></svg>Відкриється в розділі «${esc(s?s.t:'')}»</div></div>`}
     return `<div class="cat">${h}<div class="pbl">${its.map(([lbl,k,ic,t])=>{const i=PITEMS.push(t)-1;
-      return `<button type="button" class="blk k-${k}" data-p="${i}" title="Натисни — вставиться в код"><span class="bh"><span class="ico"><svg viewBox="0 0 24 24"><use href="#${ic}"/></svg></span><code>${esc(lbl)}</code></span></button>`}).join('')}</div></div>`;
+      return `<button type="button" class="pcmd k-${k}" data-p="${i}" title="Натисни — вставиться в код">${esc(lbl)}</button>`}).join('')}</div></div>`;
   }).join('');
 }
 $('palette').onmousedown=e=>{if(e.target.closest('[data-p]'))e.preventDefault()};
@@ -1515,7 +1531,7 @@ function renderCreator(){
 function setRobot(k,v){ROBOT[k]=v;ST.robot={...ROBOT};save();renderCreator();drawRobotEverywhere();
   const b=document.querySelector('.cr-bot');if(b){void b.getBBox();b.classList.add('bump')}SND.pick()}
 function openCreator(){renderCreator();updGears();drawRobotEverywhere();$('crMsg').textContent='Проходь місії, збирай шестерні й відкривай нові деталі.';$('crMsg').className='cr-msg';$('creatorDlg').showModal()}
-$('gearPill').onclick=$('chipGears').onclick=openCreator;
+$('gearPill').onclick=$('chipGears').onclick=$('heroArt').onclick=openCreator;
 $('creatorDlg').addEventListener('close',()=>{if(SCRN==='start')$('heroArt').innerHTML=heroArt();else if(SCRN==='play'&&RUN.state==='idle')showMap(RUN.view)});
 $('crOpts').addEventListener('click',e=>{
   const b=e.target.closest('.opt');if(!b)return;const k=b.dataset.k,v=b.dataset.v,m=$('crMsg');
