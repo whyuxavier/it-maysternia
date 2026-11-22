@@ -189,6 +189,33 @@ body.upd .hero,body.upd .catalog{display:none}
 .uitem h3{font-size:17px;margin:0 0 3px}
 .uitem p{margin:0;color:var(--muted);font-size:14px;line-height:1.35}
 .ubadge{display:inline-block;margin-top:6px;padding:2px 9px;border-radius:9px;font:800 12px Nunito,sans-serif;color:#2e2638}
+.card.pinned::before{display:none}
+.tag.pin{display:inline-flex;align-items:center;gap:4px;background:var(--coral);color:#2e2638;font-weight:800}
+.tag.pin svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+/* адмінка оновлень */
+.uadmin{margin:0 0 22px}
+.uform{display:grid;gap:7px;max-width:620px;padding:18px 20px;border-radius:20px;background:var(--card);box-shadow:0 4px 0 var(--shadow),0 0 0 1px var(--line);border-top:8px solid var(--butter)}
+.uform h3{font-size:19px;margin:0}
+.uftop{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.uhint{margin:0 0 4px;color:var(--muted);font-size:15px}
+.uform label{font:800 14px Nunito,sans-serif;margin-top:4px}
+.uform input:not([type=checkbox]),.uform select,.uform textarea{width:100%;padding:11px 13px;border-radius:13px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:700 16px Nunito,sans-serif;resize:vertical}
+.uform [hidden]{display:none!important}
+.uchk{display:flex;align-items:center;gap:8px;font-weight:700!important}
+.uchk input{width:18px;height:18px;accent-color:var(--coral)}
+.uchk small{color:var(--muted);font-weight:700}
+.uhow{font-size:14px;color:var(--muted)}.uhow summary{cursor:pointer;font-weight:800;color:var(--ink)}.uhow ol{margin:6px 0 0;padding-left:20px}.uhow a{color:var(--ink)}
+.urow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px}
+.ust{font:700 14px Nunito,sans-serif;color:var(--muted)}.ust[data-ok="1"]{color:var(--ink)}
+.ulink{border:0;background:none;color:var(--muted);font:800 14px Nunito,sans-serif;text-decoration:underline;cursor:pointer;padding:4px}
+.useg{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0}
+.useg button{padding:8px 14px;border-radius:12px;border:0;cursor:pointer;font:800 14px Nunito,sans-serif;color:var(--ink);background:var(--bg);box-shadow:0 0 0 1px var(--line)}
+.useg button[aria-checked="true"]{background:var(--dot);box-shadow:0 2px 0 var(--shadow)}
+.uwrap{position:relative}.uwrap .uitem{height:100%}
+.udel{position:absolute;top:-8px;right:-8px;width:32px;height:32px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;background:var(--card);color:var(--ink);box-shadow:0 2px 0 var(--shadow),0 0 0 1px var(--line)}
+.udel svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round}
+.udel.sure{background:var(--coral)}
+.umsg:hover{transform:none}
 @media (max-width:600px){.uday{grid-template-columns:1fr;gap:10px}.uitems{grid-template-columns:1fr}}
 /* ===== головна: маршрути, топ-3 тижня, нове ===== */
 .homex{display:none;padding:10px 0 60px}
@@ -653,6 +680,7 @@ dialog{border-radius:26px;box-shadow:var(--soft2),0 0 0 1px var(--line)}
   <section class="updates" id="updates">
     <div class="wrap">
       <div class="uhead"><h2>Оновлення</h2><a class="btn" href="#all">До каталогу</a></div>
+      <div class="uadmin" id="uAdmin" hidden></div>
       <div id="updList"></div>
     </div>
   </section>
@@ -786,7 +814,8 @@ const APPS = [
   {fun:1,g:[5,12], title:'Інформатичний Еліас',          desc:'Поясни IT-термін команді',                       type:'Гра',         art:'alias',     bg:'--lilac',  repo:'it-alias', url:GH+'it-maysternia/apps/it-alias/'},
   {fun:1,g:[5,12], title:'SERVER ROOM',                  desc:'Полагодь серверну разом з професором',           type:'Гра',         art:'server',    bg:'--lilac',  repo:'server-room', url:GH+'it-maysternia/apps/server-room/'},
 
-  /* — Для вчителя — */
+  /* — Для вчителя — (pin:1 — закріплена картка, завжди перша) */
+  {teacher:1, pin:1, title:'Мої матеріали на Всеосвіті', desc:'Розробки уроків, презентації й тести для вчителів', type:'Матеріали', art:'vseosvita', bg:'--peach', url:'https://vseosvita.ua/user/id2306166/library'},
   {teacher:1, title:'Пульт уроку',               desc:'Колесо імен і завдань, команди й таймер',     type:'Інструмент',  art:'randomizer',bg:'--mint',   repo:'class-randomizer', url:GH+'it-maysternia/apps/class-randomizer/'},
   {teacher:1, title:'Таймер для уроку',          desc:'Таймер на весь екран з темами',                  type:'Інструмент',  art:'timer',     bg:'--sky',    repo:'class-randomizer', url:GH+'it-maysternia/apps/class-randomizer/#timer'},
   {teacher:1, title:'Генератор QR-кодів',        desc:'QR-код для посилання на весь екран',             type:'Інструмент',  art:'qr',        bg:'--butter', repo:'qr-creator'},
@@ -813,6 +842,16 @@ const CLIP=u=>`<rect x="56" y="26" width="124" height="152" rx="18" fill="${u('v
   [0,1,2].map(i=>`<rect x="80" y="${56+i*30}" width="18" height="18" rx="5" fill="${u('m')}"/><path d="M84 ${65+i*30}l4 4 7-8" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="104" y="${61+i*30}" width="${[52,40,46][i]}" height="8" rx="4" fill="#e3dff5"/>`).join('');
 
 const ART={
+  notice(){return sc('sky',[64,44,44],u=>
+    `<path d="M92 92l96-46v108l-96-46z" fill="${u('v')}"/><rect x="70" y="84" width="30" height="40" rx="9" fill="${u('k')}"/><path d="M104 126l10 34h18l-8-34z" fill="${u('k')}"/><rect x="182" y="40" width="20" height="120" rx="10" fill="${u('o')}"/>`,
+    u=>`<path d="M222 82q14 18 0 36M236 70q24 30 0 60" stroke="#6a57e8" stroke-width="6" fill="none" stroke-linecap="round" opacity=".55"/>`+spark(268,48,10,u('y'))+`<ellipse cx="140" cy="76" rx="22" ry="6" fill="url(#gl${UID})"/>`)},
+  vseosvita(){return sc('peach',[270,46,46],u=>
+    `<rect x="58" y="62" width="150" height="104" rx="16" fill="${u('o')}"/><path d="M58 78a16 16 0 0 1 16-16h40l12 14h66a16 16 0 0 1 16 16v4H58z" fill="${u('r')}"/>`+
+    `<g transform="rotate(-6 120 70)"><rect x="80" y="30" width="78" height="96" rx="10" fill="${u('w')}"/>${[0,1,2,3].map(i=>`<rect x="92" y="${46+i*15}" width="${[54,42,50,30][i]}" height="7" rx="3.5" fill="#e3dff5"/>`).join('')}</g>`+
+    `<g transform="rotate(5 186 70)"><rect x="150" y="36" width="80" height="58" rx="10" fill="${u('w')}"/><rect x="160" y="46" width="60" height="38" rx="6" fill="${u('s')}"/><path d="M170 76l12-14 10 9 8-6 12 11z" fill="${u('m')}"/><circle cx="206" cy="56" r="5" fill="${u('y')}"/></g>`+
+    `<rect x="58" y="100" width="150" height="66" rx="16" fill="${u('o')}"/><rect x="104" y="122" width="58" height="12" rx="6" fill="#fff" opacity=".5"/>`+
+    `<rect x="226" y="98" width="52" height="68" rx="9" fill="${u('w')}"/><rect x="234" y="108" width="36" height="7" rx="3.5" fill="#e3dff5"/>${[0,1,2].map(i=>`<circle cx="240" cy="${128+i*13}" r="4" fill="${i===1?u('m'):'#e3dff5'}"/><rect x="249" y="${125+i*13}" width="20" height="6" rx="3" fill="#e3dff5"/>`).join('')}`,
+    u=>`<g transform="translate(196 20) rotate(18)"><circle cx="0" cy="0" r="11" fill="${u('p')}"/><path d="M0 10v18" stroke="#655d93" stroke-width="3.5" stroke-linecap="round"/></g>`+spark(40,52,9,u('y'))+`<ellipse cx="96" cy="74" rx="20" ry="5" fill="url(#gl${UID})"/>`)},
   projCard(){return sc('peach',[272,44,46],u=>CLIP(u)+
     `<g transform="rotate(7 246 92)"><rect x="198" y="54" width="96" height="74" rx="12" fill="${u('w')}"/><path d="M246 116c-14-9-20-15-20-23a10 10 0 0 1 20-3 10 10 0 0 1 20 3c0 8-6 14-20 23z" fill="${u('p')}"/><rect x="208" y="64" width="9" height="9" rx="2" fill="${u('y')}"/><rect x="275" y="110" width="9" height="9" rx="2" fill="${u('s')}"/></g>`,
     u=>`<ellipse cx="78" cy="48" rx="16" ry="5" fill="url(#gl${UID})"/>`+spark(286,160,9,u('y'))+`<circle cx="30" cy="140" r="6" fill="${u('v')}"/>`)},
@@ -1114,7 +1153,7 @@ const TIPS={
 };
 const BULB='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>';
 let TEACH=false;try{TEACH=localStorage.getItem('itm-teacher')==='1'}catch(e){}
-function setTeach(on){TEACH=on;try{on?localStorage.setItem('itm-teacher','1'):localStorage.removeItem('itm-teacher')}catch(e){}document.body.classList.toggle('teach',on)}
+function setTeach(on){TEACH=on;try{on?localStorage.setItem('itm-teacher','1'):localStorage.removeItem('itm-teacher')}catch(e){}document.body.classList.toggle('teach',on);if(document.body.classList.contains('upd'))renderUpdates()}
 function teachHash(){if(location.hash==='#vchytel'){setTeach(true);history.replaceState(null,'','#all');return true}return false}
 document.getElementById('tExit').addEventListener('click',()=>{setTeach(false);route()});
 const setDlg=document.getElementById('setDlg'),swT=document.getElementById('swTeach');
@@ -1201,7 +1240,7 @@ let GUEST={};try{GUEST=JSON.parse(localStorage.getItem('itm-route')||'{}')||{}}c
 let RDONE=ME?PROF[ME].done:GUEST;
 const saveR=()=>{try{localStorage.setItem('itm-profiles',JSON.stringify(PROF));localStorage.setItem('itm-me',JSON.stringify(ME?{id:ME,t:Date.now()}:null));if(!ME)localStorage.setItem('itm-route',JSON.stringify(GUEST))}catch(e){}};
 const bandOf=c=>{const n=parseInt(c,10);return !n?null:n<=4?'1-4':n<=8?'5-8':'9-12'};
-const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const esc=t=>String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const initials=n=>n.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
 const NAMES=['Леся Українка','Тарас Шевченко','Іван Франко','Ліна Костенко','Сергій Корольов','Ігор Сікорський','Марія Приймаченко','Микола Амосов','Олена Пчілка','Борис Патон'];
 /* Прогрес в інших ресурсах (MOUSE RACER, квести, Робот-кур'єр…) теж окремий для кожного учня:
@@ -1281,9 +1320,9 @@ const gridEl=document.getElementById('grid'),sideEl=document.getElementById('sid
 let current='all';
 gridEl.className='secs';
 function card(a,color){const tag=a.type;
-  const h=`<a class="card" href="${a.url||GH+a.repo+'/'}" target="_blank" rel="noopener" style="--cbg:var(${a.bg});--tape:var(${color})">
+  const h=`<a class="card${a.pin?' pinned':''}" href="${a.url||GH+a.repo+'/'}" target="_blank" rel="noopener" style="--cbg:var(${a.bg});--tape:var(${color})">
     <div class="pic"><svg viewBox="0 0 320 200" aria-hidden="true">${(ART[a.art]||ART.default)()}</svg></div>
-    <div class="txt"><h3>${a.title}</h3><p>${a.desc}</p><span class="tags"><span class="tag">${tag}</span>${a.g&&!a.fun?`<span class="tag gr">${grades(a)}</span>`:''}</span></div></a>`;
+    <div class="txt"><h3>${a.title}</h3><p>${a.desc}</p><span class="tags">${a.pin?`<span class="tag pin"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l-1 6 4 4H6l4-4zM12 13v8"/></svg>Закріплено</span>`:''}<span class="tag">${tag}</span>${a.g&&!a.fun?`<span class="tag gr">${grades(a)}</span>`:''}</span></div></a>`;
   return TEACH&&TIPS[a.title]?`<div class="tcard">${h}<button type="button" class="tbtn" data-tip="${a.title.replace(/"/g,'&quot;')}">${BULB}Як на уроці</button></div>`:h}
 function course(a){return `<a class="ccard" href="${a.url||GH+a.repo+'/'}" target="_blank" rel="noopener" style="--cbg:var(${a.bg})">
     <div class="pic"><svg viewBox="0 0 320 200" aria-hidden="true">${(ART[a.art]||ART.default)()}</svg></div>
@@ -1294,6 +1333,7 @@ const mcur=document.createElement('h2');mcur.id='mcur';mcur.className='mcur';gri
 const ageBar=document.createElement('div');ageBar.className='agebar';gridEl.parentNode.insertBefore(ageBar,gridEl);
 function renderAge(show){ageBar.hidden=!show;ageBar.innerHTML='<span class="al">Клас:</span>'+[['all','Усі'],['1-4','1–4'],['5-8','5–8'],['9-12','9–12']].map(([k,l])=>`<button type="button" data-age="${k}" aria-pressed="${AGE===k}">${l}</button>`).join('')}
 ageBar.addEventListener('click',e=>{const b=e.target.closest('[data-age]');if(!b)return;AGE=b.dataset.age;try{localStorage.setItem('itm-age',AGE)}catch(e){}renderGrid();renderSide()});
+const TEACHERS=()=>APPS.filter(a=>a.teacher).sort((a,b)=>(b.pin||0)-(a.pin||0)||(a.o||0)-(b.o||0));
 const EXAMS=()=>section('Тести','Ticket','--lilac',APPS.filter(a=>a.exam&&fitA(a)),'Перевір знання: одна спроба — у кінці оцінка. Відкривай, коли скаже вчитель.');
 function renderGrid(){
   const id=current;let html='';
@@ -1301,11 +1341,11 @@ function renderGrid(){
   else if(id==='projects'){renderAge(true);html=section('Проєкти','Paper','--coral',APPS.filter(a=>a.proj&&fitA(a)))}
   else if(id==='exams'){renderAge(true);html=EXAMS()}
   else if(id==='games'){renderAge(true);html=section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))}
-  else if(id==='teacher'){renderAge(false);html=section('Для вчителя','Work','--butter',APPS.filter(a=>a.teacher).sort((a,b)=>(a.o||0)-(b.o||0)))+(TEACH?resultsHTML():'')}
+  else if(id==='teacher'){renderAge(false);html=section('Для вчителя','Work','--butter',TEACHERS())+(TEACH?resultsHTML():'')}
   else{renderAge(true);
     const tps=id==='all'?TOPICS:TOPICS.filter(t=>t.id===id);
     html+=tps.map(t=>section(t.label,t.ic,t.color,APPS.filter(a=>a.t===t.id&&!a.exam&&fitA(a)))).join('');
-    if(id==='all')html+=section('Проєкти','Paper','--coral',APPS.filter(a=>a.proj&&fitA(a)))+EXAMS()+section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))+section('Для вчителя','Work','--butter',APPS.filter(a=>a.teacher).sort((a,b)=>(a.o||0)-(b.o||0)))}
+    if(id==='all')html+=section('Проєкти','Paper','--coral',APPS.filter(a=>a.proj&&fitA(a)))+EXAMS()+section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))+section('Для вчителя','Work','--butter',TEACHERS())}
   if(!html)html='<p class="empty">Для цього класу тут поки нічого немає — обери інший клас.</p>';
   gridEl.innerHTML=html;
 }
@@ -1340,36 +1380,105 @@ info.addEventListener('click',e=>{if(e.target===info)info.close()});
 
 
 /* ===== Оновлення (прихована сторінка #updates) =====
-   Новий запис додавай ЗВЕРХУ: дата, що зроблено (new — новий ресурс, upd — оновлення), назви карток як у APPS. */
-const UPDATES=[
-  {date:'2026-11-22', items:[{t:'Вхід учня', k:'new', n:'Для шкільних ПК: кожен учень входить під своїм іменем і має свій прогрес. Дані нікуди не передаються — усе зберігається лише на цьому комп\'ютері'}]},
-  {date:'2026-11-22', items:[{t:'Python з нуля · 7 клас', k:'new', n:'Курс Python для 7 класу: 21 урок, тренажери й підсумковий тест'},
-                             {t:'Робот-кур\'єр 2.0', k:'new', n:'16 місій: робот виконує код Python — цикли, умови й функції'}]},
-  {date:'2026-11-18', items:[{t:'Пульт уроку', k:'upd', n:'Колесо завдань: рефлексія, фізхвилинка, терміни з тем і свої набори'}]},
-  {date:'2026-11-17', items:[{t:'Python з нуля · 8 клас', k:'upd', n:'Нові уроки 0–16, простіший вигляд і здача робіт'},
-                             {t:'Python з нуля · 9 клас', k:'upd', n:'Окремий курс: нові уроки 0–16 і здача робіт'}]},
-  {date:'2026-11-16', items:[{t:'Таймер для уроку', k:'new', n:'Окрема картка для таймера з Пульта уроку'},{t:'Пульт уроку', k:'new', n:'Колесо імен з голосовим введенням, команди й таймер: бомба, Різдво, Геловін'}]},
-  {date:'2026-11-15', items:[{t:'Робот-кур\'єр', k:'new', n:'Алгоритми з блоків, цикли й умови, генератор вигляду робота'},
-                             {t:'Фішинг-детектор', k:'new', n:'Справжнє чи підробка: листи, SMS, сайти й історія «Телефон друга»'},
-                             {t:'Сапер', k:'upd', n:'Теми, режим формул і щоденний виклик'}]},
-  {date:'2026-11-14', items:[{t:'Пазл з твого фото', k:'new', n:'Завантаж фото й склади пазл до 12×12'}]},
-  {date:'2026-11-12', items:[{t:'WordShaker', k:'new'},{t:'Кібертурнір', k:'new'},{t:'Блок-схеми', k:'new'},{t:'Мій перший ПК', k:'new'},{t:'AI Invaders', k:'new'},{t:'Block Puzzle', k:'new'}]},
-  {date:'2026-11-11', items:[{t:'Танграм', k:'new'}]},
-];
+   Записи лежать у файлі updates.json (поруч з index.html).
+   Додавати й видаляти їх можна прямо на сайті: режим вчителя → сторінка «Оновлення» → «Адмінка».
+   Публікація йде через GitHub API з особистим токеном (fine-grained, лише репо it-maysternia, Contents: Read and write).
+   Формат: [{date:'РРРР-ММ-ДД', items:[{id, k:'new'|'upd'|'msg', t:'назва картки з APPS' або h:'заголовок', n:'текст'}]}] */
+let UPDATES=[];
 const MONTHS=['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня'];
+const UKIND={new:['Нове','--mint'],upd:['Оновлено','--butter'],msg:['Оголошення','--sky']};
+const updDays=()=>UPDATES.slice().sort((x,y)=>y.date<x.date?-1:y.date>x.date?1:0);
 function renderUpdates(){
-  document.getElementById('updList').innerHTML=UPDATES.map(u=>{
+  const adm=TEACH&&ghTok();
+  document.getElementById('updList').innerHTML=updDays().map(u=>{
     const d=new Date(u.date+'T12:00:00');
-    return `<div class="uday"><div class="udate">${d.getDate()} ${MONTHS[d.getMonth()]}<small>${d.getFullYear()}</small></div><div class="uitems">${u.items.map(updItem).join('')}</div></div>`}).join('');
+    return `<div class="uday"><div class="udate">${d.getDate()} ${MONTHS[d.getMonth()]}<small>${d.getFullYear()}</small></div><div class="uitems">${u.items.map(it=>adm?`<div class="uwrap">${updItem(it)}<button type="button" class="udel" data-del="${esc(it.id)}" title="Видалити запис" aria-label="Видалити запис"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>`:updItem(it)).join('')}</div></div>`}).join('')||'<p class="empty">Записів поки немає.</p>';
+  renderAdmin();
 }
 function updItem(it){
-      const a=APPS.find(x=>x.title===it.t)||{title:it.t,desc:'',bg:'--bg2',art:'default'};
-      const tab=navOf(a);
-      return `<a class="uitem" href="${a.url||GH+a.repo+'/'}" target="_blank" rel="noopener" style="--cbg:var(${a.bg})"><div class="pic"><svg viewBox="0 0 320 200" aria-hidden="true">${(ART[a.art]||ART.default)()}</svg></div>
-        <div><h3>${a.title}</h3><p>${it.n||a.desc}</p><span class="ubadge" style="background:var(${it.k==='new'?'--mint':'--butter'})">${it.k==='new'?'Нове':'Оновлено'}</span>${tab?` <span class="ubadge" style="background:color-mix(in srgb,var(${tab.color}) 60%,transparent)">${tab.label}</span>`:''}</div></a>`}
-const LATEST=UPDATES[0].date;
+  const kind=UKIND[it.k]||UKIND.msg;
+  const app=it.t&&APPS.find(x=>x.title===it.t);
+  const a=app||{title:it.h||it.t||'Оголошення',desc:'',bg:it.k==='msg'?'--sky':'--bg2',art:it.k==='msg'?'notice':'default'};
+  const tab=app&&navOf(app);
+  const inner=`<div class="pic"><svg viewBox="0 0 320 200" aria-hidden="true">${(ART[a.art]||ART.default)()}</svg></div>
+        <div><h3>${esc(app?a.title:a.title)}</h3><p>${esc(it.n||a.desc)}</p><span class="ubadge" style="background:var(${kind[1]})">${kind[0]}</span>${tab?` <span class="ubadge" style="background:color-mix(in srgb,var(${tab.color}) 60%,transparent)">${tab.label}</span>`:''}</div>`;
+  return app?`<a class="uitem" href="${app.url||GH+app.repo+'/'}" target="_blank" rel="noopener" style="--cbg:var(${a.bg})">${inner}</a>`:`<div class="uitem umsg" style="--cbg:var(${a.bg})">${inner}</div>`}
+const latest=()=>updDays()[0]?.date||'';
 function seenUpd(){try{return localStorage.getItem('itm-upd')||''}catch(e){return''}}
-function markNew(){const fresh=seenUpd()<LATEST;document.getElementById('newDot').hidden=!fresh;document.getElementById('newTag').hidden=!fresh}
+function markNew(){const L=latest(),fresh=!!L&&seenUpd()<L;document.getElementById('newDot').hidden=!fresh;document.getElementById('newTag').hidden=!fresh}
+function loadUpdates(){
+  return fetch('updates.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():[]).catch(()=>[]).then(d=>{
+    if(Array.isArray(d))UPDATES=d;
+    if(document.body.classList.contains('upd')){renderUpdates();try{localStorage.setItem('itm-upd',latest())}catch(e){}}
+    else if(document.body.classList.contains('home'))renderHome();
+    markNew()})}
+
+/* ===== Адмінка оновлень (видно лише в режимі вчителя) ===== */
+const GH_API='https://api.github.com/repos/whyuxavier/it-maysternia',GH_FILE=GH_API+'/contents/updates.json',GH_BR='main';
+function ghTok(){try{return sessionStorage.getItem('itm-gh')||localStorage.getItem('itm-gh')||''}catch(e){return''}}
+function ghSet(t,keep){try{sessionStorage.removeItem('itm-gh');localStorage.removeItem('itm-gh');if(t)(keep?localStorage:sessionStorage).setItem('itm-gh',t)}catch(e){}}
+const ghH=()=>({'Accept':'application/vnd.github+json','Authorization':'Bearer '+ghTok(),'X-GitHub-Api-Version':'2022-11-28'});
+const b64e=s=>{const b=new TextEncoder().encode(s);let o='';for(let i=0;i<b.length;i+=0x8000)o+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000));return btoa(o)};
+const b64d=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\s/g,'')),c=>c.charCodeAt(0)));
+function ghErr(st){return st===401?'Токен не підходить або закінчився його термін. Увійди ще раз.':st===403||st===404?'Цей токен не має доступу до it-maysternia. Потрібен дозвіл Contents: Read and write.':st==='net'?'Немає зв\'язку з GitHub. Перевір інтернет.':'GitHub відповів помилкою ('+st+'). Спробуй ще раз.'}
+async function ghEdit(change,msg){
+  for(let i=0;i<3;i++){
+    let r;try{r=await fetch(GH_FILE+'?ref='+GH_BR+'&t='+Date.now(),{headers:ghH(),cache:'no-store'})}catch(e){throw 'net'}
+    if(!r.ok)throw r.status;
+    const j=await r.json(),data=JSON.parse(b64d(j.content));
+    change(data);
+    try{r=await fetch(GH_FILE,{method:'PUT',headers:ghH(),body:JSON.stringify({message:msg,content:b64e(JSON.stringify(data,null,1)+'\n'),sha:j.sha,branch:GH_BR})})}catch(e){throw 'net'}
+    if(r.ok)return data;
+    if(r.status!==409&&r.status!==422)throw r.status}
+  throw 409}
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+let UKIND_SEL='msg';
+function renderAdmin(){
+  const box=document.getElementById('uAdmin');box.hidden=!TEACH;if(!TEACH)return;
+  if(!ghTok()){box.innerHTML=`<form class="uform" id="uLogin"><h3>Адмінка оновлень</h3>
+    <p class="uhint">Встав свій токен GitHub — і зможеш додавати записи прямо тут. Без токена опублікувати нічого не вийде.</p>
+    <label for="uTok">Токен GitHub</label><input id="uTok" type="password" autocomplete="off" required placeholder="github_pat_…">
+    <label class="uchk"><input type="checkbox" id="uKeep"> Запам'ятати на цьому комп'ютері <small>(не вмикай на шкільному ПК)</small></label>
+    <details class="uhow"><summary>Як створити токен</summary><ol>
+      <li>Відкрий <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → Fine-grained token</a>.</li>
+      <li>Repository access → <b>Only select repositories</b> → it-maysternia.</li>
+      <li>Permissions → Contents → <b>Read and write</b>. Термін дії — до року.</li></ol></details>
+    <div class="urow"><button class="btn main" type="submit">Увійти</button><span class="ust" id="uSt" role="status"></span></div></form>`;return}
+  const opts=APPS.slice().sort((a,b)=>a.title.localeCompare(b.title,'uk')).map(a=>`<option>${esc(a.title)}</option>`).join('');
+  box.innerHTML=`<form class="uform" id="uForm"><div class="uftop"><h3>Новий запис</h3><button type="button" class="ulink" id="uOut">Вийти з адмінки</button></div>
+    <div class="useg" role="radiogroup" aria-label="Тип запису">${Object.entries(UKIND).reverse().map(([k,v])=>`<button type="button" role="radio" data-k="${k}" aria-checked="${UKIND_SEL===k}" style="--dot:var(${v[1]})">${v[0]}</button>`).join('')}</div>
+    <label for="uApp">Ресурс</label><select id="uApp"><option value="">— без картки —</option>${opts}</select>
+    <label for="uHead" id="uHeadL">Заголовок</label><input id="uHead" maxlength="70" autocomplete="off">
+    <label for="uText">Текст</label><textarea id="uText" rows="3" maxlength="400" required></textarea>
+    <div class="urow"><button class="btn main" type="submit">Опублікувати</button><span class="ust" id="uSt" role="status"></span></div></form>`;
+  syncAdm()}
+function syncAdm(){const app=document.getElementById('uApp');if(!app)return;const has=!!app.value;
+  document.getElementById('uHead').hidden=document.getElementById('uHeadL').hidden=has;document.getElementById('uHead').required=!has}
+function ust(t,ok){const e=document.getElementById('uSt');if(e){e.textContent=t;e.dataset.ok=ok?'1':''}}
+const updBox=document.getElementById('uAdmin');
+updBox.addEventListener('click',e=>{
+  const k=e.target.closest('[data-k]');if(k){UKIND_SEL=k.dataset.k;updBox.querySelectorAll('[data-k]').forEach(b=>b.setAttribute('aria-checked',String(b===k)));return}
+  if(e.target.closest('#uOut')){ghSet('');renderUpdates()}});
+updBox.addEventListener('change',e=>{if(e.target.id==='uApp')syncAdm()});
+updBox.addEventListener('submit',async e=>{e.preventDefault();const f=e.target,btn=f.querySelector('[type=submit]');
+  if(f.id==='uLogin'){const t=document.getElementById('uTok').value.trim();if(!t)return;btn.disabled=true;ust('Перевіряю…');
+    try{const r=await fetch(GH_API,{headers:{'Accept':'application/vnd.github+json','Authorization':'Bearer '+t}});
+      if(!r.ok)throw r.status;const j=await r.json();if(!j.permissions||!j.permissions.push)throw 403;
+      ghSet(t,document.getElementById('uKeep').checked);renderUpdates()}
+    catch(err){btn.disabled=false;ust(ghErr(err instanceof TypeError?'net':err))}return}
+  const app=document.getElementById('uApp').value,h=document.getElementById('uHead').value.trim(),n=document.getElementById('uText').value.trim();
+  if(!n||(!app&&!h))return;
+  const it={id:'u'+Date.now().toString(36),k:UKIND_SEL,n};if(app)it.t=app;else it.h=h;
+  btn.disabled=true;ust('Публікую…');
+  try{const d=today();UPDATES=await ghEdit(data=>{let day=data.find(x=>x.date===d);if(!day){day={date:d,items:[]};data.unshift(day)}day.items.unshift(it)},'Оновлення: '+(app||h));
+    try{localStorage.setItem('itm-upd',latest())}catch(e){}renderUpdates();markNew();ust('Опубліковано! Для всіх з\'явиться за 1–2 хвилини.',1)}
+  catch(err){btn.disabled=false;if(err===401)ghSet('');ust(ghErr(err))}});
+document.getElementById('updList').addEventListener('click',async e=>{const b=e.target.closest('[data-del]');if(!b)return;
+  if(!confirmDel(b))return;const id=b.dataset.del;b.disabled=true;
+  try{UPDATES=await ghEdit(data=>{data.forEach(d=>d.items=d.items.filter(x=>x.id!==id));for(let i=data.length-1;i>=0;i--)if(!data[i].items.length)data.splice(i,1)},'Оновлення: видалено запис');renderUpdates();markNew();ust('Запис видалено.',1)}
+  catch(err){b.disabled=false;ust(ghErr(err))}});
+/* видалення в два натиски — без системних діалогів */
+function confirmDel(b){if(b.classList.contains('sure'))return true;b.classList.add('sure');b.title='Натисни ще раз, щоб видалити';setTimeout(()=>{b.classList.remove('sure');b.title='Видалити запис'},2500);return false}
 
 /* ===== Меню (три рисочки) ===== */
 const menuBtn=document.getElementById('menuBtn'), mnav=document.getElementById('mnav');
@@ -1385,14 +1494,14 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!mnav.hidden){setMe
 function route(){
   const id=location.hash.slice(1),b=document.body;
   b.classList.remove('home','upd');
-  if(id==='updates'){b.classList.add('upd');renderUpdates();try{localStorage.setItem('itm-upd',LATEST)}catch(e){}markNew()}
+  if(id==='updates'){b.classList.add('upd');renderUpdates();try{const L=latest();if(L)localStorage.setItem('itm-upd',L)}catch(e){}markNew()}
   else if(NAV.some(t=>t.id===id))setTab(id);
   else{b.classList.add('home');renderHome()}
   window.scrollTo({top:0,behavior:'instant'});
 }
 addEventListener('hashchange',()=>{teachHash();oldHash();route()});
 if(!ME)swapStore('');
-teachHash();setTeach(TEACH);syncWho();oldHash();markNew();route();
+teachHash();setTeach(TEACH);syncWho();oldHash();markNew();route();loadUpdates();
 if(!ME&&!TEACH&&Object.keys(PROF).length&&document.body.classList.contains('home'))openWho();
 
 /* ===== Сніг: лише на головній, лише в темній темі й лише взимку (snow.js вантажиться тільки тоді) ===== */
