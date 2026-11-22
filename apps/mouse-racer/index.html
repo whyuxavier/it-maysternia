@@ -205,6 +205,14 @@ h2{font-size:clamp(28px,6vw,44px);font-weight:700;line-height:1;margin-bottom:22
 .modal{position:fixed;inset:0;z-index:40;background:rgba(22,22,29,.62);display:flex;align-items:center;justify-content:center;padding:16px}
 .box{background:#fff;border:5px solid var(--k);box-shadow:9px 9px 0 var(--k);padding:22px;width:100%;max-width:460px;max-height:100%;overflow-y:auto;position:relative}
 .box h2{margin-bottom:16px}
+.tut{text-align:center;user-select:none;cursor:pointer;touch-action:none}
+.tut-svg{width:100%;max-width:320px;margin:0 auto 10px;border:4px solid var(--k);background:#7bc47f;display:block}
+#tutCar{transition:transform .35s cubic-bezier(.3,1.4,.5,1)}
+.tut .on{fill:var(--y);animation:tutBlink .8s steps(2) infinite}
+@keyframes tutBlink{50%{fill:var(--o)}}
+.tut-msg{font-weight:700;font-size:20px!important;text-transform:uppercase;min-height:52px;margin:0 0 12px}
+.tut-skip{background:none;border:0;font:inherit;font-size:15px;text-decoration:underline;color:var(--k);cursor:pointer;padding:6px}
+@media (prefers-reduced-motion:reduce){.tut .on{animation:none}#tutCar{transition:none}}
 .box h3{font-size:18px;text-transform:uppercase;margin:14px 0 6px}
 .box p,.box li{font-size:16px;line-height:1.3}
 .box ul{padding-left:20px}
@@ -422,6 +430,33 @@ h2{font-size:clamp(28px,6vw,44px);font-weight:700;line-height:1;margin-bottom:22
   </div>
 </div>
 
+<!-- ЯК КЕРУВАТИ -->
+<div class="modal" id="m-tut" hidden>
+  <div class="box tut">
+    <h2 data-t="tutT"></h2>
+    <svg class="tut-svg" viewBox="0 0 300 200" aria-hidden="true">
+      <rect x="0" y="0" width="150" height="200" fill="#5c5f6e"/>
+      <path d="M50 0v200M100 0v200" stroke="#fff" stroke-width="4" stroke-dasharray="16 14"/>
+      <rect x="0" y="0" width="6" height="200" fill="#ffd60a"/><rect x="144" y="0" width="6" height="200" fill="#ffd60a"/>
+      <g id="tutCar" style="transform:translateX(50px)"><rect x="10" y="118" width="30" height="50" rx="6" fill="var(--car)" stroke="#16161d" stroke-width="4"/><rect x="15" y="128" width="20" height="11" fill="#bfe9ff" stroke="#16161d" stroke-width="3"/></g>
+      <g id="tutMouse" transform="translate(175 18)">
+        <path d="M55 0C25 0 8 22 8 55v55c0 33 20 54 47 54s47-21 47-54V55C102 22 85 0 55 0z" fill="#fff" stroke="#16161d" stroke-width="5"/>
+        <path id="tutBL" d="M53 3C27 5 11 25 11 55v14h42z" fill="#fff"/>
+        <path id="tutBR" d="M57 3c26 2 42 22 42 52v14H57z" fill="#fff"/>
+        <path d="M55 0v69M8 69h94" stroke="#16161d" stroke-width="5"/>
+        <rect x="49" y="22" width="12" height="26" rx="6" fill="#16161d"/>
+      </g>
+      <g id="tutPhone" transform="translate(178 10)" hidden>
+        <rect x="0" y="0" width="104" height="180" rx="16" fill="#fff" stroke="#16161d" stroke-width="5"/>
+        <rect id="tutTL" x="9" y="16" width="42" height="148" fill="#fff"/><rect id="tutTR" x="53" y="16" width="42" height="148" fill="#fff"/>
+        <path d="M52 16v148" stroke="#16161d" stroke-width="3" stroke-dasharray="6 6"/>
+      </g>
+    </svg>
+    <p class="tut-msg" id="tutMsg"></p>
+    <div class="col"><button class="btn big g" id="tutGo" hidden data-t="tutGo"></button><button class="tut-skip" id="tutSkip" data-t="tutSkip"></button></div>
+  </div>
+</div>
+
 <!-- GAME OVER -->
 <div class="modal" id="m-over" hidden>
   <div class="box">
@@ -494,7 +529,8 @@ function persist(){try{localStorage.setItem(KEY,JSON.stringify(save));}catch(e){
    3. I18N
    ===================================================================== */
 const T={
-uk:{lead:'Аркадні перегони, де комп’ютерна миша — це твоє кермо. Перестроюйся, збирай монети, тисни нітро!',
+uk:{tutT:'Як керувати',tutL:'Натисни ЛІВУ кнопку миші',tutR:'Тепер — ПРАВУ кнопку',tutLt:'Торкнись ЛІВОЇ половини екрана',tutRt:'Тепер — ПРАВОЇ половини',tutDone:'Машина їде сама — ти лише перемикаєш смуги. Обидві кнопки разом — НІТРО (з 3 рівня).',tutGo:'Поїхали!',tutSkip:'Я вже вмію',
+lead:'Аркадні перегони, де комп’ютерна миша — це твоє кермо. Перестроюйся, збирай монети, тисни нітро!',
  play:'Грати',car:'Моя машина',ach:'Досягнення',stats:'Статистика',set:'Налаштування',back:'← Назад',
  modeT:'Обери режим',m_endless:'Безкінечний',d_endless:'Їдь без кінця. Зіткнення лише гальмують.',
  m_survival:'Виживання',d_survival:'Сердець: {s}. Удар — мінус серце, але серця можна підбирати.',
@@ -508,7 +544,8 @@ uk:{lead:'Аркадні перегони, де комп’ютерна миша
  overT:'Аварія!',score:'Очки',coins:'Монети',level:'Рівень',newRec:'НОВИЙ РЕКОРД!',
  nLock:'РІВ {n}',nReady:'ОБИДВІ!',bLvl:'РІВЕНЬ {n}',bLane:'+1 СМУГА',bNitro:'НІТРО: ОБИДВІ КНОПКИ РАЗОМ',bMax:'МАКСИМАЛЬНА ШВИДКІСТЬ',
  info:'<p>Аркадні перегони на заміському шосе: улітку — зелені луки, узимку (20.11–01.03) — сніг. Машина їде сама — ти лише перестроюєшся.</p><h3>Правила</h3><ul><li>Оминай машини та збирай монети.</li><li>Що вищий рівень — то швидше; на 3 і 5 рівнях додається смуга.</li><li>Нітро відкривається на 3 рівні й вмикається, коли шкала повна.</li><li>Безкінечний — без програшу. Виживання — сердець: {s}. Хардкор — сердець: {h}, без відновлення.</li></ul><h3>Керування</h3><ul><li><b>Миша:</b> ліва кнопка — смуга ліворуч, права — праворуч, обидві разом — нітро.</li><li><b>Сенсор:</b> тап по лівій або правій половині екрана; обидві половини двома пальцями — нітро.</li><li>Клавіатура не потрібна.</li></ul>'},
-en:{lead:'An arcade racer where your mouse is the steering wheel. Switch lanes, grab coins, hit Nitro!',
+en:{tutT:'How to drive',tutL:'Press the LEFT mouse button',tutR:'Now the RIGHT button',tutLt:'Tap the LEFT half of the screen',tutRt:'Now the RIGHT half',tutDone:'The car drives itself — you only switch lanes. Both buttons together — NITRO (from level 3).',tutGo:'Go!',tutSkip:'I know how',
+lead:'An arcade racer where your mouse is the steering wheel. Switch lanes, grab coins, hit Nitro!',
  play:'Play',car:'My car',ach:'Achievements',stats:'Statistics',set:'Settings',back:'← Back',
  modeT:'Choose a mode',m_endless:'Endless',d_endless:'Drive forever. Crashes only slow you down.',
  m_survival:'Survival',d_survival:'Hearts: {s}. A crash costs one, but hearts can be picked up.',
@@ -1010,6 +1047,27 @@ function frame(now){
 }
 function startLoop(){if(raf)return;last=performance.now();raf=requestAnimationFrame(frame);}
 function stopLoop(){if(raf){cancelAnimationFrame(raf);raf=0;}}
+/* навчання керуванню перед першим заїздом */
+const Tut={mode:null,step:0,touch:false};
+function tutDone(){try{return localStorage.getItem('mr-tut')==='1'}catch(e){return false}}
+function tutOrRun(mode){if(tutDone())return startRun(mode);Tut.mode=mode;Tut.step=0;
+  Tut.touch=matchMedia('(pointer:coarse)').matches&&!matchMedia('(pointer:fine)').matches;
+  $('tutMouse').toggleAttribute('hidden',Tut.touch);$('tutPhone').toggleAttribute('hidden',!Tut.touch);
+  $('tutCar').style.transform='translateX(50px)';$('tutGo').hidden=true;tutShow();$('m-tut').hidden=false;}
+function tutShow(){const L=Tut.touch?'tutTL':'tutBL',R=Tut.touch?'tutTR':'tutBR';
+  $(L).classList.toggle('on',Tut.step===0);$(R).classList.toggle('on',Tut.step===1);
+  $('tutMsg').textContent=t(Tut.step===0?(Tut.touch?'tutLt':'tutL'):Tut.step===1?(Tut.touch?'tutRt':'tutR'):'tutDone');
+  $('tutGo').hidden=Tut.step<2;}
+function tutFinish(){try{localStorage.setItem('mr-tut','1')}catch(e){}$('m-tut').hidden=true;startRun(Tut.mode);}
+$('m-tut').addEventListener('pointerdown',e=>{
+  if(e.target.closest('#tutGo,#tutSkip'))return;Sound.unlock();
+  const side=e.pointerType==='mouse'?(e.button===2?'R':e.button===0?'L':null):(e.clientX<innerWidth/2?'L':'R');
+  if(!side||Tut.step>1)return;
+  const want=Tut.step===0?'L':'R';
+  if(side!==want){$('tutMsg').animate([{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'none'}],{duration:220});return;}
+  $('tutCar').style.transform='translateX('+(side==='L'?0:100)+'px)';Sound.move();Tut.step++;setTimeout(tutShow,350);});
+$('tutGo').addEventListener('click',tutFinish);
+$('tutSkip').addEventListener('click',tutFinish);
 function startRun(mode){
   stopLoop();if(run&&!run.ended)endRun('quit');
   for(const k in hc)delete hc[k];
@@ -1076,7 +1134,7 @@ let show=function(name){
   if(name==='modes')renderModes();if(name==='car')renderCar();if(name==='ach')renderAch();if(name==='stats')renderStats();if(name==='set')renderSet();
   if(name)$('s-'+name).scrollTop=0;
 }
-function closeModals(){['info','pause','over'].forEach(m=>$('m-'+m).hidden=true);}
+function closeModals(){['info','pause','over','tut'].forEach(m=>$('m-'+m).hidden=true);}
 function applyLang(){
   document.documentElement.lang=save.lang;
   document.querySelectorAll('[data-t]').forEach(e=>e.textContent=t(e.dataset.t));
@@ -1121,7 +1179,7 @@ function renderSet(){syncSound();$('setLangV').textContent=t('langV');resetArm=f
 // кнопки
 document.addEventListener('click',e=>{const b=e.target.closest('button,a');if(!b)return;Sound.unlock();if(b.id!=='bSound'&&b.id!=='setSound'&&b.id!=='pSound')Sound.click();
   if(b.dataset.go)show(b.dataset.go);
-  else if(b.dataset.mode)startRun(b.dataset.mode);
+  else if(b.dataset.mode)tutOrRun(b.dataset.mode);
   else if(b.dataset.close)$('m-'+b.dataset.close).hidden=true;});
 $('bInfo').onclick=()=>$('m-info').hidden=false;
 $('m-info').addEventListener('click',e=>{if(e.target.id==='m-info')$('m-info').hidden=true;});
