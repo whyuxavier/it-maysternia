@@ -282,6 +282,13 @@ details.more.learn{background:linear-gradient(150deg,rgba(154,136,255,.16),rgba(
 details.more.learn summary{color:#c3b8ff}
 .task{font-size:17px;color:var(--ink)!important;margin:6px 0 12px!important}
 .breq{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 4px}.breq span{padding:5px 10px;border-radius:10px;background:rgba(255,179,92,.12);color:var(--amber);font-weight:800;font-size:13px}
+.hb.menu{width:42px;padding:0;color:#0b0f1f;background:linear-gradient(150deg,#b9adff,#8a76ff);box-shadow:none}
+.prow{display:flex;align-items:center;gap:10px;width:100%;margin:6px 0 0;padding:12px 14px;border-radius:14px;background:var(--panel2);font:700 14px Rubik;text-align:left}
+.prow .sw{margin-left:auto;width:42px;height:24px;border-radius:12px;background:var(--panel3);position:relative;transition:background .2s}
+.prow .sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s}
+.prow[aria-checked="true"] .sw{background:var(--mint)}.prow[aria-checked="true"] .sw::after{transform:translateX(18px)}
+details.more summary .ico{width:18px;height:18px;color:var(--cyan)}
+details.more .ref h3{font-size:14px;margin:12px 0 4px}
 </style>
 </head>
 <body>
@@ -304,6 +311,7 @@ details.more.learn summary{color:#c3b8ff}
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
   <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.6l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z" fill="currentColor"/></symbol>
   <symbol id="i-gear" viewBox="0 0 24 24"><path d="M10.3 2.5h3.4l.5 2.6 1.9.8 2.2-1.5 2.4 2.4-1.5 2.2.8 1.9 2.6.5v3.4l-2.6.5-.8 1.9 1.5 2.2-2.4 2.4-2.2-1.5-1.9.8-.5 2.6h-3.4l-.5-2.6-1.9-.8-2.2 1.5-2.4-2.4 1.5-2.2-.8-1.9-2.6-.5v-3.4l2.6-.5.8-1.9-1.5-2.2 2.4-2.4 2.2 1.5 1.9-.8z" fill="currentColor"/><circle cx="12" cy="12" r="3.6" fill="#0b0f1f"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="15" cy="7" r="2.6" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="9" cy="17" r="2.6" fill="none" stroke="currentColor" stroke-width="2.4"/></symbol>
   <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
 
@@ -316,9 +324,7 @@ details.more.learn summary{color:#c3b8ff}
   <div class="hbtns">
     <button class="hb" id="bMissions" title="Усі місії"><svg class="ico"><use href="#i-grid"/></svg><span class="lbl">Місії</span></button>
     <button class="hb" id="bGarage" title="Мій робот"><svg class="ico"><use href="#i-gear"/></svg><span class="lbl">Робот</span></button>
-    <button class="hb" id="bRef" title="Довідник команд"><svg class="ico"><use href="#i-book"/></svg><span class="lbl">Довідник</span></button>
-    <button class="hb" id="bSnd" title="Звук" aria-label="Звук"><svg class="ico"><use href="#i-snd"/></svg></button>
-    <button class="hb i" id="bInfo" title="Про гру" aria-label="Про гру">i</button>
+    <button class="hb menu" id="bInfo" title="Меню керування" aria-label="Меню керування"><svg class="ico"><use href="#i-menu"/></svg></button>
   </div>
 </header>
 
@@ -398,11 +404,13 @@ details.more.learn summary{color:#c3b8ff}
 
 <dialog id="dBrief"><div class="dlg" id="briefBody"></div></dialog>
 <dialog id="dWin"><div class="dlg win" id="winBody"></div></dialog>
-<dialog id="dRef"><div class="dlg ref">
+
+<dialog id="dInfo" class="panel"><div class="dlg">
   <button class="x" data-close aria-label="Закрити"><svg class="ico"><use href="#i-x"/></svg></button>
-  <h2>Довідник</h2>
-  <p>Команди й конструкції, які розуміє робот. Мова — підмножина Python.</p>
-  <h3>Рух</h3>
+  <h2>Меню</h2>
+  <p>Робот виконує код Python. 16 місій — від послідовності до функцій.</p>
+  <button type="button" class="prow" id="bSnd" role="switch"><svg class="ico"><use href="#i-snd"/></svg><span>Звук</span><i class="sw"></i></button>
+  <details class="more" id="refBox"><summary><svg class="ico"><use href="#i-book"/></svg>Довідник команд</summary><div class="ref"><h3>Рух</h3>
   <table><tr><td>move_forward()</td><td>Крок уперед на 1 клітинку</td></tr><tr><td>move_forward(n)</td><td>n кроків уперед</td></tr><tr><td>turn_left()</td><td>Поворот ліворуч на 90°</td></tr><tr><td>turn_right()</td><td>Поворот праворуч на 90°</td></tr></table>
   <h3>Посилки</h3>
   <table><tr><td>pick_up()</td><td>Взяти посилку з клітинки</td></tr><tr><td>deliver()</td><td>Віддати одну посилку на адресі</td></tr></table>
@@ -411,22 +419,18 @@ details.more.learn summary{color:#c3b8ff}
   <h3>Python</h3>
   <table><tr><td>x = 3</td><td>Змінна. Також x += 1, x -= 1</td></tr><tr><td>for i in range(n):</td><td>Повторити n разів (i = 0…n−1)</td></tr><tr><td>range(a, b)</td><td>Числа від a до b−1</td></tr><tr><td>while умова:</td><td>Повторювати, поки умова істинна</td></tr><tr><td>if / elif / else</td><td>Розгалуження</td></tr><tr><td>and, or, not</td><td>Логічні операції</td></tr><tr><td>== != &lt; &gt; &lt;= &gt;=</td><td>Порівняння</td></tr><tr><td>def name(p):</td><td>Власна функція з параметром</td></tr><tr><td>print(x)</td><td>Вивести значення в консоль</td></tr><tr><td># коментар</td><td>Пояснення, яке робот пропускає</td></tr></table>
   <p style="margin-top:14px">Тіло циклів, умов і функцій пишеться з відступом 4 пробіли — клавіша <kbd>Tab</kbd>.</p>
-</div></dialog>
-<dialog id="dInfo"><div class="dlg">
-  <button class="x" data-close aria-label="Закрити"><svg class="ico"><use href="#i-x"/></svg></button>
-  <h2>Робот-кур'єр 2.0</h2>
-  <p>Продовження «Робота-кур'єра»: робот виконує код Python. 16 місій — від послідовності до функцій.</p>
-  <div class="blk"><h4>Правила</h4><ul>
+</div></details>
+  <details class="more"><summary><svg class="ico"><use href="#i-doc"/></svg>Правила</summary><div><ul>
     <li>Напиши програму й натисни «Запуск».</li>
     <li>Помилка — консоль покаже рядок і підказку.</li>
     <li>★ виконати · ★ вкластися в рядки · ★ заощадити енергію.</li>
     <li>За зірки — шестерні для деталей робота.</li>
-  </ul></div>
-  <div class="blk"><h4>Керування</h4><ul>
+  </ul></div></details>
+  <details class="more"><summary><svg class="ico"><use href="#i-grid"/></svg>Керування</summary><div><ul>
     <li><kbd>Ctrl</kbd>+<kbd>Enter</kbd> запуск · <kbd>Esc</kbd> пауза · <kbd>Alt</kbd>+<kbd>R</kbd> скинути</li>
     <li><kbd>Tab</kbd> відступ · <kbd>Ctrl</kbd>+<kbd>/</kbd> коментар · <kbd>↑</kbd><kbd>↓</kbd> підказки</li>
-    <li>На телефоні — кнопки команд під редактором.</li>
-  </ul></div>
+    <li>Миша/дотик — кнопки «Запуск», «Крок» і кнопки команд під редактором.</li>
+  </ul></div></details>
   <div class="dacts" style="justify-content:space-between;align-items:center">
     <a class="gh" href="https://github.com/whyuxavier/it-maysternia" target="_blank" rel="noopener"><svg><use href="#i-star"/></svg>GitHub</a>
     <a class="gh" href="../../">← ІТ-Майстерня</a>
@@ -1018,7 +1022,7 @@ const SND={ctx:null,on:ST.sound!==false,
   deliver(){[784,988,1319].forEach((f,i)=>this.tone(f,.14,'sine',.05,0,i*.07))},
   bump(){this.tone(160,.2,'square',.04,80)},err(){this.tone(300,.18,'sawtooth',.035,150)},
   win(){[523,659,784,1047].forEach((f,i)=>this.tone(f,.2,'triangle',.06,0,i*.11))},click(){this.tone(760,.03,'sine',.025)}};
-function setSnd(){$('bSnd').innerHTML=`<svg class="ico"><use href="#i-${SND.on?'snd':'mute'}"/></svg>`;$('bSnd').classList.toggle('off',!SND.on);$('bSnd').setAttribute('aria-pressed',SND.on)}
+function setSnd(){$('bSnd').querySelector('use').setAttribute('href','#i-'+(SND.on?'snd':'mute'));$('bSnd').setAttribute('aria-checked',SND.on)}
 $('bSnd').onclick=()=>{SND.on=!SND.on;ST.sound=SND.on;save();setSnd();SND.click()};
 
 /* ================= ПІДСВІТКА КОДУ ================= */
@@ -1308,7 +1312,7 @@ $('bHint').onclick=()=>{const L=LEVELS[CUR],k=ST.hints[CUR]||0;
   else msg('hint','Підказки закінчились. Запусти програму покроково (⏭ «Крок») і стеж, де робот збивається з плану.');SND.click()};
 document.addEventListener('click',e=>{if(e.target.closest('[data-close]')){const d=e.target.closest('dialog');if(d)d.close()}});
 document.querySelectorAll('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d)d.close()}));
-$('bInfo').onclick=()=>$('dInfo').showModal();$('bRef').onclick=()=>$('dRef').showModal();
+$('bInfo').onclick=()=>{$('refBox').open=false;$('dInfo').showModal()};
 
 /* ================= ЕКРАНИ ================= */
 let CUR=null;
