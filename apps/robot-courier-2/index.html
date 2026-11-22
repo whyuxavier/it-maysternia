@@ -41,6 +41,7 @@ svg{display:block}
 .hb:hover{background:var(--panel2);transform:translateY(-1px)}
 .hb.i{font:800 18px Rubik;color:#0b0f1f;background:linear-gradient(150deg,#b9adff,#8a76ff);box-shadow:none}
 .hb.off{color:var(--dim)}
+.hb.on{background:var(--panel3);box-shadow:0 0 0 1px var(--cyan)}
 /* кнопки */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:46px;padding:0 20px;border-radius:14px;font:800 16px Nunito;background:var(--panel2);box-shadow:0 0 0 1px var(--line2);transition:transform .15s,box-shadow .15s,background .15s;white-space:nowrap;text-decoration:none;color:var(--ink)}
 .btn:hover{transform:translateY(-2px)}
@@ -49,7 +50,7 @@ svg{display:block}
 .btn.go{color:#04170f;background:linear-gradient(150deg,#7ff0c4,#2fcf92);box-shadow:0 10px 24px rgba(47,207,146,.28),inset 0 1px 0 rgba(255,255,255,.5)}
 .btn:disabled{opacity:.45;pointer-events:none}
 /* головна */
-.hero{position:relative;max-width:1200px;margin:0 auto;padding:56px 20px 40px;display:grid;grid-template-columns:1.02fr 1fr;gap:36px;align-items:center}
+.hero{position:relative;max-width:1200px;margin:0 auto;padding:56px 20px 40px;min-height:calc(100vh - 61px);display:grid;grid-template-columns:1.02fr 1fr;gap:36px;align-items:center}
 .hero::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(79,216,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(79,216,255,.07) 1px,transparent 1px);background-size:32px 32px;-webkit-mask-image:radial-gradient(ellipse at 60% 45%,#000 20%,transparent 70%);mask-image:radial-gradient(ellipse at 60% 45%,#000 20%,transparent 70%)}
 .kicker{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:rgba(79,216,255,.1);color:var(--cyan);font-weight:800;font-size:13px;box-shadow:0 0 0 1px rgba(79,216,255,.25)}
 .hero h1{font-size:clamp(36px,5.4vw,62px);line-height:1.02;margin:16px 0 14px;font-weight:800}
@@ -69,9 +70,32 @@ svg{display:block}
 @keyframes draw{from{stroke-dashoffset:520}}
 @keyframes botIn{from{transform:translate(-150px,0)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}}
-.missions{max-width:1200px;margin:0 auto;padding:8px 20px 60px}
-.missions>h2{font-size:26px;margin:0 0 6px}
-.missions>p{color:var(--muted);margin:0 0 20px}
+.page{max-width:1200px;margin:0 auto;padding:24px 20px 60px}
+.ph{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 18px}.ph h2{font-size:28px}
+.legend{margin-left:auto;color:var(--muted);font-weight:800;font-size:13px}.legend em{color:var(--amber);font-style:normal;margin-left:8px}
+.gears{margin-left:auto;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:12px;background:var(--panel);box-shadow:var(--glow);font:700 18px var(--mono)}.gears svg{color:var(--amber)}
+.gar{display:grid;grid-template-columns:minmax(260px,.8fr) 1.2fr;gap:16px;align-items:start}
+.gprev{padding:20px;text-align:center;position:sticky;top:76px;background:radial-gradient(circle at 50% 40%,rgba(79,216,255,.14),transparent 60%),var(--panel)}
+.gprev svg{width:100%;max-width:300px;margin:0 auto;filter:drop-shadow(0 20px 26px rgba(0,0,0,.5))}
+.gprev p{color:var(--muted);font-size:14px;margin:8px 0 0}
+.gprev .bump{animation:gb .35s}
+@keyframes gb{40%{transform:translateY(-6px) scale(1.03)}}
+.gopts{padding:16px}
+.grow{display:grid;grid-template-columns:84px 1fr;gap:10px;align-items:center;padding:8px 0}
+.grow+.grow{border-top:1px solid var(--line)}
+.grow>span{font:700 14px Rubik;color:var(--muted)}
+.gch{display:flex;flex-wrap:wrap;gap:8px}
+.opt{position:relative;width:64px;height:64px;border-radius:14px;background:var(--panel2);box-shadow:0 0 0 1px var(--line);display:grid;place-items:center;transition:transform .12s}
+.opt svg{width:48px;height:48px}
+.opt.sw{width:44px;height:44px;border-radius:50%}
+.opt[aria-pressed="true"]{box-shadow:0 0 0 3px var(--cyan)}
+.opt:hover{transform:translateY(-2px)}
+.opt.locked{opacity:.75}.opt.locked svg{opacity:.35}
+.opt .lk{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:2px;padding:1px 6px;border-radius:8px;background:#0b0f1f;box-shadow:0 0 0 1px var(--line2);font:700 11px var(--mono);color:var(--amber);white-space:nowrap}
+.opt .lk svg{width:11px;height:11px}
+.opt.no{animation:gshake .3s}
+@keyframes gshake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@media (max-width:760px){.gar{grid-template-columns:1fr}.gprev{position:static}.gprev svg{max-width:200px}.grow{grid-template-columns:1fr}}
 .msec{margin:0 0 22px}
 .msec h3{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
 .msec h3 i{width:10px;height:10px;border-radius:3px}
@@ -247,6 +271,17 @@ kbd{font:700 12px var(--mono);padding:2px 6px;border-radius:6px;background:var(-
 }
 
 #home{overflow-x:clip}
+
+details.more{margin:10px 0 0;border-radius:14px;background:var(--panel2)}
+details.more summary{cursor:pointer;list-style:none;padding:12px 14px;font:700 14px Rubik;display:flex;align-items:center;gap:8px}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::after{content:"";margin-left:auto;width:8px;height:8px;border-right:2.5px solid var(--muted);border-bottom:2.5px solid var(--muted);transform:rotate(45deg);transition:transform .15s}
+details.more[open] summary::after{transform:rotate(-135deg)}
+details.more>div{padding:0 14px 14px;color:var(--muted)}
+details.more.learn{background:linear-gradient(150deg,rgba(154,136,255,.16),rgba(79,216,255,.08));box-shadow:0 0 0 1px rgba(154,136,255,.25)}
+details.more.learn summary{color:#c3b8ff}
+.task{font-size:17px;color:var(--ink)!important;margin:6px 0 12px!important}
+.breq{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 4px}.breq span{padding:5px 10px;border-radius:10px;background:rgba(255,179,92,.12);color:var(--amber);font-weight:800;font-size:13px}
 </style>
 </head>
 <body>
@@ -268,6 +303,7 @@ kbd{font:700 12px var(--mono);padding:2px 6px;border-radius:6px;background:var(-
   <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 2.5h8l5 5v14H6z" stroke="currentColor" stroke-width="2.1" fill="none" stroke-linejoin="round"/><path d="M9 12h7M9 16h7" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
   <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.6l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z" fill="currentColor"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><path d="M10.3 2.5h3.4l.5 2.6 1.9.8 2.2-1.5 2.4 2.4-1.5 2.2.8 1.9 2.6.5v3.4l-2.6.5-.8 1.9 1.5 2.2-2.4 2.4-2.2-1.5-1.9.8-.5 2.6h-3.4l-.5-2.6-1.9-.8-2.2 1.5-2.4-2.4 1.5-2.2-.8-1.9-2.6-.5v-3.4l2.6-.5.8-1.9-1.5-2.2 2.4-2.4 2.2 1.5 1.9-.8z" fill="currentColor"/><circle cx="12" cy="12" r="3.6" fill="#0b0f1f"/></symbol>
   <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
 
@@ -278,7 +314,8 @@ kbd{font:700 12px var(--mono);padding:2px 6px;border-radius:6px;background:var(-
   </a>
   <div class="crumb" id="crumb"></div>
   <div class="hbtns">
-    <button class="hb" id="bMissions" hidden title="Усі місії"><svg class="ico"><use href="#i-grid"/></svg><span class="lbl">Місії</span></button>
+    <button class="hb" id="bMissions" title="Усі місії"><svg class="ico"><use href="#i-grid"/></svg><span class="lbl">Місії</span></button>
+    <button class="hb" id="bGarage" title="Мій робот"><svg class="ico"><use href="#i-gear"/></svg><span class="lbl">Робот</span></button>
     <button class="hb" id="bRef" title="Довідник команд"><svg class="ico"><use href="#i-book"/></svg><span class="lbl">Довідник</span></button>
     <button class="hb" id="bSnd" title="Звук" aria-label="Звук"><svg class="ico"><use href="#i-snd"/></svg></button>
     <button class="hb i" id="bInfo" title="Про гру" aria-label="Про гру">i</button>
@@ -288,22 +325,31 @@ kbd{font:700 12px var(--mono);padding:2px 6px;border-radius:6px;background:var(-
 <main id="home">
   <section class="hero">
     <div>
-      <span class="kicker">ІТ-Майстерня · 7–8 клас · Python</span>
+      <span class="kicker">7–8 клас · Python</span>
       <h1>Робот-кур'єр <span>2.0</span></h1>
-      <p>Нічне місто, посилки й робот, який виконує лише твій код. Пиши команди Python: послідовності, змінні, цикли, умови й функції — 16 місій від простого маршруту до лабіринту.</p>
+      <p>Пиши код — робот доставляє посилки.</p>
       <div class="acts">
-        <button class="btn pri" id="bContinue"><svg class="ico"><use href="#i-play"/></svg><span id="contLbl">Почати першу місію</span></button>
-        <button class="btn" id="bAll"><svg class="ico"><use href="#i-grid"/></svg>Усі місії</button>
+        <button class="btn pri" id="bContinue"><svg class="ico"><use href="#i-play"/></svg><span id="contLbl">Почати</span></button>
+        <button class="btn" id="bAll"><svg class="ico"><use href="#i-grid"/></svg>Місії</button>
+        <button class="btn" id="bBot"><svg class="ico"><use href="#i-gear"/></svg>Робот</button>
       </div>
       <div class="prog"><div class="bar"><i id="progBar" style="width:0"></i></div><span id="progTxt">★ 0 / 48</span></div>
     </div>
     <div class="art" id="heroArt"></div>
   </section>
-  <section class="missions" id="missions">
-    <h2>Місії</h2>
-    <p>Кожна місія вчить нового. ★ — виконати, ★★ — вкластися в рядки, ★★★ — ще й заощадити енергію.</p>
-    <div id="mlist"></div>
-  </section>
+</main>
+
+<main id="missions" class="page" hidden>
+  <div class="ph"><h2>Місії</h2><span class="legend"><em>★</em> виконати <em>★</em> рядки <em>★</em> енергія</span></div>
+  <div id="mlist"></div>
+</main>
+
+<main id="garage" class="page" hidden>
+  <div class="ph"><h2>Мій робот</h2><span class="gears"><svg class="ico"><use href="#i-gear"/></svg><b id="gearN">0</b></span></div>
+  <div class="gar">
+    <div class="card gprev"><svg id="gBot" viewBox="-60 -84 120 150"></svg><p id="gTip">Шестерні — за пройдені місії</p></div>
+    <div class="card gopts" id="gOpts"></div>
+  </div>
 </main>
 
 <main id="game" hidden>
@@ -315,7 +361,6 @@ kbd{font:700 12px var(--mono);padding:2px 6px;border-radius:6px;background:var(-
         <button class="btn" id="bBrief"><svg class="ico"><use href="#i-doc"/></svg>Місія</button>
         <button class="btn" id="bHint"><svg class="ico"><use href="#i-bulb"/></svg>Підказка</button>
       </div>
-      <p class="goal" id="gGoal"></p>
       <ul class="reqs" id="gReqs"></ul>
     </section>
     <section class="card wcard">
@@ -369,21 +414,18 @@ kbd{font:700 12px var(--mono);padding:2px 6px;border-radius:6px;background:var(-
 </div></dialog>
 <dialog id="dInfo"><div class="dlg">
   <button class="x" data-close aria-label="Закрити"><svg class="ico"><use href="#i-x"/></svg></button>
-  <span class="kicker">7–8 клас · Python</span>
   <h2>Робот-кур'єр 2.0</h2>
-  <p>Продовження «Робота-кур'єра»: тепер робот виконує не блоки, а справжній код Python. 16 місій — від послідовності команд до циклів, умов і власних функцій.</p>
-  <div class="blk"><h4>Як грати</h4><ul>
-    <li>Прочитай місію: історію, мету, план і вимоги.</li>
-    <li>Напиши програму в редакторі й натисни «Запуск».</li>
-    <li>Якщо робот помилився — консоль покаже рядок і підкаже, що не так.</li>
-    <li>Деякі місії мають кілька карт: одна програма має пройти всі.</li>
-    <li>★ — місію виконано з усіма вимогами, ★★ — код не довший за ціль, ★★★ — ще й енергії витрачено не більше за ціль.</li>
+  <p>Продовження «Робота-кур'єра»: робот виконує код Python. 16 місій — від послідовності до функцій.</p>
+  <div class="blk"><h4>Правила</h4><ul>
+    <li>Напиши програму й натисни «Запуск».</li>
+    <li>Помилка — консоль покаже рядок і підказку.</li>
+    <li>★ виконати · ★ вкластися в рядки · ★ заощадити енергію.</li>
+    <li>За зірки — шестерні для деталей робота.</li>
   </ul></div>
   <div class="blk"><h4>Керування</h4><ul>
-    <li><kbd>Ctrl</kbd>+<kbd>Enter</kbd> — запуск, <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Enter</kbd> — крок, <kbd>Esc</kbd> — пауза, <kbd>Alt</kbd>+<kbd>R</kbd> — скинути.</li>
-    <li><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd> — відступ; <kbd>Enter</kbd> після «:» сам додає відступ; <kbd>Ctrl</kbd>+<kbd>/</kbd> — коментар.</li>
-    <li>Підказки автодоповнення: <kbd>↑</kbd> <kbd>↓</kbd> і <kbd>Enter</kbd> або <kbd>Tab</kbd>.</li>
-    <li>На телефоні — кнопки команд під редактором і панель запуску внизу екрана.</li>
+    <li><kbd>Ctrl</kbd>+<kbd>Enter</kbd> запуск · <kbd>Esc</kbd> пауза · <kbd>Alt</kbd>+<kbd>R</kbd> скинути</li>
+    <li><kbd>Tab</kbd> відступ · <kbd>Ctrl</kbd>+<kbd>/</kbd> коментар · <kbd>↑</kbd><kbd>↓</kbd> підказки</li>
+    <li>На телефоні — кнопки команд під редактором.</li>
   </ul></div>
   <div class="dacts" style="justify-content:space-between;align-items:center">
     <a class="gh" href="https://github.com/whyuxavier/it-maysternia" target="_blank" rel="noopener"><svg><use href="#i-star"/></svg>GitHub</a>
@@ -935,6 +977,19 @@ function robotSVG(c,look=[0,0]){
   if(c.eyes==='cyclops')s+=`<circle cx="0" cy="-29" r="7.5" fill="#fff"/><circle cx="${lx*3}" cy="${-29+ly*3}" r="3.2" fill="#2f2a40"/>`;
   return s;
 }
+const ROPT=[
+ {k:'color',lbl:'Колір',items:Object.keys(RCOL)},
+ {k:'head',lbl:'Голова',items:['round','square','capsule','dome']},
+ {k:'eyes',lbl:'Очі',items:['dots','happy','visor','cyclops']},
+ {k:'top',lbl:'Антена',items:['ball','none','double','propeller','bolt']},
+ {k:'move',lbl:'Ходова',items:['wheels','tracks','hover']},
+ {k:'box',lbl:'Вантаж',items:['box','letter','bag','redbox','thermo']}
+];
+const PRICE={'color:butter':10,'color:lilac':10,'color:peach':15,'color:pink':20,'color:graphite':20,'color:gold':35,
+ 'head:square':10,'head:capsule':15,'head:dome':20,'eyes:happy':10,'eyes:visor':15,'eyes:cyclops':20,
+ 'top:double':10,'top:propeller':20,'top:bolt':25,'move:tracks':20,'move:hover':35,
+ 'box:letter':5,'box:bag':15,'box:redbox':45,'box:thermo':60};
+const CROP={head:'-34 -56 68 56',eyes:'-22 -44 44 30',top:'-30 -76 60 50',move:'-34 30 68 26',box:'-36 -22 72 62'};
 /* ================= ЗБЕРЕЖЕННЯ ================= */
 const $=id=>document.getElementById(id);
 const KEY='rc2-v1';
@@ -943,6 +998,11 @@ const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}};
 let TEACH=false;try{TEACH=localStorage.getItem('itm-teacher')==='1'}catch(e){}
 const unlocked=i=>TEACH||i===0||!!ST.done[i]||!!ST.done[i-1];
 let ROBOT={...RDEF};try{const o=JSON.parse(localStorage.getItem('robot-courier-v1')||'{}');if(o.robot)ROBOT={...RDEF,...o.robot}}catch(e){}
+if(ST.robot)ROBOT={...RDEF,...ST.robot};ST.owned=ST.owned||[];ST.spent=ST.spent||0;
+const gearsEarned=()=>Object.values(ST.done).reduce((a,d)=>a+(d.stars?20+5*d.stars:0),0);
+const gears=()=>Math.max(0,gearsEarned()-ST.spent);
+if(!ST.robot)Object.entries(ROBOT).forEach(([k,v])=>{if(PRICE[k+':'+v]&&!ST.owned.includes(k+':'+v))ST.owned.push(k+':'+v)});
+const owns=(k,v)=>!PRICE[k+':'+v]||ST.owned.includes(k+':'+v);
 const totalStars=()=>Object.values(ST.done).reduce((a,d)=>a+(d.stars||0),0);
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -1226,22 +1286,20 @@ function showWin(stars,lines,energy,lOK,eOK){
    <div><small>Енергія</small><b>${energy}</b><i class="${eOK?'y':'n'}">${eOK?'✓ ціль ≤ '+L.goals.energy:'ціль ≤ '+L.goals.energy+' для ★'}</i></div></div>
    <div class="dacts">${last?'':`<button class="btn" data-close>Покращити</button><button class="btn pri" id="wNext">Наступна місія →</button>`}${last?'<button class="btn pri" id="wAll">До всіх місій</button>':''}</div>`;
   const d=$('dWin');d.showModal();
-  const n=$('wNext');if(n)n.onclick=()=>{d.close();openLevel(CUR+1)};const a=$('wAll');if(a)a.onclick=()=>{d.close();goHome(true)};
+  const n=$('wNext');if(n)n.onclick=()=>{d.close();openLevel(CUR+1)};const a=$('wAll');if(a)a.onclick=()=>{d.close();nav('#missions')};
 }
 
 /* ================= МІСІЯ: БРИФІНГ ================= */
 function briefHTML(L,i){
   const r=reqList(L);
   return `<button class="x" data-close aria-label="Закрити"><svg class="ico"><use href="#i-x"/></svg></button>
-  <span class="kicker">Місія ${i+1} · ${esc(SECS[L.sec-1].t)}</span>
+  <span class="kicker">Місія ${i+1}${L.maps.length>1?' · карт: '+L.maps.length:''}</span>
   <h2>${esc(L.title)}</h2>
-  <p>${esc(L.story)}</p>
-  <div class="blk"><h4>Завдання</h4><p>${esc(L.task)}</p></div>
-  <div class="blk"><h4>Мета</h4><p>${esc(L.goal)}${L.maps.length>1?` <b style="color:var(--amber)">Карт: ${L.maps.length}.</b>`:''}</p></div>
-  <div class="blk"><h4>План</h4><ol>${L.plan.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></div>
-  ${r.length?`<div class="blk"><h4>Вимоги до коду</h4><ul>${r.map(q=>`<li>${esc(q.label)}</li>`).join('')}</ul></div>`:''}
-  <div class="blk learn"><h4>Нове: ${esc(L.learn.t)}</h4><p>${esc(L.learn.x)}</p><div class="snip">${L.learn.c.split('\n').map(hlLine).join('\n')}</div></div>
-  <div class="blk"><h4>Зірки</h4><div class="goals3"><span><em>★</em> виконати</span><span><em>★</em> ≤ ${L.goals.lines} ${plural(L.goals.lines,'рядка','рядків','рядків')}</span><span><em>★</em> енергія ≤ ${L.goals.energy}</span></div></div>
+  <p class="task">${esc(L.task)}</p>
+  ${r.length?`<div class="breq">${r.map(q=>`<span>${esc(q.label)}</span>`).join('')}</div>`:''}
+  <details class="more learn"><summary>Нове: ${esc(L.learn.t)}</summary><div>${esc(L.learn.x)}<div class="snip">${L.learn.c.split('\n').map(hlLine).join('\n')}</div></div></details>
+  <details class="more"><summary>План</summary><div><ol style="margin:0;padding-left:20px">${L.plan.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></div></details>
+  <details class="more"><summary>Історія і зірки</summary><div><p style="margin:0 0 10px">${esc(L.story)}</p><div class="goals3"><span><em>★</em> виконати</span><span><em>★</em> ≤ ${L.goals.lines} ${plural(L.goals.lines,'рядка','рядків','рядків')}</span><span><em>★</em> енергія ≤ ${L.goals.energy}</span></div></div></details>
   <div class="dacts"><button class="btn pri" data-close>До коду →</button></div>`}
 function openBrief(){const L=LEVELS[CUR];$('briefBody').innerHTML=briefHTML(L,CUR);$('dBrief').showModal()}
 $('bBrief').onclick=openBrief;
@@ -1254,43 +1312,60 @@ $('bInfo').onclick=()=>$('dInfo').showModal();$('bRef').onclick=()=>$('dRef').sh
 
 /* ================= ЕКРАНИ ================= */
 let CUR=null;
+const SCR=['home','missions','garage','game'];
+function show(id){if(RUN.state!=='idle')reset();SCR.forEach(k=>$(k).hidden=k!==id);if(id!=='game')CUR=null;
+  $('bMissions').classList.toggle('on',id==='missions');$('bGarage').classList.toggle('on',id==='garage');
+  if(id!=='game')$('crumb').innerHTML='';window.scrollTo(0,0)}
+function nav(hash,push=true){if(push&&location.hash!==hash)history.pushState(null,'',hash||location.pathname+location.search);route()}
 function openLevel(i,push=true){
-  if(i<0||i>=LEVELS.length)return;
-  if(!unlocked(i)){wmsg('Спершу пройди попередню місію');return}
-  if(RUN.state!=='idle')reset();
-  CUR=i;ST.last=i;save();const L=LEVELS[i];
-  $('home').hidden=true;$('game').hidden=false;$('bMissions').hidden=false;
+  if(i<0||i>=LEVELS.length||!unlocked(i))return;
+  if(push){history.pushState(null,'','#m'+(i+1))}
+  show('game');CUR=i;ST.last=i;save();const L=LEVELS[i];
   $('crumb').innerHTML=`<span>Місія ${i+1} · ${esc(L.title)}</span>`;
-  $('gTag').textContent=L.tag;$('gTitle').textContent=L.title;$('gGoal').innerHTML='<b>Мета:</b> '+esc(L.goal);
+  $('gTag').textContent=L.tag;$('gTitle').textContent=L.title;
   for(const k in TABST)delete TABST[k];RUN.tried=false;RUN.view=0;
   src.value=ST.code[i]!=null?ST.code[i]:`# ${L.title}\n`;ED.exec=0;ED.err=0;edRender();src.scrollTop=0;
-  clearMsgs();msg('info',`Напиши програму й натисни <b>Запуск</b>. <kbd>Ctrl</kbd>+<kbd>Enter</kbd> — запуск, ⏭ — виконати по одному рядку.`);
-  if(ST.done[i])msg('ok',`Місію вже виконано: ${'★'.repeat(ST.done[i].stars)}. Можна покращити результат.`);
-  renderKeys();updReqs();showMap(0);setBtns();
-  if(push&&location.hash!=='#m'+(i+1))history.pushState(null,'','#m'+(i+1));
-  window.scrollTo(0,0);openBrief();
+  clearMsgs();if(ST.done[i])msg('ok',`Виконано: ${'★'.repeat(ST.done[i].stars)}`);
+  renderKeys();updReqs();showMap(0);setBtns();openBrief();
 }
-function goHome(toList,push=true){
-  if(RUN.state!=='idle')reset();CUR=null;
-  $('game').hidden=true;$('home').hidden=false;$('bMissions').hidden=true;$('crumb').innerHTML='';
-  renderHome();if(push&&location.hash)history.pushState(null,'',location.pathname+location.search);
-  if(toList)setTimeout(()=>$('missions').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'}),30);else window.scrollTo(0,0);
-}
-$('brand').onclick=e=>{e.preventDefault();goHome(false)};
-$('bMissions').onclick=()=>goHome(true);
-$('bAll').onclick=()=>$('missions').scrollIntoView({behavior:'smooth'});
+function goHome(toList){nav(toList?'#missions':'')}
+$('brand').onclick=e=>{e.preventDefault();nav('')};
+$('bMissions').onclick=()=>nav('#missions');$('bAll').onclick=()=>nav('#missions');
+$('bGarage').onclick=()=>nav('#robot');$('bBot').onclick=()=>nav('#robot');
 $('bContinue').onclick=()=>openLevel(nextLevel());
 function nextLevel(){for(let i=0;i<LEVELS.length;i++)if(!ST.done[i]&&unlocked(i))return i;return Math.min(ST.last||0,LEVELS.length-1)}
 function renderHome(){
   const ts=totalStars(),max=LEVELS.length*3,nx=nextLevel(),anyDone=Object.keys(ST.done).length>0;
   $('progBar').style.width=(ts/max*100)+'%';$('progTxt').textContent=`★ ${ts} / ${max}`;
-  $('contLbl').textContent=anyDone?`Продовжити: місія ${nx+1}`:'Почати першу місію';
+  $('contLbl').textContent=anyDone?`Місія ${nx+1}`:'Почати';$('heroArt').innerHTML=heroArt();
+}
+function renderMissions(){const nx=nextLevel();
   $('mlist').innerHTML=SECS.map(s=>{const ls=LEVELS.map((L,i)=>[L,i]).filter(([L])=>L.sec===s.n);
-    return `<div class="msec"><h3><i style="background:var(--${s.c})"></i>${s.n}. ${esc(s.t)}</h3><div class="lvls">${ls.map(([L,i])=>{const d=ST.done[i],lk=!unlocked(i);
+    return `<div class="msec"><h3><i style="background:var(--${s.c})"></i>${esc(s.t)}</h3><div class="lvls">${ls.map(([L,i])=>{const d=ST.done[i],lk=!unlocked(i);
       return `<button type="button" class="lv ${d?'ok':''} ${lk?'lock':''} ${i===nx&&!lk?'cur':''}" data-l="${i}" ${lk?'aria-disabled="true"':''}><span class="n">${lk?'<svg><use href="#i-lock"/></svg>':i+1}</span><b>${esc(L.title)}</b><small>${esc(L.tag)}<span class="st">${[0,1,2].map(k=>`<span class="${d&&k<d.stars?'on':''}">★</span>`).join('')}</span></small></button>`}).join('')}</div></div>`}).join('');
 }
 $('mlist').onclick=e=>{const b=e.target.closest('[data-l]');if(!b)return;if(b.classList.contains('lock')){b.animate([{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'none'}],{duration:240});return}openLevel(+b.dataset.l)};
-function route(){const m=location.hash.match(/^#m(\d+)$/);if(m&&unlocked(+m[1]-1))openLevel(+m[1]-1,false);else goHome(false,false)}
+/* гараж */
+function renderGarage(){
+  $('gearN').textContent=gears();
+  $('gBot').innerHTML=`<ellipse cx="0" cy="58" rx="34" ry="7" fill="#000" opacity=".35"/>${robotSVG({...ROBOT})}`;
+  $('gOpts').innerHTML=ROPT.map(o=>`<div class="grow"><span>${o.lbl}</span><div class="gch">${o.items.map(it=>{
+    const on=ROBOT[o.k]===it,own=owns(o.k,it),pr=PRICE[o.k+':'+it];
+    const lk=own?'':`<span class="lk"><svg><use href="#i-gear"/></svg>${pr}</span>`;
+    if(o.k==='color')return `<button type="button" class="opt sw${own?'':' locked'}" data-k="color" data-v="${it}" style="background:${RCOL[it]}" aria-pressed="${on}" aria-label="${o.lbl}${own?'':', ціна '+pr}">${lk}</button>`;
+    return `<button type="button" class="opt${own?'':' locked'}" data-k="${o.k}" data-v="${it}" aria-pressed="${on}" aria-label="${o.lbl}${own?'':', ціна '+pr}"><svg viewBox="${CROP[o.k]||'-36 -80 72 136'}">${robotSVG({...ROBOT,[o.k]:it})}</svg>${lk}</button>`;
+  }).join('')}</div></div>`).join('');
+}
+$('gOpts').onclick=e=>{const b=e.target.closest('[data-k]');if(!b)return;const k=b.dataset.k,v=b.dataset.v,key=k+':'+v;
+  if(!owns(k,v)){const pr=PRICE[key];if(gears()<pr){b.classList.remove('no');void b.offsetWidth;b.classList.add('no');$('gTip').textContent=`Потрібно ${pr} шестерень — проходь місії`;SND.err();return}
+    ST.spent+=pr;ST.owned.push(key);$('gTip').textContent='Куплено!'}
+  ROBOT[k]=v;ST.robot={...ROBOT};save();renderGarage();SND.pick();
+  const g=$('gBot');g.classList.remove('bump');void g.getBBox();g.classList.add('bump')};
+function route(){const h=location.hash,m=h.match(/^#m(\d+)$/);
+  if(m&&unlocked(+m[1]-1))return openLevel(+m[1]-1,false);
+  if(h==='#missions'){show('missions');renderMissions();return}
+  if(h==='#robot'){show('garage');renderGarage();return}
+  show('home');renderHome()}
 window.addEventListener('popstate',route);
 
 /* ================= ГАРЯЧІ КЛАВІШІ ================= */
@@ -1321,13 +1396,13 @@ function heroArt(){
      ${code.map(([t],i)=>`<text x="50" y="${350+i*21}" font-family="JetBrains Mono,monospace" font-size="14.5">${tl(t)}</text>`).join('')}
      <rect x="44" y="${335+1*21}" width="3" height="18" rx="1.5" fill="#4fd8ff"/></g>
   </svg>
-  <span class="chip c3"><i class="d" style="background:var(--cyan)"></i>Python-команди</span>
-  <span class="chip c1"><i class="d" style="background:var(--violet)"></i>16 місій · 7 тем</span>
-  <span class="chip c2" style="bottom:2%;left:auto;right:0"><span style="color:var(--amber)">★★★</span> за кращий код</span>`;
+  <span class="chip c3"><i class="d" style="background:var(--cyan)"></i>Python</span>
+  <span class="chip c1"><i class="d" style="background:var(--violet)"></i>16 місій</span>
+  <span class="chip c2" style="bottom:2%;left:auto;right:0"><span style="color:var(--amber)">★★★</span></span>`;
 }
 
 /* ================= СТАРТ ================= */
-$('heroArt').innerHTML=heroArt();setSnd();
+setSnd();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);measure();
 window.addEventListener('resize',()=>{measure();acHide()});
 document.addEventListener('pointerdown',()=>{if(SND.on&&!SND.ctx)SND.tone(1,.001,'sine',.0001)},{once:true});
