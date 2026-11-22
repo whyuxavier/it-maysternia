@@ -5,437 +5,537 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Робот-кур'єр 2.0</title>
 <meta name="description" content="Гра з програмування для 7–8 класу: керуй роботом-кур'єром командами Python. Послідовності, змінні, цикли for і while, умови, функції — 16 місій.">
-<meta name="theme-color" content="#0b0f1f">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23243066'/%3E%3Cstop offset='1' stop-color='%230e1330'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Crect x='14' y='16' width='36' height='28' rx='12' fill='%238ec5ee'/%3E%3Crect x='19' y='22' width='26' height='14' rx='7' fill='%230e1330'/%3E%3Crect x='23' y='27' width='18' height='5' rx='2.5' fill='%234fd8ff'/%3E%3Cpath d='M32 16V9' stroke='%238ec5ee' stroke-width='3'/%3E%3Ccircle cx='32' cy='8' r='4' fill='%23ffb35c'/%3E%3Cpath d='M16 52l6-5-6-5M27 52h12' stroke='%234fd8ff' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#1b1d23">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232a2d36'/%3E%3Crect x='14' y='18' width='36' height='30' rx='9' fill='%239fcdf0'/%3E%3Crect x='20' y='25' width='24' height='10' rx='5' fill='%231b1d23'/%3E%3Ccircle cx='27' cy='30' r='2.5' fill='%23fff'/%3E%3Ccircle cx='37' cy='30' r='2.5' fill='%23fff'/%3E%3Cpath d='M32 18V9' stroke='%239fcdf0' stroke-width='3'/%3E%3Ccircle cx='32' cy='8' r='4' fill='%23ee9384'/%3E%3Cpath d='M17 55l5-4-5-4M26 55h10' stroke='%23f4d77c' stroke-width='3.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Nunito:wght@500;700;800&family=Rubik:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Nunito:wght@500;700;800&family=Rubik:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0b0f1f;--bg2:#0f1530;--panel:#141b36;--panel2:#1a2244;--panel3:#222b52;--line:rgba(140,160,255,.13);--line2:rgba(140,160,255,.22);
-  --ink:#e9edff;--muted:#97a3cc;--dim:#66729c;
-  --cyan:#4fd8ff;--violet:#9a88ff;--mint:#3fe0a6;--amber:#ffb35c;--pink:#ff7ad9;--red:#ff607c;
-  --r:18px;--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
-  --shadow:0 18px 40px rgba(0,0,0,.35);--glow:0 0 0 1px var(--line),0 12px 30px rgba(0,0,0,.3);
+  --bg:#1b1d23;--bg2:#24272f;--card:#2a2d36;--card2:#33363f;--ed:#1e2026;
+  --ink:#e6e7ef;--muted:#9a9caf;--dim:#6c7080;--line:rgba(255,255,255,.08);--shadow:rgba(0,0,0,.45);--dark:#2b2635;
+  --move:#9fcdf0;--turn:#cdbdf2;--loop:#f4d77c;--cond:#f2a99c;--box:#bfe3cf;--sens:#f6c6a6;--fn:#f5bfd3;
+  --coral:#ee9384;--mint:#bfe3cf;--butter:#f6e19c;--lilac:#d5c7f1;--sky:#bddcf3;--peach:#f6c6a6;
+  --ok:#86d6a8;--bad:#ff8f8f;
+  --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:600 16px/1.5 Nunito,system-ui,sans-serif;
-  background-image:radial-gradient(circle at 10% 0%,rgba(79,216,255,.10),transparent 38%),radial-gradient(circle at 95% 10%,rgba(154,136,255,.12),transparent 40%),radial-gradient(circle at 70% 100%,rgba(63,224,166,.06),transparent 40%);background-attachment:fixed}
-h1,h2,h3{font-family:Rubik,sans-serif;margin:0;letter-spacing:-.01em}
-button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
-a{color:var(--cyan)}
-:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
-svg{display:block}
-.ico{width:20px;height:20px;flex:none}
 [hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+html,body{margin:0}
+body{background:var(--bg);background-image:radial-gradient(circle at 8% 10%,rgba(238,147,132,.07) 0,transparent 32%),radial-gradient(circle at 92% 12%,rgba(159,205,240,.07) 0,transparent 34%),radial-gradient(circle at 85% 95%,rgba(205,189,242,.07) 0,transparent 32%),radial-gradient(circle at 10% 92%,rgba(191,227,207,.06) 0,transparent 30%);background-attachment:fixed;color:var(--ink);font-family:Nunito,system-ui,sans-serif;line-height:1.45;min-height:100vh;overflow-x:hidden}
+h1,h2,h3{font-family:Rubik,Nunito,sans-serif;margin:0;line-height:1.15}
+button{font:inherit;color:inherit}
+a{color:var(--move)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 18px}
+.ink{fill:currentColor}
+.stk{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+
 /* шапка */
-.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-left));background:rgba(11,15,31,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font:800 18px Rubik;white-space:nowrap}
-.brand svg{width:36px;height:36px}
-.brand b{color:var(--cyan)}
-.crumb{min-width:0;flex:1;display:flex;align-items:center;gap:8px;color:var(--muted);font-weight:800;font-size:14px;overflow:hidden}
-.crumb span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hbtns{display:flex;gap:8px;margin-left:auto}
-.hb{height:40px;min-width:40px;padding:0 12px;border-radius:13px;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--panel);box-shadow:0 0 0 1px var(--line);font-weight:800;font-size:14px;transition:background .15s,transform .15s}
-.hb:hover{background:var(--panel2);transform:translateY(-1px)}
-.hb.i{font:800 18px Rubik;color:#0b0f1f;background:linear-gradient(150deg,#b9adff,#8a76ff);box-shadow:none}
-.hb.off{color:var(--dim)}
-.hb.on{background:var(--panel3);box-shadow:0 0 0 1px var(--cyan)}
-/* кнопки */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:46px;padding:0 20px;border-radius:14px;font:800 16px Nunito;background:var(--panel2);box-shadow:0 0 0 1px var(--line2);transition:transform .15s,box-shadow .15s,background .15s;white-space:nowrap;text-decoration:none;color:var(--ink)}
-.btn:hover{transform:translateY(-2px)}
-.btn:active{transform:translateY(1px)}
-.btn.pri{color:#06121a;background:linear-gradient(150deg,#7ee6ff,#3fb7ff);box-shadow:0 10px 24px rgba(63,183,255,.32),inset 0 1px 0 rgba(255,255,255,.5)}
-.btn.go{color:#04170f;background:linear-gradient(150deg,#7ff0c4,#2fcf92);box-shadow:0 10px 24px rgba(47,207,146,.28),inset 0 1px 0 rgba(255,255,255,.5)}
-.btn:disabled{opacity:.45;pointer-events:none}
+header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:64px;gap:10px}
+.logo{display:flex;align-items:center;gap:10px;font:800 19px Rubik,sans-serif;background:none;border:0;cursor:pointer;padding:0;white-space:nowrap}
+.logo svg{width:36px;height:36px;overflow:visible}
+.logo b{color:var(--loop)}
+.tools{display:flex;gap:8px}
+.ib{width:42px;height:42px;border-radius:14px;border:0;cursor:pointer;background:var(--card);box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);display:grid;place-items:center}
+.ib svg{width:22px;height:22px}
+.ib.ctl{width:auto;padding:0 14px;gap:8px;display:flex;align-items:center;background:var(--lilac);color:var(--dark);font:800 15px Rubik,sans-serif}
+.gpill{border:0;cursor:pointer;display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border-radius:13px;background:var(--card);font:800 15px Rubik;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line)}
+.gpill svg{width:20px;height:20px}
+.gpill.spin svg{animation:spin .6s ease}
+@keyframes spin{to{transform:rotate(180deg)}}
+
+.screen{display:none}
+.screen.on{display:block;animation:fadeIn .25s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}}
+
+/* кнопки (як у першій частині) */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:13px 20px;border-radius:16px;border:0;cursor:pointer;font:700 17px Nunito;background:var(--card);color:var(--ink);box-shadow:0 4px 0 var(--shadow),0 0 0 1px var(--line);transition:transform .15s;white-space:nowrap;text-decoration:none}
+.btn:hover{transform:translateY(-2px) rotate(-.5deg)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--shadow),0 0 0 1px var(--line)}
+.btn svg{width:22px;height:22px;flex:none}
+.btn.main{background:var(--coral);color:#2b1d22}
+.btn.go{background:var(--mint);color:var(--dark)}
+.btn:disabled{opacity:.45;cursor:default;transform:none}
+.btn.sm{padding:7px 11px;font-size:14px;border-radius:12px;gap:6px;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line)}
+.btn.sm svg{width:18px;height:18px}
+
 /* головна */
-.hero{position:relative;max-width:1200px;margin:0 auto;padding:56px 20px 40px;min-height:calc(100vh - 61px);display:grid;grid-template-columns:1.02fr 1fr;gap:36px;align-items:center}
-.hero::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(79,216,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(79,216,255,.07) 1px,transparent 1px);background-size:32px 32px;-webkit-mask-image:radial-gradient(ellipse at 60% 45%,#000 20%,transparent 70%);mask-image:radial-gradient(ellipse at 60% 45%,#000 20%,transparent 70%)}
-.kicker{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:rgba(79,216,255,.1);color:var(--cyan);font-weight:800;font-size:13px;box-shadow:0 0 0 1px rgba(79,216,255,.25)}
-.hero h1{font-size:clamp(36px,5.4vw,62px);line-height:1.02;margin:16px 0 14px;font-weight:800}
-.hero h1 span{background:linear-gradient(100deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p{color:var(--muted);font-size:17px;max-width:520px;margin:0 0 22px}
-.hero .acts{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.prog{display:flex;align-items:center;gap:14px;margin-top:22px;color:var(--muted);font-weight:800;font-size:14px}
-.bar{flex:0 1 220px;height:8px;border-radius:9px;background:var(--panel2);overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--violet));border-radius:9px}
-.art{position:relative}
-.art svg{width:100%;height:auto;filter:drop-shadow(0 30px 40px rgba(0,0,0,.45))}
-.chip{position:absolute;display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:13px;background:rgba(20,27,54,.92);box-shadow:0 0 0 1px var(--line2),0 10px 24px rgba(0,0,0,.35);font-weight:800;font-size:13.5px;backdrop-filter:blur(6px)}
-.chip .d{width:9px;height:9px;border-radius:50%}
-.chip.c1{top:4%;left:-2%}.chip.c2{bottom:12%;left:-5%}.chip.c3{top:-2%;right:6%}
-.hero-route{stroke-dasharray:520;stroke-dashoffset:0;animation:draw 1.6s .2s ease-out both}
-.hero-bot{animation:botIn 1.5s .3s cubic-bezier(.3,.7,.3,1) both}
-.hero-code{animation:fadeUp .7s .1s ease-out both}
-@keyframes draw{from{stroke-dashoffset:520}}
-@keyframes botIn{from{transform:translate(-150px,0)}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}}
-.page{max-width:1200px;margin:0 auto;padding:24px 20px 60px}
-.ph{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 18px}.ph h2{font-size:28px}
-.legend{margin-left:auto;color:var(--muted);font-weight:800;font-size:13px}.legend em{color:var(--amber);font-style:normal;margin-left:8px}
-.gears{margin-left:auto;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:12px;background:var(--panel);box-shadow:var(--glow);font:700 18px var(--mono)}.gears svg{color:var(--amber)}
-.gar{display:grid;grid-template-columns:minmax(260px,.8fr) 1.2fr;gap:16px;align-items:start}
-.gprev{padding:20px;text-align:center;position:sticky;top:76px;background:radial-gradient(circle at 50% 40%,rgba(79,216,255,.14),transparent 60%),var(--panel)}
-.gprev svg{width:100%;max-width:300px;margin:0 auto;filter:drop-shadow(0 20px 26px rgba(0,0,0,.5))}
-.gprev p{color:var(--muted);font-size:14px;margin:8px 0 0}
-.gprev .bump{animation:gb .35s}
-@keyframes gb{40%{transform:translateY(-6px) scale(1.03)}}
-.gopts{padding:16px}
-.grow{display:grid;grid-template-columns:84px 1fr;gap:10px;align-items:center;padding:8px 0}
-.grow+.grow{border-top:1px solid var(--line)}
-.grow>span{font:700 14px Rubik;color:var(--muted)}
-.gch{display:flex;flex-wrap:wrap;gap:8px}
-.opt{position:relative;width:64px;height:64px;border-radius:14px;background:var(--panel2);box-shadow:0 0 0 1px var(--line);display:grid;place-items:center;transition:transform .12s}
-.opt svg{width:48px;height:48px}
-.opt.sw{width:44px;height:44px;border-radius:50%}
-.opt[aria-pressed="true"]{box-shadow:0 0 0 3px var(--cyan)}
-.opt:hover{transform:translateY(-2px)}
-.opt.locked{opacity:.75}.opt.locked svg{opacity:.35}
-.opt .lk{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:2px;padding:1px 6px;border-radius:8px;background:#0b0f1f;box-shadow:0 0 0 1px var(--line2);font:700 11px var(--mono);color:var(--amber);white-space:nowrap}
-.opt .lk svg{width:11px;height:11px}
-.opt.no{animation:gshake .3s}
-@keyframes gshake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-@media (max-width:760px){.gar{grid-template-columns:1fr}.gprev{position:static}.gprev svg{max-width:200px}.grow{grid-template-columns:1fr}}
-.msec{margin:0 0 22px}
-.msec h3{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
-.msec h3 i{width:10px;height:10px;border-radius:3px}
-.lvls{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
-.lv{position:relative;text-align:left;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center;padding:14px;border-radius:16px;background:var(--panel);box-shadow:var(--glow);transition:transform .15s,background .15s}
-.lv:hover{transform:translateY(-3px);background:var(--panel2)}
-.lv .n{grid-row:span 2;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font:800 18px Rubik;background:var(--panel3);color:var(--ink)}
-.lv b{font:700 15.5px Rubik;line-height:1.2}
-.lv small{color:var(--muted);font-weight:800;font-size:12.5px;display:flex;align-items:center;gap:8px}
-.lv .st{margin-left:auto;display:flex;gap:1px;color:#3a4472;font-size:14px;letter-spacing:-1px}.lv .st .on{color:var(--amber)}
-.lv.cur{box-shadow:0 0 0 2px var(--cyan),0 12px 30px rgba(79,216,255,.18)}
-.lv.cur .n{background:linear-gradient(150deg,#7ee6ff,#3fb7ff);color:#06121a}
-.lv.ok .n{background:rgba(63,224,166,.16);color:var(--mint)}
-.lv.lock{opacity:.5;cursor:not-allowed}.lv.lock:hover{transform:none;background:var(--panel)}
-.lv.lock .n svg{width:18px;height:18px}
+.hero{position:relative;padding:44px 0 30px}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;
+  -webkit-mask-image:radial-gradient(ellipse 70% 75% at 62% 45%,#000 25%,transparent 78%);mask-image:radial-gradient(ellipse 70% 75% at 62% 45%,#000 25%,transparent 78%)}
+.hero-grid{position:relative;display:grid;grid-template-columns:1fr 1.05fr;gap:28px;align-items:center}
+.hero h1{font-size:clamp(38px,5.6vw,62px);letter-spacing:-.02em}
+.hero h1 span{background:linear-gradient(transparent 62%,rgba(244,215,124,.38) 62%);padding:0 .06em}
+.lead{font-size:clamp(17px,2vw,19px);color:var(--muted);margin:14px 0 22px;max-width:34ch}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.art{position:relative;justify-self:end;width:100%;max-width:560px}
+.hstage{position:relative;background:var(--card);border-radius:28px;box-shadow:0 6px 0 var(--shadow),0 0 0 1px var(--line);overflow:hidden;aspect-ratio:560/430}
+.hstage>svg{position:absolute;inset:0;width:100%;height:100%}
+.hcust{position:absolute;right:4%;bottom:5%;padding:9px 14px;font-size:15px}
+.chip{position:absolute;padding:6px 12px;border-radius:12px;background:var(--card2);font:800 14px Nunito;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);white-space:nowrap;animation:pop .4s cubic-bezier(.4,1.6,.5,1) .8s both;z-index:2}
+.chip.c1{top:-14px;left:22px;transform:rotate(-4deg);border:0;cursor:pointer;color:var(--ink)}
+.chip.c3{top:-14px;right:22px;transform:rotate(3deg);animation-delay:.9s}
+@keyframes pop{from{opacity:0;scale:.6}}
+.hero-route{stroke-dasharray:640;animation:draw 1.4s .2s ease-out both}
+.hero-bot{animation:botIn 1.4s .2s cubic-bezier(.3,.7,.3,1) both}
+@keyframes draw{from{stroke-dashoffset:640}}
+@keyframes botIn{from{transform:translate(-128px,0)}}
+
+/* місії */
+.gwrap{padding-top:22px;padding-bottom:50px}
+.chap{margin-bottom:22px}
+.chap h2{font-size:22px;margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.chap h2 i{width:12px;height:12px;border-radius:4px;flex:none}
+.chap p{color:var(--muted);margin:0 0 12px}
+.lvls{display:flex;flex-wrap:wrap;gap:12px}
+.lv{width:86px;height:86px;border-radius:20px;border:0;cursor:pointer;background:var(--card);box-shadow:0 4px 0 var(--shadow),0 0 0 1px var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font:800 24px Rubik;transition:transform .15s}
+.lv:hover{transform:translateY(-3px) rotate(-1deg)}
+.lv .st{display:flex;gap:2px}
+.lv .st svg{width:14px;height:14px}
+.lv.locked{opacity:.4;cursor:not-allowed}
+.lv.cur{box-shadow:0 4px 0 var(--shadow),0 0 0 3px var(--loop)}
+
 /* гра */
-#game{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(360px,.92fr);gap:14px;padding:14px max(14px,env(safe-area-inset-left));max-width:1560px;margin:0 auto;height:calc(100vh - 61px);height:calc(100dvh - 61px)}
-.gl,.gr{min-height:0;display:flex;flex-direction:column;gap:12px}
-.card{background:var(--panel);border-radius:var(--r);box-shadow:var(--glow)}
-.mbar{padding:14px 16px}
-.mtop{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.tag{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-weight:800;font-size:12.5px;background:rgba(154,136,255,.15);color:#c3b8ff}
-.mtop h1{font-size:20px;flex:1;min-width:140px}
-.mtop .btn{height:36px;padding:0 12px;font-size:14px;border-radius:11px}
-.goal{margin:8px 0 0;color:var(--muted);font-size:14.5px}
-.goal b{color:var(--ink)}
-.reqs{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
-.reqs li{display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border-radius:10px;background:var(--panel2);font-size:13px;font-weight:800;color:var(--muted)}
-.reqs li i{width:18px;height:18px;border-radius:6px;display:grid;place-items:center;background:var(--panel3);font-style:normal;font-size:12px}
-.reqs li.ok{color:var(--mint)}.reqs li.ok i{background:rgba(63,224,166,.18)}
-.reqs li.bad{color:#ffb0bf}.reqs li.bad i{background:rgba(255,96,124,.18)}
-.wcard{flex:1;min-height:0;display:flex;flex-direction:column;padding:12px}
-.wtop{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-.tabs{display:flex;gap:6px}
-.tabs button{height:32px;padding:0 12px;border-radius:10px;background:var(--panel2);font-weight:800;font-size:13px;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
-.tabs button.on{background:var(--panel3);color:var(--ink);box-shadow:0 0 0 1px var(--line2)}
-.tabs button.ok{color:var(--mint)}.tabs button.bad{color:var(--red)}
-.stats{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
-.stat{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 10px;border-radius:10px;background:var(--panel2);font-weight:800;font-size:13px;color:var(--muted)}
-.stat b{color:var(--ink);font-family:var(--mono);font-weight:700}
-.stat svg{width:16px;height:16px}
-.world{flex:1;min-height:0;display:grid;place-items:center;border-radius:14px;background:#0c1129;box-shadow:inset 0 0 0 1px var(--line);overflow:hidden;position:relative}
-.world svg{width:100%;height:100%;max-height:100%}
-.world .msg{position:absolute;left:50%;top:14px;transform:translateX(-50%);padding:7px 14px;border-radius:12px;font-weight:800;font-size:14px;background:rgba(20,27,54,.95);box-shadow:0 0 0 1px var(--line2);pointer-events:none;opacity:0;transition:opacity .2s;white-space:nowrap}
-.world .msg.show{opacity:1}
-.ctrl{display:flex;align-items:center;gap:8px;padding:10px;flex-wrap:wrap}
-.ctrl .btn{height:42px;padding:0 14px;font-size:15px;border-radius:12px}
-.ctrl .btn svg{width:18px;height:18px}
-.speed{margin-left:auto;display:flex;align-items:center;gap:8px;color:var(--muted);font-weight:800;font-size:13px}
-.speed input{width:96px;accent-color:var(--cyan)}
-/* редактор */
-.ed{position:relative;flex:1;min-height:220px;display:grid;grid-template-columns:46px 1fr;grid-template-rows:auto minmax(0,1fr);background:#0a0e22;border-radius:var(--r);box-shadow:var(--glow);overflow:hidden}
-.ed-h{grid-column:1/-1;display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);font:600 12.5px var(--mono);color:var(--dim)}
-.ed-h .dots{display:flex;gap:5px}.ed-h .dots i{width:9px;height:9px;border-radius:50%;background:#2a3360}
-.ed-h .fn{color:var(--muted)}
-.ed-h .lc{margin-left:auto}
-.ed-h button{height:26px;padding:0 9px;border-radius:8px;background:var(--panel);color:var(--muted);font:700 12px Nunito}
-.ed-h button:hover{color:var(--ink)}
+.gwrap.playw{padding-top:16px}
+.play{display:grid;grid-template-columns:196px minmax(0,1.15fr) minmax(300px,1fr);gap:16px;align-items:start}
+.colh{display:flex;align-items:center;gap:8px;min-height:38px;margin-bottom:8px}
+.colh h3{font-size:15px;color:var(--muted);flex:1;min-width:0}
+.lvname{display:flex;align-items:center;gap:8px;flex:1;min-width:0;border:0;background:none;padding:0;cursor:pointer;font:800 17px Rubik,sans-serif;text-align:left}
+.lvname span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lvname svg{width:20px;height:20px;flex:none;opacity:.8}
+.lvname:hover svg{opacity:1}
+.maptabs{display:flex;gap:6px}
+.maptabs button{border:0;border-radius:12px;padding:6px 10px;font-weight:800;cursor:pointer;background:var(--bg2);color:var(--muted)}
+.maptabs button[aria-pressed="true"]{background:var(--butter);color:var(--dark);box-shadow:0 2px 0 var(--shadow)}
+.maptabs button:disabled{cursor:default}
+.mapcol{position:sticky;top:80px}
+.mstats{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.stat{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 11px;border-radius:11px;background:var(--bg2);font-weight:800;font-size:13.5px;color:var(--muted)}
+.stat b{color:var(--ink);font-family:Rubik;font-size:15px}
+.stat svg{width:17px;height:17px}
+.mapbox{position:relative;background:var(--card);border-radius:22px;padding:12px;box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line)}
+.mapbox svg{width:100%;height:auto;display:block;max-height:58vh}
+.mapbox .msg{position:absolute;left:50%;top:20px;transform:translateX(-50%);padding:7px 14px;border-radius:12px;font-weight:800;font-size:14px;background:var(--ink);color:var(--bg);pointer-events:none;opacity:0;transition:opacity .2s;white-space:nowrap;z-index:2}
+.mapbox .msg.show{opacity:1}
+.runbar{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.runbar .btn{padding:11px 13px;font-size:16px;flex:1 1 auto}
+
+/* палітра команд — ті самі блоки-пазли, але з кодом */
+.palcol{position:sticky;top:80px}
+.palette{background:var(--card);border-radius:22px;padding:12px 10px 14px 12px;box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line);max-height:calc(100vh - 150px);overflow:auto}
+.cat+.cat{margin-top:14px}
+.cat h4{display:flex;align-items:center;gap:7px;margin:0 0 9px;font:800 12px Rubik,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.cat h4 i{width:11px;height:11px;border-radius:4px;flex:none}
+.cat.locked h4{opacity:.55}
+.pbl{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.lockn{display:flex;gap:7px;align-items:center;padding:8px 10px;border-radius:12px;background:var(--bg2);font-size:13px;font-weight:700;color:var(--muted);line-height:1.25}
+.lockn svg{width:16px;height:16px;flex:none}
+
+/* блок-пазл (з першої частини) */
+.blk{--k:var(--move);position:relative;display:block;width:max-content;color:var(--dark)}
+.blk::after,.mouth::before{content:"";position:absolute;width:24px;height:7px;background:var(--k);clip-path:polygon(0 0,100% 0,19px 100%,5px 100%);z-index:1;pointer-events:none}
+.blk::after{left:14px;bottom:-7px}
+.k-fwd,.k-mv{--k:var(--move)} .k-left,.k-right,.k-turn{--k:var(--turn)} .k-rep,.k-while,.k-loop{--k:var(--loop)} .k-if,.k-cond{--k:var(--cond)} .k-box{--k:var(--box)} .k-sens{--k:var(--sens)} .k-fn{--k:var(--fn)}
+.bh,.mid,.foot{display:flex;align-items:center;background:var(--k);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='7'%3E%3Cpath d='M0 0h24l-5 7H5z'/%3E%3C/svg%3E") var(--nx,14px) 0/24px 7px no-repeat,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='7'%3E%3Cpath d='M0 0h24l-5 7H5z'/%3E%3C/svg%3E") var(--nx,14px) 0/24px 7px no-repeat,linear-gradient(#000 0 0);mask-composite:exclude}
+.bh{gap:8px;min-height:40px;padding:8px 11px 6px 6px;border-radius:9px;font-weight:800;font-size:14px;white-space:nowrap}
+.c>.bh{border-radius:9px 9px 9px 0}
+.mouth{position:relative;display:flex}
+.mouth::before{left:32px;top:0}
+.arm{width:18px;flex:none;background:var(--k)}
+.mouth>.list{min-height:16px;min-width:40px;display:flex;flex-direction:column;align-items:flex-start;padding:0 0 0 0}
+.mid,.foot{--nx:32px}
+.mid{min-height:24px;padding:5px 12px 3px 24px;border-radius:0 9px 9px 0;font-weight:800;font-size:12.5px}
+.foot{height:14px;border-radius:0 9px 9px 9px}
+.ico{width:25px;height:25px;flex:none;border-radius:8px;background:rgba(255,255,255,.5);display:grid;place-items:center}
+.ico svg{width:18px;height:18px}
+.blk code{font:700 13.5px var(--mono)}
+button.blk{border:0;padding:0;background:none;font:inherit;text-align:left;cursor:pointer;filter:drop-shadow(0 2px 0 var(--shadow));transition:transform .12s}
+button.blk:hover{transform:translateX(3px)}
+button.blk:active{transform:translateX(3px) translateY(1px)}
+.blk.mini{display:inline-block;filter:drop-shadow(0 2px 0 var(--shadow))}
+.blk.mini .bh{font-size:13px;min-height:34px;padding:6px 10px 5px 5px}
+.blk.mini .ico{width:22px;height:22px}.blk.mini .ico svg{width:16px;height:16px}
+
+/* програма */
+.reqs{list-style:none;margin:0 0 10px;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.reqs li{display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 5px;border-radius:11px;background:var(--bg2);font-size:13px;font-weight:800;color:var(--muted)}
+.reqs li i{width:19px;height:19px;border-radius:6px;display:grid;place-items:center;background:var(--card2);font-style:normal;font-size:12px}
+.reqs li.ok{color:var(--ok)}.reqs li.ok i{background:rgba(134,214,168,.18)}
+.reqs li.bad{color:var(--bad)}.reqs li.bad i{background:rgba(255,143,143,.18)}
+.ed{position:relative;height:clamp(340px,52vh,600px);display:grid;grid-template-columns:44px 1fr;grid-template-rows:auto minmax(0,1fr);background:var(--ed);border-radius:22px;box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line);overflow:hidden}
+.ed-h{grid-column:1/-1;display:flex;align-items:center;gap:8px;padding:8px 10px 8px 14px;border-bottom:1px solid var(--line);font:600 12.5px var(--mono);color:var(--dim);background:var(--card)}
+.ed-h .fn{color:var(--muted);display:inline-flex;align-items:center;gap:7px}
+.ed-h .fn i{width:9px;height:9px;border-radius:3px;background:var(--loop)}
+.ed-h .lc{margin-left:auto;font-family:Nunito;font-weight:800;font-size:13px}
+.tk{height:28px;padding:0 10px;border:0;border-radius:9px;background:var(--bg2);color:var(--muted);font:700 12.5px var(--mono);cursor:pointer;box-shadow:0 2px 0 var(--shadow)}
+.tk:hover{color:var(--ink)}
 .gut,.code pre,.code textarea{font:400 14.5px/24px var(--mono);tab-size:4}
-.gut{padding:12px 0;overflow:hidden;text-align:right;color:#3d4670;user-select:none;position:relative}
+.gut{padding:12px 0;overflow:hidden;text-align:right;color:#565a68;user-select:none;position:relative}
 .gut div{height:24px;padding-right:10px;position:relative}
-.gut .x{color:var(--cyan)}
-.gut .x::before{content:"";position:absolute;left:6px;top:7px;border:5px solid transparent;border-left:7px solid var(--cyan)}
-.gut .e{color:var(--red)}
-.gut .e::before{content:"";position:absolute;left:7px;top:8px;width:8px;height:8px;border-radius:50%;background:var(--red)}
+.gut .x{color:var(--loop)}
+.gut .x::before{content:"";position:absolute;left:5px;top:7px;border:5px solid transparent;border-left:7px solid var(--loop)}
+.gut .e{color:var(--bad)}
+.gut .e::before{content:"";position:absolute;left:6px;top:8px;width:8px;height:8px;border-radius:50%;background:var(--bad)}
 .code{position:relative;min-width:0;min-height:0}
 .code pre,.code textarea{position:absolute;inset:0;margin:0;padding:12px 14px 40px 10px;white-space:pre;overflow:auto;border:0;background:transparent}
-.code pre{pointer-events:none;color:#d7defa;overflow:hidden}
+.code pre{pointer-events:none;color:#d6d8e3;overflow:hidden}
 .code pre span.l{display:block;min-height:24px;margin:0 -14px 0 -10px;padding:0 14px 0 10px}
-.code pre span.l.x{background:rgba(79,216,255,.12);box-shadow:inset 3px 0 0 var(--cyan)}
-.code pre span.l.e{background:rgba(255,96,124,.13);box-shadow:inset 3px 0 0 var(--red)}
-.code textarea{color:transparent;caret-color:var(--cyan);resize:none;outline:none;-webkit-text-fill-color:transparent}
-.code textarea::selection{background:rgba(79,216,255,.28)}
+.code pre span.l.x{background:rgba(244,215,124,.1);box-shadow:inset 3px 0 0 var(--loop)}
+.code pre span.l.e{background:rgba(255,143,143,.11);box-shadow:inset 3px 0 0 var(--bad)}
+.code textarea{color:transparent;caret-color:var(--loop);resize:none;outline:none;-webkit-text-fill-color:transparent}
+.code textarea::selection{background:rgba(159,205,240,.25)}
 .code textarea:read-only{caret-color:transparent}
-.t-kw{color:#c49cff;font-weight:600}.t-cmd{color:#5fdcff}.t-sen{color:#ff8fdf}.t-bi{color:#ffc27a}.t-num{color:#ffb35c}.t-str{color:#7ff0bf}.t-com{color:#5b6791;font-style:italic}.t-def{color:#ffe17a}.t-op{color:#8ea0d8}.t-bool{color:#ff9f7a}
-.ac{position:absolute;z-index:5;min-width:200px;max-width:280px;background:#141b38;border-radius:12px;box-shadow:0 0 0 1px var(--line2),0 14px 30px rgba(0,0,0,.5);padding:5px;font:600 13.5px var(--mono)}
+/* підсвітка — кольори тих самих категорій, що й блоки */
+.t-mv{color:var(--move)}.t-turn{color:var(--turn)}.t-box{color:var(--box)}.t-sen{color:var(--sens)}
+.t-loop{color:var(--loop);font-weight:600}.t-cond{color:var(--cond);font-weight:600}.t-fn{color:var(--fn);font-weight:600}.t-def{color:var(--fn)}
+.t-bi{color:#c9cbe0}.t-num{color:#f0b58a}.t-str{color:#a6dbbc}.t-com{color:#6f7383;font-style:italic}.t-op{color:#9a9caf}.t-bool{color:var(--cond)}
+.ac{position:absolute;z-index:5;min-width:200px;max-width:280px;background:var(--card2);border-radius:12px;box-shadow:0 0 0 1px var(--line),0 14px 30px rgba(0,0,0,.5);padding:5px;font:600 13.5px var(--mono)}
 .ac div{display:flex;justify-content:space-between;gap:12px;padding:6px 9px;border-radius:8px;cursor:pointer}
-.ac div small{font:700 11px Nunito;color:var(--dim)}
-.ac div.on{background:rgba(79,216,255,.16)}
-.keys{display:flex;gap:6px;overflow-x:auto;padding:0 0 2px;scrollbar-width:thin}
-.keys button{flex:none;height:34px;padding:0 10px;border-radius:10px;background:var(--panel);box-shadow:0 0 0 1px var(--line);font:600 13px var(--mono);color:#a9c6ff;white-space:nowrap}
-.keys button.k{color:#c49cff}.keys button.s{color:#ff8fdf}.keys button.u{color:var(--muted);font-family:Nunito;font-weight:800}
-.keys button:hover{background:var(--panel2)}
+.ac div small{font:700 11px Nunito;color:var(--muted)}
+.ac div.on{background:rgba(244,215,124,.14)}
 /* консоль */
-.con{flex:0 0 auto;max-height:30vh;min-height:92px;overflow:auto;padding:10px 12px;font-size:14px}
-.con-h{display:flex;align-items:center;gap:8px;color:var(--dim);font:700 12px var(--mono);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
-.con-h .vars{margin-left:auto;text-transform:none;letter-spacing:0;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70%}
-.con-h .vars b{color:var(--amber);font-weight:700}
-.m{display:flex;gap:9px;padding:7px 10px;border-radius:10px;margin-top:6px;background:var(--panel2);line-height:1.4}
-.m .mi{flex:none;width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font:800 12px Rubik;margin-top:1px}
-.m.info .mi{background:rgba(79,216,255,.16);color:var(--cyan)}
-.m.ok{background:rgba(63,224,166,.1)}.m.ok .mi{background:rgba(63,224,166,.2);color:var(--mint)}
-.m.err{background:rgba(255,96,124,.1)}.m.err .mi{background:rgba(255,96,124,.22);color:var(--red)}
-.m.hint{background:rgba(255,179,92,.09)}.m.hint .mi{background:rgba(255,179,92,.2);color:var(--amber)}
-.m.out{background:transparent;padding:2px 10px;margin-top:2px;font:400 13.5px var(--mono);color:#c8d2f5}
+.con{margin-top:12px;background:var(--card);border-radius:22px;box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line);max-height:34vh;min-height:92px;overflow:auto;padding:10px 12px 12px;font-size:14.5px}
+.con-h{display:flex;align-items:center;gap:8px;color:var(--muted);font:800 12px Rubik;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.con-h .vars{margin-left:auto;text-transform:none;letter-spacing:0;font:600 12.5px var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70%}
+.con-h .vars b{color:var(--loop);font-weight:700}
+.m{display:flex;gap:9px;padding:8px 10px;border-radius:12px;margin-top:6px;background:var(--bg2);line-height:1.4}
+.m .mi{flex:none;width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font:800 12px Rubik;margin-top:1px;color:var(--dark)}
+.m.info .mi{background:var(--move)}
+.m.ok{background:rgba(134,214,168,.1)}.m.ok .mi{background:var(--mint)}
+.m.err{background:rgba(255,143,143,.1)}.m.err .mi{background:var(--cond)}
+.m.hint{background:rgba(244,215,124,.08)}.m.hint .mi{background:var(--loop)}
+.m.out{background:transparent;padding:2px 10px;margin-top:2px;font:400 13.5px var(--mono);color:#d6d8e3}
 .m .hl{display:block;color:var(--muted);font-size:13.5px;margin-top:2px}
-.m .ln{color:var(--red);font:700 12.5px var(--mono);cursor:pointer;text-decoration:underline dotted}
-/* діалоги */
-dialog{border:0;padding:0;border-radius:24px;background:var(--panel);color:var(--ink);box-shadow:0 0 0 1px var(--line2),0 30px 70px rgba(0,0,0,.6);width:min(640px,calc(100vw - 24px));max-height:calc(100dvh - 24px)}
-dialog::backdrop{background:rgba(4,6,16,.65);backdrop-filter:blur(3px)}
-.dlg{padding:24px;overflow:auto;max-height:calc(100dvh - 24px)}
-.dlg h2{font-size:24px;margin:8px 0 8px;padding-right:40px}
-.dlg .x{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:12px;background:var(--panel2);display:grid;place-items:center}
-.dlg p{color:var(--muted);margin:0 0 12px}
-.blk{margin:14px 0 0;padding:14px;border-radius:14px;background:var(--panel2)}
-.blk h4{margin:0 0 6px;font:700 13px Rubik;text-transform:uppercase;letter-spacing:.07em;color:var(--dim)}
-.blk p{margin:0;color:var(--ink)}
-.blk ol,.blk ul{margin:0;padding-left:20px}.blk li{margin:3px 0}
-.blk.learn{background:linear-gradient(150deg,rgba(154,136,255,.16),rgba(79,216,255,.08));box-shadow:0 0 0 1px rgba(154,136,255,.25)}
-.blk.learn h4{color:#c3b8ff}
-.snip{margin:10px 0 0;padding:12px 14px;border-radius:12px;background:#0a0e22;font:400 14px/1.6 var(--mono);white-space:pre;overflow:auto;color:#d7defa}
-.goals3{display:flex;flex-wrap:wrap;gap:8px}
-.goals3 span{padding:6px 10px;border-radius:10px;background:var(--panel3);font-weight:800;font-size:13.5px}
-.goals3 em{color:var(--amber);font-style:normal}
-.dacts{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:20px}
-.win{text-align:center}
-.win .stars{display:flex;justify-content:center;gap:10px;margin:6px 0 8px}
-.win .stars svg{width:58px;height:58px}
-.win .stars svg path{fill:#2a3360}.win .stars svg.on path{fill:url(#starG)}
-.win .stars svg.on{animation:pop .45s both}.win .stars svg.on:nth-child(2){animation-delay:.15s}.win .stars svg.on:nth-child(3){animation-delay:.3s}
-@keyframes pop{from{transform:scale(.3);opacity:0}}
-.wstats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0 4px;text-align:left}
-.wstats div{padding:12px;border-radius:14px;background:var(--panel2)}
-.wstats small{display:block;color:var(--muted);font-weight:800;font-size:12.5px}
-.wstats b{font:700 22px var(--mono)}
-.wstats i{font-style:normal;font-size:13px;font-weight:800;display:block;margin-top:2px}
-.wstats .y{color:var(--mint)}.wstats .n{color:var(--amber)}
-.ref table{width:100%;border-collapse:collapse;font-size:14.5px}
-.ref td{padding:7px 6px;border-top:1px solid var(--line);vertical-align:top}
-.ref td:first-child{font:600 13.5px var(--mono);color:#5fdcff;white-space:nowrap}
-.ref h3{font-size:15px;margin:18px 0 4px;color:var(--muted)}
-.gh{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:var(--panel2);text-decoration:none;color:var(--ink);font-weight:800}
-.gh svg{width:18px;height:18px;color:var(--amber)}
-kbd{font:700 12px var(--mono);padding:2px 6px;border-radius:6px;background:var(--panel3);box-shadow:0 1px 0 #0006}
+.m .ln{color:var(--bad);font-weight:800;cursor:pointer;text-decoration:underline dotted}
+.m code,.dlg code{font:600 13px var(--mono);color:var(--loop)}
+
 /* робот і світ */
 #bot{transition:transform var(--dur,300ms) cubic-bezier(.45,.05,.35,1)}
 #bot .dir{transition:transform var(--dur,300ms) ease}
-#bot.bump{animation:bump .35s}
-@keyframes bump{30%{transform:var(--bt) translate(var(--bx),var(--by))}}
 .ring-pulse{animation:rp .6s ease-out both}
 @keyframes rp{from{opacity:.9;transform:scale(.6)}to{opacity:0;transform:scale(1.6)}}
-.flyup{animation:fly .5s ease-in both}
-@keyframes fly{to{opacity:0;transform:translateY(-26px)}}
-@media (max-width:1020px){
-  #game{display:flex;flex-direction:column;height:auto;padding-bottom:90px}
-  .gl,.gr{display:contents}
-  .mbar{order:1}.wcard{order:2}.ed{order:4}.keys{order:5}.con{order:6}
-  .ctrl{order:3;position:sticky;bottom:max(8px,env(safe-area-inset-bottom));z-index:20;background:rgba(20,27,54,.94);backdrop-filter:blur(10px)}
-  .world{min-height:0;padding:6px}
-  .world svg{height:auto;max-height:60vh}
-  .ed{min-height:300px;flex:none;height:46vh}
-  .con{max-height:none}
+
+/* діалоги (як у першій частині) */
+dialog{border:0;border-radius:22px;padding:0;max-width:520px;width:calc(100% - 28px);background:var(--card);color:var(--ink);box-shadow:0 6px 0 var(--shadow),0 30px 60px -20px rgba(0,0,0,.7)}
+dialog::backdrop{background:rgba(10,10,16,.6)}
+.dlg{padding:24px;position:relative;max-height:84vh;overflow:auto}
+.dlg h2{font-size:23px;margin-bottom:8px;padding-right:36px}
+.dlg h3{font-size:16px;margin:16px 0 8px}
+.dlg p,.dlg li{color:var(--muted);font-size:15px;margin:0}
+.dlg ul,.dlg ol{margin:0;padding-left:20px}
+.close{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:12px;border:0;background:var(--bg2);font:700 20px Rubik;cursor:pointer;color:var(--ink)}
+.dlg details{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+.dlg summary{cursor:pointer;font:800 16px Rubik,sans-serif}
+.dlg details>div{margin-top:8px}
+.pill{display:inline-block;padding:5px 12px;border-radius:12px;background:var(--bg2);font-weight:800;font-size:14px;box-shadow:0 2px 0 var(--shadow),0 0 0 1px var(--line);margin-bottom:10px}
+.intro .task{font-size:17px;color:var(--ink);margin:6px 0 12px}
+.breq{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 4px}.breq span{padding:5px 10px;border-radius:10px;background:rgba(244,215,124,.12);color:var(--loop);font-weight:800;font-size:13px}
+.snip{margin:10px 0 0;padding:12px 14px;border-radius:14px;background:var(--ed);font:400 14px/1.6 var(--mono);white-space:pre;overflow:auto;color:#d6d8e3}
+.goals3{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.goals3 span{padding:6px 10px;border-radius:10px;background:var(--bg2);font-weight:800;font-size:13.5px}
+.goals3 em{color:var(--loop);font-style:normal}
+.was{display:grid;grid-template-columns:auto 22px minmax(0,1fr);gap:10px;align-items:center;margin-top:12px;padding:14px;border-radius:16px;background:var(--bg2)}
+.was .arr{color:var(--muted)}
+.was .arr svg{width:22px;height:22px}
+.was .snip{margin:0}
+.was small{grid-column:1/-1;color:var(--muted);font-weight:700;font-size:13px}
+.dacts{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:18px}
+.win{text-align:center}
+.win .stars{display:flex;justify-content:center;gap:8px;margin:12px 0}
+.win .stars svg{width:52px;height:52px}
+.win .stars svg.on{animation:pop .4s cubic-bezier(.4,1.6,.5,1) both}
+.win .dacts{justify-content:center}
+.gain{display:flex;align-items:center;justify-content:center;gap:8px;font:800 18px Rubik;margin:4px 0 8px;color:var(--ink)!important;animation:pop .45s cubic-bezier(.4,1.6,.5,1) .5s both}
+.gain svg{width:30px;height:30px}
+.wstats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 4px;text-align:left}
+.wstats div{padding:12px;border-radius:14px;background:var(--bg2)}
+.wstats small{display:block;color:var(--muted);font-weight:800;font-size:12.5px}
+.wstats b{font:800 22px Rubik}
+.wstats i{font-style:normal;font-size:13px;font-weight:800;display:block;margin-top:2px}
+.wstats .y{color:var(--ok)}.wstats .n{color:var(--loop)}
+/* керування */
+#dInfo{max-width:560px}
+#dBrief{max-width:620px}
+.was .snip{font-size:13px}
+.ctlbot{display:flex;align-items:center;gap:14px;width:100%;border:0;cursor:pointer;text-align:left;padding:10px 14px 10px 10px;border-radius:18px;background:var(--bg2);box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);transition:transform .15s}
+.ctlbot:hover{transform:translateY(-2px)}
+.ctlbot .cb-av{width:62px;height:62px;border-radius:16px;background:#34463b;display:grid;place-items:center;flex:none}
+.ctlbot .cb-av svg{width:40px;height:auto;overflow:visible}
+.ctlbot b{display:block;font:800 17px Rubik,sans-serif}
+.ctlbot small{color:var(--muted);font-size:14px}
+.ctlbot>svg{width:22px;height:22px;margin-left:auto;flex:none}
+.seg{display:flex;gap:6px;background:var(--bg2);border-radius:14px;padding:4px}
+.seg button{flex:1;border:0;border-radius:11px;padding:8px 6px;background:none;cursor:pointer;font:800 15px Nunito;display:flex;align-items:center;justify-content:center;gap:6px;color:var(--muted)}
+.seg button svg{width:18px;height:18px}
+.seg button[aria-pressed="true"]{background:var(--card2);color:var(--ink);box-shadow:0 2px 0 var(--shadow)}
+.howto{display:grid;gap:9px}
+.howto>div{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.howto code{font:600 13.5px var(--mono);color:var(--ink);background:var(--ed);padding:4px 8px;border-radius:8px}
+.howto .eq{color:var(--dim);font-weight:800}
+.ref table{width:100%;border-collapse:collapse;font-size:14.5px}
+.ref td{padding:7px 6px;border-top:1px solid var(--line);vertical-align:top;color:var(--muted)}
+.ref td:first-child{font:600 13.5px var(--mono);color:var(--ink);white-space:nowrap}
+.ref h4{font:800 13px Rubik;margin:14px 0 4px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+kbd{font:700 12px var(--mono);padding:2px 6px;border-radius:6px;background:var(--bg2);box-shadow:0 1px 0 #0008;color:var(--ink)}
+.gh{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:10px 16px;border-radius:14px;background:var(--butter);text-decoration:none;color:var(--dark);font-weight:800;box-shadow:0 3px 0 var(--shadow)}
+.gh svg{width:18px;height:18px}
+/* мій робот */
+#creatorDlg{max-width:680px}
+.creator{display:grid;grid-template-columns:190px 1fr;gap:18px;align-items:center;margin-top:10px}
+.cr-stage{position:relative;border-radius:22px;background:radial-gradient(circle at 50% 78%,#3d5245 0 34%,#34463b 35% 100%);aspect-ratio:1/1.22;display:grid;place-items:center;overflow:hidden}
+.cr-stage::after{content:"";position:absolute;left:18%;right:18%;bottom:9%;height:9%;border-radius:50%;background:rgba(0,0,0,.25)}
+.cr-stage svg{width:68%;height:auto;position:relative;z-index:1;overflow:visible;margin-top:-4%}
+.cr-bot.bump{animation:bump .35s cubic-bezier(.3,1.6,.5,1)}
+@keyframes bump{40%{transform:translateY(-6px) scale(1.04)}}
+.cr-opts{display:grid;gap:9px}
+.cr-row{display:grid;grid-template-columns:60px 1fr;align-items:center;gap:6px}
+.cr-row>span{font:800 13px Nunito;color:var(--muted)}
+.cr-ch{display:flex;flex-wrap:wrap;gap:12px 6px}
+.cr-msg{min-height:20px;font-weight:700;font-size:14px;margin:4px 0 0;color:var(--muted)}
+.cr-msg.ok{color:var(--ok)}.cr-msg.bad{color:var(--bad)}
+.opt{position:relative;width:44px;height:40px;border:0;border-radius:12px;background:var(--bg2);cursor:pointer;padding:2px;box-shadow:0 2px 0 var(--shadow);display:grid;place-items:center;transition:transform .12s}
+.opt:hover{transform:translateY(-2px)}
+.opt svg{width:100%;height:100%;overflow:hidden}
+.opt.sw{width:24px;height:24px;border-radius:50%}
+.opt[aria-pressed="true"]{outline:3px solid var(--coral);outline-offset:2px;background:var(--card2)}
+.opt.locked>svg{opacity:.35;filter:grayscale(.85)}
+.opt.sw.locked{box-shadow:inset 0 0 0 20px rgba(27,29,35,.55),0 2px 0 var(--shadow)}
+.lock{position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);display:flex;align-items:center;gap:2px;background:var(--ink);color:var(--bg);font:800 10.5px Rubik;padding:1px 6px 1px 3px;border-radius:8px;white-space:nowrap;pointer-events:none}
+.lock svg{width:12px;height:12px}
+.opt.shake{animation:crash .35s}
+@keyframes crash{25%{translate:-5px 0}75%{translate:5px 0}}
+.cr-foot{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.cr-foot .btn{padding:9px 14px;font-size:15px}
+
+@media (max-width:1080px){
+  .play{grid-template-columns:186px minmax(0,1fr)}
+  .mapcol{grid-column:1/-1;order:-1;position:static}
+  .mapbox svg{max-height:46vh}
 }
 @media (max-width:860px){
-  .hero{grid-template-columns:1fr;padding-top:32px;gap:26px}
-  .chip.c2{left:0}.chip.c1{left:0}
+  .creator{grid-template-columns:1fr}
+  .cr-stage{max-width:150px;justify-self:center;width:100%}
+  .hero{padding:24px 0 20px}
+  .hero-grid{grid-template-columns:1fr}
+  .art{justify-self:center;max-width:480px;margin-top:10px}
+  .lead{max-width:none}
 }
-@media (max-width:600px){
-  .top{gap:8px}.brand span{display:none}
-  .hb .lbl{display:none}
-  .crumb{font-size:13px}
+@media (max-width:640px){
+  .play{grid-template-columns:minmax(0,1fr)}
+  .palcol{position:static}
+  .palcol .colh{display:none}
+  .palette{max-height:none;display:flex;gap:18px;overflow-x:auto;align-items:flex-start;padding-bottom:16px}
+  .cat{flex:none}.cat+.cat{margin-top:0}
+  .lockn{max-width:150px}
+  .ib.ctl span{display:none}.ib.ctl{width:42px;padding:0;justify-content:center}
+  .colh .btn.sm span{display:none}
+  .lvname span{white-space:normal;font-size:16px}
+  .colh{flex-wrap:wrap}
+  .mapcol .lvname{flex:1 1 100%}
+  .runbar{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  .runbar .btn{padding:9px 4px;font-size:14px;gap:3px;flex-direction:column}
+  .runbar .btn svg{width:20px;height:20px}
+  .stat .sl{display:none}
   .gut,.code pre,.code textarea{font-size:16px;line-height:25px}
   .gut div,.code pre span.l{height:25px;min-height:25px}
-  .ctrl .btn{padding:0 11px}.ctrl .btn .lbl{display:none}
-  .speed span{display:none}.speed input{width:80px}
-  .mtop h1{font-size:18px}
-  .dlg{padding:20px 16px}
+  .ed{height:52vh;min-height:300px}
+  .was{grid-template-columns:1fr}.was .arr{transform:rotate(90deg);justify-self:start}
   .wstats{grid-template-columns:1fr}
-  .stats .stat:nth-child(3){display:none}
 }
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.001s!important;animation-delay:0s!important;transition-duration:.001s!important}
+@media (max-width:480px){
+  .gpill{padding:5px 8px;font-size:14px}
+  .cr-row{grid-template-columns:50px 1fr}
+  .dlg{padding:20px 16px}
+  .logo span{font-size:17px}
+  .lv{width:72px;height:72px;font-size:20px}
+  .chip{font-size:12px}
+  .ed-h .fn{display:none}
 }
-
-#home{overflow-x:clip}
-
-details.more{margin:10px 0 0;border-radius:14px;background:var(--panel2)}
-details.more summary{cursor:pointer;list-style:none;padding:12px 14px;font:700 14px Rubik;display:flex;align-items:center;gap:8px}
-details.more summary::-webkit-details-marker{display:none}
-details.more summary::after{content:"";margin-left:auto;width:8px;height:8px;border-right:2.5px solid var(--muted);border-bottom:2.5px solid var(--muted);transform:rotate(45deg);transition:transform .15s}
-details.more[open] summary::after{transform:rotate(-135deg)}
-details.more>div{padding:0 14px 14px;color:var(--muted)}
-details.more.learn{background:linear-gradient(150deg,rgba(154,136,255,.16),rgba(79,216,255,.08));box-shadow:0 0 0 1px rgba(154,136,255,.25)}
-details.more.learn summary{color:#c3b8ff}
-.task{font-size:17px;color:var(--ink)!important;margin:6px 0 12px!important}
-.breq{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 4px}.breq span{padding:5px 10px;border-radius:10px;background:rgba(255,179,92,.12);color:var(--amber);font-weight:800;font-size:13px}
-.hb.menu{width:42px;padding:0;color:#0b0f1f;background:linear-gradient(150deg,#b9adff,#8a76ff);box-shadow:none}
-.prow{display:flex;align-items:center;gap:10px;width:100%;margin:6px 0 0;padding:12px 14px;border-radius:14px;background:var(--panel2);font:700 14px Rubik;text-align:left}
-.prow .sw{margin-left:auto;width:42px;height:24px;border-radius:12px;background:var(--panel3);position:relative;transition:background .2s}
-.prow .sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s}
-.prow[aria-checked="true"] .sw{background:var(--mint)}.prow[aria-checked="true"] .sw::after{transform:translateX(18px)}
-details.more summary .ico{width:18px;height:18px;color:var(--cyan)}
-details.more .ref h3{font-size:14px;margin:12px 0 4px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs><linearGradient id="starG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe08a"/><stop offset="1" stop-color="#ff9f3d"/></linearGradient></defs>
-  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12.5-7.5z" fill="currentColor"/></symbol>
-  <symbol id="i-step" viewBox="0 0 24 24"><path d="M5 5v14l9-7z" fill="currentColor"/><rect x="16" y="5" width="3.2" height="14" rx="1.2" fill="currentColor"/></symbol>
-  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4.5" width="4" height="15" rx="1.4" fill="currentColor"/><rect x="14" y="4.5" width="4" height="15" rx="1.4" fill="currentColor"/></symbol>
-  <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.3-5.4M4.5 4.5v4h4" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="2" fill="currentColor"/><rect x="13.5" y="3.5" width="7" height="7" rx="2" fill="currentColor"/><rect x="3.5" y="13.5" width="7" height="7" rx="2" fill="currentColor"/><rect x="13.5" y="13.5" width="7" height="7" rx="2" fill="currentColor"/></symbol>
-  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linejoin="round"/></symbol>
-  <symbol id="i-snd" viewBox="0 0 24 24"><path d="M4 9.5h4l5-4.5v14l-5-4.5H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/></symbol>
-  <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.5h4l5-4.5v14l-5-4.5H4z" fill="currentColor"/><path d="M17 9.5l5 5M22 9.5l-5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
-  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="3" fill="currentColor"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" stroke="currentColor" stroke-width="2.4" fill="none"/></symbol>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <filter id="paper" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="2.5" stdDeviation="1.6" flood-color="#000" flood-opacity=".45"/></filter>
+  <symbol id="i-fwd" viewBox="0 0 24 24"><path class="stk" style="stroke-width:3" d="M12 20V5M6 10l6-6 6 6"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path class="stk" style="stroke-width:3" d="M17 20v-7a5 5 0 0 0-5-5H5"/><path class="stk" style="stroke-width:3" d="M9 4L5 8l4 4"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path class="stk" style="stroke-width:3" d="M7 20v-7a5 5 0 0 1 5-5h7"/><path class="stk" style="stroke-width:3" d="M15 4l4 4-4 4"/></symbol>
+  <symbol id="i-rep" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M20 12a8 8 0 0 1-13.7 5.6M4 12A8 8 0 0 1 17.7 6.4"/><path class="stk" style="stroke-width:2.6" d="M18 2.5v4h-4M6 21.5v-4h4"/></symbol>
+  <symbol id="i-while" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M5 12a7 7 0 0 1 12-5l2 2"/><path class="stk" style="stroke-width:2.6" d="M19 4v5h-5"/><path class="ink" d="M8 21v-7l5-4 5 4v7z"/></symbol>
+  <symbol id="i-if" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M12 3l9 9-9 9-9-9z"/><rect x="8" y="9" width="8" height="6" rx="1" class="ink"/></symbol>
+  <symbol id="i-pkg" viewBox="0 0 24 24"><path class="ink" d="M4 8h16v12H4z" opacity=".35"/><path class="stk" style="stroke-width:2.4" d="M4 8h16v12H4zM4 8l2-4h12l2 4M10 8v5h4V8"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.4" d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3.2" class="ink"/></symbol>
+  <symbol id="i-fn" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M8 4C5 4 5 7 5 9s-1 3-2 3c1 0 2 1 2 3s0 5 3 5M16 4c3 0 3 3 3 5s1 3 2 3c-1 0-2 1-2 3s0 5-3 5"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><g fill="#9aa3b5" stroke="#6f7790" stroke-width=".8"><rect x="10" y="1" width="4" height="5.5" rx="1"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(45 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(90 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(135 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(180 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(225 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(270 12 12)"/><rect x="10" y="1" width="4" height="5.5" rx="1" transform="rotate(315 12 12)"/><circle cx="12" cy="12" r="7.6"/></g><circle cx="12" cy="12" r="3" fill="#2a2d36"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M8 11V8a4 4 0 0 1 8 0v3"/><rect x="5" y="11" width="14" height="10" rx="3" class="ink"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6L2.5 9.3l6.6-.8z"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path class="ink" d="M5 3h2v19H5z"/><path class="ink" d="M7 4c4-2 6 2 12 0v9c-6 2-8-2-12 0z"/></symbol>
+  <symbol id="i-step" viewBox="0 0 24 24"><path class="ink" d="M5 4l10 8-10 8z"/><rect x="16" y="4" width="3.5" height="16" rx="1" class="ink"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="5.5" y="4" width="4.5" height="16" rx="1.4" class="ink"/><rect x="14" y="4" width="4.5" height="16" rx="1.4" class="ink"/></symbol>
+  <symbol id="i-reset" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M4 12a8 8 0 1 0 3-6.2"/><path class="stk" style="stroke-width:2.6" d="M4 3v5h5"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M9 14L4 9l5-5"/><path class="stk" style="stroke-width:2.6" d="M4 9h10a6 6 0 0 1 0 12h-3"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.4" d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.3" d="M9 18h6M10 21.5h4M12 2.5a6.5 6.5 0 0 0-3.8 11.8c.5.4.8 1 .8 1.7h6c0-.7.3-1.3.8-1.7A6.5 6.5 0 0 0 12 2.5z"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" class="ink"/><path d="M12 11v6" stroke="var(--bg)" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="7.5" r="1.6" fill="var(--bg)"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path class="ink" d="M7 4l13 8-13 8z"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2" class="ink"/><rect x="14" y="3" width="7" height="7" rx="2" class="ink"/><rect x="3" y="14" width="7" height="7" rx="2" class="ink"/><rect x="14" y="14" width="7" height="7" rx="2" class="ink"/></symbol>
+  <symbol id="i-bot" viewBox="0 0 24 24"><rect x="11" y="2.5" width="2" height="4" class="ink"/><circle cx="12" cy="3" r="2" class="ink"/><rect x="4" y="6.5" width="16" height="13" rx="4.5" class="ink"/><rect x="1.5" y="10.5" width="2.5" height="5" rx="1.2" class="ink"/><rect x="20" y="10.5" width="2.5" height="5" rx="1.2" class="ink"/><circle cx="9" cy="12.3" r="1.9" fill="var(--bg2)"/><circle cx="15" cy="12.3" r="1.9" fill="var(--bg2)"/></symbol>
   <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.5 2.5L5 13.5h6l-1 8 8.5-11h-6z" fill="currentColor"/></symbol>
-  <symbol id="i-box" viewBox="0 0 24 24"><path d="M3.5 7.5L12 3l8.5 4.5v9L12 21l-8.5-4.5z" fill="currentColor" opacity=".35"/><path d="M3.5 7.5L12 12l8.5-4.5M12 12v9" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
   <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 22s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z" fill="currentColor" opacity=".35"/><circle cx="12" cy="10" r="3" fill="currentColor"/></symbol>
-  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21.5h4M12 2.5a6.5 6.5 0 0 0-3.8 11.8c.5.4.8 1 .8 1.7h6c0-.7.3-1.3.8-1.7A6.5 6.5 0 0 0 12 2.5z" stroke="currentColor" stroke-width="2.1" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 2.5h8l5 5v14H6z" stroke="currentColor" stroke-width="2.1" fill="none" stroke-linejoin="round"/><path d="M9 12h7M9 16h7" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></symbol>
-  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
-  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.6l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z" fill="currentColor"/></symbol>
-  <symbol id="i-gear" viewBox="0 0 24 24"><path d="M10.3 2.5h3.4l.5 2.6 1.9.8 2.2-1.5 2.4 2.4-1.5 2.2.8 1.9 2.6.5v3.4l-2.6.5-.8 1.9 1.5 2.2-2.4 2.4-2.2-1.5-1.9.8-.5 2.6h-3.4l-.5-2.6-1.9-.8-2.2 1.5-2.4-2.4 1.5-2.2-.8-1.9-2.6-.5v-3.4l2.6-.5.8-1.9-1.5-2.2 2.4-2.4 2.2 1.5 1.9-.8z" fill="currentColor"/><circle cx="12" cy="12" r="3.6" fill="#0b0f1f"/></symbol>
-  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="15" cy="7" r="2.6" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="9" cy="17" r="2.6" fill="none" stroke="currentColor" stroke-width="2.4"/></symbol>
-  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-</svg>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M4 12h15M13 6l6 6-6 6"/></symbol>
+</defs></svg>
 
-<header class="top">
-  <a class="brand" href="#" id="brand" aria-label="Робот-кур'єр 2.0 — на головну">
-    <svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lgo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a3770"/><stop offset="1" stop-color="#121838"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#lgo)"/><rect x="14" y="16" width="36" height="28" rx="12" fill="#8ec5ee"/><rect x="19" y="22" width="26" height="14" rx="7" fill="#0e1330"/><rect x="23" y="27" width="18" height="5" rx="2.5" fill="#4fd8ff"/><path d="M32 16V9" stroke="#8ec5ee" stroke-width="3"/><circle cx="32" cy="8" r="4" fill="#ffb35c"/><path d="M16 53l6-5-6-5M27 53h12" stroke="#4fd8ff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <span>Робот-кур'єр <b>2.0</b></span>
-  </a>
-  <div class="crumb" id="crumb"></div>
-  <div class="hbtns">
-    <button class="hb" id="bMissions" title="Усі місії"><svg class="ico"><use href="#i-grid"/></svg><span class="lbl">Місії</span></button>
-    <button class="hb" id="bGarage" title="Мій робот"><svg class="ico"><use href="#i-gear"/></svg><span class="lbl">Робот</span></button>
-    <button class="hb menu" id="bInfo" title="Меню керування" aria-label="Меню керування"><svg class="ico"><use href="#i-menu"/></svg></button>
+<header>
+  <div class="wrap bar">
+    <button class="logo" id="home" type="button" aria-label="На головну">
+      <svg viewBox="-42 -74 84 130" aria-hidden="true" id="logoBot"></svg>
+      <span>Робот-кур'єр <b>2.0</b></span>
+    </button>
+    <div class="tools">
+      <button class="gpill" id="gearPill" type="button" title="Мій робот" aria-label="Шестерні — відкрити налаштування робота"><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg><b id="gearN">0</b></button>
+      <button class="ib" id="snd" type="button" aria-label="Звук"></button>
+      <button class="ib ctl" id="infoBtn" type="button" aria-label="Керування" title="Керування"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="stk" style="stroke-width:2.4" d="M4 7h9M18 7h2M4 17h3M12 17h8"/><circle cx="15.5" cy="7" r="2.6" class="ink"/><circle cx="9.5" cy="17" r="2.6" class="ink"/></svg><span>Керування</span></button>
+    </div>
   </div>
 </header>
 
-<main id="home">
-  <section class="hero">
-    <div>
-      <span class="kicker">7–8 клас · Python</span>
-      <h1>Робот-кур'єр <span>2.0</span></h1>
-      <p>Пиши код — робот доставляє посилки.</p>
-      <div class="acts">
-        <button class="btn pri" id="bContinue"><svg class="ico"><use href="#i-play"/></svg><span id="contLbl">Почати</span></button>
-        <button class="btn" id="bAll"><svg class="ico"><use href="#i-grid"/></svg>Місії</button>
-        <button class="btn" id="bBot"><svg class="ico"><use href="#i-gear"/></svg>Робот</button>
-      </div>
-      <div class="prog"><div class="bar"><i id="progBar" style="width:0"></i></div><span id="progTxt">★ 0 / 48</span></div>
-    </div>
-    <div class="art" id="heroArt"></div>
-  </section>
-</main>
-
-<main id="missions" class="page" hidden>
-  <div class="ph"><h2>Місії</h2><span class="legend"><em>★</em> виконати <em>★</em> рядки <em>★</em> енергія</span></div>
-  <div id="mlist"></div>
-</main>
-
-<main id="garage" class="page" hidden>
-  <div class="ph"><h2>Мій робот</h2><span class="gears"><svg class="ico"><use href="#i-gear"/></svg><b id="gearN">0</b></span></div>
-  <div class="gar">
-    <div class="card gprev"><svg id="gBot" viewBox="-60 -84 120 150"></svg><p id="gTip">Шестерні — за пройдені місії</p></div>
-    <div class="card gopts" id="gOpts"></div>
-  </div>
-</main>
-
-<main id="game" hidden>
-  <div class="gl">
-    <section class="card mbar">
-      <div class="mtop">
-        <span class="tag" id="gTag"></span>
-        <h1 id="gTitle"></h1>
-        <button class="btn" id="bBrief"><svg class="ico"><use href="#i-doc"/></svg>Місія</button>
-        <button class="btn" id="bHint"><svg class="ico"><use href="#i-bulb"/></svg>Підказка</button>
-      </div>
-      <ul class="reqs" id="gReqs"></ul>
-    </section>
-    <section class="card wcard">
-      <div class="wtop">
-        <div class="tabs" id="mapTabs"></div>
-        <div class="stats">
-          <span class="stat" title="Енергія — кількість дій робота"><svg style="color:var(--amber)"><use href="#i-bolt"/></svg><b id="sEn">0</b></span>
-          <span class="stat" title="Посилки в роботі"><svg style="color:var(--cyan)"><use href="#i-box"/></svg><b id="sCar">0</b></span>
-          <span class="stat" title="Залишилось доставити"><svg style="color:var(--mint)"><use href="#i-pin"/></svg><b id="sLeft">0</b></span>
+<main>
+<section class="screen on" id="s-start">
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1>Робот-кур'єр <span>2.0</span></h1>
+        <p class="lead">Пиши код на Python — і робот рознесе посилки містом. Від перших команд до циклів, умов і функцій.</p>
+        <div class="btns">
+          <button class="btn main" id="bPlay"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg><span id="bPlayT">Грати</span></button>
+          <button class="btn" id="bLevels"><svg viewBox="0 0 24 24"><use href="#i-grid"/></svg>Місії</button>
         </div>
       </div>
-      <div class="world" id="world"><div class="msg" id="wmsg"></div></div>
-    </section>
+      <div class="art">
+        <div class="hstage" id="heroArt"></div>
+        <button class="chip c1" id="chipGears" type="button">0 шестерень</button>
+        <span class="chip c3" id="chipStars">0 з 48 зірок</span>
+      </div>
+    </div>
   </div>
-  <div class="gr">
-    <section class="card ctrl" id="ctrl">
-      <button class="btn go" id="bRun" title="Запуск (Ctrl+Enter)"><svg><use href="#i-play"/></svg><span class="lbl">Запуск</span></button>
-      <button class="btn" id="bStep" title="Крок (Ctrl+Shift+Enter)"><svg><use href="#i-step"/></svg><span class="lbl">Крок</span></button>
-      <button class="btn" id="bPause" title="Пауза (Esc)" disabled><svg><use href="#i-pause"/></svg><span class="lbl">Пауза</span></button>
-      <button class="btn" id="bReset" title="Скинути (Alt+R)"><svg><use href="#i-reset"/></svg><span class="lbl">Скинути</span></button>
-      <label class="speed"><span>Швидкість</span><input type="range" id="speed" min="1" max="5" step="1" value="3" aria-label="Швидкість"></label>
-    </section>
-    <section class="ed" id="ed">
-      <div class="ed-h"><span class="dots"><i></i><i></i><i></i></span><span class="fn">courier.py</span><span class="lc" id="lc">1 рядок</span><button id="bClear" title="Очистити код">Очистити</button></div>
-      <div class="gut" id="gut"></div>
-      <div class="code"><pre id="hl" aria-hidden="true"></pre><textarea id="src" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Код програми"></textarea></div>
-    </section>
-    <div class="keys" id="keys"></div>
-    <section class="card con" id="con" aria-live="polite">
-      <div class="con-h"><span>Консоль</span><span class="vars" id="vars"></span></div>
-      <div id="msgs"></div>
-    </section>
+</section>
+
+<section class="screen" id="s-levels"><div class="wrap gwrap" id="levels"></div></section>
+
+<section class="screen" id="s-play">
+  <div class="wrap gwrap playw">
+    <div class="play">
+      <div class="palcol">
+        <div class="colh"><h3>Команди</h3></div>
+        <div class="palette" id="palette"></div>
+      </div>
+      <div class="wscol">
+        <div class="colh"><h3 id="cnt"></h3>
+          <button class="btn sm" id="bHint" title="Підказка"><svg viewBox="0 0 24 24"><use href="#i-bulb"/></svg><span>Підказка</span></button>
+          <button class="btn sm" id="bUndo" title="Скасувати (Ctrl+Z)"><svg viewBox="0 0 24 24"><use href="#i-undo"/></svg><span>Скасувати</span></button>
+          <button class="btn sm" id="bClear" title="Очистити"><svg viewBox="0 0 24 24"><use href="#i-trash"/></svg><span id="bClearT">Очистити</span></button>
+        </div>
+        <ul class="reqs" id="gReqs"></ul>
+        <section class="ed" id="ed">
+          <div class="ed-h"><span class="fn"><i></i>courier.py</span><span class="lc" id="lc"></span><button class="tk" id="bTab" type="button" title="Додати відступ">Tab</button><button class="tk" id="bUntab" type="button" title="Прибрати відступ">Shift+Tab</button></div>
+          <div class="gut" id="gut"></div>
+          <div class="code"><pre id="hl" aria-hidden="true"></pre><textarea id="src" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Код програми"></textarea></div>
+        </section>
+        <section class="con" id="con" aria-live="polite">
+          <div class="con-h"><span>Консоль</span><span class="vars" id="vars"></span></div>
+          <div id="msgs"></div>
+        </section>
+      </div>
+      <div class="mapcol">
+        <div class="colh"><button class="lvname" id="lvName" type="button" title="Показати завдання"><span id="lvTitle"></span><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-info"/></svg></button><div class="maptabs" id="mapTabs"></div></div>
+        <div class="mstats">
+          <span class="stat" title="Енергія — кількість дій робота"><svg style="color:var(--loop)"><use href="#i-bolt"/></svg><span class="sl">Енергія</span> <b id="sEn">0</b></span>
+          <span class="stat" title="Посилки в роботі"><svg viewBox="0 0 24 24" style="color:var(--box)"><use href="#i-pkg"/></svg><span class="sl">Везе</span> <b id="sCar">0</b></span>
+          <span class="stat" title="Залишилось доставити"><svg style="color:var(--cond)"><use href="#i-pin"/></svg><span class="sl">Залишилось</span> <b id="sLeft">0</b></span>
+        </div>
+        <div class="mapbox" id="world"></div>
+        <div class="runbar">
+          <button class="btn go" id="bRun" title="Старт (Ctrl+Enter)"><svg viewBox="0 0 24 24"><use href="#i-flag"/></svg><span class="lbl">Старт</span></button>
+          <button class="btn" id="bStep" title="Крок (Ctrl+Shift+Enter)"><svg viewBox="0 0 24 24"><use href="#i-step"/></svg>Крок</button>
+          <button class="btn" id="bPause" title="Пауза (Esc)" disabled><svg viewBox="0 0 24 24"><use href="#i-pause"/></svg>Пауза</button>
+          <button class="btn" id="bReset" title="Спочатку (Alt+R)"><svg viewBox="0 0 24 24"><use href="#i-reset"/></svg>Спочатку</button>
+        </div>
+      </div>
+    </div>
   </div>
+</section>
 </main>
 
-<dialog id="dBrief"><div class="dlg" id="briefBody"></div></dialog>
+<dialog id="creatorDlg" aria-labelledby="crT">
+  <div class="dlg">
+    <button class="close" type="button" data-close aria-label="Закрити">×</button>
+    <h2 id="crT" style="display:flex;align-items:center;gap:10px">Мій робот <span class="gpill"><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg><b id="crGears">0</b></span></h2><p class="cr-msg" id="crMsg">Проходь місії, збирай шестерні й відкривай нові деталі.</p>
+    <div class="creator">
+      <div class="cr-stage"><svg viewBox="-46 -76 92 134" id="crPreview" role="img" aria-label="Твій робот-кур'єр"></svg></div>
+      <div>
+        <div class="cr-opts" id="crOpts"></div>
+        <div class="cr-foot"><button class="btn" id="crRandom" type="button"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" class="ink"/><circle cx="8" cy="8" r="1.8" fill="var(--bg)"/><circle cx="16" cy="16" r="1.8" fill="var(--bg)"/><circle cx="12" cy="12" r="1.8" fill="var(--bg)"/><circle cx="16" cy="8" r="1.8" fill="var(--bg)"/><circle cx="8" cy="16" r="1.8" fill="var(--bg)"/></svg>Випадковий</button><button class="btn main" type="button" data-close>Готово</button></div>
+      </div>
+    </div>
+  </div>
+</dialog>
+<dialog id="dBrief"><div class="dlg intro" id="briefBody"></div></dialog>
 <dialog id="dWin"><div class="dlg win" id="winBody"></div></dialog>
 
-<dialog id="dInfo" class="panel"><div class="dlg">
-  <button class="x" data-close aria-label="Закрити"><svg class="ico"><use href="#i-x"/></svg></button>
-  <h2>Меню</h2>
-  <p>Робот виконує код Python. 16 місій — від послідовності до функцій.</p>
-  <button type="button" class="prow" id="bSnd" role="switch"><svg class="ico"><use href="#i-snd"/></svg><span>Звук</span><i class="sw"></i></button>
-  <details class="more" id="refBox"><summary><svg class="ico"><use href="#i-book"/></svg>Довідник команд</summary><div class="ref"><h3>Рух</h3>
-  <table><tr><td>move_forward()</td><td>Крок уперед на 1 клітинку</td></tr><tr><td>move_forward(n)</td><td>n кроків уперед</td></tr><tr><td>turn_left()</td><td>Поворот ліворуч на 90°</td></tr><tr><td>turn_right()</td><td>Поворот праворуч на 90°</td></tr></table>
-  <h3>Посилки</h3>
-  <table><tr><td>pick_up()</td><td>Взяти посилку з клітинки</td></tr><tr><td>deliver()</td><td>Віддати одну посилку на адресі</td></tr></table>
-  <h3>Датчики (повертають True / False)</h3>
-  <table><tr><td>front_is_clear()</td><td>Попереду вільно</td></tr><tr><td>left_is_clear()</td><td>Ліворуч вільно</td></tr><tr><td>right_is_clear()</td><td>Праворуч вільно</td></tr><tr><td>at_package()</td><td>Під роботом є посилка</td></tr><tr><td>at_destination()</td><td>Робот на адресі, яка ще чекає</td></tr><tr><td>has_package()</td><td>Робот везе хоч одну посилку</td></tr></table>
-  <h3>Python</h3>
-  <table><tr><td>x = 3</td><td>Змінна. Також x += 1, x -= 1</td></tr><tr><td>for i in range(n):</td><td>Повторити n разів (i = 0…n−1)</td></tr><tr><td>range(a, b)</td><td>Числа від a до b−1</td></tr><tr><td>while умова:</td><td>Повторювати, поки умова істинна</td></tr><tr><td>if / elif / else</td><td>Розгалуження</td></tr><tr><td>and, or, not</td><td>Логічні операції</td></tr><tr><td>== != &lt; &gt; &lt;= &gt;=</td><td>Порівняння</td></tr><tr><td>def name(p):</td><td>Власна функція з параметром</td></tr><tr><td>print(x)</td><td>Вивести значення в консоль</td></tr><tr><td># коментар</td><td>Пояснення, яке робот пропускає</td></tr></table>
-  <p style="margin-top:14px">Тіло циклів, умов і функцій пишеться з відступом 4 пробіли — клавіша <kbd>Tab</kbd>.</p>
-</div></details>
-  <details class="more"><summary><svg class="ico"><use href="#i-doc"/></svg>Правила</summary><div><ul>
-    <li>Напиши програму й натисни «Запуск».</li>
-    <li>Помилка — консоль покаже рядок і підказку.</li>
-    <li>★ виконати · ★ вкластися в рядки · ★ заощадити енергію.</li>
-    <li>За зірки — шестерні для деталей робота.</li>
-  </ul></div></details>
-  <details class="more"><summary><svg class="ico"><use href="#i-grid"/></svg>Керування</summary><div><ul>
-    <li><kbd>Ctrl</kbd>+<kbd>Enter</kbd> запуск · <kbd>Esc</kbd> пауза · <kbd>Alt</kbd>+<kbd>R</kbd> скинути</li>
-    <li><kbd>Tab</kbd> відступ · <kbd>Ctrl</kbd>+<kbd>/</kbd> коментар · <kbd>↑</kbd><kbd>↓</kbd> підказки</li>
-    <li>Миша/дотик — кнопки «Запуск», «Крок» і кнопки команд під редактором.</li>
-  </ul></div></details>
-  <div class="dacts" style="justify-content:space-between;align-items:center">
-    <a class="gh" href="https://github.com/whyuxavier/it-maysternia" target="_blank" rel="noopener"><svg><use href="#i-star"/></svg>GitHub</a>
-    <a class="gh" href="../../">← ІТ-Майстерня</a>
+<dialog id="dInfo" aria-labelledby="infoT">
+  <div class="dlg">
+    <button class="close" type="button" data-close aria-label="Закрити">×</button>
+    <h2 id="infoT">Керування</h2>
+    <button class="ctlbot" id="ctlBot" type="button"><span class="cb-av"><svg viewBox="-46 -76 92 134" id="ctlBotSvg" filter="url(#paper)"></svg></span><span><b>Мій робот</b><small>Колір, голова, очі, колеса — за шестерні</small></span><svg viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M9 5l7 7-7 7"/></svg></button>
+    <h3>Швидкість робота</h3>
+    <div class="seg" id="speedSeg">
+      <button type="button" data-s="1"><svg viewBox="0 0 24 24"><path class="ink" d="M6 5l12 7-12 7z"/></svg>Повільно</button>
+      <button type="button" data-s="2"><svg viewBox="0 0 24 24"><path class="ink" d="M2 5l9 7-9 7zM12 5l9 7-9 7z"/></svg>Звичайно</button>
+      <button type="button" data-s="3"><svg viewBox="0 0 24 24"><path class="ink" d="M1 6l7 6-7 6zM8.5 6l7 6-7 6zM16 6l7 6-7 6z"/></svg>Швидко</button>
+    </div>
+    <h3>Блоки → Python</h3>
+    <div class="howto" id="howto"></div>
+    <details id="refBox">
+      <summary>Довідник команд</summary>
+      <div class="ref">
+        <h4>Посилки</h4>
+        <table><tr><td>pick_up()</td><td>Взяти посилку з клітинки</td></tr><tr><td>deliver()</td><td>Віддати одну посилку на адресі</td></tr><tr><td>move_forward(n)</td><td>n кроків уперед</td></tr></table>
+        <h4>Датчики (True / False)</h4>
+        <table><tr><td>front_is_clear()</td><td>Попереду вільно</td></tr><tr><td>left_is_clear()</td><td>Ліворуч вільно</td></tr><tr><td>right_is_clear()</td><td>Праворуч вільно</td></tr><tr><td>at_package()</td><td>Під роботом є посилка</td></tr><tr><td>at_destination()</td><td>Робот на адресі, яка ще чекає</td></tr><tr><td>has_package()</td><td>Робот везе хоч одну посилку</td></tr></table>
+        <h4>Python</h4>
+        <table><tr><td>x = 3</td><td>Змінна. Також x += 1, x -= 1</td></tr><tr><td>range(a, b)</td><td>Числа від a до b−1</td></tr><tr><td>if / elif / else</td><td>Розгалуження</td></tr><tr><td>and, or, not</td><td>Логічні операції</td></tr><tr><td>== != &lt; &gt; &lt;= &gt;=</td><td>Порівняння</td></tr><tr><td>def name(p):</td><td>Власна функція з параметром</td></tr><tr><td>print(x)</td><td>Вивести значення в консоль</td></tr><tr><td># коментар</td><td>Пояснення, яке робот пропускає</td></tr></table>
+      </div>
+    </details>
+    <details>
+      <summary>Клавіші</summary>
+      <ul>
+        <li><kbd>Ctrl</kbd>+<kbd>Enter</kbd> — старт, <kbd>Esc</kbd> — пауза, <kbd>Alt</kbd>+<kbd>R</kbd> — спочатку</li>
+        <li><kbd>Tab</kbd> — відступ, <kbd>Shift</kbd>+<kbd>Tab</kbd> — прибрати, <kbd>Ctrl</kbd>+<kbd>/</kbd> — коментар</li>
+        <li><kbd>↑</kbd><kbd>↓</kbd> і <kbd>Enter</kbd> — вибір підказки під час набору</li>
+        <li>Миша/дотик — натискай команди ліворуч, вони вставляються в код</li>
+      </ul>
+    </details>
+    <details>
+      <summary>Про гру й правила</summary>
+      <div>
+        <p>Продовження Робота-кур'єра: ті самі мапи, робот і посилки, але програму пишеш кодом Python. 16 місій — від послідовності до функцій.</p>
+        <ul style="margin-top:8px">
+          <li>Напиши програму й натисни «Старт». Помилку консоль покаже з номером рядка.</li>
+          <li>Тіло циклів, умов і функцій пишеться з відступом 4 пробіли.</li>
+          <li>★ виконати · ★ вкластися в рядки · ★ заощадити енергію.</li>
+          <li>За зірки — шестерні для деталей робота.</li>
+        </ul>
+      </div>
+    </details>
+    <a class="gh" href="https://github.com/whyuxavier/it-maysternia" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6L2.5 9.3l6.6-.8z"/></svg>GitHub</a>
   </div>
-</div></dialog>
+</dialog>
 <script>
 (()=>{'use strict';
 /* ================= ІНТЕРПРЕТАТОР PYTHON (підмножина) ================= */
@@ -720,7 +820,7 @@ class World{
     for(let i=0;i<n;i++){const nx=this.r.x+DX[this.r.d],ny=this.r.y+DY[this.r.d];
       if(!this.free(nx,ny)){const c=this.ch(nx,ny),out=ny<0||ny>=this.H||nx<0||nx>=this.W;
         yield {t:'bump',x:nx,y:ny,line};
-        throw new PyErr('robot','Робот врізався '+(out?'в край карти':'в '+BLOCK[c]),line,i?'Робот встиг пройти '+i+' з '+n+' кроків. Порахуй клітинки ще раз.':'Попереду перешкода. Може, спершу треба повернути?')}
+        throw new PyErr('robot','Робот врізався '+(out?'в край мапи':'в '+BLOCK[c]),line,i?'Робот встиг пройти '+i+' з '+n+' кроків. Порахуй клітинки ще раз.':'Попереду перешкода. Може, спершу треба повернути?')}
       this.r.x=nx;this.r.y=ny;this.energy++;this.moves++;this.trail.push([nx,ny]);
       yield {t:'move',x:nx,y:ny,d:this.r.d,line}}
   }
@@ -817,7 +917,7 @@ const LEVELS=[
   goal:'Обидві адреси отримали посилки.',
   plan:['Їдь уздовж нижньої вулиці до першої посилки','Поверни на північ і забери другу','Поверни на захід і доставляй по черзі'],
   req:[],cmds:['move_forward','turn_left','turn_right','pick_up','deliver'],
-  learn:{t:'Порядок має значення',x:'Програма виконується строго згори донизу. Одна помилка в підрахунку — і робот поїде не туди. Запускай покроково, щоб перевіряти себе.',c:'# ⏭ «Крок» виконує по одному рядку'},
+  learn:{t:'Порядок має значення',x:'Програма виконується строго згори донизу. Одна помилка в підрахунку — і робот поїде не туди. Запускай покроково, щоб перевіряти себе.',c:'# Кнопка «Крок» виконує по одному рядку'},
   hints:['Спершу 3 кроки до першої посилки.','На розі поверни ліворуч — на північ. Друга посилка за 2 клітинки.','Помітив, скільки однакових рядків? У наступній місії навчимось їх скорочувати.'],
   maps:[{rows:['#########','#D...D..#','#######.#','#T#T###P#','#######.#','#>..P...#','#########']}],goals:{lines:22,energy:22}},
  {sec:2,title:'Довгий проспект',tag:'Параметри',
@@ -866,19 +966,19 @@ const LEVELS=[
   hints:['Відрізки: 1, 2, 3, 4, 5. Після кожного — поворот праворуч.','range(1, 6) дає 1, 2, 3, 4, 5.'],
   maps:[{rows:['#######','#D#####','#.##T##','#.#...#','#.#^#.#','#.#T#.#','#.....#','#######'],pk:{'3,4':1}}],goals:{lines:5,energy:22}},
  {sec:4,title:'Невідома відстань',tag:'Цикл while',
-  story:'Сьогодні три замовлення в три різні тупики. Довжина кожного невідома, але адреса завжди в самому кінці. Одна програма має спрацювати на всіх трьох картах!',
+  story:'Сьогодні три замовлення в три різні тупики. Довжина кожного невідома, але адреса завжди в самому кінці. Одна програма має спрацювати на всіх трьох мапах!',
   task:'Забери посилку й їдь уперед, поки є дорога. Доставь у кінці тупика.',
-  goal:'Програма проходить усі 3 карти.',
+  goal:'Програма проходить усі 3 мапи.',
   plan:['Забери посилку','Повторюй крок, ПОКИ попереду вільно','Доставь'],
   req:['while','sensor'],cmds:['move_forward','pick_up','deliver','front_is_clear'],
   learn:{t:'Цикл while і датчики',x:'while повторює тіло, поки умова істинна. Датчик front_is_clear() відповідає True, якщо попереду вільно.',c:'while front_is_clear():\n    move_forward()'},
-  hints:['Числа тут не допоможуть: на кожній карті різна відстань.','Після циклу робот стоїть перед стіною — саме на адресі.'],
+  hints:['Числа тут не допоможуть: на кожній мапі різна відстань.','Після циклу робот стоїть перед стіною — саме на адресі.'],
   maps:[{rows:['#T##T##T###','#>.....D###','###T##T####']},{rows:['#T##T##T###','#>..D######','###T##T####']},{rows:['#T##T##T###','#>.......D#','###T##T####']}],
   pkAtStart:1,goals:{lines:4,energy:23}},
  {sec:4,title:'Потрібні двері',tag:'while not',
   story:'Вулиця довга, а потрібний будинок щоразу в іншому місці. Їхати до кінця не можна — проминеш адресу.',
   task:'Їдь, поки робот НЕ на точці доставки. Тоді доставь.',
-  goal:'Програма проходить усі 3 карти.',
+  goal:'Програма проходить усі 3 мапи.',
   plan:['Забери посилку','Рухайся, поки не на адресі','Доставь'],
   req:['while','not'],cmds:['move_forward','pick_up','deliver','at_destination'],
   learn:{t:'Заперечення not',x:'not перевертає відповідь: not True → False. Датчик at_destination() — True, коли робот на адресі.',c:'while not has_package():\n    ...'},
@@ -888,7 +988,7 @@ const LEVELS=[
  {sec:5,title:'Розвилка',tag:'if / else',
   story:'Дорога закінчується розвилкою, і щоразу відкритий інший бік. Робот має сам вирішити, куди повернути.',
   task:'Доїдь до розвилки, поверни у вільний бік і їдь до кінця, щоб доставити посилку.',
-  goal:'Програма проходить усі 3 карти.',
+  goal:'Програма проходить усі 3 мапи.',
   plan:['Забери посилку й їдь, поки попереду вільно','ЯКЩО ліворуч вільно — поверни ліворуч, ІНАКШЕ праворуч','Знову їдь до кінця й доставь'],
   req:['if','else'],cmds:['move_forward','turn_left','turn_right','pick_up','deliver','front_is_clear','left_is_clear','right_is_clear'],
   learn:{t:'Умова if / else',x:'if виконує блок, лише коли умова істинна. else — коли хибна. Обидва блоки з відступом.',c:'if front_is_clear():\n    move_forward()\nelse:\n    turn_right()'},
@@ -898,7 +998,7 @@ const LEVELS=[
  {sec:5,title:'Збирач',tag:'if у циклі',
   story:'Після бурі посилки розкидало вулицею. Склад у кінці чекає всі до однієї. Де саме лежать посилки — щоразу інакше.',
   task:'Проїдь вулицею, підбери кожну посилку і здай усі на склад у кінці.',
-  goal:'Склад отримав усі посилки на всіх 3 картах.',
+  goal:'Склад отримав усі посилки на всіх 3 мапах.',
   plan:['Поки попереду вільно: ЯКЩО тут посилка — забери, потім крок','На складі: поки є посилки — доставляй'],
   req:['while','if'],cmds:['move_forward','pick_up','deliver','front_is_clear','at_package','has_package'],
   learn:{t:'if усередині циклу',x:'Умову можна перевіряти на кожному кроці циклу. Зверни увагу на відступи: тіло if має 8 пробілів.',c:'while front_is_clear():\n    if at_package():\n        ...\n    move_forward()'},
@@ -908,7 +1008,7 @@ const LEVELS=[
  {sec:5,title:'Лабіринт',tag:'if / elif / else',
   story:'Старі промзони — справжній лабіринт. Мапи немає, але є перевірене правило: тримайся правої стіни, і рано чи пізно знайдеш вихід.',
   task:'Довези посилку через лабіринт до адреси. Одна програма — для обох лабіринтів.',
-  goal:'Посилка доставлена на обох картах.',
+  goal:'Посилка доставлена на обох мапах.',
   plan:['Поки не на адресі:','  якщо праворуч вільно — поверни праворуч і крок','  інакше, якщо попереду вільно — крок','  інакше — поверни ліворуч','Доставь'],
   req:['while','if','else'],cmds:['move_forward','turn_left','turn_right','pick_up','deliver','front_is_clear','right_is_clear','at_destination'],
   learn:{t:'elif',x:'elif — «інакше, якщо». Перевіряється лише тоді, коли попередня умова хибна. Спрацьовує лише одна гілка.',c:'if a:\n    ...\nelif b:\n    ...\nelse:\n    ...'},
@@ -935,8 +1035,8 @@ const LEVELS=[
   maps:[{rows:['###########','#########D#','######D##.#','###D##.##.#','>.........#','#T##T##T###'],pk:{'0,4':3}}],goals:{lines:15,energy:39}},
  {sec:7,title:'Нічна зміна',tag:'Оптимізація',
   story:'Фінальний іспит оператора: квартал, п\'ять адрес, і щоночі вони різні. Потрібна коротка, надійна й економна програма.',
-  task:'Забери 5 посилок і доставь їх на всі адреси довкола кварталу. Програма має працювати на обох картах.',
-  goal:'Усі адреси отримали посилки на обох картах.',
+  task:'Забери 5 посилок і доставь їх на всі адреси довкола кварталу. Програма має працювати на обох мапах.',
+  goal:'Усі адреси отримали посилки на обох мапах.',
   plan:['Забери посилки циклом','Обходь квартал: 4 сторони по 6 клітинок','На кожній клітинці перевіряй, чи це адреса','Для ★★★: зупинись, щойно посилки закінчаться'],
   req:['for','if',['maxLines',12]],cmds:['move_forward','turn_left','turn_right','pick_up','deliver','at_destination','front_is_clear'],
   learn:{t:'Вкладені цикли',x:'Цикл можна вкласти в інший цикл. Внутрішній повністю виконується на кожному повторі зовнішнього.',c:'for side in range(4):\n    for step in range(6):\n        ...\n    turn_right()'},
@@ -997,7 +1097,8 @@ const CROP={head:'-34 -56 68 56',eyes:'-22 -44 44 30',top:'-30 -76 60 50',move:'
 /* ================= ЗБЕРЕЖЕННЯ ================= */
 const $=id=>document.getElementById(id);
 const KEY='rc2-v1';
-const ST=(()=>{let d={};try{d=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}return Object.assign({done:{},code:{},speed:3,sound:true,hints:{},last:0},d)})();
+const ST=(()=>{let d={};try{d=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}return Object.assign({done:{},code:{},speed:2,sound:true,hints:{},last:0},d)})();
+if(![1,2,3].includes(ST.speed))ST.speed=ST.speed>3?3:2;
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}};
 let TEACH=false;try{TEACH=localStorage.getItem('itm-teacher')==='1'}catch(e){}
 const unlocked=i=>TEACH||i===0||!!ST.done[i]||!!ST.done[i-1];
@@ -1006,7 +1107,9 @@ if(ST.robot)ROBOT={...RDEF,...ST.robot};ST.owned=ST.owned||[];ST.spent=ST.spent|
 const gearsEarned=()=>Object.values(ST.done).reduce((a,d)=>a+(d.stars?20+5*d.stars:0),0);
 const gears=()=>Math.max(0,gearsEarned()-ST.spent);
 if(!ST.robot)Object.entries(ROBOT).forEach(([k,v])=>{if(PRICE[k+':'+v]&&!ST.owned.includes(k+':'+v))ST.owned.push(k+':'+v)});
-const owns=(k,v)=>!PRICE[k+':'+v]||ST.owned.includes(k+':'+v);
+/* деталі, відкриті в першій частині, доступні й тут */
+let V1OWN=[];try{const o=JSON.parse(localStorage.getItem('robot-courier-v1')||'{}');if(Array.isArray(o.owned))V1OWN=o.owned}catch(e){}
+const owns=(k,v)=>!PRICE[k+':'+v]||ST.owned.includes(k+':'+v)||V1OWN.includes(k+':'+v);
 const totalStars=()=>Object.values(ST.done).reduce((a,d)=>a+(d.stars||0),0);
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -1022,19 +1125,25 @@ const SND={ctx:null,on:ST.sound!==false,
   deliver(){[784,988,1319].forEach((f,i)=>this.tone(f,.14,'sine',.05,0,i*.07))},
   bump(){this.tone(160,.2,'square',.04,80)},err(){this.tone(300,.18,'sawtooth',.035,150)},
   win(){[523,659,784,1047].forEach((f,i)=>this.tone(f,.2,'triangle',.06,0,i*.11))},click(){this.tone(760,.03,'sine',.025)}};
-function setSnd(){$('bSnd').querySelector('use').setAttribute('href','#i-'+(SND.on?'snd':'mute'));$('bSnd').setAttribute('aria-checked',SND.on)}
-$('bSnd').onclick=()=>{SND.on=!SND.on;ST.sound=SND.on;save();setSnd();SND.click()};
+const sndBtn=$('snd');
+function setSnd(){sndBtn.innerHTML=SND.on?'<svg viewBox="0 0 24 24"><path class="ink" d="M3 9h4l5-4v14l-5-4H3z"/><path class="stk" style="stroke-width:2" d="M15 9a4 4 0 0 1 0 6M17.5 6.5a7.5 7.5 0 0 1 0 11"/></svg>':'<svg viewBox="0 0 24 24"><path class="ink" d="M3 9h4l5-4v14l-5-4H3z"/><path class="stk" style="stroke-width:2" d="M16 9l5 6M21 9l-5 6"/></svg>';
+  sndBtn.setAttribute('aria-pressed',String(SND.on));sndBtn.title=SND.on?'Звук увімкнено':'Звук вимкнено'}
+sndBtn.onclick=()=>{SND.on=!SND.on;ST.sound=SND.on;save();setSnd();SND.click()};
 
 /* ================= ПІДСВІТКА КОДУ ================= */
 const CMDS=['move_forward','turn_left','turn_right','pick_up','deliver'];
 const SENS=['front_is_clear','left_is_clear','right_is_clear','at_package','at_destination','has_package'];
 const BIS=['range','print','len','abs','min','max','str','int'];
 const KWS=['if','elif','else','while','for','in','def','return','pass','break','continue','and','or','not'];
+/* кольори категорій — ті самі, що в блоках першої частини */
+function tokCls(t){
+  if(t==='move_forward')return 't-mv';if(t==='turn_left'||t==='turn_right')return 't-turn';if(t==='pick_up'||t==='deliver')return 't-box';
+  if(['for','while','in','break','continue'].includes(t))return 't-loop';if(['if','elif','else','not','and','or'].includes(t))return 't-cond';return 't-fn'}
 const TOKRE=/(#.*$)|("[^"]*"?|'[^']*'?)|(\b\d+(?:\.\d+)?\b)|([A-Za-z_Ѐ-ӿ][A-Za-z0-9_Ѐ-ӿ]*)|([=<>!+\-*/%]+)/g;
 function hlLine(l){let out='',last=0,m,afterDef=false;TOKRE.lastIndex=0;
   while((m=TOKRE.exec(l))){out+=esc(l.slice(last,m.index));last=TOKRE.lastIndex;const t=m[0];let c='';
     if(m[1])c='t-com';else if(m[2])c='t-str';else if(m[3])c='t-num';else if(m[5])c='t-op';
-    else if(m[4]){if(afterDef){c='t-def';afterDef=false}else if(KWS.includes(t)){c='t-kw';if(t==='def')afterDef=true}else if(t==='True'||t==='False'||t==='None')c='t-bool';else if(CMDS.includes(t))c='t-cmd';else if(SENS.includes(t))c='t-sen';else if(BIS.includes(t))c='t-bi'}
+    else if(m[4]){if(afterDef){c='t-def';afterDef=false}else if(KWS.includes(t)){c=tokCls(t);if(t==='def')afterDef=true}else if(t==='True'||t==='False'||t==='None')c='t-bool';else if(CMDS.includes(t))c=tokCls(t);else if(SENS.includes(t))c='t-sen';else if(t==='range')c='t-loop';else if(BIS.includes(t))c='t-bi'}
     out+=c?`<span class="${c}">${esc(t)}</span>`:esc(t);if(!t)TOKRE.lastIndex++}
   return out+esc(l.slice(last));}
 
@@ -1045,7 +1154,7 @@ function edRender(){
   const lines=src.value.split('\n');
   hl.innerHTML=lines.map((l,i)=>`<span class="l${ED.exec===i+1?' x':''}${ED.err===i+1?' e':''}">${hlLine(l)||' '}</span>`).join('');
   gut.innerHTML=lines.map((_,i)=>`<div class="${ED.exec===i+1?'x':''}${ED.err===i+1?' e':''}">${i+1}</div>`).join('')+'<div></div><div></div>';
-  const n=codeLines(src.value);$('lc').textContent=n+' '+plural(n,'рядок','рядки','рядків')+' коду';
+  updCnt();
   syncScroll();
 }
 function syncScroll(){hl.scrollTop=src.scrollTop;hl.scrollLeft=src.scrollLeft;gut.scrollTop=src.scrollTop}
@@ -1078,7 +1187,7 @@ src.addEventListener('keydown',e=>{
     if(before.length&&/^ +$/.test(before)){e.preventDefault();const n=before.length%4||4;ins('',p-n,p)}}
 });
 $('bClear').onclick=()=>{if(src.readOnly)return;if(src.value.trim()&&!confirmClear())return;src.focus();src.select();ins('# '+LEVELS[CUR].title+'\n')};
-let clearArm=0;function confirmClear(){if(Date.now()-clearArm<2500)return true;clearArm=Date.now();$('bClear').textContent='Точно?';setTimeout(()=>$('bClear').textContent='Очистити',2500);return false}
+let clearArm=0;function confirmClear(){if(Date.now()-clearArm<2500)return true;clearArm=Date.now();$('bClearT').textContent='Точно?';setTimeout(()=>$('bClearT').textContent='Очистити',2500);return false}
 /* автодоповнення */
 const AC={open:false,items:[],i:0,word:'',el:null};
 let CW=8.7;function measure(){const s=document.createElement('span');s.textContent='x'.repeat(40);s.style.cssText='position:absolute;visibility:hidden;white-space:pre';hl.appendChild(s);CW=s.getBoundingClientRect().width/40;s.remove()}
@@ -1110,71 +1219,82 @@ src.addEventListener('click',acHide);
 function snip(t){if(src.readOnly)return;const c=t.indexOf('|');const txt=t.replace('|','');const p=src.selectionStart,ls=lineStart(p),cur=src.value.slice(ls,lineEnd(p));
   let pre='';if(cur.trim()&&p===lineEnd(p)){const ind=cur.match(/^ */)[0].length+(/:\s*$/.test(cur)?4:0);pre='\n'+' '.repeat(ind)}
   ins(pre+txt);if(c>=0){const e=src.selectionStart-(txt.length-c);src.setSelectionRange(e,e)}}
-function renderKeys(){
-  const L=LEVELS[CUR],s=L.sec,ks=[];
-  L.cmds.forEach(c=>ks.push([c+'()',SENS.includes(c)?'s':'',c+'()']));
-  if(s>=3||CUR>=5)ks.push(['for … range','k','for i in range(|):']);
-  if(s>=4)ks.push(['while','k','while |:']);
-  if(s>=5){ks.push(['if','k','if |:']);ks.push(['else','k','else:'])}
-  if(CUR>=12)ks.push(['elif','k','elif |:']);
-  if(s>=4)ks.push(['not','k','not ']);
-  if(s>=6)ks.push(['def','k','def |():']);
-  ks.push(['⇥ Tab','u','TAB'],['⇤','u','UNTAB']);
-  $('keys').innerHTML=ks.map(([l,c,t],i)=>`<button type="button" class="${c}" data-k="${i}">${esc(l)}</button>`).join('');
-  $('keys').onmousedown=e=>e.preventDefault();
-  $('keys').onclick=e=>{const b=e.target.closest('[data-k]');if(!b)return;const t=ks[+b.dataset.k][2];
-    if(t==='TAB'){if(!src.readOnly){const col=src.selectionStart-lineStart(src.selectionStart);ins(' '.repeat(4-col%4))}}
-    else if(t==='UNTAB'){if(!src.readOnly)mapLines(l=>l.replace(/^ {1,4}/,''))}
-    else snip(t)};
+/* палітра команд: ті самі категорії й кольори блоків, що в першій частині */
+const ICO={move_forward:'i-fwd',turn_left:'i-left',turn_right:'i-right',pick_up:'i-pkg',deliver:'i-pkg'};
+const PCATS=[
+ {n:'Рух',k:'mv',from:1,items:L=>L.cmds.filter(c=>['move_forward','turn_left','turn_right'].includes(c)).map(c=>[c+'()',c==='move_forward'?'mv':'turn',ICO[c],c+'()']).concat(L.sec>=2&&L.cmds.includes('move_forward')?[['move_forward(n)','mv','i-fwd','move_forward(|)']]:[])},
+ {n:'Посилки',k:'box',from:1,items:L=>L.cmds.filter(c=>c==='pick_up'||c==='deliver').map(c=>[c+'()','box','i-pkg',c+'()'])},
+ {n:'Датчики',k:'sens',from:4,items:L=>L.cmds.filter(c=>SENS.includes(c)).map(c=>[c+'()','sens','i-eye',c+'()'])},
+ {n:'Цикли',k:'loop',from:3,items:L=>[['for … range','loop','i-rep','for i in range(|):']].concat(L.sec>=4?[['while …','loop','i-while','while |:']]:[]),c:true},
+ {n:'Умови',k:'cond',from:4,items:L=>(L.sec>=5?[['if …','cond','i-if','if |:'],['else','cond','i-if','else:']]:[]).concat(CUR>=12?[['elif …','cond','i-if','elif |:']]:[]).concat([['not','cond','i-if','not ']])},
+ {n:'Функції',k:'fn',from:6,items:L=>[['def …','fn','i-fn','def |():']]}
+];
+let PITEMS=[];
+function renderPalette(){
+  const L=LEVELS[CUR];PITEMS=[];
+  $('palette').innerHTML=PCATS.map(c=>{
+    const h=`<h4><i style="background:var(--${c.k==='mv'?'move':c.k})"></i>${c.n}</h4>`;
+    const its=L.sec>=c.from?c.items(L):[];
+    if(!its.length){const s=SECS.find(s=>s.n===c.from);return `<div class="cat locked">${h}<div class="lockn"><svg viewBox="0 0 24 24"><use href="#i-lock"/></svg>Відкриється в розділі «${esc(s?s.t:'')}»</div></div>`}
+    return `<div class="cat">${h}<div class="pbl">${its.map(([lbl,k,ic,t])=>{const i=PITEMS.push(t)-1;
+      return `<button type="button" class="blk k-${k}" data-p="${i}" title="Натисни — вставиться в код"><span class="bh"><span class="ico"><svg viewBox="0 0 24 24"><use href="#${ic}"/></svg></span><code>${esc(lbl)}</code></span></button>`}).join('')}</div></div>`;
+  }).join('');
 }
+$('palette').onmousedown=e=>{if(e.target.closest('[data-p]'))e.preventDefault()};
+$('palette').onclick=e=>{const b=e.target.closest('[data-p]');if(!b)return;snip(PITEMS[+b.dataset.p]);SND.click()};
+$('bTab').onmousedown=$('bUntab').onmousedown=e=>e.preventDefault();
+$('bTab').onclick=()=>{if(!src.readOnly){const col=src.selectionStart-lineStart(src.selectionStart);ins(' '.repeat(4-col%4))}};
+$('bUntab').onclick=()=>{if(!src.readOnly)mapLines(l=>l.replace(/^ {1,4}/,''))};
+$('bUndo').onclick=()=>{if(src.readOnly)return;src.focus();try{document.execCommand('undo')}catch(e){}onInput()};
 
 /* ================= СВІТ ================= */
 const TS=64;
 const hsh=(x,y,k=0)=>{let h=(x*73856093)^(y*19349663)^(k*83492791);h=(h^(h>>>13))*1274126177;return ((h^(h>>>16))>>>0)/4294967296};
-function defs(p){return `<defs>
- <linearGradient id="${p}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2e3a74"/><stop offset="1" stop-color="#1c2452"/></linearGradient>
- <linearGradient id="${p}b2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#33306e"/><stop offset="1" stop-color="#211f4c"/></linearGradient>
- <radialGradient id="${p}t" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#46d6a4"/><stop offset="1" stop-color="#16705a"/></radialGradient>
- <linearGradient id="${p}p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd08a"/><stop offset="1" stop-color="#f0953e"/></linearGradient>
- <filter id="${p}g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
- <filter id="${p}s" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#000" flood-opacity=".45"/></filter></defs>`}
+function defs(){return ''}
+const ROOFS=['#d98a7d','#a998d8','#86b4d8','#d8bd62'];
+function houseTile(x,y){const X=x*TS,Y=y*TS,r=hsh(x,y),roof=ROOFS[Math.floor(hsh(x,y,7)*4)],w1=hsh(x,y,1)>.45?'#f6d98a':'#59627a',w2=hsh(x,y,2)>.5?'#f6d98a':'#59627a';
+  return `<g filter="url(#paper)"><rect x="${X+40}" y="${Y+9}" width="7" height="13" fill="#8d889e"/><path d="M${X+8} ${Y+32}L${X+32} ${Y+10}L${X+56} ${Y+32}z" fill="${roof}"/><rect x="${X+14}" y="${Y+30}" width="36" height="26" rx="2" fill="#ddd6c6"/><rect x="${X+27}" y="${Y+39}" width="10" height="17" rx="2" fill="${shade(roof,-.2)}"/><rect x="${X+18}" y="${Y+35}" width="6" height="6" rx="1" fill="${w1}"/><rect x="${X+40}" y="${Y+35}" width="6" height="6" rx="1" fill="${w2}"/></g>`}
+function treeTile(x,y){const X=x*TS,Y=y*TS,m=32;
+  if(hsh(x,y,3)<.5)return `<g filter="url(#paper)"><circle cx="${X+m}" cy="${Y+m+2}" r="24" fill="#4c8460"/><circle cx="${X+m-7}" cy="${Y+m-4}" r="15" fill="#5f9a70"/><circle cx="${X+m+8}" cy="${Y+m+5}" r="12" fill="#558f68"/><circle cx="${X+m-9}" cy="${Y+m-8}" r="5" fill="#7db58c"/>${hsh(x,y,4)<.5?`<circle cx="${X+m+9}" cy="${Y+m-6}" r="3.2" fill="#d98a7d"/><circle cx="${X+m-2}" cy="${Y+m+11}" r="3.2" fill="#d98a7d"/>`:''}</g>`;
+  return `<g filter="url(#paper)"><rect x="${X+6}" y="${Y+7}" width="52" height="50" rx="16" fill="#5a9069"/><circle cx="${X+20}" cy="${Y+23}" r="8" fill="#4e8360"/><circle cx="${X+40}" cy="${Y+37}" r="9" fill="#4e8360"/><circle cx="${X+42}" cy="${Y+19}" r="3" fill="#a998d8"/><circle cx="${X+19}" cy="${Y+42}" r="3" fill="#a998d8"/></g>`}
 function groundSVG(W,H,ch,p,base){
-  let s=`<rect x="-8" y="-8" width="${W*TS+16}" height="${H*TS+16}" rx="18" fill="#0d132e"/>`;
-  const road=(x,y)=>!('#T~'.includes(ch(x,y)));
+  let s=`<rect x="-10" y="-10" width="${W*TS+20}" height="${H*TS+20}" rx="18" fill="#26332c"/><rect x="-4" y="-4" width="${W*TS+8}" height="${H*TS+8}" rx="14" fill="#2f4036"/>`;
+  const road=(x,y)=>x>=0&&y>=0&&x<W&&y<H&&!('#T~'.includes(ch(x,y)));
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){const c=ch(x,y),X=x*TS,Y=y*TS;
-    if(c==='#'){const g=hsh(x,y)>.55?'b2':'b';s+=`<rect x="${X+5}" y="${Y+5}" width="54" height="54" rx="11" fill="url(#${p+g})" filter="url(#${p}s)"/><rect x="${X+5}" y="${Y+5}" width="54" height="9" rx="6" fill="#fff" opacity=".07"/>`;
-      for(let j=0;j<2;j++)for(let i=0;i<3;i++){const r=hsh(x,y,i+j*3);s+=`<rect x="${X+14+i*14}" y="${Y+24+j*14}" width="8" height="6" rx="1.5" fill="${r>.72?'#ffd27a':r>.55?'#4fd8ff':'#2a3466'}" opacity="${r>.55?.8:1}"/>`}}
-    else if(c==='T'){s+=`<rect x="${X+3}" y="${Y+3}" width="58" height="58" rx="14" fill="#10211f"/><circle cx="${X+32}" cy="${Y+33}" r="21" fill="url(#${p}t)" filter="url(#${p}s)"/><circle cx="${X+25}" cy="${Y+26}" r="7" fill="#fff" opacity=".13"/>`}
-    else if(c==='~'){s+=`<rect x="${X}" y="${Y}" width="64" height="64" fill="#103a5a"/>`}
-    else{s+=`<rect x="${X}" y="${Y}" width="64" height="64" fill="#182048"/>`;
-      if(road(x+1,y)&&x+1<W)s+=`<rect x="${X+44}" y="${Y+31}" width="16" height="2" rx="1" fill="#4fd8ff" opacity=".16"/>`;
-      if(road(x,y+1)&&y+1<H)s+=`<rect x="${X+31}" y="${Y+44}" width="2" height="16" rx="1" fill="#4fd8ff" opacity=".16"/>`;
-      s+=`<circle cx="${X+32}" cy="${Y+32}" r="2" fill="#4fd8ff" opacity=".22"/>`;
-      if(c==='C')s+=`<path d="M${X+32} ${Y+14}l13 34h-26z" fill="#ff9a4a"/><path d="M${X+25} ${Y+34}h14" stroke="#fff" stroke-width="4"/><rect x="${X+16}" y="${Y+46}" width="32" height="6" rx="3" fill="#c76a2a"/>`}
-  }
-  if(base){const cx=base.x*TS+32,cy=base.y*TS+32,h=[...Array(6)].map((_,i)=>{const a=Math.PI/3*i+Math.PI/6;return `${(cx+26*Math.cos(a)).toFixed(1)},${(cy+26*Math.sin(a)).toFixed(1)}`}).join(' ');
-    s+=`<polygon points="${h}" fill="rgba(154,136,255,.12)" stroke="#9a88ff" stroke-width="2.5" stroke-linejoin="round"/>`}
+    if(!road(x,y)&&c!=='~'&&(x+y)%2)s+=`<rect x="${X}" y="${Y}" width="64" height="64" fill="#34473b" opacity=".7"/>`;
+    if(c==='~')s+=`<rect x="${X}" y="${Y}" width="64" height="64" fill="#2f5168"/><path d="M${X+12} ${Y+24}q6 -5 12 0t12 0M${X+24} ${Y+42}q6 -5 12 0t12 0" stroke="#4f7a96" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    else if(road(x,y)){s+=`<rect x="${X+2}" y="${Y+2}" width="60" height="60" rx="10" fill="#3b3f49"/>`;
+      if(road(x+1,y))s+=`<rect x="${X+50}" y="${Y+2}" width="16" height="60" fill="#3b3f49"/>`;
+      if(road(x,y+1))s+=`<rect x="${X+2}" y="${Y+50}" width="60" height="16" fill="#3b3f49"/>`}}
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const X=x*TS+32,Y=y*TS+32;if(!road(x,y))continue;
+    if(road(x+1,y))s+=`<path d="M${X} ${Y}h64" stroke="#b8976e" stroke-width="3" stroke-dasharray="3 10" stroke-linecap="round" opacity=".5"/>`;
+    if(road(x,y+1))s+=`<path d="M${X} ${Y}v64" stroke="#b8976e" stroke-width="3" stroke-dasharray="3 10" stroke-linecap="round" opacity=".5"/>`}
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const c=ch(x,y),X=x*TS,Y=y*TS;
+    if(c==='#')s+=houseTile(x,y);
+    else if(c==='T')s+=treeTile(x,y);
+    else if(c==='C')s+=`<g filter="url(#paper)"><path d="M${X+32} ${Y+14}l13 34h-26z" fill="#f0a36f"/><path d="M${X+26} ${Y+33}h12" stroke="#f3eee2" stroke-width="4"/><rect x="${X+16}" y="${Y+46}" width="32" height="6" rx="3" fill="#c0784a"/></g>`}
+  if(base)s+=`<rect x="${base.x*TS+7}" y="${base.y*TS+7}" width="50" height="50" rx="12" fill="rgba(246,225,156,.1)" stroke="#b8a46c" stroke-width="2" stroke-dasharray="5 5"/>`;
   return s;
 }
-function objsSVG(w,p){let s='';
+const boxSVG=(n)=>`${n>1?`<rect x="-12" y="-20" width="24" height="16" rx="3" fill="#d9ae62"/>`:''}<rect x="-14" y="-12" width="28" height="23" rx="3" fill="#e9c27a"/><rect x="-3" y="-12" width="6" height="23" fill="#c99b4f"/><rect x="-14" y="-12" width="28" height="5" rx="2" fill="#d9ae62"/>`;
+function objsSVG(w){let s='';
   for(const [k,d] of Object.entries(w.dest)){const [x,y]=k.split(',').map(Number),cx=x*TS+32,cy=y*TS+32,ok=d.got>=d.need;
-    s+=`<g transform="translate(${cx} ${cy})"><circle r="25" fill="${ok?'rgba(63,224,166,.14)':'rgba(79,216,255,.09)'}" stroke="${ok?'#3fe0a6':'#4fd8ff'}" stroke-width="2.5" ${ok?'':'stroke-dasharray="6 5"'} filter="url(#${p}g)"/>`+
-      (ok?`<path d="M-9 0l6 6 12-13" stroke="#3fe0a6" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`:`<path d="M-11 2l11-10 11 10v10h-22z" fill="none" stroke="#4fd8ff" stroke-width="3" stroke-linejoin="round"/><rect x="-3" y="5" width="6" height="7" rx="1" fill="#4fd8ff"/>`)+
-      (d.need>1?`<g transform="translate(19 -19)"><rect x="-15" y="-10" width="30" height="20" rx="10" fill="#0d132e" stroke="${ok?'#3fe0a6':'#4fd8ff'}" stroke-width="1.6"/><text text-anchor="middle" y="4.5" font-family="JetBrains Mono,monospace" font-weight="700" font-size="12" fill="#e9edff">${d.got}/${d.need}</text></g>`:'')+`</g>`}
+    s+=`<g transform="translate(${cx} ${cy})">`+(ok?`<circle r="24" fill="rgba(134,214,168,.16)" stroke="#86d6a8" stroke-width="2.5"/><g transform="translate(-4 4) scale(.7)" filter="url(#paper)">${boxSVG(1)}</g><circle cx="12" cy="-10" r="10" fill="#3f9d6e"/><path d="M7.5 -10l3.5 3.5 6 -7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`
+      :`<circle r="24" fill="rgba(242,169,156,.12)" stroke="#f2a99c" stroke-width="2.5" stroke-dasharray="6 5"/><path d="M-11 1l11-10 11 10v11h-22z" fill="#f2a99c"/><rect x="-3.5" y="4" width="7" height="8" rx="1" fill="#3b3f49"/>`)+
+      (d.need>1?`<g transform="translate(19 -19)"><rect x="-15" y="-10" width="30" height="20" rx="10" fill="#1b1d23" stroke="${ok?'#86d6a8':'#f2a99c'}" stroke-width="1.6"/><text text-anchor="middle" y="4.5" font-family="Rubik,sans-serif" font-weight="800" font-size="12" fill="#e6e7ef">${d.got}/${d.need}</text></g>`:'')+`</g>`}
   for(const [k,n] of Object.entries(w.pk)){if(!n)continue;const [x,y]=k.split(',').map(Number),cx=x*TS+32,cy=y*TS+36;
-    s+=`<g transform="translate(${cx} ${cy})" filter="url(#${p}s)">${n>1?`<rect x="-12" y="-20" width="24" height="18" rx="4" fill="url(#${p}p)" opacity=".75"/>`:''}<rect x="-14" y="-12" width="28" height="23" rx="5" fill="url(#${p}p)"/><rect x="-3" y="-12" width="6" height="23" fill="#b86a24" opacity=".55"/><rect x="-14" y="-12" width="28" height="6" rx="3" fill="#fff" opacity=".28"/>`+
-      (n>1?`<circle cx="16" cy="-16" r="10" fill="#ffb35c"/><text x="16" y="-11.5" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="800" font-size="13" fill="#2a1600">${n}</text>`:'')+`</g>`}
+    s+=`<g transform="translate(${cx} ${cy})"><g filter="url(#paper)">${boxSVG(n)}</g>`+
+      (n>1?`<circle cx="16" cy="-16" r="10" fill="#f4d77c"/><text x="16" y="-11.5" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="800" font-size="13" fill="#2b2635">${n}</text>`:'')+`</g>`}
   return s}
 const LOOK=[[0,-1],[1,0],[0,1],[-1,0]];
-function botSprite(d,carry){return `<g transform="translate(0 7) scale(.46)">${robotSVG({...ROBOT,box:carry?(ROBOT.box&&ROBOT.box!=='none'?ROBOT.box:'box'):'none'},LOOK[d])}</g>`}
+function botSprite(d,carry){return `<g transform="translate(0 7) scale(.46)" filter="url(#paper)">${robotSVG({...ROBOT,box:carry?(ROBOT.box&&ROBOT.box!=='none'?ROBOT.box:'box'):'none'},LOOK[d])}</g>`}
 const VIEW={w:null,rot:0,p:'w'};
 function drawWorld(w){
   VIEW.w=w;VIEW.rot=w.r.d*90;const W=w.W,H=w.H;
-  $('world').innerHTML=`<div class="msg" id="wmsg"></div><svg viewBox="-12 -12 ${W*TS+24} ${H*TS+24}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Карта міста з роботом">${defs('w')}
-    <g>${groundSVG(W,H,(x,y)=>w.ch(x,y),'w',w.base)}</g><polyline id="trail" fill="none" stroke="#4fd8ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".35" stroke-dasharray="2 9" points=""/>
+  $('world').innerHTML=`<div class="msg" id="wmsg"></div><svg viewBox="-12 -12 ${W*TS+24} ${H*TS+24}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Мапа міста з роботом">${defs('w')}
+    <g>${groundSVG(W,H,(x,y)=>w.ch(x,y),'w',w.base)}</g><polyline id="trail" fill="none" stroke="#f4d77c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".45" stroke-dasharray="2 10" points=""/>
     <g id="objs">${objsSVG(w,'w')}</g><g id="fx"></g>
-    <g id="bot" style="transform:translate(${w.r.x*TS+32}px,${w.r.y*TS+32}px)"><ellipse cx="0" cy="24" rx="20" ry="6" fill="#000" opacity=".35"/>
-      <g class="dir" style="transform:rotate(${VIEW.rot}deg)"><path d="M-8 -28l8 -7 8 7" stroke="#4fd8ff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#wg)"/></g>
+    <g id="bot" style="transform:translate(${w.r.x*TS+32}px,${w.r.y*TS+32}px)"><g class="dir" style="transform:rotate(${VIEW.rot}deg)"><path d="M-8 -27L0 -35L8 -27z" fill="#ee9384" stroke="#2a2d36" stroke-width="2.5" stroke-linejoin="round"/></g>
       <g id="spr">${botSprite(w.r.d,w.carry)}</g></g></svg>`;
   updTrail();updStats();
 }
@@ -1187,8 +1307,8 @@ async function animate(ev,d){
   const w=VIEW.w,bot=$('bot');if(!bot)return;
   if(ev.t==='move'){bot.style.transform=`translate(${ev.x*TS+32}px,${ev.y*TS+32}px)`;updTrail();SND.move()}
   else if(ev.t==='turn'){VIEW.rot+=ev.s*90;bot.querySelector('.dir').style.transform=`rotate(${VIEW.rot}deg)`;$('spr').innerHTML=botSprite(ev.d,w.carry);SND.turn()}
-  else if(ev.t==='pick'){$('objs').innerHTML=objsSVG(w,'w');$('spr').innerHTML=botSprite(w.r.d,w.carry);fxRing(ev.x,ev.y,'#ffb35c');SND.pick()}
-  else if(ev.t==='deliver'){$('objs').innerHTML=objsSVG(w,'w');$('spr').innerHTML=botSprite(w.r.d,w.carry);fxRing(ev.x,ev.y,'#3fe0a6');SND.deliver()}
+  else if(ev.t==='pick'){$('objs').innerHTML=objsSVG(w,'w');$('spr').innerHTML=botSprite(w.r.d,w.carry);fxRing(ev.x,ev.y,'#f4d77c');SND.pick()}
+  else if(ev.t==='deliver'){$('objs').innerHTML=objsSVG(w,'w');$('spr').innerHTML=botSprite(w.r.d,w.carry);fxRing(ev.x,ev.y,'#86d6a8');SND.deliver()}
   else if(ev.t==='bump'){const bx=(ev.x-w.r.x)*14,by=(ev.y-w.r.y)*14,base=`translate(${w.r.x*TS+32}px,${w.r.y*TS+32}px)`;
     bot.style.transform=`translate(${w.r.x*TS+32+bx}px,${w.r.y*TS+32+by}px)`;SND.bump();await sleep(Math.max(120,d*.5));bot.style.transform=base}
   updStats();await sleep(d);
@@ -1211,19 +1331,18 @@ function showVars(){$('vars').innerHTML=[...VARS].slice(-5).map(([k,v])=>`${esc(
 
 /* ================= ВИКОНАННЯ ================= */
 const RUN={tok:0,state:'idle',paused:false,step:false,wake:null,view:0};
-const DUR=[0,700,450,280,150,60];
+const DUR=[0,560,300,130];
 const dur=()=>DUR[ST.speed]||280;
 function waitWake(){return new Promise(r=>RUN.wake=r)}
 function wakeUp(){const r=RUN.wake;RUN.wake=null;if(r)r()}
 function setBtns(){const s=RUN.state;
   $('bRun').disabled=s==='running';$('bPause').disabled=s!=='running';$('bStep').disabled=s==='running';
-  $('bRun').querySelector('.lbl').textContent=s==='paused'||s==='stepping'?'Далі':'Запуск';
-  src.readOnly=s!=='idle';document.querySelectorAll('#mapTabs button').forEach(b=>b.disabled=s!=='idle')}
+    src.readOnly=s!=='idle';document.querySelectorAll('#mapTabs button').forEach(b=>b.disabled=s!=='idle')}
 function setExec(n){ED.exec=n;edRender();if(n)scrollToLine(n)}
 function showMap(i){RUN.view=i;const L=LEVELS[CUR];drawWorld(new World(L.maps[i],L));setDur(dur());renderTabs()}
 const TABST={};
 function renderTabs(){const L=LEVELS[CUR],el=$('mapTabs');if(L.maps.length<2){el.innerHTML='';return}
-  el.innerHTML=L.maps.map((_,i)=>`<button type="button" data-m="${i}" class="${i===RUN.view?'on':''} ${TABST[i]||''}">${TABST[i]==='ok'?'✓ ':TABST[i]==='bad'?'✕ ':''}Карта ${i+1}</button>`).join('');
+  el.innerHTML=L.maps.map((_,i)=>`<button type="button" data-m="${i}" aria-pressed="${i===RUN.view}">Мапа ${i+1}${TABST[i]==='ok'?' ✓':TABST[i]==='bad'?' ✗':''}</button>`).join('');
   el.onclick=e=>{const b=e.target.closest('[data-m]');if(!b||RUN.state!=='idle')return;showMap(+b.dataset.m)}}
 async function start(mode){
   SND.tone(1,.001,'sine',.0001);
@@ -1238,7 +1357,7 @@ async function start(mode){
   let energy=0;
   for(let mi=from;mi<to;mi++){
     showMap(mi);const w=VIEW.w;const g=makeRunner(ast,w);
-    if(L.maps.length>1)wmsg('Карта '+(mi+1),900);
+    if(L.maps.length>1)wmsg('Мапа '+(mi+1),900);
     try{
       for(;;){
         if(RUN.paused){setBtns();await waitWake()}
@@ -1252,19 +1371,20 @@ async function start(mode){
       }
     }catch(e){if(tok!==RUN.tok)return;if(e instanceof PyErr){TABST[mi]='bad';renderTabs();showErr(e);if(e.kind==='robot')wmsg('Аварія!');finish();return}console.error(e);msg('err','Внутрішня помилка: '+esc(e.message));finish();return}
     if(!w.done()){TABST[mi]='bad';renderTabs();const n=w.left();
-      showErr(new PyErr('goal',`Програма закінчилась, а ${plural(n,'залишилась','залишились','залишилось')} ${n} ${plural(n,'недоставлена посилка','недоставлені посилки','недоставлених посилок')}${L.maps.length>1?' на карті '+(mi+1):''}.`,0,w.carry?'Робот везе посилку — може, бракує deliver() у кінці?':'Перевір план місії: де робот зупинився і чому?'));finish();return}
+      showErr(new PyErr('goal',`Програма закінчилась, а ${plural(n,'залишилась','залишились','залишилось')} ${n} ${plural(n,'недоставлена посилка','недоставлені посилки','недоставлених посилок')}${L.maps.length>1?' на мапі '+(mi+1):''}.`,0,w.carry?'Робот везе посилку — може, бракує deliver() у кінці?':'Перевір план місії: де робот зупинився і чому?'));finish();return}
     TABST[mi]='ok';renderTabs();energy+=w.energy;
-    if(mi<to-1){wmsg('Карта '+(mi+1)+' ✓',800);SND.pick();await sleep(Math.max(500,dur()*2));if(tok!==RUN.tok)return}
+    if(mi<to-1){wmsg('Мапа '+(mi+1)+' ✓',800);SND.pick();await sleep(Math.max(500,dur()*2));if(tok!==RUN.tok)return}
   }
   setExec(0);
-  if(!all){msg('ok',`Карта ${RUN.view+1} пройдена. Щоб зарахувати місію, запусти всі карти кнопкою «Запуск».`);finish();return}
+  if(!all){msg('ok',`Мапа ${RUN.view+1} пройдена. Щоб зарахувати місію, запусти всі мапи кнопкою «Старт».`);finish();return}
   complete(ast,energy);finish();
 }
 function finish(){RUN.state='idle';RUN.paused=false;setBtns()}
-function pause(){if(RUN.state!=='running')return;RUN.paused=true;RUN.state='paused';setBtns();msg('info','Пауза. «Далі» — продовжити, «Крок» — по рядку.')}
+function pause(){if(RUN.state!=='running')return;RUN.paused=true;RUN.state='paused';setBtns();msg('info','Пауза. «Старт» — продовжити, «Крок» — по одному рядку.')}
 function reset(){RUN.tok++;RUN.paused=false;wakeUp();RUN.state='idle';ED.exec=0;ED.err=0;edRender();setBtns();showMap(RUN.view)}
 $('bRun').onclick=()=>start('run');$('bStep').onclick=()=>start('step');$('bPause').onclick=pause;$('bReset').onclick=reset;
-$('speed').value=ST.speed;$('speed').oninput=e=>{ST.speed=+e.target.value;save();setDur(dur())};
+function drawSpeed(){$('speedSeg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.s===ST.speed)))}
+$('speedSeg').onclick=e=>{const b=e.target.closest('[data-s]');if(!b)return;ST.speed=+b.dataset.s;save();drawSpeed();setDur(dur());SND.click()};
 
 /* ================= ВИМОГИ І ЗІРКИ ================= */
 function reqList(L){return L.req.map(r=>Array.isArray(r)?{label:'Не більше '+r[1]+' '+plural(r[1],'рядка','рядків','рядків')+' коду',test:(A,n)=>n<=r[1]}:{label:RQ[r][0],test:A=>RQ[r][1](A)})}
@@ -1275,101 +1395,141 @@ function complete(ast,energy){
   const L=LEVELS[CUR],code=src.value,r=evalReqs(L,code),bad=r.filter(q=>!q.ok);RUN.tried=true;updReqs();
   if(bad.length){msg('err',`<b>Робот впорався, але місію не зараховано</b><br>Не виконано вимогу: ${bad.map(q=>'«'+esc(q.label)+'»').join(', ')}.<span class="hl">Вимоги — частина завдання: вони тренують нову тему.</span>`);SND.err();return}
   const lines=codeLines(code),lOK=lines<=L.goals.lines,eOK=energy<=L.goals.energy,stars=1+(lOK?1:0)+(eOK?1:0);
-  const prev=ST.done[CUR]||{};ST.done[CUR]={stars:Math.max(prev.stars||0,stars),lines:Math.min(prev.lines||99,lines),energy:Math.min(prev.energy||9999,energy)};save();
+  const g0=gearsEarned(),prev=ST.done[CUR]||{};ST.done[CUR]={stars:Math.max(prev.stars||0,stars),lines:Math.min(prev.lines||99,lines),energy:Math.min(prev.energy||9999,energy)};save();
+  const gain=gearsEarned()-g0;updGears();if(gain){const gp=$('gearPill');gp.classList.remove('spin');void gp.offsetWidth;gp.classList.add('spin')}
   msg('ok',`<b>Місію виконано!</b> ${'★'.repeat(stars)}${'☆'.repeat(3-stars)} · ${lines} ${plural(lines,'рядок','рядки','рядків')} · енергія ${energy}`);
-  SND.win();setTimeout(()=>showWin(stars,lines,energy,lOK,eOK),450);
+  SND.win();setTimeout(()=>showWin(stars,lines,energy,lOK,eOK,gain),450);
 }
-const STAR='<svg viewBox="0 0 24 24"><path d="M12 2.6l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg>';
-function showWin(stars,lines,energy,lOK,eOK){
+/* ================= ШЕСТЕРНІ ================= */
+const gw=g=>plural(g,'шестерня','шестерні','шестерень');
+function updGears(){const g=gears();$('gearN').textContent=g;$('crGears').textContent=g;$('chipGears').textContent=`${g} ${gw(g)}`}
+const starSvg=(on,d=0)=>`<svg viewBox="0 0 24 24" class="${on?'on':''}" style="fill:${on?'#f2b632':'var(--bg2)'};animation-delay:${d}s"><use href="#i-star"/></svg>`;
+
+/* ================= ПЕРЕМОГА ================= */
+function showWin(stars,lines,energy,lOK,eOK,gain){
   const L=LEVELS[CUR],last=CUR===LEVELS.length-1;
-  $('winBody').innerHTML=`<button class="x" data-close aria-label="Закрити"><svg class="ico"><use href="#i-x"/></svg></button>
-   <div class="stars">${[0,1,2].map(i=>STAR.replace('<svg',`<svg class="${i<stars?'on':''}"`)).join('')}</div>
-   <h2 style="padding:0">${last?'Усі місії пройдено!':'Місію виконано!'}</h2>
-   <p>${last?'Ти — справжній оператор роботів. Спробуй зібрати ★★★ у кожній місії.':stars===3?'Ідеально: коротко й економно.':'Можна покращити — спробуй ще раз.'}</p>
+  $('winBody').innerHTML=`<svg viewBox="-46 -76 92 134" style="width:84px;height:auto;display:block;margin:0 auto 6px;overflow:visible" filter="url(#paper)">${robotSVG(ROBOT)}</svg>
+   <h2 style="padding:0">${last?'Усі місії пройдено!':'Посилки доставлено!'}</h2>
+   <div class="stars">${[1,2,3].map(i=>starSvg(i<=stars,i*.15)).join('')}</div>
+   ${gain?`<p class="gain"><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg>+${gain} ${gw(gain)}</p>`:''}
+   <p>${stars===3?'Коротко й економно — ідеально!':'Можна покращити: скороти код або заощадь енергію.'}</p>
    <div class="wstats"><div><small>Рядків коду</small><b>${lines}</b><i class="${lOK?'y':'n'}">${lOK?'✓ ціль ≤ '+L.goals.lines:'ціль ≤ '+L.goals.lines+' для ★'}</i></div>
    <div><small>Енергія</small><b>${energy}</b><i class="${eOK?'y':'n'}">${eOK?'✓ ціль ≤ '+L.goals.energy:'ціль ≤ '+L.goals.energy+' для ★'}</i></div></div>
-   <div class="dacts">${last?'':`<button class="btn" data-close>Покращити</button><button class="btn pri" id="wNext">Наступна місія →</button>`}${last?'<button class="btn pri" id="wAll">До всіх місій</button>':''}</div>`;
+   <div class="dacts">${last?'<button class="btn main" id="wAll">До місій</button>':'<button class="btn main" id="wNext">Наступна місія</button>'}<button class="btn" id="wAgain">Ще раз</button></div>`;
   const d=$('dWin');d.showModal();
-  const n=$('wNext');if(n)n.onclick=()=>{d.close();openLevel(CUR+1)};const a=$('wAll');if(a)a.onclick=()=>{d.close();nav('#missions')};
+  const n=$('wNext');if(n)n.onclick=()=>{d.close();openLevel(CUR+1)};
+  const a=$('wAll');if(a)a.onclick=()=>{d.close();nav('#missions')};
+  $('wAgain').onclick=()=>{d.close();reset()};
 }
 
-/* ================= МІСІЯ: БРИФІНГ ================= */
+/* ================= БЛОКИ З ПЕРШОЇ ЧАСТИНИ ================= */
+const BLK={fwd:['Крок вперед','i-fwd'],left:['Поворот ліворуч','i-left'],right:['Поворот праворуч','i-right'],rep:['Повторити','i-rep'],while:['Поки не вдома','i-while'],if:['Якщо кущ','i-if']};
+function blkHTML(n,mini){const [l,ic]=BLK[n.t];const h=`<span class="bh"><span class="ico"><svg viewBox="0 0 24 24"><use href="#${ic}"/></svg></span>${l}${n.t==='rep'?' '+n.n:''}</span>`;
+  const mouth=list=>`<span class="mouth"><span class="arm"></span><span class="list">${list.map(x=>blkHTML(x)).join('')}</span></span>`;
+  if(n.body&&!mini)return `<span class="blk c k-${n.t}">${h}${mouth(n.body)}<span class="foot"></span></span>`;
+  if(n.then&&!mini)return `<span class="blk c k-${n.t}">${h}${mouth(n.then)}<span class="mid">інакше</span>${mouth(n.else)}<span class="foot"></span></span>`;
+  return `<span class="blk${mini?' mini':''} k-${n.t}">${h}</span>`}
+/* «так це виглядало блоками» — у місіях, де з'являється нова ідея */
+const WAS={
+ 0:{b:[{t:'fwd'}],py:'move_forward()'},
+ 1:{b:[{t:'left'},{t:'right'}],py:'turn_left()\nturn_right()'},
+ 3:{b:[{t:'rep',n:5,body:[{t:'fwd'}]}],py:'move_forward(5)'},
+ 5:{b:[{t:'rep',n:3,body:[{t:'fwd'},{t:'left'}]}],py:'for i in range(3):\n    move_forward()\n    turn_left()'},
+ 9:{b:[{t:'while',body:[{t:'fwd'}]}],py:'while not at_destination():\n    move_forward()'},
+ 10:{b:[{t:'if',then:[{t:'right'}],else:[{t:'fwd'}]}],py:'if not front_is_clear():\n    turn_right()\nelse:\n    move_forward()'}
+};
+const wasHTML=w=>`<div class="was"><small>Так це виглядало блоками</small><div style="display:flex;flex-direction:column;align-items:flex-start">${w.b.map(x=>blkHTML(x)).join('')}</div><span class="arr"><svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span><div class="snip">${w.py.split('\n').map(hlLine).join('\n')}</div></div>`;
+function renderHowto(){
+  const rows=[[{t:'fwd'},'move_forward()'],[{t:'left'},'turn_left()'],[{t:'right'},'turn_right()'],[{t:'rep',n:3},'for i in range(3):'],[{t:'while'},'while not at_destination():'],[{t:'if'},'if not front_is_clear():']];
+  $('howto').innerHTML=rows.map(([b,c])=>`<div>${blkHTML(b,true)}<span class="eq">=</span><code>${hlLine(c)}</code></div>`).join('')+`<div><span>Нові в 2.0:</span><code>${hlLine('pick_up()')}</code><code>${hlLine('deliver()')}</code></div>`;
+}
+
+/* ================= МІСІЯ: ЗАВДАННЯ ================= */
 function briefHTML(L,i){
-  const r=reqList(L);
-  return `<button class="x" data-close aria-label="Закрити"><svg class="ico"><use href="#i-x"/></svg></button>
-  <span class="kicker">Місія ${i+1}${L.maps.length>1?' · карт: '+L.maps.length:''}</span>
-  <h2>${esc(L.title)}</h2>
+  const r=reqList(L),sec=SECS.find(s=>s.n===L.sec);
+  return `<button class="close" type="button" data-close aria-label="Закрити">×</button>
+  <span class="pill">${esc(sec?sec.t:'')}${L.maps.length>1?' · мап: '+L.maps.length:''}</span>
+  <h2>${i+1}. ${esc(L.title)}</h2>
   <p class="task">${esc(L.task)}</p>
   ${r.length?`<div class="breq">${r.map(q=>`<span>${esc(q.label)}</span>`).join('')}</div>`:''}
-  <details class="more learn"><summary>Нове: ${esc(L.learn.t)}</summary><div>${esc(L.learn.x)}<div class="snip">${L.learn.c.split('\n').map(hlLine).join('\n')}</div></div></details>
-  <details class="more"><summary>План</summary><div><ol style="margin:0;padding-left:20px">${L.plan.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></div></details>
-  <details class="more"><summary>Історія і зірки</summary><div><p style="margin:0 0 10px">${esc(L.story)}</p><div class="goals3"><span><em>★</em> виконати</span><span><em>★</em> ≤ ${L.goals.lines} ${plural(L.goals.lines,'рядка','рядків','рядків')}</span><span><em>★</em> енергія ≤ ${L.goals.energy}</span></div></div></details>
-  <div class="dacts"><button class="btn pri" data-close>До коду →</button></div>`}
-function openBrief(){const L=LEVELS[CUR];$('briefBody').innerHTML=briefHTML(L,CUR);$('dBrief').showModal()}
-$('bBrief').onclick=openBrief;
+  ${WAS[i]?wasHTML(WAS[i]):''}
+  <details${WAS[i]?'':' open'}><summary>Нове: ${esc(L.learn.t)}</summary><div><p>${esc(L.learn.x)}</p><div class="snip">${L.learn.c.split('\n').map(hlLine).join('\n')}</div></div></details>
+  <details><summary>План</summary><div><ol>${L.plan.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></div></details>
+  <details><summary>Історія і зірки</summary><div><p>${esc(L.story)}</p><div class="goals3"><span><em>★</em> виконати</span><span><em>★</em> ≤ ${L.goals.lines} ${plural(L.goals.lines,'рядка','рядків','рядків')}</span><span><em>★</em> енергія ≤ ${L.goals.energy}</span></div></div></details>
+  <div class="dacts"><button class="btn main" data-close><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Почати</button></div>`}
+function openBrief(){if(CUR==null)return;$('briefBody').innerHTML=briefHTML(LEVELS[CUR],CUR);$('dBrief').showModal()}
+$('lvName').onclick=openBrief;
 $('bHint').onclick=()=>{const L=LEVELS[CUR],k=ST.hints[CUR]||0;
   if(k<L.hints.length){msg('hint',`<b>Підказка ${k+1} з ${L.hints.length}</b><br>${esc(L.hints[k])}`);ST.hints[CUR]=k+1;save()}
-  else msg('hint','Підказки закінчились. Запусти програму покроково (⏭ «Крок») і стеж, де робот збивається з плану.');SND.click()};
+  else msg('hint','Підказки закінчились. Запусти програму покроково (кнопка «Крок») і стеж, де робот збивається з плану.');SND.click()};
 document.addEventListener('click',e=>{if(e.target.closest('[data-close]')){const d=e.target.closest('dialog');if(d)d.close()}});
 document.querySelectorAll('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d)d.close()}));
-$('bInfo').onclick=()=>{$('refBox').open=false;$('dInfo').showModal()};
+$('infoBtn').onclick=()=>{$('ctlBotSvg').innerHTML=robotSVG(ROBOT);drawSpeed();$('refBox').open=false;$('dInfo').showModal()};
+$('ctlBot').onclick=()=>{$('dInfo').close();openCreator()};
 
 /* ================= ЕКРАНИ ================= */
-let CUR=null;
-const SCR=['home','missions','garage','game'];
-function show(id){if(RUN.state!=='idle')reset();SCR.forEach(k=>$(k).hidden=k!==id);if(id!=='game')CUR=null;
-  $('bMissions').classList.toggle('on',id==='missions');$('bGarage').classList.toggle('on',id==='garage');
-  if(id!=='game')$('crumb').innerHTML='';window.scrollTo(0,0)}
+let CUR=null,SCRN='start';
+function show(id){if(RUN.state!=='idle')reset();document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+id));SCRN=id;if(id!=='play')CUR=null;window.scrollTo(0,0)}
 function nav(hash,push=true){if(push&&location.hash!==hash)history.pushState(null,'',hash||location.pathname+location.search);route()}
+function updCnt(){if(CUR==null)return;const n=codeLines(src.value);$('cnt').textContent=`Рядків: ${n} · ціль: ${LEVELS[CUR].goals.lines}`}
 function openLevel(i,push=true){
   if(i<0||i>=LEVELS.length||!unlocked(i))return;
-  if(push){history.pushState(null,'','#m'+(i+1))}
-  show('game');CUR=i;ST.last=i;save();const L=LEVELS[i];
-  $('crumb').innerHTML=`<span>Місія ${i+1} · ${esc(L.title)}</span>`;
-  $('gTag').textContent=L.tag;$('gTitle').textContent=L.title;
+  if(push)history.pushState(null,'','#m'+(i+1));
+  show('play');CUR=i;ST.last=i;save();const L=LEVELS[i];
+  $('lvTitle').textContent=`${i+1}. ${L.title}`;
   for(const k in TABST)delete TABST[k];RUN.tried=false;RUN.view=0;
   src.value=ST.code[i]!=null?ST.code[i]:`# ${L.title}\n`;ED.exec=0;ED.err=0;edRender();src.scrollTop=0;
   clearMsgs();if(ST.done[i])msg('ok',`Виконано: ${'★'.repeat(ST.done[i].stars)}`);
-  renderKeys();updReqs();showMap(0);setBtns();openBrief();
+  renderPalette();updReqs();updCnt();showMap(0);setBtns();setTimeout(()=>{if(SCRN==='play'&&!document.querySelector('dialog[open]'))openBrief()},60);
 }
-function goHome(toList){nav(toList?'#missions':'')}
-$('brand').onclick=e=>{e.preventDefault();nav('')};
-$('bMissions').onclick=()=>nav('#missions');$('bAll').onclick=()=>nav('#missions');
-$('bGarage').onclick=()=>nav('#robot');$('bBot').onclick=()=>nav('#robot');
-$('bContinue').onclick=()=>openLevel(nextLevel());
+$('home').onclick=()=>nav('');
+$('bPlay').onclick=()=>openLevel(nextLevel());
+$('bLevels').onclick=()=>nav('#missions');
 function nextLevel(){for(let i=0;i<LEVELS.length;i++)if(!ST.done[i]&&unlocked(i))return i;return Math.min(ST.last||0,LEVELS.length-1)}
 function renderHome(){
-  const ts=totalStars(),max=LEVELS.length*3,nx=nextLevel(),anyDone=Object.keys(ST.done).length>0;
-  $('progBar').style.width=(ts/max*100)+'%';$('progTxt').textContent=`★ ${ts} / ${max}`;
-  $('contLbl').textContent=anyDone?`Місія ${nx+1}`:'Почати';$('heroArt').innerHTML=heroArt();
+  updGears();const ts=totalStars(),max=LEVELS.length*3;
+  $('chipStars').textContent=`${ts} з ${max} зірок`;
+  $('bPlayT').textContent=Object.keys(ST.done).length?'Продовжити':'Грати';
+  $('heroArt').innerHTML=heroArt();
 }
+const SECSUB={1:'Команди виконуються рядок за рядком, згори донизу.',2:'Число в дужках і змінні замість однакових рядків.',3:'Цикл for повторює блок коду задану кількість разів.',4:'Цикл while повторює, поки умова істинна.',5:'Робот сам вирішує, що робити, за датчиками.',6:'Власні команди з def.',7:'Усе разом — коротко й економно.'};
+const SECCOL={1:'move',2:'turn',3:'loop',4:'loop',5:'cond',6:'fn',7:'box'};
 function renderMissions(){const nx=nextLevel();
-  $('mlist').innerHTML=SECS.map(s=>{const ls=LEVELS.map((L,i)=>[L,i]).filter(([L])=>L.sec===s.n);
-    return `<div class="msec"><h3><i style="background:var(--${s.c})"></i>${esc(s.t)}</h3><div class="lvls">${ls.map(([L,i])=>{const d=ST.done[i],lk=!unlocked(i);
-      return `<button type="button" class="lv ${d?'ok':''} ${lk?'lock':''} ${i===nx&&!lk?'cur':''}" data-l="${i}" ${lk?'aria-disabled="true"':''}><span class="n">${lk?'<svg><use href="#i-lock"/></svg>':i+1}</span><b>${esc(L.title)}</b><small>${esc(L.tag)}<span class="st">${[0,1,2].map(k=>`<span class="${d&&k<d.stars?'on':''}">★</span>`).join('')}</span></small></button>`}).join('')}</div></div>`}).join('');
+  $('levels').innerHTML=SECS.map(s=>`<div class="chap"><h2><i style="background:var(--${SECCOL[s.n]})"></i>${s.n}. ${esc(s.t)}</h2><p>${SECSUB[s.n]||''}</p><div class="lvls">${
+    LEVELS.map((L,i)=>[L,i]).filter(([L])=>L.sec===s.n).map(([L,i])=>{const d=ST.done[i],ok=unlocked(i),st=d?d.stars:0;
+      return `<button class="lv${ok?'':' locked'}${i===nx&&ok&&!d?' cur':''}" data-l="${i}" ${ok?'':'aria-disabled="true"'} title="${esc(L.title)} — ${esc(L.tag)}">${i+1}<span class="st">${[1,2,3].map(k=>starSvg(k<=st)).join('')}</span></button>`}).join('')}</div></div>`).join('');
 }
-$('mlist').onclick=e=>{const b=e.target.closest('[data-l]');if(!b)return;if(b.classList.contains('lock')){b.animate([{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'none'}],{duration:240});return}openLevel(+b.dataset.l)};
-/* гараж */
-function renderGarage(){
-  $('gearN').textContent=gears();
-  $('gBot').innerHTML=`<ellipse cx="0" cy="58" rx="34" ry="7" fill="#000" opacity=".35"/>${robotSVG({...ROBOT})}`;
-  $('gOpts').innerHTML=ROPT.map(o=>`<div class="grow"><span>${o.lbl}</span><div class="gch">${o.items.map(it=>{
+$('levels').onclick=e=>{const b=e.target.closest('[data-l]');if(!b)return;if(b.classList.contains('locked')){b.animate([{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'none'}],{duration:240});return}openLevel(+b.dataset.l)};
+
+/* ================= МІЙ РОБОТ (як у першій частині) ================= */
+function drawRobotEverywhere(){$('crPreview').innerHTML=`<g class="cr-bot" filter="url(#paper)">${robotSVG(ROBOT)}</g>`;$('logoBot').innerHTML=robotSVG(ROBOT)}
+function renderCreator(){
+  $('crOpts').innerHTML=ROPT.map(o=>`<div class="cr-row"><span>${o.lbl}</span><div class="cr-ch">${o.items.map(it=>{
     const on=ROBOT[o.k]===it,own=owns(o.k,it),pr=PRICE[o.k+':'+it];
-    const lk=own?'':`<span class="lk"><svg><use href="#i-gear"/></svg>${pr}</span>`;
-    if(o.k==='color')return `<button type="button" class="opt sw${own?'':' locked'}" data-k="color" data-v="${it}" style="background:${RCOL[it]}" aria-pressed="${on}" aria-label="${o.lbl}${own?'':', ціна '+pr}">${lk}</button>`;
-    return `<button type="button" class="opt${own?'':' locked'}" data-k="${o.k}" data-v="${it}" aria-pressed="${on}" aria-label="${o.lbl}${own?'':', ціна '+pr}"><svg viewBox="${CROP[o.k]||'-36 -80 72 136'}">${robotSVG({...ROBOT,[o.k]:it})}</svg>${lk}</button>`;
+    const lock=own?'':`<span class="lock"><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg>${pr}</span>`;
+    const lab=own?`${o.lbl}: варіант`:`${o.lbl}: закрито, ціна ${pr} шестерень`;
+    if(o.k==='color')return `<button type="button" class="opt sw${own?'':' locked'}" data-k="color" data-v="${it}" style="background:${RCOL[it]}" aria-pressed="${on}" aria-label="${lab}">${lock}</button>`;
+    return `<button type="button" class="opt${own?'':' locked'}" data-k="${o.k}" data-v="${it}" aria-pressed="${on}" aria-label="${lab}"><svg viewBox="${CROP[o.k]}">${robotSVG({...ROBOT,[o.k]:it})}</svg>${lock}</button>`;
   }).join('')}</div></div>`).join('');
 }
-$('gOpts').onclick=e=>{const b=e.target.closest('[data-k]');if(!b)return;const k=b.dataset.k,v=b.dataset.v,key=k+':'+v;
-  if(!owns(k,v)){const pr=PRICE[key];if(gears()<pr){b.classList.remove('no');void b.offsetWidth;b.classList.add('no');$('gTip').textContent=`Потрібно ${pr} шестерень — проходь місії`;SND.err();return}
-    ST.spent+=pr;ST.owned.push(key);$('gTip').textContent='Куплено!'}
-  ROBOT[k]=v;ST.robot={...ROBOT};save();renderGarage();SND.pick();
-  const g=$('gBot');g.classList.remove('bump');void g.getBBox();g.classList.add('bump')};
+function setRobot(k,v){ROBOT[k]=v;ST.robot={...ROBOT};save();renderCreator();drawRobotEverywhere();
+  const b=document.querySelector('.cr-bot');if(b){void b.getBBox();b.classList.add('bump')}SND.pick()}
+function openCreator(){renderCreator();updGears();drawRobotEverywhere();$('crMsg').textContent='Проходь місії, збирай шестерні й відкривай нові деталі.';$('crMsg').className='cr-msg';$('creatorDlg').showModal()}
+$('gearPill').onclick=$('chipGears').onclick=openCreator;
+$('creatorDlg').addEventListener('close',()=>{if(SCRN==='start')$('heroArt').innerHTML=heroArt();else if(SCRN==='play'&&RUN.state==='idle')showMap(RUN.view)});
+$('crOpts').addEventListener('click',e=>{
+  const b=e.target.closest('.opt');if(!b)return;const k=b.dataset.k,v=b.dataset.v,m=$('crMsg');
+  if(!owns(k,v)){const pr=PRICE[k+':'+v],g=gears();
+    if(g<pr){b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');SND.err();m.textContent=`Потрібно ще ${pr-g} — проходь місії й збирай зірки!`;m.className='cr-msg bad';return}
+    ST.owned.push(k+':'+v);ST.spent+=pr;save();updGears();SND.win();m.textContent=`Відкрито нову деталь! −${pr}`;m.className='cr-msg ok'}
+  setRobot(k,v);
+});
+$('crRandom').onclick=()=>{ROPT.forEach(o=>{const ok=o.items.filter(it=>owns(o.k,it));ROBOT[o.k]=ok[Math.floor(Math.random()*ok.length)]});setRobot('color',ROBOT.color)};
+
 function route(){const h=location.hash,m=h.match(/^#m(\d+)$/);
   if(m&&unlocked(+m[1]-1))return openLevel(+m[1]-1,false);
-  if(h==='#missions'){show('missions');renderMissions();return}
-  if(h==='#robot'){show('garage');renderGarage();return}
-  show('home');renderHome()}
+  if(h==='#missions'){show('levels');renderMissions();return}
+  show('start');renderHome();if(h==='#robot')openCreator()}
 window.addEventListener('popstate',route);
 
 /* ================= ГАРЯЧІ КЛАВІШІ ================= */
@@ -1380,33 +1540,29 @@ document.addEventListener('keydown',e=>{
   else if(e.altKey&&(e.key==='r'||e.key==='R'||e.code==='KeyR')){e.preventDefault();reset()}
 });
 
-/* ================= ГЕРОЙ ================= */
+/* ================= ГОЛОВНА ІЛЮСТРАЦІЯ ================= */
 function heroArt(){
   const rows=['##T#T##','#>....#','#T##T.#','#....D#','##T##T#'],ch=(x,y)=>(rows[y]||'')[x]||'#',m=(x,y)=>'#T'.includes(ch(x,y))?ch(x,y):'.';
   const pts=[[1,1],[5,1],[5,3]].map(([x,y])=>`${x*TS+32},${y*TS+32}`).join(' ');
-  const code=[['for i in range(3):'],['    move_forward(2)'],['    turn_right()'],['deliver()']];
-  const tl=t=>{let s='',m2;const re=/(\b(?:for|in)\b)|(\b(?:move_forward|turn_right|deliver)\b)|(\brange\b)|(\b\d+\b)|([^\w]+|\w+)/g;while((m2=re.exec(t))){const c=m2[1]?'#c49cff':m2[2]?'#5fdcff':m2[3]?'#ffc27a':m2[4]?'#ffb35c':'#d7defa';s+=`<tspan fill="${c}">${esc(m2[0]).replace(/ /g,'&#160;')}</tspan>`}return s};
-  return `<svg viewBox="0 0 560 450" role="img" aria-label="Робот-кур'єр їде нічним містом за програмою на Python">${defs('h')}
-   <rect x="20" y="16" width="520" height="400" rx="30" fill="#111838" stroke="rgba(140,160,255,.18)"/>
-   <g transform="translate(58 46) scale(.995)">${groundSVG(7,5,m,'h')}
-     <polyline class="hero-route" points="${pts}" fill="none" stroke="#4fd8ff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" filter="url(#hg)" opacity=".85"/>
-     <g transform="translate(${5*TS+32} ${3*TS+32})"><circle r="25" fill="rgba(63,224,166,.14)" stroke="#3fe0a6" stroke-width="2.5" filter="url(#hg)"/><path d="M-9 0l6 6 12-13" stroke="#3fe0a6" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
-     <g transform="translate(${4*TS+32} ${1*TS+36})" filter="url(#hs)"><rect x="-14" y="-12" width="28" height="23" rx="5" fill="url(#hp)"/><rect x="-3" y="-12" width="6" height="23" fill="#b86a24" opacity=".55"/></g>
-     <g transform="translate(${5*TS+32} ${2*TS+26})"><g class="hero-bot"><ellipse cx="0" cy="30" rx="24" ry="7" fill="#000" opacity=".35"/><g transform="translate(0 8) scale(.5)">${robotSVG({...ROBOT},[0,1])}</g></g></g>
+  const code=['pick_up()','move_forward(4)','turn_right()','move_forward(2)','deliver()'];
+  const col={move_forward:'#9fcdf0',turn_right:'#cdbdf2',pick_up:'#bfe3cf',deliver:'#bfe3cf'};
+  const tl=t=>{let s='',m2;const re=/([a-z_]+)|(\d+)|([^\w]+)/g;while((m2=re.exec(t))){const c=m2[1]?(col[m2[1]]||'#d6d8e3'):m2[2]?'#f0b58a':'#9a9caf';s+=`<tspan fill="${c}">${esc(m2[0])}</tspan>`}return s};
+  return `<svg viewBox="0 0 560 430" role="img" aria-label="Робот-кур'єр їде нічним містом за програмою на Python">
+   <g transform="translate(70 26)">${groundSVG(7,5,m,'h',{x:1,y:1})}
+     <polyline class="hero-route" points="${pts}" fill="none" stroke="#f4d77c" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/>
+     <g transform="translate(${5*TS+32} ${3*TS+32})"><circle r="24" fill="rgba(242,169,156,.12)" stroke="#f2a99c" stroke-width="2.5" stroke-dasharray="6 5"/><path d="M-11 1l11-10 11 10v11h-22z" fill="#f2a99c"/><rect x="-3.5" y="4" width="7" height="8" rx="1" fill="#3b3f49"/></g>
+     <g transform="translate(${3*TS+32} ${1*TS+32})"><g class="hero-bot"><g class="dir" style="transform:rotate(90deg)"><path d="M-8 -27L0 -35L8 -27z" fill="#ee9384" stroke="#2a2d36" stroke-width="2.5" stroke-linejoin="round"/></g><g transform="translate(0 7) scale(.46)" filter="url(#paper)">${robotSVG({...ROBOT,box:ROBOT.box||'box'},[1,0])}</g></g></g>
    </g>
-   <g class="hero-code" filter="url(#hs)"><rect x="34" y="300" width="262" height="128" rx="18" fill="#0a0e22" stroke="rgba(79,216,255,.35)"/>
-     <circle cx="54" cy="318" r="4.5" fill="#ff607c"/><circle cx="68" cy="318" r="4.5" fill="#ffb35c"/><circle cx="82" cy="318" r="4.5" fill="#3fe0a6"/>
-     <text x="100" y="322" font-family="JetBrains Mono,monospace" font-size="11" fill="#66729c">courier.py</text>
-     ${code.map(([t],i)=>`<text x="50" y="${350+i*21}" font-family="JetBrains Mono,monospace" font-size="14.5">${tl(t)}</text>`).join('')}
-     <rect x="44" y="${335+1*21}" width="3" height="18" rx="1.5" fill="#4fd8ff"/></g>
-  </svg>
-  <span class="chip c3"><i class="d" style="background:var(--cyan)"></i>Python</span>
-  <span class="chip c1"><i class="d" style="background:var(--violet)"></i>16 місій</span>
-  <span class="chip c2" style="bottom:2%;left:auto;right:0"><span style="color:var(--amber)">★★★</span></span>`;
+   <g filter="url(#paper)"><rect x="22" y="252" width="236" height="160" rx="18" fill="#1e2026" stroke="rgba(255,255,255,.08)"/>
+     <rect x="40" y="270" width="9" height="9" rx="3" fill="#f4d77c"/><text x="57" y="279" font-family="JetBrains Mono,monospace" font-size="12" fill="#9a9caf">courier.py</text>
+     ${code.map((t,i)=>`<text x="62" y="${308+i*22}" font-family="JetBrains Mono,monospace" font-size="15">${tl(t)}</text><text x="${i>8?32:40}" y="${308+i*22}" font-family="JetBrains Mono,monospace" font-size="13" fill="#565a68">${i+1}</text>`).join('')}
+     <rect x="54" y="${293+1*22}" width="3" height="20" rx="1.5" fill="#f4d77c"/></g>
+  </svg>`;
 }
 
 /* ================= СТАРТ ================= */
-setSnd();
+Object.keys(ROBOT).forEach(k=>{const o=ROPT.find(x=>x.k===k);if(!o||!o.items.includes(ROBOT[k]))ROBOT[k]=RDEF[k]});
+setSnd();updGears();drawRobotEverywhere();renderHowto();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);measure();
 window.addEventListener('resize',()=>{measure();acHide()});
 document.addEventListener('pointerdown',()=>{if(SND.on&&!SND.ctx)SND.tone(1,.001,'sine',.0001)},{once:true});
