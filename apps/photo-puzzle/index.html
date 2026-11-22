@@ -140,6 +140,27 @@
   #board{position:absolute; inset:0; width:100%; height:100%; touch-action:none; cursor:grab}
   #board:active{cursor:grabbing}
 
+
+  .sz-g{display:block;width:30px;height:30px;border-radius:6px;flex:none;background:var(--coral);
+    background-image:linear-gradient(var(--card) 1.5px,transparent 1.5px),linear-gradient(90deg,var(--card) 1.5px,transparent 1.5px);
+    background-size:calc(100% / var(--n)) calc(100% / var(--n));background-position:-1px -1px;box-shadow:inset 0 0 0 1.5px var(--card)}
+  .setup-img{display:block;width:min(46vw,170px);aspect-ratio:1;object-fit:cover;border-radius:16px;margin:0 auto 6px;box-shadow:var(--shadow)}
+  .setup-t{text-align:center;font-weight:800;margin:10px 0 8px}
+  .sizes{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:8px}
+  .sz{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px;border:0;border-radius:16px;background:var(--paper);color:var(--ink);font:inherit;cursor:pointer;box-shadow:inset 0 0 0 2px transparent}
+  .sz .sz-g{width:40px;height:40px;background-color:var(--slot)}
+  .sz b{font-size:16px;font-variant-numeric:tabular-nums}
+  .sz.on{box-shadow:inset 0 0 0 3px var(--coral);background:var(--card)}.sz.on .sz-g{background-color:var(--coral)}
+  .tgl{display:flex;align-items:center;gap:10px;margin:14px 0 0;font-weight:800;cursor:pointer}
+  .tgl input{position:absolute;opacity:0;pointer-events:none}
+  .tgl span{width:44px;height:26px;border-radius:13px;background:var(--slot);position:relative;flex:none;transition:background .2s}
+  .tgl span::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s}
+  .tgl input:checked+span{background:var(--teal)}.tgl input:checked+span::after{transform:translateX(18px)}
+  .tgl input:focus-visible+span{outline:3px solid var(--mustard);outline-offset:2px}
+  #previewBtn[aria-pressed="true"]{box-shadow:0 0 0 3px var(--teal),var(--shadow)}
+  #board{cursor:pointer}
+  #btnResume{flex-basis:100%}
+  .hero-actions{flex-wrap:wrap}
   /* ---------- вікна ---------- */
   dialog{
     border:0; border-radius:24px; background:var(--card); color:var(--ink);
@@ -196,6 +217,7 @@
       <h1>Зроби пазл зі свого фото!</h1>
       <p class="lead">Завантаж власне фото, зроби знімок або обери готову картинку й склади її по шматочках. Перетягуй шматочки мишкою, і коли шматочок буде поруч зі своїм місцем, він сам встане.</p>
       <div class="hero-actions">
+        <button class="btn primary" id="btnResume" hidden><span>Продовжити пазл</span></button>
         <button class="btn primary" id="btnFile"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-folder"/></svg><span>З файлу</span></button>
         <button class="btn teal" id="btnCam"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-camera"/></svg><span>Знімок</span></button>
         <button class="btn blue" id="btnBuiltin"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-image"/></svg><span>Готові картинки</span></button>
@@ -246,18 +268,10 @@
     <div class="hud">
       <div class="chip" title="Час"><span aria-hidden="true">⏱️</span><span id="timer">00:00</span></div>
       <div class="chip" title="Шматочки"><span aria-hidden="true">🧩</span><span id="count">0/9</span></div>
-      <button class="btn round step" id="minusBtn" title="Менше шматочків" aria-label="Менше шматочків">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
-      </button>
-      <button class="grid-ctrl" id="sizeBtn" title="Розмір пазла" aria-label="Обрати розмір пазла">
-        <span class="mini" aria-hidden="true"><span class="mini-box"></span></span>
-        <span id="gridLabel">3×3</span>
-      </button>
-      <button class="btn round step" id="plusBtn" title="Більше шматочків" aria-label="Більше шматочків">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
-      </button>
-      <button class="btn round" id="shuffleBtn" title="Перемішати" aria-label="Перемішати"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-swap"/></svg></button>
-      <button class="btn round" id="previewBtn" title="Зразок" aria-label="Показати зразок"><img id="thumb" alt=""></button>
+      <button class="btn round" id="previewBtn" title="Зразок на дошці" aria-label="Зразок на дошці" aria-pressed="false"><img id="thumb" alt=""></button>
+      <button class="btn round" id="hintBtn" title="Підказка: де місце шматочка" aria-label="Підказка"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21.5h4M12 2.5a6.5 6.5 0 0 0-3.8 11.8c.5.4.8 1 .8 1.7h6c0-.7.3-1.3.8-1.7A6.5 6.5 0 0 0 12 2.5z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="btn round" id="shuffleBtn" title="Почати спочатку" aria-label="Почати спочатку"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-swap"/></svg></button>
+      <button class="grid-ctrl" id="sizeBtn" title="Новий розмір пазла" aria-label="Обрати розмір пазла"><span class="sz-g" style="--n:3" aria-hidden="true"></span><span id="gridLabel">3×3</span></button>
       <button class="btn round" id="soundBtn" title="Звук" aria-label="Звук"></button>
     </div>
     <div class="stage" id="stage">
@@ -273,14 +287,14 @@
   <h3>Як грати</h3>
   <ul>
     <li>Обери картинку: з файлу, знімок з камери або готову.</li>
-    <li>Повзунком обери розмір пазла, від 3×3 до 32×32.</li>
-    <li>Коли шматочок буде близько до свого місця, він сам встане.</li>
+    <li>Обери розмір: від 3×3 до 8×8 на телефоні, до 12×12 на комп'ютері.</li>
+    <li>Незакінчений пазл зберігається — його можна продовжити.</li>
   </ul>
   <h3>Керування</h3>
   <ul>
-    <li>🖱️ Мишка: натисни шматочок, тримай кнопку і перетягни.</li>
-    <li>👆 Планшет або телефон: торкнись шматочка і перетягни пальцем.</li>
-    <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-swap"/></svg> перемішує шматочки, <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-volu"/></svg> вмикає і вимикає звук.</li>
+    <li>Торкнись шматочка в лотку, а потім — його місця на дошці. Або просто перетягни.</li>
+    <li>Лоток гортається пальцем, коліщатком миші або перетягуванням уздовж нього.</li>
+    <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-swap"/></svg> — почати спочатку, лампочка — підказка, мініатюра — зразок на дошці, <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-volu"/></svg> вмикає і вимикає звук.</li>
   </ul>
   <p><span class="star" aria-hidden="true">★</span> <a href="https://github.com/whyuxavier" target="_blank" rel="noopener">Наш GitHub</a></p>
   <div class="dlg-actions"><button class="btn" value="close" form=""><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-close"/></svg>Закрити</button></div>
@@ -311,11 +325,13 @@
 
 <!-- ПЕРЕМОГА -->
 <!-- РОЗМІР ПАЗЛА -->
-<dialog id="sizeDlg">
-  <h2>Скільки шматочків?</h2>
-  <div class="size-grid" id="sizeGrid"></div>
-  <p id="sizeInfo">3×3</p>
-  <div class="dlg-actions"><button class="btn" data-close><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-close"/></svg>Закрити</button></div>
+<dialog id="setupDlg">
+  <h2>Новий пазл</h2>
+  <img id="setupImg" class="setup-img" alt="Обрана картинка">
+  <p class="setup-t">Скільки шматочків?</p>
+  <div class="sizes" id="sizes"></div>
+  <label class="tgl"><input type="checkbox" id="ghostChk"><span></span>Зразок на дошці</label>
+  <div class="dlg-actions"><button class="btn" data-close>Скасувати</button><button class="btn primary" id="startBtn">Почати</button></div>
 </dialog>
 
 <dialog id="winDlg">
@@ -375,6 +391,7 @@
   function playSound(name){
     try{
       if (name === 'pick') tone(520, 0.08, 0, 'triangle', 0.1);
+      if (name === 'wrong') tone(200, 0.16, 0, 'square', 0.06);
       if (name === 'snap'){ tone(660, 0.12, 0, 'sine', 0.18); tone(990, 0.14, 0.06, 'sine', 0.12); }
       if (name === 'win') [523, 659, 784, 1046].forEach((f, i) => tone(f, 0.25, i * 0.13, 'triangle', 0.18));
     }catch(e){}
@@ -410,8 +427,10 @@
     c.getContext('2d').drawImage(drawable, sx, sy, side, side, 0, 0, size, size);
     state.src = c;
     state.thumb = c.toDataURL('image/jpeg', 0.9);
-    showGame();
-    newPuzzle();
+    const sm = document.createElement('canvas'); sm.width = sm.height = Math.min(640, size);
+    sm.getContext('2d').drawImage(c, 0, 0, sm.width, sm.height);
+    state.saveImg = sm.toDataURL('image/jpeg', 0.85);
+    openSetup();
   }
   function fromFile(file){
     if (!file || !file.type.startsWith('image/')) return toast('Це не картинка 🙂');
@@ -645,7 +664,7 @@
   }
   function goHome(){
     stopTimer();
-    state.src = null; state.pieces = []; state.dragging = null; state.done = false;
+    state.src = null; state.pieces = []; state.list = []; state.drag = null; state.ptr = null; state.sel = null; state.done = false;
     document.body.dataset.view = 'home';
     $('#home').hidden = false;
     $('#game').hidden = true;
@@ -653,55 +672,90 @@
   }
 
   // ---------- пазл ----------
-  function newPuzzle(){
+  const SIZES = [3, 4, 5, 6, 8, 10, 12];
+  const isPhone = () => Math.min(innerWidth, innerHeight) < 600;
+  const sizesFor = () => isPhone() ? SIZES.filter(n => n <= 8) : SIZES;
+  const lsGet = k => { try { return localStorage.getItem(k) } catch (e) { return null } };
+  const lsSet = (k, v) => { try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v) } catch (e) {} };
+  state.N = +lsGet('pz_n') || 4;
+  state.ghost = lsGet('pz_ghost') === 'on';
+  state.list = []; state.sel = null; state.drag = null; state.ptr = null; state.scroll = 0; state.hint = null; state.flash = null;
+
+  function shuffled(a){ for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+  function newPuzzle(saved){
     stopTimer();
-    state.elapsed = 0; state.done = false; state.placedCount = 0; state.dragging = null;
     const N = state.N;
+    state.done = false; state.sel = null; state.drag = null; state.ptr = null; state.scroll = 0; state.hint = null; state.flash = null;
     state.pieces = [];
-    for (let i = 0; i < N * N; i++){
-      state.pieces.push({ r: Math.floor(i / N), c: i % N, x: 0, y: 0, nx: 0, ny: 0, placed: false, anim: null });
+    for (let i = 0; i < N * N; i++) state.pieces.push({ i, r: Math.floor(i / N), c: i % N, placed: false, x: 0, y: 0, s: 0, init: false });
+    if (saved){
+      saved.placed.forEach(i => { if (state.pieces[i]) state.pieces[i].placed = true; });
+      state.list = saved.list.map(i => state.pieces[i]).filter(Boolean);
+      state.elapsed = saved.elapsed || 0;
+    } else {
+      state.list = shuffled(state.pieces.slice());
+      state.elapsed = 0;
     }
-    layout(true);
-    updateHud(); updateTimer();
+    state.placedCount = state.pieces.filter(p => p.placed).length;
+    layout(); updateHud(); updateTimer(); saveGame();
   }
-  function layout(scatter){
+  function layout(){
     const W = canvas.clientWidth, H = canvas.clientHeight;
     if (!W || !H) return;
-    const pad = 12;
-    let b, t;
+    const pad = 12, g = 8;
+    let b, t, axis, ts, lanes;
     if (W >= H * 1.05){
-      // широкий екран: дошка зліва, шматочки справа
-      const s = Math.min(H - 2 * pad, W * 0.55);
-      b = { x: pad, y: (H - s) / 2, s };
-      const tx = b.x + s + pad * 2;
-      t = { x: tx, y: pad, w: W - tx - pad, h: H - 2 * pad };
+      // ПК / планшет горизонтально: дошка ліворуч, лоток праворуч (прокрутка вниз)
+      const tw = Math.max(150, Math.min(340, W * 0.3));
+      const s = Math.min(H - 2 * pad, W - tw - 3 * pad);
+      b = { x: pad + (W - tw - 3 * pad - s) / 2, y: (H - s) / 2, s };
+      t = { x: W - tw - pad, y: pad, w: tw, h: H - 2 * pad };
+      axis = 'y';
+      const tu = tw - 10;
+      lanes = Math.max(1, Math.round((tu - g) / (Math.min(96, Math.max(60, b.s / state.N)) + g)));
+      ts = Math.min(110, (tu - g) / lanes - g);
     } else {
-      // вузький екран (телефон): дошка зверху, шматочки знизу
-      const s = Math.min(W - 2 * pad, H * 0.58);
-      b = { x: (W - s) / 2, y: pad, s };
-      const ty = b.y + s + pad;
-      t = { x: pad, y: ty, w: W - 2 * pad, h: H - ty - pad };
+      // телефон: дошка зверху, лоток-стрічка знизу (прокрутка вбік)
+      ts = Math.max(56, Math.min(88, W * 0.19));
+      const s1 = Math.min(W - 2 * pad, H - 3 * pad - (ts + 2 * g));
+      lanes = (H - 3 * pad - s1 >= 2 * ts + 3 * g) ? 2 : 1;
+      const th = lanes * ts + (lanes + 1) * g;
+      const s = Math.min(W - 2 * pad, H - 3 * pad - th);
+      b = { x: (W - s) / 2, y: pad + Math.max(0, (H - 3 * pad - th - s) / 2), s };
+      t = { x: pad, y: H - pad - th, w: W - 2 * pad, h: th };
+      axis = 'x';
     }
-    state.board = b; state.tray = t; state.W = W; state.H = H;
-    state.cell = b.s / state.N;
-    const cell = state.cell;
-
+    Object.assign(state, { board: b, trayR: t, axis, ts, lanes, gap: g, W, H, cell: b.s / state.N });
     const dpr = window.devicePixelRatio || 1;
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    for (const p of state.pieces){
-      if (p.placed){
-        p.x = b.x + p.c * cell; p.y = b.y + p.r * cell;
-      } else if (scatter){
-        p.x = t.x + Math.random() * Math.max(0, t.w - cell);
-        p.y = t.y + Math.random() * Math.max(0, t.h - cell);
-        p.nx = p.x / W; p.ny = p.y / H;
-      } else {
-        p.x = p.nx * W; p.y = p.ny * H;
-      }
-    }
+    state.scroll = Math.min(state.scroll, maxScroll());
     requestRender();
+  }
+  function maxScroll(){
+    const { ts, gap: g, lanes, trayR: t } = state;
+    const lines = Math.ceil(state.list.length / lanes);
+    const len = g + lines * (ts + g);
+    return Math.max(0, len - (state.axis === 'x' ? t.w : t.h));
+  }
+  function slot(i){
+    const { ts, gap: g, lanes, trayR: t } = state;
+    const line = Math.floor(i / lanes), lane = i % lanes;
+    return state.axis === 'x'
+      ? { x: t.x + g + line * (ts + g) - state.scroll, y: t.y + g + lane * (ts + g), s: ts }
+      : { x: t.x + g + lane * (ts + g) + ((t.w - 10 - g) - lanes * (ts + g)) / 2, y: t.y + g + line * (ts + g) - state.scroll, s: ts };
+  }
+  function cellBox(r, c){ const b = state.board, k = state.cell; return { x: b.x + c * k, y: b.y + r * k, s: k }; }
+  function dragBox(){
+    const P = state.ptr, s = state.cell;
+    const lift = P.touch ? Math.max(s * 0.7, 34) : 0;
+    return { x: P.x - s / 2, y: P.y - s / 2 - lift, s };
+  }
+  function targetOf(p){
+    if (p.placed) return cellBox(p.r, p.c);
+    if (p === state.drag && state.ptr) return dragBox();
+    const i = state.list.indexOf(p);
+    return i < 0 ? { x: p.x, y: p.y, s: p.s } : slot(i);
   }
 
   let rafId = 0;
@@ -709,87 +763,93 @@
   function render(){
     rafId = 0;
     if (!state.src) return;
-    const { W, H } = state;
+    const { W, H, trayR: t } = state, now = performance.now();
+    let anim = false;
+    const step = p => {
+      const tg = targetOf(p);
+      if (!p.init){ p.x = tg.x; p.y = tg.y; p.s = tg.s; p.init = true; return; }
+      const k = p === state.drag ? 0.7 : 0.28;
+      for (const q of ['x', 'y', 's']){ const d = tg[q] - p[q]; if (Math.abs(d) > 0.3){ p[q] += d * k; anim = true; } else p[q] = tg[q]; }
+    };
     ctx.clearRect(0, 0, W, H);
-    drawBoard();
-
-    let animating = false;
-    for (const p of state.pieces){
-      if (!p.anim) continue;
-      p.x += (p.anim.x - p.x) * 0.25;
-      p.y += (p.anim.y - p.y) * 0.25;
-      if (Math.abs(p.anim.x - p.x) < 0.3 && Math.abs(p.anim.y - p.y) < 0.3){
-        p.x = p.anim.x; p.y = p.anim.y; p.anim = null;
-      } else animating = true;
+    drawBoard(now);
+    for (const p of state.pieces) if (p.placed){ step(p); drawPiece(p); }
+    // лоток
+    ctx.save();
+    roundRect(t.x, t.y, t.w, t.h, 18); ctx.fillStyle = 'rgba(59,50,38,.07)'; ctx.fill(); ctx.clip();
+    for (const p of state.list){ step(p); if (p.x + p.s > t.x - 4 && p.x < t.x + t.w + 4 && p.y + p.s > t.y - 4 && p.y < t.y + t.h + 4) drawPiece(p, false, p === state.sel); }
+    const ms = maxScroll();
+    if (ms > 0){
+      const frac = (state.axis === 'x' ? t.w : t.h) / ((state.axis === 'x' ? t.w : t.h) + ms), pos = state.scroll / ms;
+      ctx.fillStyle = 'rgba(59,50,38,.28)';
+      if (state.axis === 'x'){ const L = (t.w - 24) * frac; roundRect(t.x + 12 + (t.w - 24 - L) * pos, t.y + t.h - 6, L, 4, 2); }
+      else { const L = (t.h - 24) * frac; roundRect(t.x + t.w - 6, t.y + 12 + (t.h - 24 - L) * pos, 4, L, 2); }
+      ctx.fill();
     }
-    for (const p of state.pieces) if (p.placed) drawPiece(p, false);
-    for (const p of state.pieces) if (!p.placed && p !== state.dragging) drawPiece(p, false);
-    if (state.dragging) drawPiece(state.dragging, true);
-
-    if (animating) requestRender();
+    ctx.restore();
+    if (state.drag){ step(state.drag); drawPiece(state.drag, true); }
+    if (anim || (state.hint && now < state.hint.until) || (state.flash && now < state.flash.until)) requestRender();
   }
-  function drawBoard(){
+  function roundRect(x, y, w, h, r){ ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h); }
+  function drawBoard(now){
     const b = state.board, cell = state.cell, N = state.N;
     ctx.fillStyle = '#e6dac3';
-    ctx.fillRect(b.x - 4, b.y - 4, b.s + 8, b.s + 8);
+    roundRect(b.x - 5, b.y - 5, b.s + 10, b.s + 10, 10); ctx.fill();
+    if (state.ghost){ ctx.save(); ctx.globalAlpha = 0.28; ctx.drawImage(state.src, b.x, b.y, b.s, b.s); ctx.restore(); }
     ctx.save();
-    ctx.strokeStyle = 'rgba(59,50,38,0.2)';
-    ctx.setLineDash([6, 6]);
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(59,50,38,0.22)'; ctx.setLineDash([5, 5]); ctx.lineWidth = 1;
     ctx.beginPath();
     for (let i = 0; i <= N; i++){
       ctx.moveTo(b.x + i * cell, b.y); ctx.lineTo(b.x + i * cell, b.y + b.s);
       ctx.moveTo(b.x, b.y + i * cell); ctx.lineTo(b.x + b.s, b.y + i * cell);
     }
-    ctx.stroke();
-    ctx.restore();
+    ctx.stroke(); ctx.restore();
+    const mark = (m, fill, stroke) => {
+      const c = cellBox(m.r, m.c), a = 0.55 + 0.45 * Math.sin(now / 120);
+      ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = fill; ctx.fillRect(c.x, c.y, c.s, c.s);
+      ctx.strokeStyle = stroke; ctx.lineWidth = 4; ctx.strokeRect(c.x + 2, c.y + 2, c.s - 4, c.s - 4); ctx.restore();
+    };
+    if (state.hint && now < state.hint.until) mark(state.hint, 'rgba(242,193,78,.35)', '#f2c14e');
+    if (state.flash && now < state.flash.until) mark(state.flash, 'rgba(239,125,87,.3)', '#ef7d57');
   }
-  function drawPiece(p, lifted){
-    const cell = state.cell, N = state.N;
-    const sz = state.src.width / N;
+  function drawPiece(p, lifted, selected){
+    const N = state.N, sz = state.src.width / N, s = p.s;
     ctx.save();
-    if (lifted){
-      ctx.shadowColor = 'rgba(59,50,38,0.35)';
-      ctx.shadowBlur = 14; ctx.shadowOffsetY = 6;
-    }
-    ctx.drawImage(state.src, p.c * sz, p.r * sz, sz, sz, p.x, p.y, cell, cell);
+    if (lifted || selected){ ctx.shadowColor = 'rgba(59,50,38,0.35)'; ctx.shadowBlur = 14; ctx.shadowOffsetY = 6; }
+    const y = selected ? p.y - 3 : p.y;
+    ctx.drawImage(state.src, p.c * sz, p.r * sz, sz, sz, p.x, y, s, s);
     ctx.shadowColor = 'transparent';
-    // білий паперовий обрис
-    const lw = Math.max(1, cell * 0.03);
-    ctx.strokeStyle = 'rgba(255,255,255,0.9)';
-    ctx.lineWidth = lw;
-    ctx.strokeRect(p.x + lw / 2, p.y + lw / 2, cell - lw, cell - lw);
+    const lw = Math.max(1, s * 0.03);
+    ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = lw;
+    ctx.strokeRect(p.x + lw / 2, y + lw / 2, s - lw, s - lw);
+    if (selected){ ctx.strokeStyle = '#ef7d57'; ctx.lineWidth = 4; ctx.strokeRect(p.x - 1, y - 1, s + 2, s + 2); }
     ctx.restore();
   }
-  function target(p){
-    return { x: state.board.x + p.c * state.cell, y: state.board.y + p.r * state.cell };
-  }
-  function pieceAt(x, y){
-    const cell = state.cell;
-    for (let i = state.pieces.length - 1; i >= 0; i--){
-      const p = state.pieces[i];
-      if (p.placed) continue;
-      if (x >= p.x && x <= p.x + cell && y >= p.y && y <= p.y + cell) return p;
-    }
+  const inR = (x, y, r) => x >= r.x && x <= r.x + (r.w ?? r.s) && y >= r.y && y <= r.y + (r.h ?? r.s);
+  function trayPieceAt(x, y){
+    for (let i = 0; i < state.list.length; i++){ const s = slot(i); if (x >= s.x && x <= s.x + s.s && y >= s.y && y <= s.y + s.s) return state.list[i]; }
     return null;
   }
-  function pos(e){
-    const r = canvas.getBoundingClientRect();
-    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  function cellAt(x, y){
+    const b = state.board; if (!inR(x, y, b)) return null;
+    return { r: Math.min(state.N - 1, Math.floor((y - b.y) / state.cell)), c: Math.min(state.N - 1, Math.floor((x - b.x) / state.cell)) };
   }
+  function pos(e){ const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
   function place(p){
-    const t = target(p);
     p.placed = true;
-    p.anim = { x: t.x, y: t.y };
+    const i = state.list.indexOf(p); if (i >= 0) state.list.splice(i, 1);
+    if (state.sel === p) state.sel = null;
     state.placedCount++;
-    playSound('snap');
-    updateHud();
+    state.hint = null;
+    state.scroll = Math.min(state.scroll, maxScroll());
+    playSound('snap'); updateHud(); saveGame();
     if (state.placedCount === state.N * state.N) finish();
     requestRender();
   }
+  function wrong(cell){ state.flash = { r: cell.r, c: cell.c, until: performance.now() + 450 }; playSound('wrong'); if (navigator.vibrate) try{ navigator.vibrate(30) }catch(e){} requestRender(); }
   function finish(){
     state.done = true;
-    stopTimer(); updateTimer();
+    stopTimer(); updateTimer(); lsSet('pz_save', null);
     playSound('win');
     $('#winTime').textContent = fmt(state.elapsed);
     setTimeout(() => $('#winDlg').showModal(), 700);
@@ -797,129 +857,149 @@
   function updateHud(){
     $('#count').textContent = state.placedCount + '/' + (state.N * state.N);
     $('#thumb').src = state.thumb || '';
+    $('#gridLabel').textContent = state.N + '×' + state.N;
+    $('#sizeBtn .sz-g').style.setProperty('--n', state.N);
+    $('#previewBtn').setAttribute('aria-pressed', String(state.ghost));
+  }
+  function scrollToPiece(p){
+    const i = state.list.indexOf(p); if (i < 0) return;
+    const { ts, gap: g, lanes, trayR: t } = state, line = Math.floor(i / lanes), start = g + line * (ts + g), len = state.axis === 'x' ? t.w : t.h;
+    if (start - state.scroll < 0 || start + ts - state.scroll > len) state.scroll = Math.max(0, Math.min(maxScroll(), start - (len - ts) / 2));
   }
 
-  // ---------- мишка / дотик ----------
+  // ---------- мишка / дотик: «тап-тап» і перетягування ----------
   canvas.addEventListener('pointerdown', e => {
-    if (state.done || !state.src) return;
+    if (state.done || !state.src || state.ptr) return;
     const { x, y } = pos(e);
-    const p = pieceAt(x, y);
-    if (!p) return;
     canvas.setPointerCapture(e.pointerId);
-    p.anim = null;
-    state.dragging = p;
-    state.dragOff = { x: x - p.x, y: y - p.y };
-    // піднімаємо шматочок наверх
-    const i = state.pieces.indexOf(p);
-    state.pieces.splice(i, 1); state.pieces.push(p);
-    startTimer();
-    playSound('pick');
-    requestRender();
+    const P = { id: e.pointerId, x0: x, y0: y, x, y, mode: 'wait', touch: e.pointerType !== 'mouse', s0: state.scroll };
+    if (inR(x, y, state.trayR)){ P.zone = 'tray'; P.piece = trayPieceAt(x, y); }
+    else if (cellAt(x, y)){ P.zone = 'board'; P.cell = cellAt(x, y); }
+    else P.zone = 'none';
+    state.ptr = P;
   });
   canvas.addEventListener('pointermove', e => {
-    const p = state.dragging;
-    if (!p) return;
-    const { x, y } = pos(e);
-    let nx = x - state.dragOff.x, ny = y - state.dragOff.y;
-    const t = target(p);
-    // магніт: поблизу свого місця шматочок притягується
-    if (Math.hypot(nx - t.x, ny - t.y) < state.cell * 0.6){
-      nx += (t.x - nx) * 0.3;
-      ny += (t.y - ny) * 0.3;
+    const P = state.ptr; if (!P || P.id !== e.pointerId) return;
+    const { x, y } = pos(e); P.x = x; P.y = y;
+    const dx = x - P.x0, dy = y - P.y0;
+    if (P.mode === 'wait' && Math.hypot(dx, dy) > 8){
+      if (P.zone === 'tray'){
+        const along = state.axis === 'x' ? dx : dy, across = state.axis === 'x' ? dy : dx;
+        if (P.piece && (Math.abs(across) > Math.abs(along) * 0.9 || maxScroll() === 0)) startDrag(P);
+        else P.mode = 'scroll';
+      } else P.mode = 'none';
     }
-    p.x = nx; p.y = ny;
-    requestRender();
+    if (P.mode === 'scroll'){ state.scroll = Math.max(0, Math.min(maxScroll(), P.s0 - (state.axis === 'x' ? dx : dy))); requestRender(); }
+    if (P.mode === 'drag') requestRender();
   });
-  function endDrag(){
-    const p = state.dragging;
-    if (!p) return;
-    state.dragging = null;
-    const t = target(p);
-    if (Math.hypot(p.x - t.x, p.y - t.y) < state.cell * 0.5){
-      place(p);
-    } else {
-      p.nx = p.x / state.W; p.ny = p.y / state.H;
-    }
-    requestRender();
+  function startDrag(P){
+    const p = P.piece, i = state.list.indexOf(p);
+    state.list.splice(i, 1); P.from = i; P.mode = 'drag';
+    state.drag = p; state.sel = null;
+    startTimer(); playSound('pick');
   }
-  canvas.addEventListener('pointerup', endDrag);
-  canvas.addEventListener('pointercancel', endDrag);
+  function endPointer(e, cancel){
+    const P = state.ptr; if (!P || (e && P.id !== e.pointerId)) return;
+    if (P.mode === 'drag'){
+      const p = state.drag, box = dragBox(), cx = box.x + box.s / 2, cy = box.y + box.s / 2, t = cellBox(p.r, p.c);
+      state.drag = null;
+      if (!cancel && Math.hypot(cx - (t.x + t.s / 2), cy - (t.y + t.s / 2)) < state.cell * 0.75){ state.ptr = null; place(p); return; }
+      const cell = !cancel && cellAt(cx, cy);
+      if (cell) wrong(cell);
+      state.list.splice(Math.min(P.from, state.list.length), 0, p);
+    } else if (P.mode === 'wait' && !cancel){
+      if (P.zone === 'tray' && P.piece){
+        state.sel = state.sel === P.piece ? null : P.piece; state.hint = null;
+        startTimer(); playSound('pick');
+      } else if (P.zone === 'board' && state.sel){
+        if (P.cell.r === state.sel.r && P.cell.c === state.sel.c) place(state.sel); else wrong(P.cell);
+      } else if (P.zone === 'board' && state.list.length){
+        toast('Спершу обери шматочок у лотку');
+      }
+    }
+    state.ptr = null; requestRender();
+  }
+  canvas.addEventListener('pointerup', e => endPointer(e, false));
+  canvas.addEventListener('pointercancel', e => endPointer(e, true));
+  canvas.addEventListener('wheel', e => {
+    if (!state.src) return; const { x, y } = pos(e);
+    if (!inR(x, y, state.trayR) || maxScroll() === 0) return;
+    e.preventDefault();
+    state.scroll = Math.max(0, Math.min(maxScroll(), state.scroll + (Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX)));
+    requestRender();
+  }, { passive: false });
+
+  // ---------- збереження незакінченого пазла ----------
+  function saveGame(){
+    if (!state.src || state.done || !state.saveImg) return;
+    lsSet('pz_save', JSON.stringify({ img: state.saveImg, N: state.N, placed: state.pieces.filter(p => p.placed).map(p => p.i),
+      list: state.list.concat(state.drag ? [state.drag] : []).map(p => p.i), elapsed: Math.round(state.startTime !== null ? performance.now() - state.startTime : state.elapsed) }));
+  }
+  setInterval(() => { if (state.startTime !== null) saveGame(); }, 5000);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) saveGame(); });
+  function savedGame(){ try { const s = JSON.parse(lsGet('pz_save') || 'null'); return s && s.img && s.N ? s : null } catch (e) { return null } }
+  function updateResume(){ $('#btnResume').hidden = !savedGame(); }
+  function resume(){
+    const s = savedGame(); if (!s) return;
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement('canvas'); c.width = c.height = img.naturalWidth;
+      c.getContext('2d').drawImage(img, 0, 0);
+      state.src = c; state.thumb = s.img; state.saveImg = s.img; state.N = s.N;
+      showGame(); newPuzzle(s);
+    };
+    img.src = s.img;
+  }
+
+  // ---------- новий пазл: вибір розміру ----------
+  function openSetup(){
+    $('#setupImg').src = state.thumb;
+    const list = sizesFor(); if (!list.includes(state.N)) state.N = list.reduce((a, n) => Math.abs(n - state.N) < Math.abs(a - state.N) ? n : a, list[0]);
+    $('#sizes').innerHTML = list.map(n => `<button type="button" class="sz${n === state.N ? ' on' : ''}" data-n="${n}" aria-pressed="${n === state.N}"><span class="sz-g" style="--n:${n}"></span><b>${n}×${n}</b></button>`).join('');
+    $('#ghostChk').checked = state.ghost;
+    $('#setupDlg').showModal();
+  }
+  $('#sizes').addEventListener('click', e => {
+    const b = e.target.closest('[data-n]'); if (!b) return;
+    state.N = +b.dataset.n;
+    $('#sizes').querySelectorAll('.sz').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', String(x === b)); });
+  });
+  $('#startBtn').addEventListener('click', () => {
+    lsSet('pz_n', String(state.N));
+    state.ghost = $('#ghostChk').checked; lsSet('pz_ghost', state.ghost ? 'on' : 'off');
+    $('#setupDlg').close(); showGame(); newPuzzle();
+  });
 
   // ---------- кнопки ----------
   $('#infoBtn').addEventListener('click', () => $('#infoDlg').showModal());
   $('#btnFile').addEventListener('click', () => $('#file').click());
-  $('#file').addEventListener('change', e => {
-    fromFile(e.target.files[0]);
-    e.target.value = '';
-  });
+  $('#file').addEventListener('change', e => { fromFile(e.target.files[0]); e.target.value = ''; });
   $('#btnCam').addEventListener('click', openCamera);
   $('#snapBtn').addEventListener('click', snap);
   $('#btnBuiltin').addEventListener('click', () => $('#pickDlg').showModal());
-  $('#backBtn').addEventListener('click', goHome);
-  $('#shuffleBtn').addEventListener('click', () => { if (state.src) newPuzzle(); });
-  $('#previewBtn').addEventListener('click', () => {
-    $('#previewImg').src = state.thumb;
-    $('#previewDlg').showModal();
+  $('#btnResume').addEventListener('click', resume);
+  $('#backBtn').addEventListener('click', () => { saveGame(); goHome(); updateResume(); });
+  let restartArm = 0;
+  $('#shuffleBtn').addEventListener('click', () => {
+    if (!state.src) return;
+    if (state.placedCount > 0 && Date.now() - restartArm > 2500){ restartArm = Date.now(); toast('Натисни ще раз, щоб почати спочатку'); return; }
+    restartArm = 0; newPuzzle();
   });
+  $('#previewBtn').addEventListener('click', () => { state.ghost = !state.ghost; lsSet('pz_ghost', state.ghost ? 'on' : 'off'); updateHud(); requestRender(); toast(state.ghost ? 'Зразок на дошці увімкнено' : 'Зразок сховано'); });
+  $('#hintBtn').addEventListener('click', () => {
+    if (!state.src || state.done || !state.list.length) return;
+    if (!state.sel){ const t = state.trayR, vis = state.list.find((p, i) => { const s = slot(i); return s.x >= t.x - 1 && s.y >= t.y - 1 && s.x + s.s <= t.x + t.w + 1 && s.y + s.s <= t.y + t.h + 1; }); state.sel = vis || state.list[0]; }
+    scrollToPiece(state.sel);
+    state.hint = { r: state.sel.r, c: state.sel.c, until: performance.now() + 1800 };
+    startTimer(); playSound('pick'); requestRender();
+  });
+  $('#sizeBtn').addEventListener('click', () => { if (state.src) openSetup(); });
   $('#againBtn').addEventListener('click', () => { $('#winDlg').close(); newPuzzle(); });
-  $('#newBtn').addEventListener('click', () => { $('#winDlg').close(); goHome(); });
+  $('#newBtn').addEventListener('click', () => { $('#winDlg').close(); goHome(); updateResume(); });
   $('#soundBtn').addEventListener('click', () => {
     state.soundOn = !state.soundOn;
-    localStorage.setItem('pz_sound', state.soundOn ? 'on' : 'off');
+    lsSet('pz_sound', state.soundOn ? 'on' : 'off');
     updateSoundBtn();
-  });
-
-  // вибір розміру: поле 12×12, рамка росте від центру до країв
-  const MAX_N = 12, MIN_N = 3;
-  const sizeGrid = $('#sizeGrid');
-  sizeGrid.innerHTML = '<i></i>'.repeat(MAX_N * MAX_N);
-  const sizeBox = document.createElement('div');
-  sizeBox.className = 'size-box';
-  sizeGrid.appendChild(sizeBox);
-  function previewSize(n){
-    $('#sizeInfo').textContent = n + '×' + n;
-    const p = n / MAX_N * 100, off = (MAX_N - n) / 2 / MAX_N * 100;
-    sizeBox.style.left = off + '%';
-    sizeBox.style.top = off + '%';
-    sizeBox.style.width = p + '%';
-    sizeBox.style.height = p + '%';
-  }
-  // відстань від центру поля: чим далі від центру, тим більший розмір
-  function sizeFromEvent(e){
-    const r = sizeGrid.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width * MAX_N - MAX_N / 2;
-    const y = (e.clientY - r.top) / r.height * MAX_N - MAX_N / 2;
-    const d = Math.max(Math.abs(x), Math.abs(y));
-    return Math.min(MAX_N, Math.max(MIN_N, Math.round(d * 2)));
-  }
-  sizeGrid.addEventListener('pointermove', e => previewSize(sizeFromEvent(e)));
-  sizeGrid.addEventListener('pointerdown', e => {
-    const n = sizeFromEvent(e);
-    previewSize(n);
-    setSize(n);
-    $('#sizeDlg').close();
-  });
-  function setSize(n){
-    state.N = Math.min(MAX_N, Math.max(MIN_N, n));
-    updateSizeUI();
-    if (state.src) newPuzzle();
-  }
-  // показує поточний розмір: підпис, міні-поле з рамкою й доступність кнопок ±
-  function updateSizeUI(){
-    const n = state.N;
-    $('#gridLabel').textContent = n + '×' + n;
-    const box = document.querySelector('#sizeBtn .mini-box');
-    const p = n / MAX_N * 100, off = (MAX_N - n) / 2 / MAX_N * 100;
-    box.style.left = off + '%'; box.style.top = off + '%';
-    box.style.width = p + '%'; box.style.height = p + '%';
-    $('#minusBtn').disabled = n <= MIN_N;
-    $('#plusBtn').disabled = n >= MAX_N;
-  }
-  $('#minusBtn').addEventListener('click', () => setSize(state.N - 1));
-  $('#plusBtn').addEventListener('click', () => setSize(state.N + 1));
-  $('#sizeBtn').addEventListener('click', () => {
-    previewSize(state.N);
-    $('#sizeDlg').showModal();
   });
 
   // закриття вікон: кнопки з data-close і клік поза вікном
@@ -941,13 +1021,13 @@
     if (it) fromFile(it.getAsFile());
   });
 
-  window.addEventListener('resize', () => { if (state.src) layout(false); });
+  window.addEventListener('resize', () => { if (state.src) layout(); });
 
   // ---------- старт ----------
   document.getElementById('rocketScene').innerHTML = ROCKET_BODY;
   buildPicks();
   updateSoundBtn();
-  updateSizeUI();
+  updateResume();
   updateHud();
 })();
 </script>
