@@ -754,6 +754,7 @@ const APPS = [
 
   /* — Алгоритми і програмування: від блоків до коду, курси перед квестами, гра наприкінці — */
   {t:'algo',g:[5,6],   title:'Робот-кур\'єр',                desc:'Склади програму з блоків і достав посилки',     type:'Гра',         art:'robot',     bg:'--mint',   repo:'robot-courier', url:GH+'it-maysternia/apps/robot-courier/'},
+  {t:'algo',g:[7,8],   title:'Робот-кур\'єр 2.0',            desc:'Керуй роботом командами Python: цикли, умови, функції', type:'Гра',         art:'robot2',    bg:'--lilac',  repo:'robot-courier-2', url:GH+'it-maysternia/apps/robot-courier-2/'},
   {t:'algo',g:[5,7],   title:'Блок-схеми',                   desc:'Будуй алгоритми з блоків',                       type:'Редактор',    art:'flowchart', bg:'--lilac',  repo:'flowchart', url:GH+'it-maysternia/apps/flowchart/'},
   {t:'algo',g:[8,8],   title:'Python з нуля · 8 клас',       desc:'Курс Python для 8 класу',                      type:'Курс',        art:'pybook',    bg:'--mint',   repo:'learn-python'},
   {t:'algo',exam:1,g:[8,8],   title:'Тест: Python, 8 клас',        desc:'Перші кроки в Python',                           type:'Тест',       art:'snake',     bg:'--mint',   repo:'python-quest-8', url:GH+'it-maysternia/apps/python-quest-8/'},
@@ -916,6 +917,15 @@ const ART={
      <rect x="198" y="140" width="26" height="22" rx="5" fill="${u('s')}"/><path d="M204 151h14" stroke="#fff" stroke-width="3" stroke-linecap="round"/><rect x="98" y="150" width="58" height="8" rx="4" fill="#e3dff5"/>
      <circle cx="238" cy="74" r="24" fill="${u('o')}"/><rect x="235" y="60" width="6" height="18" rx="3" fill="#fff"/><circle cx="238" cy="86" r="3.5" fill="#fff"/>`,
     u=>`<path d="M124 0v50" stroke="#8e88b8" stroke-width="3"/><ellipse cx="112" cy="96" rx="22" ry="7" fill="url(#gl${UID})"/>`+spark(54,62,9,u('y'))+`<circle cx="282" cy="40" r="6" fill="${u('v')}"/>`)},
+  robot2(){return sc('lilac',[276,40,44],u=>
+    `<rect x="28" y="30" width="158" height="128" rx="16" fill="${u('k')}"/><circle cx="44" cy="44" r="4" fill="#ec6a64"/><circle cx="56" cy="44" r="4" fill="#f2c75a"/><circle cx="68" cy="44" r="4" fill="#5fc796"/>`+
+    [[44,64,26,'#b3a6ff'],[76,64,58,'#86b9ef'],[60,84,82,'#cfe6ff'],[60,104,60,'#ffc0a0'],[44,124,54,'#b9f0d4']].map(([x,y,w,c])=>`<rect x="${x}" y="${y}" width="${w}" height="9" rx="4.5" fill="${c}"/>`).join('')+
+    `<rect x="40" y="62" width="3" height="13" rx="1.5" fill="#86b9ef"/>
+     <circle cx="222" cy="160" r="11" fill="#3d3570"/><circle cx="270" cy="160" r="11" fill="#3d3570"/><circle cx="222" cy="160" r="4" fill="#8f86c9"/><circle cx="270" cy="160" r="4" fill="#8f86c9"/>
+     <rect x="204" y="112" width="84" height="46" rx="14" fill="${u('w')}"/><rect x="222" y="122" width="48" height="26" rx="5" fill="${u('y')}"/><path d="M222 135h48M246 122v26" stroke="#d8a93d" stroke-width="3"/>
+     <circle cx="246" cy="82" r="32" fill="${u('w')}"/><rect x="224" y="68" width="44" height="28" rx="12" fill="${u('k')}"/><rect x="230" y="78" width="32" height="9" rx="4.5" fill="${u('s')}"/>
+     <path d="M246 50v-14" stroke="#7a72ad" stroke-width="4" stroke-linecap="round"/><circle cx="246" cy="32" r="7" fill="${u('o')}"/>`,
+    u=>`<path d="M186 120c10 0 12 14 18 16" stroke="#8f86c9" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round" fill="none"/><ellipse cx="236" cy="66" rx="12" ry="5" fill="url(#gl${UID})"/>`+spark(300,150,9,u('y'))+`<circle cx="20" cy="172" r="6" fill="${u('m')}"/>`)},
   robot(){return sc('mint',[60,40,42],u=>
     `<path d="M232 96l30-26 30 26v60h-60z" fill="${u('o')}"/><path d="M226 100l36-32 36 32" stroke="#e36f53" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
      <rect x="252" y="124" width="20" height="32" rx="5" fill="#fff" opacity=".9"/><rect x="242" y="104" width="14" height="12" rx="3" fill="#fff" opacity=".75"/>
@@ -1329,6 +1339,7 @@ info.addEventListener('click',e=>{if(e.target===info)info.close()});
 /* ===== Оновлення (прихована сторінка #updates) =====
    Новий запис додавай ЗВЕРХУ: дата, що зроблено (new — новий ресурс, upd — оновлення), назви карток як у APPS. */
 const UPDATES=[
+  {date:'2026-11-22', items:[{t:'Робот-кур\'єр 2.0', k:'new', n:'16 місій: робот виконує код Python — цикли, умови й функції'}]},
   {date:'2026-11-18', items:[{t:'Пульт уроку', k:'upd', n:'Колесо завдань: рефлексія, фізхвилинка, терміни з тем і свої набори'}]},
   {date:'2026-11-17', items:[{t:'Python з нуля · 8 клас', k:'upd', n:'Нові уроки 0–16, простіший вигляд і здача робіт'},
                              {t:'Python з нуля · 9 клас', k:'upd', n:'Окремий курс: нові уроки 0–16 і здача робіт'}]},
