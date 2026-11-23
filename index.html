@@ -283,7 +283,7 @@ body.teach .tmode{display:inline-flex}
 .pbtn b{display:block;font:800 16px Rubik,sans-serif}
 .prow{display:flex;gap:6px;align-items:stretch}.prow .pbtn{flex:1;min-width:0}
 .pdel{flex:none;min-width:40px;padding:0 10px;border:0;border-radius:13px;background:var(--bg);color:var(--muted);font:800 18px Rubik,sans-serif;cursor:pointer}.pdel:hover{color:#c0392b}
-.pdel.arm{background:#e8505b;color:#fff;font-size:13px}
+.pcf{padding:12px;border-radius:15px;background:color-mix(in srgb,#e8505b 10%,var(--bg));box-shadow:inset 0 0 0 2px color-mix(in srgb,#e8505b 40%,transparent);display:grid;gap:8px}.pcf label{font-size:13.5px;font-weight:700;color:var(--muted)}.pcf label b{display:block;color:#e8505b;font-size:15px;margin-top:2px}.pcf input{padding:9px 11px;border-radius:11px;border:2px solid color-mix(in srgb,#e8505b 40%,transparent);font:700 15px Nunito,sans-serif;color:var(--ink);background:var(--card);outline:none}.pcf div{display:flex;gap:8px;justify-content:flex-end}.pcf button{height:38px;padding:0 14px;border:0;border-radius:11px;font:800 14px Nunito,sans-serif;cursor:pointer}.pcn{background:var(--bg);color:var(--ink)}.pok{background:#e8505b;color:#fff}.pok:disabled{opacity:.4;cursor:not-allowed}
 .pbtn small{color:var(--muted);font-size:13px}
 .pform{margin-top:16px;padding-top:14px;border-top:2px dashed var(--line);display:grid;gap:6px}
 .pform h3{font-size:16px;margin:0 0 4px}
@@ -1164,8 +1164,15 @@ function syncSet(){swT.setAttribute('aria-checked',String(TEACH));document.getEl
   document.getElementById('sList').innerHTML=Object.keys(PROF).sort().map(id=>`<div class="si"><span>${esc(PROF[id].name)} <small>${esc(PROF[id].cls)}</small></span><button type="button" data-del="${esc(id)}" aria-label="Видалити ${esc(PROF[id].name)}">×</button></div>`).join('')}
 function delProfile(id){if(ME===id){swapStore('');ME=null;RDONE=GUEST}else{try{if(localStorage.getItem('itm-owner')===id)swapStore('')}catch(err){}}delete PROF[id];saveR();syncWho();syncSet();route()}
 document.getElementById('pList').addEventListener('click',e=>{const d=e.target.closest('[data-pdel]');if(!d)return;e.stopPropagation();
-  if(!d.classList.contains('arm')){d.classList.add('arm');d.textContent='Видалити?';setTimeout(()=>{if(d.isConnected){d.classList.remove('arm');d.textContent='×'}},3000);return}
-  const row=d.closest('.prow');delProfile(d.dataset.pdel);row.remove()},true);
+  const row=d.closest('.prow'),old=document.querySelector('#pList .pcf');if(old){const same=old.previousElementSibling===row;old.remove();if(same)return}
+  const id=d.dataset.pdel,p=PROF[id];if(!p)return;const need='Видалити '+p.name,norm=x=>x.toLowerCase().replace(/[’ʼ`]/g,"'").replace(/\s+/g,' ').trim();
+  const cf=document.createElement('div');cf.className='pcf';
+  cf.innerHTML=`<label>Щоб видалити ім'я й увесь прогрес, напиши:<b>${esc(need)}</b></label><input autocomplete="off" spellcheck="false" aria-label="Підтвердження видалення"><div><button type="button" class="pcn">Скасувати</button><button type="button" class="pok" disabled>Видалити</button></div>`;
+  row.after(cf);const inp=cf.querySelector('input'),ok=cf.querySelector('.pok');inp.focus();
+  inp.oninput=()=>{ok.disabled=norm(inp.value)!==norm(need)};
+  inp.onkeydown=ev=>{if(ev.key==='Enter'){ev.preventDefault();if(!ok.disabled)ok.click()}};
+  cf.querySelector('.pcn').onclick=()=>cf.remove();
+  ok.onclick=()=>{delProfile(id);cf.remove();row.remove()}},true);
 document.getElementById('sList').addEventListener('click',e=>{const d=e.target.closest('[data-del]');if(!d)return;const id=d.dataset.del;if(ME===id){swapStore('');ME=null;RDONE=GUEST}else{try{if(localStorage.getItem('itm-owner')===id)swapStore('')}catch(err){}}delete PROF[id];saveR();syncWho();syncSet();route()});
 document.getElementById('mSet').addEventListener('click',()=>{setMenu(false);syncSet();setDlg.showModal()});
 setDlg.addEventListener('click',e=>{if(e.target===setDlg||e.target.closest('[data-x]')||e.target.closest('#sRes'))setDlg.close()});

@@ -40,7 +40,7 @@
   '.itmw-q{width:100%;margin:0 0 8px;padding:10px 12px;border-radius:12px;border:2px solid #e4e0f2;font:700 15px Nunito,sans-serif;color:#2f2a4a;background:#fff}'+
   '.itmw-list{display:grid;gap:6px;max-height:240px;overflow:auto;margin:0 0 14px}'+
   '.itmw-p{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border-radius:13px;border:0;background:#f5f3fb;color:#2f2a4a;cursor:pointer;text-align:left;font:700 15px Nunito,sans-serif}'+
-  '.itmw-r{display:flex;gap:6px;min-width:0}.itmw-r .itmw-p{flex:1;min-width:0;overflow:hidden;white-space:nowrap}.itmw-del.arm{white-space:nowrap;min-width:88px}.itmw-del{flex:none;min-width:40px;padding:0 10px;border:0;border-radius:13px;background:#f5f3fb;color:#6c6790;font:800 18px Rubik,sans-serif;cursor:pointer}.itmw-del:hover{color:#c0392b}.itmw-del.arm{background:#e8505b;color:#fff;font-size:13px}'+
+  '.itmw-r{display:flex;gap:6px;min-width:0}.itmw-r .itmw-p{flex:1;min-width:0;overflow:hidden;white-space:nowrap}.itmw-del.arm{white-space:nowrap;min-width:88px}.itmw-del{flex:none;min-width:40px;padding:0 10px;border:0;border-radius:13px;background:#f5f3fb;color:#6c6790;font:800 18px Rubik,sans-serif;cursor:pointer}.itmw-del:hover{color:#c0392b}.itmw-cf{padding:12px;border-radius:13px;background:#fff1f1;box-shadow:inset 0 0 0 2px #f3b4b8;display:grid;gap:8px}.itmw-cf label{font-size:13.5px;font-weight:700;color:#6c6790}.itmw-cf label b{display:block;color:#c0392b;font-size:15px;margin-top:2px}.itmw-cf input{padding:9px 11px;border-radius:11px;border:2px solid #f3b4b8;font:700 15px Nunito,sans-serif;color:#2f2a4a;background:#fff!important;outline:none}.itmw-cf div{display:flex;gap:8px;justify-content:flex-end}.itmw-cf button{height:38px;padding:0 14px;border:0;border-radius:11px;font:800 14px Nunito,sans-serif;cursor:pointer}.itmw-cn{background:#ece8fb;color:#2f2a4a}.itmw-ok{background:#e8505b;color:#fff}.itmw-ok:disabled{opacity:.4;cursor:not-allowed}'+
   '.itmw-p:hover{background:#ece8fb}.itmw-p.on{box-shadow:inset 0 0 0 2px #8f7dff}.itmw-p i{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#d5c7f1;font:800 12px Rubik,sans-serif;font-style:normal;flex:none}.itmw-p small{margin-left:auto;color:#6c6790;font-weight:800}'+
   '.itmw-f{display:grid;gap:6px;padding:14px;border-radius:16px;background:#f5f3fb}.itmw-f h3{margin:0 0 2px;font:700 15px Rubik,sans-serif}.itmw-f label{font-weight:800;font-size:13px;color:#6c6790}'+
   '.itmw-f input{padding:10px 12px;border-radius:12px;border:2px solid #e4e0f2;font:700 16px Nunito,sans-serif;color:#2f2a4a;background:#fff;outline:none}.itmw-f input:focus{border-color:#8f7dff}'+
@@ -51,9 +51,19 @@
     d=document.createElement('dialog');d.id='itmwDlg';d.className='itmw-dlg';d.setAttribute('aria-labelledby','itmwT');document.body.appendChild(d);
     d.addEventListener('click',function(e){if(e.target===d||e.target.closest('.itmw-x'))return d.close();
       var del=e.target.closest('[data-del]');if(del){
-        if(!del.classList.contains('arm')){del.classList.add('arm');del.textContent='Видалити?';setTimeout(function(){if(del.isConnected){del.classList.remove('arm');del.textContent='×'}},3000);return}
-        var id=del.dataset.del;PROF=J('itm-profiles',{});delete PROF[id];try{LS.setItem('itm-profiles',JSON.stringify(PROF))}catch(_){}
-        if(id===ME||LS.getItem('itm-owner')===id){d.close();go('');return}del.closest('.itmw-r').remove();return}
+        var row=del.closest('.itmw-r'),old=d.querySelector('.itmw-cf');if(old){var same=old.previousSibling===row;old.remove();if(same)return}
+        var id=del.dataset.del,pp=J('itm-profiles',{})[id];if(!pp)return;var need='Видалити '+pp.name;
+        var norm=function(x){return x.toLowerCase().replace(/[’ʼ`]/g,"'").replace(/\s+/g,' ').trim()};
+        var cf=document.createElement('div');cf.className='itmw-cf';
+        cf.innerHTML='<label>Щоб видалити ім\'я й увесь прогрес, напиши:<b>'+esc(need)+'</b></label><input autocomplete="off" spellcheck="false" aria-label="Підтвердження видалення"><div><button type="button" class="itmw-cn">Скасувати</button><button type="button" class="itmw-ok" disabled>Видалити</button></div>';
+        row.parentNode.insertBefore(cf,row.nextSibling);
+        var inp=cf.querySelector('input'),ok=cf.querySelector('.itmw-ok');inp.focus();
+        inp.oninput=function(){ok.disabled=norm(inp.value)!==norm(need)};
+        inp.onkeydown=function(ev){if(ev.key==='Enter'&&!ok.disabled){ev.preventDefault();ok.click()}};
+        cf.querySelector('.itmw-cn').onclick=function(){cf.remove()};
+        ok.onclick=function(){PROF=J('itm-profiles',{});delete PROF[id];try{LS.setItem('itm-profiles',JSON.stringify(PROF))}catch(_){}
+          if(id===ME||LS.getItem('itm-owner')===id){d.close();go('');return}cf.remove();row.remove()};
+        return}
       var p=e.target.closest('[data-pid]');if(p){d.close();if(p.dataset.pid!==ME)go(p.dataset.pid)}
       if(e.target.closest('.itmw-out')){d.close();go('')}});
     d.addEventListener('input',function(e){if(!e.target.classList.contains('itmw-q'))return;var q=e.target.value.trim().toLowerCase();
