@@ -281,6 +281,9 @@ body.teach .tmode{display:inline-flex}
 .pbtn{display:flex;align-items:center;gap:12px;width:100%;border:0;cursor:pointer;text-align:left;padding:8px 12px 8px 8px;border-radius:15px;background:var(--bg);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
 .pbtn:hover,.pbtn.me{background:color-mix(in srgb,var(--mint) 45%,var(--card))}
 .pbtn b{display:block;font:800 16px Rubik,sans-serif}
+.prow{display:flex;gap:6px;align-items:stretch}.prow .pbtn{flex:1;min-width:0}
+.pdel{flex:none;min-width:40px;padding:0 10px;border:0;border-radius:13px;background:var(--bg);color:var(--muted);font:800 18px Rubik,sans-serif;cursor:pointer}.pdel:hover{color:#c0392b}
+.pdel.arm{background:#e8505b;color:#fff;font-size:13px}
 .pbtn small{color:var(--muted);font-size:13px}
 .pform{margin-top:16px;padding-top:14px;border-top:2px dashed var(--line);display:grid;gap:6px}
 .pform h3{font-size:16px;margin:0 0 4px}
@@ -1159,6 +1162,10 @@ document.getElementById('tExit').addEventListener('click',()=>{setTeach(false);r
 const setDlg=document.getElementById('setDlg'),swT=document.getElementById('swTeach');
 function syncSet(){swT.setAttribute('aria-checked',String(TEACH));document.getElementById('sRes').hidden=!TEACH;
   document.getElementById('sList').innerHTML=Object.keys(PROF).sort().map(id=>`<div class="si"><span>${esc(PROF[id].name)} <small>${esc(PROF[id].cls)}</small></span><button type="button" data-del="${esc(id)}" aria-label="Видалити ${esc(PROF[id].name)}">×</button></div>`).join('')}
+function delProfile(id){if(ME===id){swapStore('');ME=null;RDONE=GUEST}else{try{if(localStorage.getItem('itm-owner')===id)swapStore('')}catch(err){}}delete PROF[id];saveR();syncWho();syncSet();route()}
+document.getElementById('pList').addEventListener('click',e=>{const d=e.target.closest('[data-pdel]');if(!d)return;e.stopPropagation();
+  if(!d.classList.contains('arm')){d.classList.add('arm');d.textContent='Видалити?';setTimeout(()=>{if(d.isConnected){d.classList.remove('arm');d.textContent='×'}},3000);return}
+  const row=d.closest('.prow');delProfile(d.dataset.pdel);row.remove()},true);
 document.getElementById('sList').addEventListener('click',e=>{const d=e.target.closest('[data-del]');if(!d)return;const id=d.dataset.del;if(ME===id){swapStore('');ME=null;RDONE=GUEST}else{try{if(localStorage.getItem('itm-owner')===id)swapStore('')}catch(err){}}delete PROF[id];saveR();syncWho();syncSet();route()});
 document.getElementById('mSet').addEventListener('click',()=>{setMenu(false);syncSet();setDlg.showModal()});
 setDlg.addEventListener('click',e=>{if(e.target===setDlg||e.target.closest('[data-x]')||e.target.closest('#sRes'))setDlg.close()});
@@ -1258,6 +1265,18 @@ function swapStore(to){
     Object.entries(next).forEach(([k,v])=>localStorage.setItem(k,v));
     localStorage.setItem('itm-owner',to);localStorage.setItem('itm-profiles',JSON.stringify(PROF));
   }catch(e){/* браузер переповнений — лишаємо як є */}}
+/* вхід у застосунках (apps) і на цій сторінці — спільний: підхоплюємо зміни з інших вкладок і після повернення назад */
+function syncFromStorage(){
+  try{PROF=JSON.parse(localStorage.getItem('itm-profiles')||'{}')||{}}catch(e){}
+  let m=null;try{const c=JSON.parse(localStorage.getItem('itm-me')||'null');if(c&&PROF[c.id]&&Date.now()-c.t<90*60e3)m=c.id}catch(e){}
+  try{GUEST=JSON.parse(localStorage.getItem('itm-route')||'{}')||{}}catch(e){}
+  const changed=m!==ME;ME=m;let owner='';try{owner=localStorage.getItem('itm-owner')||''}catch(e){}
+  if(owner!==(ME||''))swapStore(ME||'');
+  RDONE=ME?PROF[ME].done:GUEST;syncWho();if(changed)route();
+}
+addEventListener('pageshow',e=>{if(e.persisted)syncFromStorage()});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncFromStorage()});
+addEventListener('storage',e=>{if(!e.key||/^itm-(me|owner|profiles)$/.test(e.key))syncFromStorage()});
 function login(id){swapStore(id);ME=id;RDONE=PROF[id].done;const b=bandOf(PROF[id].cls);if(b){AGE=b;try{localStorage.setItem('itm-age',AGE)}catch(e){}}saveR();syncWho();route()}
 function logout(){swapStore('');ME=null;RDONE=GUEST;saveR();syncWho();route()}
 function syncWho(){const p=ME&&PROF[ME],b=document.getElementById('whoBtn');b.classList.toggle('in',!!p);
@@ -1267,7 +1286,7 @@ function syncWho(){const p=ME&&PROF[ME],b=document.getElementById('whoBtn');b.cl
 const whoDlg=document.getElementById('whoDlg');
 function openWho(){const ids=Object.keys(PROF).sort((a,b)=>(PROF[b].t||0)-(PROF[a].t||0));
   const cnt=p=>Object.keys(p.done).length;
-  document.getElementById('pList').innerHTML=ids.map(id=>{const p=PROF[id];return `<button type="button" class="pbtn${id===ME?' me':''}" data-pid="${esc(id)}"><span class="av">${esc(initials(p.name))}</span><span><b>${esc(p.name)}</b><small>${esc(p.cls)} · пройдено кроків: ${cnt(p)}</small></span></button>`}).join('');
+  document.getElementById('pList').innerHTML=ids.map(id=>{const p=PROF[id];return `<div class="prow"><button type="button" class="pbtn${id===ME?' me':''}" data-pid="${esc(id)}"><span class="av">${esc(initials(p.name))}</span><span><b>${esc(p.name)}</b><small>${esc(p.cls)} · пройдено кроків: ${cnt(p)}</small></span></button><button type="button" class="pdel" data-pdel="${esc(id)}" aria-label="Видалити ${esc(p.name)}" title="Видалити ім'я й прогрес">×</button></div>`}).join('');
   document.getElementById('pFormT').textContent=ids.length?'Мене тут немає':'Я тут уперше';
   document.getElementById('pName').placeholder='Наприклад, '+NAMES[Math.floor(Math.random()*NAMES.length)];
   document.getElementById('pOut').hidden=!ME;whoDlg.showModal()}
