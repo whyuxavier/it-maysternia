@@ -32,6 +32,7 @@
   var CSS='.itmw-btn{display:inline-flex;align-items:center;gap:7px;height:40px;max-width:190px;padding:0 13px 0 9px;border-radius:13px;border:0;cursor:pointer;font:800 14px/1 Nunito,Rubik,system-ui,sans-serif;color:inherit;background:rgba(128,128,150,.16);box-shadow:inset 0 0 0 1.5px rgba(128,128,150,.28);white-space:nowrap;flex:none}'+
   '.itmw-btn:hover{background:rgba(128,128,150,.26)}.itmw-btn svg{width:20px;height:20px;flex:none}.itmw-btn span{overflow:hidden;text-overflow:ellipsis}'+
   '.itmw-btn i{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#8f7dff;color:#fff;font:800 11px Rubik,sans-serif;font-style:normal;flex:none}'+
+  '.itmw-ib svg{width:22px;height:22px}.itmw-av{display:grid;place-items:center;width:min(28px,76%);aspect-ratio:1;border-radius:50%;background:#8f7dff;color:#fff;font:800 11.5px/1 Rubik,Nunito,sans-serif;letter-spacing:.02em}'+
   '.itmw-btn.in{padding-left:7px}@media (max-width:640px){.itmw-btn span{display:none}.itmw-btn{padding:0 8px;max-width:none}}'+
   '.itmw-dlg{border:0;padding:0;border-radius:24px;width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 24px);background:#fff;color:#2f2a4a;box-shadow:0 30px 70px rgba(10,8,30,.45);font:600 15px/1.45 Nunito,system-ui,sans-serif}'+
   '.itmw-dlg::backdrop{background:rgba(20,16,40,.55)}.itmw-in{position:relative;padding:22px}'+
@@ -82,18 +83,18 @@
       (ME?'<button type="button" class="itmw-out">Вийти</button>':'')+'</div>';
     d.showModal()}
   window.ITMW={me:function(){return ME&&PROF[ME]?{id:ME,name:PROF[ME].name,cls:PROF[ME].cls}:null},open:open,
-    mount:function(parent,before){
+    mount:function(parent,before,cls){
       function put(){var host=typeof parent==='string'?document.querySelector(parent):parent;
         var s=document.createElement('style');s.textContent=CSS;document.head.appendChild(s);
-        var b=document.createElement('button');b.type='button';b.className='itmw-btn'+(ME?' in':'');var p=ME&&PROF[ME];
+        var b=document.createElement('button');b.type='button';b.className=cls?cls+' itmw-ib':'itmw-btn'+(ME?' in':'');var p=ME&&PROF[ME];
         b.title=p?p.name+', '+p.cls+' — змінити учня':'Увійти, щоб зберігати свій прогрес';b.setAttribute('aria-label',b.title);
-        b.innerHTML=p?'<i>'+esc(ini(p.name))+'</i><span>'+esc(p.name.split(' ')[0])+'</span>':ICON+'<span>Увійти</span>';
+        b.innerHTML=cls?(p?'<span class="itmw-av">'+esc(ini(p.name))+'</span>':ICON):(p?'<i>'+esc(ini(p.name))+'</i><span>'+esc(p.name.split(' ')[0])+'</span>':ICON+'<span>Увійти</span>');
         b.addEventListener('click',function(e){e.stopPropagation();open()});
         if(!host){b.style.cssText='position:fixed;left:12px;bottom:12px;z-index:9999;background:#fff;color:#2f2a4a';document.body.appendChild(b);return}
         var ref=before?host.querySelector(before):host.firstChild;host.insertBefore(b,ref||host.firstChild)}
       if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',put);else put()}};
 })();
-ITMW.mount('header .tools','#snd');
+ITMW.mount('header .tools','#snd','ib');
 </script>
 <style>@media (max-width:440px){header .logo span{display:none}header .tools{gap:6px}}</style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
