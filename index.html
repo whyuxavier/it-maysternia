@@ -1374,7 +1374,7 @@ const ageBar=document.createElement('div');ageBar.className='agebar';gridEl.pare
 function renderAge(show){ageBar.hidden=!show;ageBar.innerHTML='<span class="al">Клас:</span>'+[['all','Усі'],['1-4','1–4'],['5-8','5–8'],['9-12','9–12']].map(([k,l])=>`<button type="button" data-age="${k}" aria-pressed="${AGE===k}">${l}</button>`).join('')}
 ageBar.addEventListener('click',e=>{const b=e.target.closest('[data-age]');if(!b)return;AGE=b.dataset.age;try{localStorage.setItem('itm-age',AGE)}catch(e){}renderGrid();renderSide()});
 const TEACHERS=()=>APPS.filter(a=>a.teacher).sort((a,b)=>(b.pin||0)-(a.pin||0)||(a.o||0)-(b.o||0));
-const EXAMS=()=>section('Тести','Ticket','--lilac',APPS.filter(a=>a.exam&&fitA(a)),'Перевір знання: одна спроба — у кінці оцінка. Відкривай, коли скаже вчитель.');
+const EXAMS=()=>section('Тести','Ticket','--lilac',APPS.filter(a=>a.exam&&fitA(a)));
 function renderGrid(){
   const id=current;let html='';
   if(id==='routes'){renderAge(true);html=(ME?'':`<div class="rlogin"><div><b>Увійди, щоб зберігати свій прогрес</b><br><small>Кожен учень на цьому комп'ютері має свої позначки.</small></div><button type="button" class="btn main" onclick="openWho()">Увійти</button></div>`)+ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).map(routeHTML).join('')}
