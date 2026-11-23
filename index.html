@@ -505,6 +505,9 @@ dialog{border-radius:26px;box-shadow:var(--soft2),0 0 0 1px var(--line)}
 .piece{animation-name:rise}
 @keyframes rise{from{opacity:0;transform:translateY(18px) scale(.97)}}
 @media (max-width:600px){.card,.card:nth-child(n){border-radius:18px}.card .pic{border-radius:13px}}
+.sec.fold .fh{display:none!important}
+.more{display:flex;align-items:center;gap:6px;margin:16px auto 0;padding:8px 16px;border:0;border-radius:999px;background:rgba(255,255,255,.7);box-shadow:0 0 0 1px rgba(59,52,80,.12);font:800 14px Nunito,sans-serif;color:#3b3450;cursor:pointer}
+.more:hover{background:#fff}.more span{color:#6f6787}.more svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 </style>
 </head>
 <body class="home">
@@ -1382,10 +1385,17 @@ function renderGrid(){
   else{renderAge(true);
     const tps=id==='all'?TOPICS:TOPICS.filter(t=>t.id===id);
     html+=tps.map(t=>section(t.label,t.ic,t.color,APPS.filter(a=>a.t===t.id&&!a.exam&&fitA(a)))).join('');
-    if(id==='all')html+=section('Проєкти','Paper','--coral',APPS.filter(a=>a.proj&&fitA(a)))+EXAMS()+section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))+section('Для вчителя','Work','--butter',TEACHERS())}
+    if(id==='all')html+=section('Проєкти','Paper','--coral',APPS.filter(a=>a.proj&&fitA(a))).replace('<div class="sec">','<div class="sec fold">')+EXAMS()+section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))+section('Для вчителя','Work','--butter',TEACHERS())}
   if(!html)html='<p class="empty">Для цього класу тут поки нічого немає — обери інший клас.</p>';
-  gridEl.innerHTML=html;
+  gridEl.innerHTML=html;fold();
 }
+/* у «Усе одразу» проєкти — один рядок і кнопка «Показати всі» */
+function fold(){gridEl.querySelectorAll('.sec.fold').forEach(sec=>{const g=sec.querySelector('.grid'),it=[...g.children];it.forEach(e=>e.classList.remove('fh'));
+  const top=it[0]?it[0].offsetTop:0,hid=it.filter(e=>e.offsetTop>top+4);hid.forEach(e=>e.classList.add('fh'));
+  let b=sec.querySelector('.more');if(!hid.length){if(b)b.remove();return}
+  if(!b){b=document.createElement('button');b.type='button';b.className='more';b.onclick=()=>{sec.classList.remove('fold');it.forEach(e=>e.classList.remove('fh'));b.remove()};sec.appendChild(b)}
+  b.innerHTML=`Показати всі <span>${it.length}</span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>`})}
+let foldT;addEventListener('resize',()=>{clearTimeout(foldT);foldT=setTimeout(fold,150)});
 function navCount(n){if(n.id==='projects')return APPS.filter(a=>a.proj&&fitA(a)).length;if(n.id==='routes')return ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).length;if(n.id==='exams')return APPS.filter(a=>a.exam&&fitA(a)).length;if(n.id==='games')return APPS.filter(a=>a.fun&&fitA(a)).length;if(n.id==='teacher')return APPS.filter(a=>a.teacher).length;if(n.id==='all')return APPS.filter(a=>a.teacher||fitA(a)).length;return APPS.filter(a=>a.t===n.id&&!a.exam&&fitA(a)).length}
 function renderSide(){const mc=document.getElementById('mcur');if(mc){const t=NAV.find(x=>x.id===current);mc.textContent=t?t.label:'';mc.hidden=current!=='all'}document.getElementById('mside').innerHTML=sideEl.innerHTML=NAV.map(t=>`<a href="#${t.id}" style="--dot:var(${t.color})"${t.id===current?' aria-current="true"':''}><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">${ICX[t.ic]||''}</svg></span><span class="lb">${t.label}</span><span class="n">${navCount(t)}</span></a>`).join('')};
 function setTab(id){current=id;renderGrid();renderSide()}
