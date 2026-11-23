@@ -217,8 +217,38 @@ const PROJ=[
    ['Напиши висновок','3–4 речення: який варіант вигідніший і чому. Як аналітик — від даних до висновку.',['Місія «Аналітик даних»',M+'data-analysis-quest/']]],
   crit:[['Дані зібрані й впорядковані в таблиці',3],['Розрахунки зроблені формулами, а не вручну',4],['Діаграма доречна й підписана',2],['Висновок спирається на дані',3]],
   teacher:['Мета: розрахунки формулами, діаграми, висновки на основі даних — проблемна ситуація з життя класу.','Ціни — реальні: сайти перевізників, музеїв, кафе. Можна працювати в парах.','Сильнішим: третій варіант або знижка для групи (умова ЯКЩО/IF).']},
+ {id:'elephant',g:[7,9],c:'--lilac',icon:'elephant',title:'Купи слона',
+  sit:'Є дитяча гра-підколка «Купи слона». Що б ти не відповів, чуєш: «Всі кажуть …, а ти купи слона!» Напиши програму, яка грає в це замість тебе.',
+  product:'Віконна програма на Python (tkinter): поле, кнопка й відповідь-підколка',time:'1 урок',where:'Python: Thonny, IDLE або ЄПайтон',
+  steps:[
+   ['Відкрий редактор','Thonny, IDLE або онлайн-редактор ЄПайтон. Створи файл slon.py.',['Курс «Python з нуля»','https://whyuxavier.github.io/learn-python/']],
+   ['Створи вікно','from tkinter import *, далі winnie = Tk(), заголовок «Купи слона» і розмір 400x200.'],
+   ['Додай напис','luba = Label(text="Купи слона!") і розмісти: place(relx=0.5, rely=0.2, anchor="center").'],
+   ['Додай поле введення','andry = Entry() — сюди друг пише відповідь. Розмісти трохи нижче напису.'],
+   ['Напиши функцію reply()','answer = andry.get(), потім luba.config(text=f"Всі кажуть {answer}, а ти купи слона!") і andry.delete(0, END).'],
+   ['Додай кнопку','betty = Button(text="Відповісти", command=reply) — без дужок після reply. У кінці winnie.mainloop().'],
+   ['Перевір на друзях','Дай сусідові: хай спробує відмовитися. Слон не має відступати!'],
+   ['Прокачай програму','Додай кольори й шрифти або лічильник спроб: після 5-ї слон «здається».']],
+  crit:[['Вікно з назвою й розміром',2],['Напис і поле введення',2],['Функція з get() і f-рядком',3],['Кнопка викликає функцію',2],['Поле очищується',1],['Працює без помилок, код охайний',1],['Власне покращення',1]],
+  teacher:['Мета: віджети Label, Entry, Button, метод get(), f-рядки, config(), розміщення place з relx/rely.','Типова помилка: command=reply() з дужками — функція спрацьовує одразу при запуску.','andry.delete(0, END) працює завдяки from tkinter import *; з import tkinter as tk пишемо tk.END.','Якщо Python не встановлено — запускайте в онлайн-редакторі ЄПайтон.']},
+ {id:'excuses',g:[7,9],c:'--butter',icon:'dice',title:'Генератор виправдань',
+  sit:'Ти забув зробити домашнє, а урок за п\'ять хвилин. Потрібна швидка й смішна відмовка! Створи програму, яка вигадує виправдання одним кліком.',
+  product:'Віконна програма на Python (tkinter) з кнопкою «Вигадати виправдання»',time:'1 урок',where:'Python: Thonny, IDLE або ЄПайтон',
+  steps:[
+   ['Підготуй середовище','Відкрий Thonny або IDLE і створи файл excuses.py.',['Курс «Python з нуля»','https://whyuxavier.github.io/learn-python/']],
+   ['Підключи модулі','import tkinter as tk — для вікна, import random — для випадкового вибору.'],
+   ['Склади список','excuses = [...] — щонайменше 8 смішних виправдань у лапках через кому. Наприклад: «Мій кіт вирішив, що зошит — це його ковдра».'],
+   ['Створи вікно','window = tk.Tk(), заголовок і розмір, наприклад 500x300.'],
+   ['Додай написи','Заголовок, коротка інструкція й result_label — тут з\'являтиметься виправдання.'],
+   ['Напиши функцію','generate_excuse(): excuse = random.choice(excuses), потім result_label.config(text=excuse).'],
+   ['Додай кнопку','«Вигадати виправдання» з command=generate_excuse — без дужок!'],
+   ['Запусти й перевір','window.mainloop(). Кожен клік — нове виправдання.']],
+  crit:[['Файл створено, модулі підключено',2],['Список із 8+ виправдань',2],['Вікно, заголовок і написи',2],['Функція з random.choice',2],['Кнопка оновлює текст',2],['Працює без помилок, охайно',1],['Додаткове завдання',1]],
+  teacher:['Мета: списки, модуль random, вікно tkinter, обробка натискання кнопки.','План (45 хв): мотивація 5 · пояснення 3 · практика 25 · перевірка 7 · рефлексія 5.','Типові помилки: NameError — немає import random або список названо інакше; command=generate_excuse() з дужками; пропущена кома чи лапка у списку — SyntaxError.','Додаткові завдання: кнопка «Скопіювати», ще 5 виправдань, власне оформлення, без повтору двічі поспіль.']}
 ];
 const ICON={
+ elephant:'<svg viewBox="0 0 48 48"><rect x="4" y="8" width="40" height="32" rx="5" fill="#fbfbfa"/><ellipse cx="26" cy="27" rx="11" ry="8" fill="#b9b3cc"/><circle cx="16" cy="22" r="7" fill="#b9b3cc"/><ellipse cx="19" cy="21" rx="4" ry="5" fill="#a39cbd"/><path d="M11 24c-2 4-1 9 2 10" stroke="#b9b3cc" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="14.5" cy="20" r="1.3" fill="#3b3450"/><rect x="20" y="32" width="4" height="5" rx="1.5" fill="#b9b3cc"/><rect x="30" y="32" width="4" height="5" rx="1.5" fill="#b9b3cc"/></svg>',
+ dice:'<svg viewBox="0 0 48 48"><path d="M7 9h26a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H17l-7 6v-6H7a4 4 0 0 1-4-4V13a4 4 0 0 1 4-4z" fill="#fbfbfa"/><rect x="9" y="15" width="20" height="3.5" rx="1.7" fill="#d5c7f1"/><rect x="9" y="21" width="14" height="3.5" rx="1.7" fill="#d5c7f1"/><rect x="25" y="23" width="19" height="19" rx="5" fill="#eba497" transform="rotate(12 34.5 32.5)"/><circle cx="30" cy="28" r="1.8" fill="#fbfbfa"/><circle cx="34.5" cy="32.5" r="1.8" fill="#fbfbfa"/><circle cx="39" cy="37" r="1.8" fill="#fbfbfa"/></svg>',
  card:'<svg viewBox="0 0 48 48"><rect x="6" y="10" width="36" height="28" rx="5" fill="#fbfbfa"/><path d="M24 31c-6-4-9-7-9-10a4.5 4.5 0 0 1 9-1 4.5 4.5 0 0 1 9 1c0 3-3 6-9 10z" fill="#eba497"/><rect x="10" y="14" width="4" height="4" fill="#bfe3cf"/><rect x="34" y="30" width="4" height="4" fill="#bddcf3"/></svg>',
  shield:'<svg viewBox="0 0 48 48"><path d="M24 5l16 6v11c0 10-7 17-16 21C15 39 8 32 8 22V11z" fill="#fbfbfa"/><rect x="17" y="21" width="14" height="11" rx="3" fill="#3b3450"/><path d="M20 21v-3a4 4 0 0 1 8 0v3" fill="none" stroke="#3b3450" stroke-width="3"/><circle cx="24" cy="26.5" r="1.8" fill="#f6e19c"/></svg>',
  chart:'<svg viewBox="0 0 48 48"><rect x="6" y="8" width="36" height="32" rx="5" fill="#fbfbfa"/><rect x="12" y="26" width="6" height="9" rx="1.5" fill="#bddcf3"/><rect x="21" y="18" width="6" height="17" rx="1.5" fill="#eba497"/><rect x="30" y="22" width="6" height="13" rx="1.5" fill="#f6e19c"/><path d="M11 15h14" stroke="#3b3450" stroke-width="3" stroke-linecap="round"/></svg>'};
@@ -257,7 +287,7 @@ function listView(){
         <g transform="rotate(35 330 230)"><rect x="318" y="160" width="22" height="110" rx="5" fill="#bddcf3"/><path d="M318 270h22l-11 22z" fill="#f6c6a6"/><path d="M325 284h8l-4 8z" fill="#3b3450"/><rect x="318" y="160" width="22" height="16" rx="5" fill="#eba497"/></g>
         <rect x="40" y="180" width="70" height="54" rx="10" fill="#d5c7f1"/><rect x="52" y="194" width="10" height="28" rx="3" fill="#fbfbfa"/><rect x="68" y="204" width="10" height="18" rx="3" fill="#fbfbfa"/><rect x="84" y="198" width="10" height="24" rx="3" fill="#fbfbfa"/>
       </g></svg>
-      <span class="chip c1">Ситуація з життя</span><span class="chip c2">Кроки й критерії</span><span class="chip c3">${PROJ.length} проєкти</span>
+      <span class="chip c1">Ситуація з життя</span><span class="chip c2">Кроки й критерії</span><span class="chip c3">${PROJ.length} ${PROJ.length%10>=2&&PROJ.length%10<=4&&(PROJ.length%100<10||PROJ.length%100>=20)?'проєкти':'проєктів'}</span>
     </div></section>
   <section class="list" id="list"><h2>Обери проєкт</h2><div class="pgrid">${PROJ.map(p=>{const d=doneOf(p),n=p.steps.length;
     return `<a class="pcard" href="#${p.id}" style="--c:var(${p.c})"><div class="top">${ICON[p.icon]}</div><div class="bd"><h3>${esc(p.title)}</h3><p>${esc(p.sit.split('. ')[0])}.</p>

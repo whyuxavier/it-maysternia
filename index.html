@@ -807,6 +807,8 @@ const APPS = [
   {proj:1,g:[1,4],   title:'Проєкт «Піксельна листівка»',   desc:'Створи листівку для рідних на комп\'ютері',  type:'Проєкт', art:'projCard',   bg:'--peach', repo:'it-maysternia', url:GH+'it-maysternia/apps/projects/#card'},
   {proj:1,g:[5,8],   title:'Проєкт «Пам\'ятка безпеки»',     desc:'Допоможи молодшим не потрапити до шахраїв',   type:'Проєкт', art:'projSafety', bg:'--sky',   repo:'it-maysternia', url:GH+'it-maysternia/apps/projects/#safety'},
   {proj:1,g:[9,12],  title:'Проєкт «Бюджет екскурсії»',     desc:'Порахуй і порівняй два варіанти поїздки',     type:'Проєкт', art:'projTrip',   bg:'--mint',  repo:'it-maysternia', url:GH+'it-maysternia/apps/projects/#trip'},
+  {proj:1,g:[7,9],   title:'Проєкт «Купи слона»',           desc:'Програма на Python, яка не дає відмовитися',  type:'Проєкт', art:'projElephant', bg:'--lilac', repo:'it-maysternia', url:GH+'it-maysternia/apps/projects/#elephant'},
+  {proj:1,g:[7,9],   title:'Проєкт «Генератор виправдань»',  desc:'Смішна відмовка одним кліком на Python',      type:'Проєкт', art:'projExcuses',  bg:'--butter',repo:'it-maysternia', url:GH+'it-maysternia/apps/projects/#excuses'},
 
   /* — Ігри для перерви — */
   {fun:1,g:[1,12], title:'Танграм',                      desc:'Склади фігуру з семи частинок',                  type:'Гра',         art:'tangram',   bg:'--butter', repo:'tangram', url:GH+'it-maysternia/apps/tangram/'},
@@ -861,6 +863,15 @@ const ART={
   projSafety(){return sc('sky',[272,44,46],u=>CLIP(u)+
     `<path d="M246 46l42 15v30c0 27-19 44-42 54-23-10-42-27-42-54V61z" fill="${u('s')}"/><path d="M246 58l30 11v22c0 19-13 32-30 40z" fill="#fff" opacity=".25"/><rect x="230" y="86" width="32" height="26" rx="7" fill="${u('k')}"/><path d="M236 86v-7a10 10 0 0 1 20 0v7" stroke="#352f58" stroke-width="5" fill="none"/><circle cx="246" cy="98" r="4" fill="${u('y')}"/>`,
     u=>spark(290,160,9,u('y'))+`<circle cx="30" cy="140" r="6" fill="${u('o')}"/>`)},
+  projElephant(){return sc('lilac',[272,44,46],u=>CLIP(u)+
+    `<rect x="196" y="44" width="104" height="86" rx="12" fill="${u('w')}"/><rect x="196" y="44" width="104" height="18" rx="9" fill="${u('v')}"/><rect x="196" y="54" width="104" height="8" fill="${u('v')}"/><circle cx="208" cy="53" r="3" fill="#fff"/>`+
+    `<rect x="212" y="72" width="72" height="8" rx="4" fill="#e3dff5"/><rect x="216" y="88" width="64" height="14" rx="5" fill="#fff" stroke="#e3dff5" stroke-width="2"/><rect x="230" y="108" width="36" height="14" rx="6" fill="${u('o')}"/>`+
+    `<g transform="translate(250 166)"><ellipse cx="6" cy="0" rx="26" ry="17" fill="#b9b3cc"/><circle cx="-20" cy="-10" r="15" fill="#b9b3cc"/><ellipse cx="-12" cy="-12" rx="9" ry="11" fill="#a39cbd"/><path d="M-31 -4c-6 8-4 18 3 21" stroke="#b9b3cc" stroke-width="8" fill="none" stroke-linecap="round"/><circle cx="-24" cy="-14" r="2.6" fill="#352f58"/></g>`,
+    u=>spark(36,56,9,u('y')))},
+  projExcuses(){return sc('butter',[272,44,46],u=>CLIP(u)+
+    `<path d="M204 44h84a12 12 0 0 1 12 12v40a12 12 0 0 1-12 12h-50l-20 16v-16h-14a12 12 0 0 1-12-12V56a12 12 0 0 1 12-12z" fill="${u('w')}"/><rect x="210" y="62" width="74" height="9" rx="4.5" fill="#e3dff5"/><rect x="210" y="80" width="52" height="9" rx="4.5" fill="#e3dff5"/>`+
+    `<g transform="rotate(14 262 156)"><rect x="238" y="132" width="48" height="48" rx="11" fill="${u('o')}"/><circle cx="250" cy="144" r="4.5" fill="#fff"/><circle cx="262" cy="156" r="4.5" fill="#fff"/><circle cx="274" cy="168" r="4.5" fill="#fff"/></g>`,
+    u=>spark(36,56,9,u('v')))},
   projTrip(){return sc('mint',[272,44,46],u=>CLIP(u)+
     `<rect x="198" y="44" width="96" height="84" rx="14" fill="${u('w')}"/><rect x="212" y="94" width="16" height="24" rx="5" fill="${u('s')}"/><rect x="236" y="72" width="16" height="46" rx="5" fill="${u('o')}"/><rect x="260" y="84" width="16" height="34" rx="5" fill="${u('m')}"/><rect x="212" y="56" width="44" height="7" rx="3.5" fill="#e3dff5"/>`+
     `<ellipse cx="270" cy="160" rx="22" ry="8" fill="#e5b84a"/><rect x="248" y="146" width="44" height="14" fill="${u('y')}"/><ellipse cx="270" cy="146" rx="22" ry="8" fill="#ffe9a6"/><ellipse cx="236" cy="168" rx="18" ry="7" fill="#e5b84a"/><rect x="218" y="158" width="36" height="10" fill="${u('y')}"/><ellipse cx="236" cy="158" rx="18" ry="7" fill="#ffe9a6"/>`,
