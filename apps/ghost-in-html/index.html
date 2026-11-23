@@ -58,14 +58,17 @@
       try{LS.setItem('itm-profiles',JSON.stringify(PROF))}catch(_){}d.close();if(id!==ME)go(id)});
     d.addEventListener('keydown',function(e){e.stopPropagation()});
     return d}
-  function open(){PROF=J('itm-profiles',{});var d=dlg(),ids=Object.keys(PROF).sort(function(a,b){return (PROF[b].t||0)-(PROF[a].t||0)});
+  function open(){if(!document.getElementById('itmwCss')){var st=document.createElement('style');st.id='itmwCss';st.textContent=CSS;document.head.appendChild(st)}PROF=J('itm-profiles',{});var d=dlg(),ids=Object.keys(PROF).sort(function(a,b){return (PROF[b].t||0)-(PROF[a].t||0)});
     d.innerHTML='<div class="itmw-in"><button class="itmw-x" type="button" aria-label="Закрити">×</button><h2 id="itmwT">Хто за комп\'ютером?</h2><p>Обери себе — прогрес збережеться саме для тебе.</p>'+
       (ids.length>8?'<input class="itmw-q" type="search" placeholder="Пошук за іменем" aria-label="Пошук учня">':'')+
       (ids.length?'<div class="itmw-list">'+ids.map(function(id){var p=PROF[id];return '<button type="button" class="itmw-p'+(id===ME?' on':'')+'" data-pid="'+esc(id)+'" data-s="'+esc((p.name+' '+p.cls).toLowerCase())+'"><i>'+esc(ini(p.name))+'</i>'+esc(p.name)+'<small>'+esc(p.cls)+'</small></button>'}).join('')+'</div>':'')+
       '<form class="itmw-f"><h3>'+(ids.length?'Мене немає у списку':'Я тут уперше')+'</h3><label for="itmwN">Ім\'я та прізвище</label><input id="itmwN" autocomplete="off" required maxlength="40"><label for="itmwC">Клас</label><input id="itmwC" autocomplete="off" required maxlength="8" placeholder="Наприклад, 6-А"><button class="itmw-go" type="submit">Увійти</button></form>'+
       (ME?'<button type="button" class="itmw-out">Вийти</button>':'')+'</div>';
     d.showModal()}
-  window.ITMW={me:function(){return ME&&PROF[ME]?{id:ME,name:PROF[ME].name,cls:PROF[ME].cls}:null},open:open,
+  window.ITMW={login:function(n,c){n=String(n).trim().replace(/\s+/g,' ');c=String(c).trim().toUpperCase().replace(/\s+/g,'');var id=(n+'|'+c).toLowerCase();
+      PROF=J('itm-profiles',{});if(!PROF[id])PROF[id]={name:n,cls:c,done:{}};PROF[id].t=Date.now();LS.setItem('itm-profiles',JSON.stringify(PROF));
+      if(id!==ME){swap(id);ME=id}LS.setItem('itm-me',JSON.stringify({id:id,t:Date.now()}));return id},
+    me:function(){return ME&&PROF[ME]?{id:ME,name:PROF[ME].name,cls:PROF[ME].cls}:null},open:open,
     mount:function(parent,before){
       function put(){var host=typeof parent==='string'?document.querySelector(parent):parent;
         var s=document.createElement('style');s.textContent=CSS;document.head.appendChild(s);
@@ -77,8 +80,9 @@
         var ref=before?host.querySelector(before):host.firstChild;host.insertBefore(b,ref||host.firstChild)}
       if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',put);else put()}};
 })();
-ITMW.mount('header.top','#soundBtn');
 </script>
+<style>.who-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 12px;margin:0 0 12px;border-radius:12px;background:rgba(127,127,150,.14)}
+.itmw-dlg h2,.itmw-dlg h3{color:#2f2a4a!important;opacity:1!important}.itmw-dlg input{background:#fff!important;color:#2f2a4a!important;border:2px solid #e4e0f2!important;box-shadow:none!important}.itmw-dlg input:focus{border-color:#8f7dff!important}</style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ghost in HTML</title>
 <meta name="description" content="Квест з HTML, CSS і JavaScript: виправ код у 12 кімнатах і звільни привида.">
@@ -1083,7 +1087,9 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#overlay').clas
 
 /* ===================== info ===================== */
 function info(){
+  const who=window.ITMW&&ITMW.me();
   modal(`<h2>Ghost in HTML</h2>
+  <div class="who-row"><span>${who?'Учень: <b>'+esc(who.name)+'</b>, '+esc(who.cls):'Учня не обрано'}</span><button class="btn small" id="whoBtn">${who?'Змінити учня':'Обрати учня'}</button></div>
   <p>Квест для закріплення курсу веб-програмування. На старому сайті шкільної газети застряг привид Піксель. Виправ помилки в коді 12 кімнат, збери 12 фрагментів ключа — і отримай сертифікат.</p>
   <h3>Правила</h3>
   <ul>
@@ -1104,6 +1110,7 @@ function info(){
     <a class="gh" href="https://github.com/whyuxavier/it-maysternia/tree/main/apps/ghost-in-html" target="_blank" rel="noopener"><svg><use href="#i-star"/></svg>GitHub</a>
     <button class="btn danger small" id="wipe">Почати спочатку</button>
   </div>`);
+  $('#whoBtn').onclick=()=>{closeModal();ITMW.open()};
   $('#wipe').onclick=()=>{if(confirm('Стерти весь прогрес?')){S={rooms:{},sound:S.sound};save();closeModal();show('home');homeLbl()}};
 }
 $('#infoBtn').onclick=info; $('#howBtn').onclick=info;
@@ -1114,9 +1121,13 @@ $('#brand').onclick=()=>{homeLbl();show('home')};
 $('#startBtn').onclick=()=>{
   ac();
   if(S.name){openMap();return}
-  modal(`<h2>Хто увійшов у сайт?</h2><p>Ім’я з’явиться у твоєму сертифікаті.</p>
-  <form id="nameF"><input class="name-in" id="nameIn" maxlength="40" placeholder="Ім’я та прізвище" required><div class="row"><button class="btn primary" type="submit">Почати</button></div></form>`);
-  $('#nameF').onsubmit=e=>{e.preventDefault();const v=$('#nameIn').value.trim();if(!v)return;S.name=v;save();closeModal();play('boo');openMap();setTimeout(()=>toast('Привіт, '+esc(v)+'! Я Піксель. Почнемо з підвалу.'),400)};
+  const who=window.ITMW&&ITMW.me();
+  modal(`<h2>Хто увійшов у сайт?</h2><p>Ім’я з’явиться у твоєму сертифікаті, а прогрес збережеться саме для тебе.</p>
+  <form id="nameF"><input class="name-in" id="nameIn" maxlength="40" placeholder="Ім’я та прізвище" required value="${who?esc(who.name):''}"><input class="name-in" id="clsIn" maxlength="8" placeholder="Клас, напр. 10-А" required value="${who?esc(who.cls):''}" style="margin-top:8px"><div class="row"><button class="btn primary" type="submit">Почати</button></div></form>`);
+  $('#nameF').onsubmit=e=>{e.preventDefault();const v=$('#nameIn').value.trim(),c=$('#clsIn').value.trim();if(!v||!c)return;
+    if(window.ITMW){const snd=S.sound;ITMW.login(v,c);try{S=JSON.parse(localStorage.getItem(KEY))||{}}catch(_){S={}}S.rooms=S.rooms||{};if(S.sound===undefined)S.sound=snd}
+    if(S.name&&doneCount()){S.name=v;save();closeModal();homeLbl();openMap();toast('З поверненням, '+esc(v)+'!');return}
+    S.name=v;save();closeModal();play('boo');openMap();setTimeout(()=>toast('Привіт, '+esc(v)+'! Я Піксель. Почнемо з підвалу.'),400)};
 };
 
 /* ===================== map ===================== */
