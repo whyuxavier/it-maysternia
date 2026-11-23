@@ -1120,8 +1120,8 @@ const SHOW_ROUTES=false;
 const NAV=[
  {id:'all',label:'Усе одразу',color:'--sky',ic:'Category'},
  ...(SHOW_ROUTES?[{id:'routes',label:'Маршрути',color:'--peach',ic:'Discovery'}]:[]),
- {id:'projects',label:'Проєкти',color:'--coral',ic:'Paper'},
  ...TOPICS.filter(t=>APPS.some(a=>a.t===t.id)),
+ {id:'projects',label:'Проєкти',color:'--coral',ic:'Paper'},
  {id:'exams',label:'Тести',color:'--lilac',ic:'Ticket'},
  {id:'games',label:'Ігри для перерви',color:'--coral',ic:'Game'},
  {id:'teacher',label:'Для вчителя',color:'--butter',ic:'Work'},
@@ -1385,7 +1385,7 @@ function renderGrid(){
   else{renderAge(true);
     const tps=id==='all'?TOPICS:TOPICS.filter(t=>t.id===id);
     html+=tps.map(t=>section(t.label,t.ic,t.color,APPS.filter(a=>a.t===t.id&&!a.exam&&fitA(a)))).join('');
-    if(id==='all')html+=section('Проєкти','Paper','--coral',APPS.filter(a=>a.proj&&fitA(a))).replace('<div class="sec">','<div class="sec fold">')+EXAMS()+section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))+section('Для вчителя','Work','--butter',TEACHERS())}
+    if(id==='all')html+=section('Проєкти','Paper','--coral',APPS.filter(a=>a.proj&&fitA(a))).replace('<div class="sec">','<div class="sec fold">')+EXAMS().replace('<div class="sec">','<div class="sec fold">')+section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))+section('Для вчителя','Work','--butter',TEACHERS())}
   if(!html)html='<p class="empty">Для цього класу тут поки нічого немає — обери інший клас.</p>';
   gridEl.innerHTML=html;fold();
 }
