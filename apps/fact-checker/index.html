@@ -66,14 +66,19 @@ svg{display:block}
 .wt .ico{width:26px;height:26px;border-radius:8px;display:grid;place-items:center}
 .wt .ico svg{width:16px;height:16px}
 .wt b{font:800 15px Rubik,sans-serif;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wclose{width:34px;height:34px;border-radius:10px;border:0;background:none;display:grid;place-items:center}
-.wclose:hover{background:rgba(196,73,61,.12)}
-.wclose svg{width:18px;height:18px}
+.wbtn{width:34px;height:34px;border-radius:10px;border:0;background:none;display:grid;place-items:center;flex:none}
+.wbtn:hover{background:rgba(59,52,80,.08)}
+.wclose:hover{background:rgba(196,73,61,.14)}
+.wbtn svg{width:17px;height:17px}
+.rsz{position:absolute;right:0;bottom:0;width:18px;height:18px;cursor:nwse-resize;touch-action:none;background:linear-gradient(135deg,transparent 50%,rgba(59,52,80,.25) 50%,rgba(59,52,80,.25) 58%,transparent 58%,transparent 70%,rgba(59,52,80,.25) 70%,rgba(59,52,80,.25) 78%,transparent 78%)}
+.win.maxed{border-radius:0}.win.maxed .rsz{display:none}
+.tb.mini{opacity:.6}
 .wb{flex:1;overflow:auto;position:relative}
 @media (max-width:760px){
  .icons{grid-template-columns:repeat(3,1fr);grid-template-rows:none;grid-auto-flow:row;grid-auto-columns:auto;left:10px;right:10px;top:12px;bottom:auto}
  .win{left:0!important;top:0!important;width:100%!important;height:calc(100% - 58px)!important;border-radius:0;min-width:0}
  .wt{cursor:default}
+ .wmax,.rsz{display:none}
  .tb .lbl{display:none}
  .tb.casebtn .lbl{display:inline}
 }
@@ -159,6 +164,28 @@ svg{display:block}
  .trb{width:36px}
 }
 @media (max-width:420px){.clock{display:none}}
+
+
+.ctx{position:fixed;z-index:2500;min-width:220px;padding:6px;border-radius:14px;background:var(--card);box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line),0 20px 40px -18px rgba(40,30,70,.5)}
+.ctx button{display:flex;gap:10px;align-items:center;width:100%;border:0;background:none;padding:8px 10px;border-radius:9px;font:700 14.5px Nunito;text-align:left}
+.ctx button:hover{background:rgba(189,220,243,.6)}
+.ctx svg{width:17px;height:17px;flex:none}
+.ctx hr{border:0;border-top:1px solid var(--line);margin:4px 6px}
+.spam{position:fixed;inset:0;z-index:2200;overflow:hidden}
+.ad{position:absolute;width:300px;max-width:calc(100% - 20px);border-radius:14px;background:#fff;box-shadow:0 6px 0 rgba(0,0,0,.25),0 0 0 3px #3b3450;overflow:hidden;animation:adin .18s ease-out}
+@keyframes adin{from{transform:scale(.6);opacity:0}}
+.adt{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 4px 12px;background:#3b3450;color:#fff;font:800 12px Nunito}
+.adt button{width:26px;height:26px;border:0;border-radius:7px;background:#c4493d;color:#fff;display:grid;place-items:center}
+.adt svg{width:14px;height:14px}
+.adb{padding:14px;background:var(--ad);text-align:center}
+.adb h4{font:800 22px Rubik;color:#c4493d;margin-bottom:6px}
+.adb p{font:700 14.5px Nunito;margin-bottom:10px}
+.adbtn{display:inline-block;padding:9px 18px;border-radius:12px;background:#38d27a;font:800 15px Rubik;color:#10331f}
+#os.sick .desk{filter:hue-rotate(-30deg) saturate(1.6)}
+.crash{position:fixed;inset:0;z-index:2600;display:grid;place-items:center;background:rgba(40,10,15,.55)}
+.crashb{width:min(440px,calc(100% - 28px));padding:24px;border-radius:22px;background:var(--card);text-align:center;box-shadow:0 6px 0 var(--shadow),0 30px 60px -20px rgba(0,0,0,.5)}
+.crashb h3{font:800 24px Rubik;margin-bottom:8px;color:#c4493d}
+@media (prefers-reduced-motion:reduce){.ad{animation:none}}
 
 /* marker */
 .mk{border-radius:5px;transition:background .15s, box-shadow .15s}
@@ -368,6 +395,8 @@ kbd{font:800 13px ui-monospace,Consolas,monospace;padding:3px 8px;border-radius:
  <symbol id="i-book" viewBox="0 0 24 24"><path class="ink" d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v16H6.5A2.5 2.5 0 0 0 4 20.5z"/><path class="stk" d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></symbol>
  <symbol id="i-bell" viewBox="0 0 24 24"><path class="ink" d="M12 3a6 6 0 0 0-6 6v4l-2 3h16l-2-3V9a6 6 0 0 0-6-6z"/><path class="stk" d="M10 19.5a2 2 0 0 0 4 0"/></symbol>
  <symbol id="i-power" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.8" d="M12 3v8M7 6.5a7 7 0 1 0 10 0"/></symbol>
+ <symbol id="i-min" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.8" d="M6 17h12"/></symbol>
+ <symbol id="i-max" viewBox="0 0 24 24"><rect x="5.5" y="5.5" width="13" height="13" rx="3" class="stk" style="stroke-width:2.4"/></symbol>
  <symbol id="i-gh" viewBox="0 0 24 24"><path class="ink" d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.6.4-1.1.7-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></symbol>
  <symbol id="i-vf" viewBox="0 0 24 24"><path fill="#3d8bdc" d="M12 1.5l2.6 2 3.2-.3 1 3.1 2.8 1.6-.9 3.1.9 3.1-2.8 1.6-1 3.1-3.2-.3-2.6 2-2.6-2-3.2.3-1-3.1-2.8-1.6.9-3.1-.9-3.1 2.8-1.6 1-3.1 3.2.3z"/><path d="M7.5 12.2l3 3 6-6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
@@ -398,6 +427,9 @@ kbd{font:800 13px ui-monospace,Consolas,monospace;padding:3px 8px;border-radius:
   </div>
  </div>
 </section>
+<div class="ctx" id="ctx" hidden></div>
+<div class="spam" id="spam" hidden></div>
+<div class="crash" id="crash" hidden><div class="crashb"><svg viewBox="0 0 24 24" width="54" height="54" style="color:#c4493d;margin:0 auto 10px"><use href="#i-miss"/></svg><h3>Систему заражено</h3><p id="crashTxt"></p><p class="note" style="margin:8px 0 16px">Щоб усе це зникло, перезапусти комп'ютер. Зміну доведеться почати заново.</p><button class="btn main" id="rebootB" type="button"><svg viewBox="0 0 24 24"><use href="#i-power"/></svg>Перезапустити</button></div></div>
 <div class="boot" id="boot"><div><img alt="" width="84" height="84" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='4' width='56' height='56' rx='16' fill='%23bddcf3'/%3E%3Crect x='14' y='13' width='28' height='36' rx='5' fill='%23fbfbfa'/%3E%3Cpath d='M19 22h18M19 29h14M19 36h10' stroke='%233b3450' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='40' cy='38' r='9' fill='none' stroke='%23eba497' stroke-width='5'/%3E%3Cpath d='M46.5 44.5l7 7' stroke='%23eba497' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E"><div class="bl"><i></i></div></div></div>
 <div class="off" id="off" hidden><div><p style="margin-bottom:18px;font:700 17px Nunito;opacity:.8">Комп'ютер вимкнено</p><button class="powerbig" id="powerOn" type="button" aria-label="Увімкнути"><svg viewBox="0 0 24 24"><use href="#i-power"/></svg></button></div></div>
 
@@ -850,7 +882,7 @@ function openWin(app, focusOnly) {
   if (!w) {
     const A = APPS[app], el = document.createElement('div');
     el.className = 'win'; el.dataset.app = app;
-    el.innerHTML = `<div class="wt"><span class="ico ${A.c}">${icon(A.i)}</span><b>${A.t}</b><button class="wclose" type="button" aria-label="Закрити">${icon('i-x')}</button></div><div class="wb"></div>`;
+    el.innerHTML = `<div class="wt"><span class="ico ${A.c}">${icon(A.i)}</span><b>${A.t}</b><button class="wbtn wmin" type="button" aria-label="Згорнути" title="Згорнути">${icon('i-min')}</button><button class="wbtn wmax" type="button" aria-label="Розгорнути" title="Розгорнути">${icon('i-max')}</button><button class="wbtn wclose" type="button" aria-label="Закрити" title="Закрити">${icon('i-x')}</button></div><div class="wb"></div><div class="rsz" aria-hidden="true"></div>`;
     const desk = $('#desk'), dw = desk.clientWidth, dh = desk.clientHeight;
     const n = Object.keys(wins).filter(k => k !== 'case').length;
     let W = Math.min(A.w, dw - 40), H = Math.min(A.h, dh - 30);
@@ -861,10 +893,15 @@ function openWin(app, focusOnly) {
     desk.appendChild(el);
     w = wins[app] = {el, body: $('.wb', el)};
     $('.wclose', el).onclick = e => { e.stopPropagation(); closeWin(app); };
+    $('.wmin', el).onclick = e => { e.stopPropagation(); minWin(app); };
+    $('.wmax', el).onclick = e => { e.stopPropagation(); maxWin(app); };
+    $('.wt', el).addEventListener('dblclick', e => { if (!e.target.closest('button')) maxWin(app); });
     el.addEventListener('pointerdown', () => focusWin(app));
     dragify(el, $('.wt', el));
+    resizify(el, $('.rsz', el));
     renderApp(app);
   }
+  if (w.min) { w.min = false; w.el.hidden = false; }
   focusWin(app);
   if (!focusOnly) sfx.click();
   markSeen(app);
@@ -873,26 +910,69 @@ function openWin(app, focusOnly) {
 }
 function closeWin(app) {
   const w = wins[app]; if (!w) return; w.el.remove(); delete wins[app];
-  if (isMobile()) { const rest = Object.keys(wins); if (rest.length) focusWin(rest[rest.length - 1]); }
+  if (focused === app) focusTop();
   renderTaskbar();
+}
+function minWin(app) {
+  const w = wins[app]; if (!w) return;
+  w.min = true; w.el.hidden = true; tone(420, .06, 'triangle', .03);
+  if (focused === app) focusTop();
+  renderTaskbar();
+}
+function maxWin(app) {
+  const w = wins[app]; if (!w || isMobile()) return;
+  const st = w.el.style;
+  if (w.prev) { Object.assign(st, w.prev); w.prev = null; w.el.classList.remove('maxed'); }
+  else { w.prev = {left: st.left, top: st.top, width: st.width, height: st.height}; Object.assign(st, {left: '0px', top: '0px', width: '100%', height: '100%'}); w.el.classList.add('maxed'); }
+  focusWin(app);
+}
+function focusTop() {
+  const vis = Object.entries(wins).filter(([, o]) => !o.min).sort((a, b) => (+b[1].el.style.zIndex) - (+a[1].el.style.zIndex));
+  focused = null;
+  if (vis.length) focusWin(vis[0][0]);
 }
 let focused = null;
 function focusWin(app) {
-  const w = wins[app]; if (!w) return;
+  const w = wins[app]; if (!w || w.min) return;
   w.el.style.zIndex = ++ztop;
   if (isMobile()) Object.entries(wins).forEach(([k, o]) => { o.el.style.visibility = k === app ? 'visible' : 'hidden'; });
   focused = app; renderTaskbar();
 }
+function tbClick(app) {
+  const w = wins[app];
+  if (!w) return openWin(app);
+  if (w.min) return openWin(app);
+  if (focused === app) return minWin(app);
+  focusWin(app);
+}
 function renderTaskbar() {
-  $('#tbApps').innerHTML = Object.keys(wins).filter(a => a !== 'case').map(a => `<button class="tb ${a === focused ? 'on' : ''}" data-open="${a}" type="button"><span class="ico ${APPS[a].c}">${icon(APPS[a].i)}</span><span class="lbl">${APPS[a].t}</span></button>`).join('');
+  $('#tbApps').innerHTML = Object.keys(wins).filter(a => a !== 'case').map(a => `<button class="tb ${a === focused && !wins[a].min ? 'on' : ''} ${wins[a].min ? 'mini' : ''}" data-tb="${a}" type="button" title="${APPS[a].t}"><span class="ico ${APPS[a].c}">${icon(APPS[a].i)}</span><span class="lbl">${APPS[a].t}</span></button>`).join('');
   const c = S.cases[S.ci];
   $('#tbCaseL').textContent = c && S.active ? `${isMobile() ? '' : 'Справа '}${S.ci + 1}/${S.cases.length} · ${S.found.size}/${Object.keys(c.ev).length}` : 'Справи';
-  $('#tbCase').classList.toggle('on', focused === 'case' && !!wins.case);
+  $('#tbCase').classList.toggle('on', focused === 'case' && !!wins.case && !wins.case.min);
+}
+function resizify(el, h) {
+  let sx, sy, ow, oh, id = null;
+  h.addEventListener('pointerdown', e => {
+    if (isMobile()) return;
+    e.stopPropagation(); id = e.pointerId; h.setPointerCapture(id);
+    sx = e.clientX; sy = e.clientY; ow = el.offsetWidth; oh = el.offsetHeight;
+    const w = wins[el.dataset.app]; if (w && w.prev) { w.prev = null; el.classList.remove('maxed'); }
+  });
+  h.addEventListener('pointermove', e => {
+    if (e.pointerId !== id) return;
+    const d = $('#desk');
+    el.style.width = Math.max(300, Math.min(d.clientWidth - el.offsetLeft, ow + e.clientX - sx)) + 'px';
+    el.style.height = Math.max(220, Math.min(d.clientHeight - el.offsetTop, oh + e.clientY - sy)) + 'px';
+  });
+  const up = e => { if (e.pointerId === id) id = null; };
+  h.addEventListener('pointerup', up); h.addEventListener('pointercancel', up);
 }
 function dragify(el, handle) {
   let sx, sy, ox, oy, id = null;
   handle.addEventListener('pointerdown', e => {
     if (isMobile() || e.target.closest('button')) return;
+    if (el.classList.contains('maxed')) return;
     id = e.pointerId; handle.setPointerCapture(id);
     sx = e.clientX; sy = e.clientY; ox = el.offsetLeft; oy = el.offsetTop; handle.style.cursor = 'grabbing';
   });
@@ -1202,6 +1282,156 @@ function endShift() {
   $('#stayB').onclick = () => $('#endDlg').close();
 }
 
+/* ---------- context menu ---------- */
+const WALLS = [
+  '',
+  'background:#e9e3f7;background-image:radial-gradient(circle at 20% 25%,#f5c6dc 0,transparent 38%),radial-gradient(circle at 80% 70%,#bddcf3 0,transparent 40%)',
+  'background:#e2f1ea;background-image:radial-gradient(circle at 75% 20%,#f6e19c 0,transparent 36%),radial-gradient(circle at 15% 80%,#bfe3cf 0,transparent 40%)',
+  'background:#f3e9e2;background-image:radial-gradient(circle at 30% 30%,#f6c6a6 0,transparent 38%),radial-gradient(circle at 85% 80%,#d5c7f1 0,transparent 40%)'
+];
+let wall = store.get('wall', 0);
+function applyWall() { $('#os').style.cssText = WALLS[wall % WALLS.length]; }
+function copyText(t) {
+  try { navigator.clipboard.writeText(t).then(() => toast('Скопійовано'), () => toast('Скопійовано')); } catch (e) { toast('Скопійовано'); }
+}
+function ctxItems(t) {
+  const it = [];
+  const sel = String(window.getSelection ? window.getSelection() : '').trim();
+  const lnk = t.closest('[data-go]');
+  const winEl = t.closest('.win'), app = winEl && winEl.dataset.app;
+  if (t.closest('.wt') && app) {
+    const w = wins[app];
+    it.push(['Згорнути', 'i-min', () => minWin(app)]);
+    if (!isMobile()) it.push([w && w.prev ? 'Відновити розмір' : 'Розгорнути', 'i-max', () => maxWin(app)]);
+    it.push('-', ['Закрити', 'i-x', () => closeWin(app)]);
+    return it;
+  }
+  const tb = t.closest('[data-tb]');
+  if (tb) { const a = tb.dataset.tb; return [[wins[a] && wins[a].min ? 'Відкрити' : 'Згорнути', 'i-min', () => tbClick(a)], ['Закрити вікно', 'i-x', () => closeWin(a)]]; }
+  const dic = t.closest('.dic');
+  if (dic) {
+    it.push(['Відкрити', 'i-play', () => dic.click()]);
+    if (dic.dataset.path === 'Кошик') it.push(['Очистити кошик', 'i-bin', () => { FS['Кошик'] = []; renderPc(); toast('Кошик очищено'); }]);
+    return it;
+  }
+  const fi = t.closest('[data-fi]');
+  if (fi && wins.pc) {
+    const f = wins.pc.items[+fi.dataset.fi];
+    it.push(['Відкрити', 'i-play', () => openFile(f)]);
+    if (FS[fxPath] && fxPath !== 'Кошик') it.push(['Видалити', 'i-bin', () => { FS[fxPath] = FS[fxPath].filter(x => x !== f); FS['Кошик'].push({...f, from: fxPath}); renderPc(); toast('Переміщено в Кошик'); }]);
+    if (fxPath === 'Кошик') {
+      it.push(['Відновити', 'i-reload', () => { FS['Кошик'] = FS['Кошик'].filter(x => x !== f); (FS[f.from || 'Документи']).push(f); renderPc(); toast('Файл відновлено'); }]);
+      it.push(['Видалити назавжди', 'i-x', () => { FS['Кошик'] = FS['Кошик'].filter(x => x !== f); renderPc(); toast('Файл видалено назавжди'); }]);
+    }
+    return it;
+  }
+  if (lnk) {
+    const u = lnk.dataset.go;
+    it.push(['Відкрити посилання', 'i-web', () => go(u)], ['Копіювати адресу', 'i-dossier', () => copyText('https://' + u)], ['Перевірити в «Досьє сайту»', 'i-tools', () => { toolTab = 'dossier'; dossierQ = host(u); openWin('tools'); renderTools(); }]);
+  }
+  const ph = t.closest('.pimg');
+  if (ph) {
+    const k = $('.chkph', ph).dataset.photo;
+    it.push(['Пошук за фото', 'i-tools', () => { curPhoto = k; toolTab = 'reverse'; openWin('tools'); renderTools(); }], ['Властивості фото', 'i-photo', () => { curPhoto = k; toolTab = 'meta'; openWin('tools'); renderTools(); }]);
+  }
+  if (t.closest('.wb')) {
+    if (it.length) it.push('-');
+    if (!t.closest('.casep')) it.push(['Позначити маркером', 'i-marker', () => { const mk = t.closest('.mk'); if (mk) tryMark(mk); else { sfx.bad(); toast('Тут доказу немає.'); } }]);
+    if (sel) it.push(['Копіювати', 'i-dossier', () => copyText(sel)]);
+    if (app === 'web') it.push(['Назад', 'i-back', () => { if (B.pos > 0) { B.pos--; showPage(); } }], ['Оновити сторінку', 'i-reload', () => showPage()]);
+    return it;
+  }
+  if (t.closest('.taskbar')) return [['Справи', 'i-case', () => openWin('case')], ['Налаштування', 'i-ctl', () => openWin('settings')]];
+  /* робочий стіл */
+  return [
+    ['Оновити', 'i-reload', () => { $('#icons').style.opacity = 0; setTimeout(() => { drawDesk(); renderBadges(); $('#icons').style.opacity = ''; }, 150); }],
+    ['Змінити шпалери', 'i-photo', () => { wall = (wall + 1) % WALLS.length; store.set('wall', wall); applyWall(); }],
+    '-',
+    ['Комп\'ютер', 'i-pc', () => openWin('pc')],
+    ['Підручник', 'i-book', () => openWin('guide')],
+    ['Налаштування', 'i-ctl', () => openWin('settings')]
+  ];
+}
+let CTX = [];
+document.addEventListener('contextmenu', e => {
+  if (!e.target.closest('#os') || e.target.closest('input')) return;
+  if (INFECTED) { e.preventDefault(); return; }
+  e.preventDefault();
+  CTX = ctxItems(e.target);
+  const m = $('#ctx');
+  m.innerHTML = CTX.map((x, i) => x === '-' ? '<hr>' : `<button type="button" data-ctx="${i}">${icon(x[1])}${esc(x[0])}</button>`).join('');
+  m.hidden = false;
+  const W = m.offsetWidth, H = m.offsetHeight;
+  m.style.left = Math.min(e.clientX, innerWidth - W - 6) + 'px';
+  m.style.top = Math.min(e.clientY, innerHeight - H - 6) + 'px';
+  tone(600, .03, 'triangle', .025);
+});
+function hideCtx() { $('#ctx').hidden = true; }
+document.addEventListener('pointerdown', e => { if (!e.target.closest('#ctx')) hideCtx(); }, true);
+window.addEventListener('blur', hideCtx);
+
+/* ---------- infection (наслідок шахрайства) ---------- */
+let INFECTED = false, spamT = [];
+const ADS = [
+  ['ВІТАЄМО!!!', 'Ти 1 000 000-й відвідувач! Забери свій приз 🎁', '#f6e19c', 'Забрати приз'],
+  ['УВАГА! ВІРУСИ!', 'На твоєму ПК знайдено 37 вірусів. Натисни, щоб очистити!', '#ffb3ad', 'Очистити'],
+  ['-99% ТІЛЬКИ СЬОГОДНІ', 'Робакси майже безкоштовно! Встигни за 30 секунд!', '#bfe3cf', 'Купити'],
+  ['БЕЗКОШТОВНІ СКІНИ', 'Завантаж генератор скінів просто зараз', '#d5c7f1', 'Завантажити'],
+  ['АКАУНТ ЗАБЛОКОВАНО', 'Сплати 999 грн, щоб розблокувати свій акаунт', '#ffb3ad', 'Сплатити'],
+  ['ТИ ВИГРАВ СМАРТФОН', 'Введи номер картки, щоб оплатити доставку', '#bddcf3', 'Отримати'],
+  ['ГАРЯЧІ ЗНИЖКИ', 'Купуй-купуй-купуй! Кількість обмежена!!!', '#f6c6a6', 'До кошика'],
+  ['ПК ПЕРЕГРІВАЄТЬСЯ', 'Встанови «Супер Прискорювач 3000», поки не пізно', '#f6e19c', 'Встановити']
+];
+function spawnAd(x, y) {
+  if (!INFECTED) return;
+  const layer = $('#spam'), a = ADS[Math.floor(Math.random() * ADS.length)];
+  const el = document.createElement('div'); el.className = 'ad';
+  const W = Math.min(300, innerWidth - 20);
+  el.style.left = (x ?? Math.random() * Math.max(10, innerWidth - W - 10)) + 'px';
+  el.style.top = (y ?? Math.random() * Math.max(10, innerHeight - 260)) + 'px';
+  el.style.setProperty('--ad', a[2]);
+  el.style.transform = `rotate(${(Math.random() * 6 - 3).toFixed(1)}deg)`;
+  el.innerHTML = `<div class="adt"><b>Реклама</b><button type="button" aria-label="Закрити">${icon('i-x')}</button></div><div class="adb"><h4>${a[0]}</h4><p>${a[1]}</p><span class="adbtn">${a[3]}</span></div>`;
+  el.querySelector('button').onclick = ev => { ev.stopPropagation(); const r = el.getBoundingClientRect(); el.remove(); tone(300, .08, 'square', .04); spawnAd(r.left + 30, r.top + 30); spawnAd(r.left - 30, r.top + 50); };
+  el.onclick = () => { tone(200, .1, 'square', .05); spawnAd(); };
+  layer.appendChild(el);
+  tone(300 + Math.random() * 600, .07, 'square', .035);
+}
+function infect(kind) {
+  if (INFECTED) return;
+  INFECTED = true; store.set('progress', null); S.active = false;
+  setMarker(false); hideCtx();
+  $$('dialog[open]').forEach(d => d.close());
+  const c = S.cases[S.ci], who = c && c.chat ? c.chat : 'Друг';
+  const NS = kind === 'card'
+    ? [['sms', 'ПіксельБанк', 'Списано 2 499 грн. Покупка в інтернеті'], ['sms', 'ПіксельБанк', 'Списано 4 990 грн. Покупка в інтернеті'], ['sms', 'Невідомий номер', 'Ваша картка заблокована. Перейдіть за посиланням…'], ['sms', 'ПіксельБанк', 'Недостатньо коштів на рахунку']]
+    : [['msg', 'Roblox', 'Пароль змінено з нового пристрою'], ['msg', who, 'чого ти мені шлеш якісь дивні посилання??'], ['msg', 'Клас 7-Б', 'хто це пише з твого акаунта?? 😳'], ['msg', 'Roblox', 'Усі робакси з акаунта витрачено']];
+  NS.push(['case', 'Система', 'Знайдено підозрілу програму'], ['msg', 'Невідомий', 'Привіт! Хочеш ще безкоштовних подарунків? 🎁']);
+  $('#os').classList.add('sick');
+  $('#spam').hidden = false;
+  let n = 0;
+  spamT.push(setInterval(() => spawnAd(), 320));
+  spamT.push(setInterval(() => { const x = NS[n++ % NS.length]; notify({app: x[0], title: x[1], text: x[2]}); }, 750));
+  spamT.push(setTimeout(() => {
+    spamT.forEach(t => { clearInterval(t); clearTimeout(t); });
+    $('#crashTxt').textContent = kind === 'card'
+      ? 'Ти ввів дані картки на сайті шахраїв. З картки списують гроші, а комп\'ютер заповнили віруси й реклама.'
+      : 'Ти ввів пароль на сайті шахраїв. Твій акаунт викрали, від твого імені розсилають спам, а комп\'ютер заповнили віруси й реклама.';
+    $('#crash').hidden = false; sfx.bad();
+  }, 5800));
+}
+function reboot() {
+  $('#crash').hidden = true; $('#spam').innerHTML = ''; $('#spam').hidden = true; $('#os').classList.remove('sick');
+  $('#notifs').innerHTML = '';
+  INFECTED = false;
+  const b = $('#boot'); b.hidden = false; b.classList.remove('hide');
+  setTimeout(() => {
+    b.classList.add('hide'); setTimeout(() => b.hidden = true, 400);
+    newShift();
+    setTimeout(() => notify({app: 'guide', title: 'Комп\'ютер перезапущено', text: 'Зміну розпочато заново. Пам\'ятай: пароль і дані картки не вводять за посиланнями з повідомлень.'}), 300);
+  }, 1300);
+}
+
 /* ---------- events ---------- */
 document.addEventListener('click', e => {
   const t = e.target;
@@ -1215,6 +1445,9 @@ document.addEventListener('click', e => {
   }
   if (!t.closest('#startm,#startBtn')) { $('#startm').hidden = true; $('#startBtn').classList.remove('on'); }
   if (!t.closest('#ncenter,#trBell')) $('#ncenter').hidden = true;
+  const cx = t.closest('[data-ctx]'); if (cx) { const x = CTX[+cx.dataset.ctx]; hideCtx(); sfx.click(); x[2](); return; }
+  if (INFECTED) return;
+  const tbb = t.closest('[data-tb]'); if (tbb) { tbClick(tbb.dataset.tb); return; }
   const o = t.closest('[data-open]'); if (o) { if (o.dataset.path) { fxPath = o.dataset.path; } openWin(o.dataset.open); if (o.dataset.path) renderPc(); return; }
   const g = t.closest('[data-go]'); if (g) { e.preventDefault(); go(g.dataset.go); return; }
   const chEl = t.closest('[data-chat]'); if (chEl) { curChat = chEl.dataset.chat || null; renderMsg(); return; }
@@ -1241,9 +1474,11 @@ document.addEventListener('submit', e => {
   if (f.id === 'urlF') { go($('#urlIn').value); return; }
   if (f.id === 'sF') { const q = $('#sIn').value; if (q.trim()) go('poshuk.web/?q=' + encodeURIComponent(q.trim())); return; }
   if (f.id === 'dF') { dossierQ = $('#dIn').value.trim(); renderTools(); return; }
-  if (f.dataset.trap) { S.traps++; S.score = Math.max(0, S.score - 10); sfx.bad(); toast('Стоп! Ти щойно віддав би свої дані шахраям. −10 балів'); renderCase(); save(); }
+  if (f.dataset.trap) { infect(f.dataset.trap); return; }
 });
 document.addEventListener('keydown', e => {
+  if (INFECTED) { hideCtx(); return; }
+  if (e.key === 'Escape') hideCtx();
   if (e.target.matches('input') || document.querySelector('dialog[open]')) return;
   if (e.key === 'm' || e.key === 'M' || e.key === 'ь' || e.key === 'Ь') { setMarker(!marker); }
   if (e.key === 'Escape') {
@@ -1251,10 +1486,11 @@ document.addEventListener('keydown', e => {
     else if (marker) setMarker(false); else if (focused && wins[focused]) closeWin(focused);
   }
 });
+$('#rebootB').onclick = reboot;
 $('#trMk').onclick = () => { setMarker(!marker); sfx.click(); toast(marker ? 'Маркер увімкнено: натискай на докази.' : 'Маркер вимкнено.'); };
 $('#trSnd').onclick = () => setSound(!sound);
 $('#trBell').onclick = () => { const n = $('#ncenter'); n.hidden = !n.hidden; $('#startm').hidden = true; renderBell(); };
-$('#tbCase').onclick = () => openWin('case');
+$('#tbCase').onclick = () => tbClick('case');
 $('#startBtn').onclick = () => { const m = $('#startm'); m.hidden = !m.hidden; $('#startBtn').classList.toggle('on', !m.hidden); $('#smBest').textContent = store.get('best', 0) ? 'Рекорд: ' + store.get('best', 0) : ''; sfx.click(); };
 $('#nClear').onclick = () => { NOTIFS.length = 0; renderBell(); };
 $('#powerBtn').onclick = () => { $('#startm').hidden = true; $('#off').hidden = false; closeAllWins(); setMarker(false); renderTaskbar(); };
@@ -1282,7 +1518,7 @@ function boot() {
     }
   }, fast ? 100 : 1100);
 }
-drawDesk(); setSound(sound); renderBell();
+drawDesk(); setSound(sound); renderBell(); applyWall();
 mo.observe($('#desk'), {childList: true, subtree: true});
 boot();
 </script>
