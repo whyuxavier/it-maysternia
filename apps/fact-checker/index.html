@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Фактчекер — фейк чи правда? · ІТ-Майстерня</title>
+<meta name="description" content="Тренажер медіаграмотності для 5–12 класу: розслідуй повідомлення, сайти й фото у вигаданому комп'ютері та визнач, фейк це чи правда.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='4' width='56' height='56' rx='16' fill='%23bddcf3'/%3E%3Crect x='14' y='13' width='28' height='36' rx='5' fill='%23fbfbfa'/%3E%3Cpath d='M19 22h18M19 29h14M19 36h10' stroke='%233b3450' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='40' cy='38' r='9' fill='none' stroke='%23eba497' stroke-width='5'/%3E%3Cpath d='M46.5 44.5l7 7' stroke='%23eba497' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&family=Rubik:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+ --ink:#3b3450;--muted:#6f6787;--card:#fbfbfa;--line:rgba(59,52,80,.12);--shadow:rgba(60,56,72,.18);
+ --peach:#f6c6a6;--mint:#bfe3cf;--lilac:#d5c7f1;--sky:#bddcf3;--butter:#f6e19c;--coral:#eba497;--pink:#f5bfd3;
+ --bg:#eef3fb;--stamp:#c4493d;--ok:#2f8a5b;--hl:#ffe86b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font:600 16px/1.45 Nunito,system-ui,sans-serif;color:var(--ink);background:#eef3fb;background-image:
+ radial-gradient(circle at 8% 10%,#ffe3dc 0,transparent 32%),
+ radial-gradient(circle at 92% 12%,#d9ecff 0,transparent 34%),
+ radial-gradient(circle at 85% 95%,#e6dcff 0,transparent 32%),
+ radial-gradient(circle at 10% 92%,#d8f6e6 0,transparent 30%)}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:inherit}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+svg{display:block}
+.ink{fill:currentColor}
+.stk{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+[hidden]{display:none!important}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:13px 20px;border-radius:16px;border:0;font:700 17px Nunito;background:var(--card);box-shadow:0 4px 0 var(--shadow),0 0 0 1px var(--line);transition:transform .15s}
+.btn svg{width:21px;height:21px}
+.btn:hover{transform:translateY(-2px) rotate(-.5deg)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--shadow),0 0 0 1px var(--line)}
+.btn.main{background:var(--coral)}
+.btn.sm{padding:9px 14px;font-size:15px;border-radius:13px}
+
+/* OS */
+#os{position:fixed;inset:0;overflow:hidden;z-index:10;user-select:none;background:#dfe8f5;background-image:
+ radial-gradient(circle at 15% 20%,#ffe3dc 0,transparent 35%),radial-gradient(circle at 85% 15%,#d9ecff 0,transparent 38%),
+ radial-gradient(circle at 75% 90%,#e6dcff 0,transparent 35%),radial-gradient(circle at 20% 85%,#d8f6e6 0,transparent 32%)}
+.desk{position:absolute;inset:0 0 58px 0}
+.icons{position:absolute;top:14px;left:14px;bottom:14px;display:grid;grid-template-rows:repeat(auto-fill,100px);grid-auto-flow:column;grid-auto-columns:94px;gap:4px 8px;align-content:start}
+.dic{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border:0;background:none;border-radius:16px;font:800 13px Nunito;text-align:center}
+.dic:hover,.dic:focus-visible{background:rgba(255,255,255,.55)}
+.dic .ico{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;box-shadow:0 4px 0 var(--shadow),0 0 0 1px var(--line)}
+.dic .ico svg{width:28px;height:28px}
+.badge{position:absolute;top:4px;right:14px;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--stamp);color:#fff;font:800 12px/20px Nunito;box-shadow:0 0 0 2px #fff}
+.c-msg{background:var(--sky)}.c-sms{background:var(--mint)}.c-web{background:var(--butter)}.c-feed{background:var(--pink)}.c-tools{background:var(--lilac)}.c-case{background:var(--peach)}
+.taskbar{position:absolute;left:0;right:0;bottom:0;height:58px;display:flex;align-items:center;gap:6px;padding:0 10px;background:color-mix(in srgb,var(--card) 96%,transparent);border-top:1px solid var(--line)}
+.tb{display:flex;align-items:center;gap:7px;height:42px;padding:0 12px;border-radius:13px;border:0;background:transparent;font:800 14px Nunito;white-space:nowrap}
+.tb.on{background:rgba(59,52,80,.08)}
+.tb .ico{width:28px;height:28px;border-radius:9px;display:grid;place-items:center}
+.tb .ico svg{width:17px;height:17px}
+.tbapps{display:flex;gap:4px;overflow-x:auto;flex:1;scrollbar-width:none}
+.clock{font:700 14px ui-monospace,Consolas,monospace;color:var(--muted);padding:0 6px}
+.casebtn{background:var(--peach)!important;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line)}
+
+/* windows */
+.win{position:absolute;display:flex;flex-direction:column;background:var(--card);border-radius:18px;box-shadow:0 6px 0 var(--shadow),0 0 0 1px var(--line),0 24px 50px -24px rgba(40,30,70,.45);overflow:hidden;min-width:300px}
+.wt{display:flex;align-items:center;gap:9px;height:44px;padding:0 6px 0 12px;border-bottom:1px solid var(--line);cursor:grab;user-select:none;touch-action:none;flex:none}
+.wt .ico{width:26px;height:26px;border-radius:8px;display:grid;place-items:center}
+.wt .ico svg{width:16px;height:16px}
+.wt b{font:800 15px Rubik,sans-serif;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wclose{width:34px;height:34px;border-radius:10px;border:0;background:none;display:grid;place-items:center}
+.wclose:hover{background:rgba(196,73,61,.12)}
+.wclose svg{width:18px;height:18px}
+.wb{flex:1;overflow:auto;position:relative}
+@media (max-width:760px){
+ .icons{grid-template-columns:repeat(3,1fr);grid-template-rows:none;grid-auto-flow:row;grid-auto-columns:auto;left:10px;right:10px;top:12px;bottom:auto}
+ .win{left:0!important;top:0!important;width:100%!important;height:calc(100% - 58px)!important;border-radius:0;min-width:0}
+ .wt{cursor:default}
+ .tb .lbl{display:none}
+ .tb.casebtn .lbl{display:inline}
+}
+
+
+.c-pc{background:var(--sky)}.c-bin{background:#e4e1ea}.c-guide{background:var(--coral)}.c-notes{background:var(--butter)}.c-photos{background:var(--pink)}.c-set{background:var(--lilac)}.c-butter{background:var(--butter)}
+.startb{width:46px;height:46px;flex:none;border:0;border-radius:14px;background:rgba(59,52,80,.06);display:grid;place-items:center}
+.startb.on,.startb:hover{background:var(--sky)}
+.tray{display:flex;align-items:center;gap:2px;flex:none}
+.trb{position:relative;width:40px;height:40px;border:0;border-radius:12px;background:none;display:grid;place-items:center}
+.trb svg{width:21px;height:21px}
+.trb:hover{background:rgba(59,52,80,.06)}
+.trb.on{background:var(--hl)}
+.trb .badge{top:1px;right:1px}
+.mkb{display:flex;gap:6px;width:auto;padding:0 12px;font:800 14px Nunito;box-shadow:0 0 0 1px var(--line)}
+.tb.casebtn.on{outline:2px solid var(--ink)}
+.startm,.ncenter{position:absolute;bottom:68px;width:380px;max-width:calc(100% - 20px);background:var(--card);border-radius:20px;box-shadow:0 6px 0 var(--shadow),0 0 0 1px var(--line),0 30px 60px -24px rgba(40,30,70,.5);padding:16px;z-index:1500}
+.startm{left:10px}.ncenter{right:10px;max-height:70%;overflow:auto}
+.sm-user{display:flex;gap:10px;align-items:center;padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.sm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.sm-grid button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border:0;background:none;border-radius:14px;font:800 12.5px Nunito;text-align:center}
+.sm-grid button:hover{background:rgba(59,52,80,.06)}
+.sm-grid .ico{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;box-shadow:0 3px 0 var(--shadow)}
+.sm-grid .ico svg{width:22px;height:22px}
+.sm-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.notifs{position:absolute;right:12px;bottom:70px;width:340px;max-width:calc(100% - 24px);display:flex;flex-direction:column;gap:8px;z-index:1400;pointer-events:none}
+.notif{pointer-events:auto;display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:16px;background:var(--card);box-shadow:0 5px 0 var(--shadow),0 0 0 1px var(--line),0 18px 40px -20px rgba(40,30,70,.5);cursor:pointer;transform:translateX(40px);opacity:0;transition:transform .3s,opacity .3s}
+.notif.on{transform:none;opacity:1}
+.notif .ico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none}
+.notif .ico svg{width:20px;height:20px}
+.notif b{display:block;font:800 14.5px Rubik,sans-serif}
+.notif small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:13.5px;color:var(--muted)}
+.nx{margin-left:auto;border:0;background:none;width:26px;height:26px;display:grid;place-items:center;flex:none;border-radius:8px}
+.nx svg{width:15px;height:15px}
+.boot,.off{position:fixed;inset:0;z-index:3000;background:#2e2940;color:#fff;display:grid;place-items:center;text-align:center;transition:opacity .4s}
+.boot.hide{opacity:0}
+.boot img{margin:0 auto 22px;border-radius:22px}
+.bl{width:160px;height:6px;border-radius:3px;background:rgba(255,255,255,.15);overflow:hidden;margin:0 auto}
+.bl i{display:block;height:100%;width:40%;border-radius:3px;background:var(--sky);animation:bl 1s ease-in-out infinite}
+@keyframes bl{from{transform:translateX(-100%)}to{transform:translateX(260%)}}
+.powerbig{width:86px;height:86px;border-radius:50%;border:0;background:var(--coral);display:grid;place-items:center;margin:0 auto;box-shadow:0 5px 0 rgba(0,0,0,.3)}
+.powerbig svg{width:40px;height:40px;color:#3b3450}
+@media (prefers-reduced-motion:reduce){.bl i{animation:none;width:100%}.notif{transition:none}}
+.fx{display:grid;grid-template-columns:170px 1fr;height:100%}
+.fxs{border-right:1px solid var(--line);padding:8px;display:flex;flex-direction:column;gap:2px;overflow:auto;background:rgba(59,52,80,.03)}
+.fxs button{display:flex;gap:8px;align-items:center;border:0;background:none;padding:8px 10px;border-radius:10px;font:700 14px Nunito;text-align:left;white-space:nowrap}
+.fxs button svg{width:18px;height:18px;flex:none}
+.fxs button.on{background:rgba(189,220,243,.6)}
+.fxm{display:flex;flex-direction:column;min-height:0}
+.fxp{display:flex;gap:8px;align-items:center;padding:8px 14px;min-height:48px;border-bottom:1px solid var(--line);font:800 14.5px Nunito}
+.fxp svg{width:18px;height:18px}
+.fxg{padding:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px;overflow:auto;align-content:start}
+.fi{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border:0;background:none;border-radius:12px;font:700 13px Nunito;text-align:center;word-break:break-word}
+.fi:hover{background:rgba(59,52,80,.06)}
+.fi .ico{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;box-shadow:0 3px 0 var(--shadow)}
+.fi .ico svg{width:24px;height:24px}
+.guide{display:grid;grid-template-columns:200px 1fr;height:100%}
+.gs{border-right:1px solid var(--line);padding:8px;overflow:auto;background:rgba(235,164,151,.08)}
+.gs button{display:flex;gap:8px;align-items:baseline;width:100%;border:0;background:none;padding:8px 10px;border-radius:10px;font:700 14px Nunito;text-align:left}
+.gs button b{font:800 13px Rubik;color:var(--muted)}
+.gs button.on{background:rgba(235,164,151,.35)}
+.gc{overflow:auto;padding:20px 24px;font-size:15.5px}
+.gc h2{font:800 22px Rubik,sans-serif;margin-bottom:10px}
+.gc ul,.gc ol{padding-left:22px;margin:8px 0}.gc li{margin:6px 0}
+.gc .ex{padding:9px 12px;border-radius:12px;background:rgba(59,52,80,.05);margin:8px 0;font:600 14px ui-monospace,Consolas,monospace;word-break:break-all}
+.gnav{display:flex;justify-content:space-between;margin-top:20px;gap:10px}
+.note-body{padding:18px;white-space:pre-wrap;font:600 15px/1.55 ui-monospace,Consolas,monospace;user-select:text}
+.setp{padding:18px;display:flex;flex-direction:column;gap:8px}
+.setp h3{font:800 16px Rubik;margin-top:10px}
+.fwd.who{font-style:normal;font-weight:800;color:#7a5aa6}
+.daysep{align-self:center;font:800 12px Nunito;color:var(--muted);background:rgba(255,255,255,.7);padding:3px 10px;border-radius:10px;margin:4px 0}
+@media (max-width:760px){
+ .fx,.guide{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+ .fxs,.gs{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);display:flex}
+ .gs button{width:auto;white-space:nowrap}
+ .tray .lbl,.mkb .lbl{display:none}
+ .mkb{padding:0 10px}
+ .notifs{left:12px;right:12px;width:auto;top:12px;bottom:auto}
+ .tbapps .tb{padding:0 6px}
+ .notif:nth-child(n+3){display:none}
+ .taskbar{gap:4px;padding:0 6px}
+ .tb.casebtn{padding:0 8px}
+ .trb{width:36px}
+}
+@media (max-width:420px){.clock{display:none}}
+
+/* marker */
+.mk{border-radius:5px;transition:background .15s, box-shadow .15s}
+body.marker #os .mk{cursor:crosshair}
+body.marker #os .mk:hover{background:rgba(255,232,107,.45);box-shadow:0 0 0 2px rgba(255,232,107,.45)}
+.mk.found{background:var(--hl)!important;box-shadow:0 0 0 2px var(--hl)!important}
+body.marker #os{cursor:crosshair}
+.shake{animation:shk .35s}
+@keyframes shk{20%,60%{transform:translateX(-4px)}40%,80%{transform:translateX(4px)}}
+
+/* case panel */
+.casep{padding:16px;display:flex;flex-direction:column;gap:14px}
+.casep .num{font:800 13px Nunito;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.casep h3{font:800 20px/1.2 Rubik,sans-serif}
+.casep .brief{font-size:15.5px}
+.evs{display:flex;flex-direction:column;gap:6px}
+.evh{display:flex;justify-content:space-between;font:800 14px Nunito}
+.ev{display:flex;gap:8px;align-items:flex-start;padding:7px 10px;border-radius:11px;background:rgba(59,52,80,.05);font-size:14.5px;line-height:1.3}
+.ev.got{background:#fff6bf}
+.ev svg{width:18px;height:18px;flex:none;margin-top:1px}
+.ev.empty{color:var(--muted)}
+.stamps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.st{border:2.5px solid currentColor;border-radius:12px;background:var(--card);padding:10px 4px;font:800 13.5px Rubik,sans-serif;text-transform:uppercase;letter-spacing:.3px;transform:rotate(-2deg)}
+.st.fake{color:var(--stamp)}.st.true{color:var(--ok)}.st.manip{color:#a26a12}
+.st:hover{transform:rotate(-4deg) scale(1.04)}
+.stbox{position:sticky;bottom:0;background:var(--card);padding:10px 0 4px;margin-top:-4px;box-shadow:0 -12px 12px -8px var(--card)}
+.hintb{align-self:flex-start;background:none;border:0;font:800 14px Nunito;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.hintt{font-size:14.5px;padding:10px 12px;border-radius:12px;background:var(--lilac)}
+.scorepill{display:inline-flex;gap:6px;align-items:center;padding:4px 10px;border-radius:12px;background:var(--mint);font:800 13px Nunito}
+
+/* messenger / sms */
+.chat{display:grid;grid-template-columns:200px 1fr;height:100%}
+.chats{border-right:1px solid var(--line);overflow:auto}
+.ch{display:flex;gap:10px;align-items:center;width:100%;padding:10px 12px;border:0;background:none;text-align:left;border-bottom:1px solid var(--line)}
+.ch.on{background:rgba(189,220,243,.45)}
+.ch small{display:block;color:var(--muted);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
+.av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font:800 15px Rubik,sans-serif;flex:none}
+.conv{display:flex;flex-direction:column;min-height:0}
+.convh{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);font:800 15px Rubik}
+.convh .back{display:none;border:0;background:none;width:30px;height:30px}
+.msgs{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:8px;background:rgba(189,220,243,.18)}
+.bub{max-width:82%;padding:9px 12px;border-radius:16px 16px 16px 5px;background:var(--card);box-shadow:0 2px 0 var(--shadow);font-size:15px}
+.bub.me{align-self:flex-end;border-radius:16px 16px 5px 16px;background:#d9ecff}
+.bub time{display:block;font-size:11.5px;color:var(--muted);text-align:right;margin-top:3px}
+.fwd{font-size:12.5px;color:var(--muted);font-style:italic;margin-bottom:4px}
+.lnk{color:#2763b0;text-decoration:underline;word-break:break-all;cursor:pointer}
+.replies{display:flex;flex-direction:column;gap:6px;padding:10px;border-top:1px solid var(--line);flex:none;max-height:45%;overflow:auto}
+.rph{font:800 12.5px Nunito;color:var(--muted)}
+.rep{text-align:left;border:0;border-radius:14px 14px 5px 14px;padding:9px 13px;background:#d9ecff;font:700 14.5px Nunito;box-shadow:0 2px 0 var(--shadow)}
+.rep:hover{background:var(--sky)}
+.inp input{flex:1;border:0;border-radius:12px;padding:9px 12px;background:rgba(59,52,80,.06)}
+.empty-app{padding:30px;text-align:center;color:var(--muted)}
+@media (max-width:760px){.chat{grid-template-columns:1fr}.chat.open .chats{display:none}.chat:not(.open) .conv{display:none}.convh .back{display:grid;place-items:center}}
+
+/* browser */
+.br{display:flex;flex-direction:column;height:100%}
+.brbar{display:flex;gap:6px;align-items:center;padding:8px;border-bottom:1px solid var(--line);flex:none}
+.brbar button{width:34px;height:34px;border:0;border-radius:10px;background:none;display:grid;place-items:center}
+.brbar button svg{width:18px;height:18px}
+.url{flex:1;display:flex;align-items:center;gap:6px;min-width:0;background:rgba(59,52,80,.06);border-radius:12px;padding:0 10px}
+.url input{border:0;background:none;padding:8px 0;flex:1;min-width:0;font:600 14px ui-monospace,Consolas,monospace;outline:none}
+.bms{display:flex;gap:6px;padding:6px 8px;border-bottom:1px solid var(--line);overflow-x:auto;flex:none;scrollbar-width:none}
+.bm{border:0;background:rgba(59,52,80,.05);border-radius:9px;padding:4px 10px;font:700 13px Nunito;white-space:nowrap}
+.page{flex:1;overflow:auto;background:#fff}
+.pg{padding:22px;max-width:720px;margin:0 auto}
+.pg h1{font:800 26px/1.2 Rubik,sans-serif;margin-bottom:10px}
+.pg h2{font:800 20px Rubik,sans-serif;margin:14px 0 6px}
+.pg p{margin:8px 0}
+.pg .meta{color:var(--muted);font-size:14px}
+.pg .fld{display:block;margin:10px 0}
+.pg .fld span{display:block;font:800 14px Nunito;margin-bottom:4px}
+.pg .fld input{width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #ccd;background:#fff}
+.pg .go{display:inline-block;margin-top:10px;padding:12px 22px;border-radius:12px;border:0;font:800 16px Rubik}
+.notfound{padding:50px 20px;text-align:center;color:var(--muted)}
+.notfound h2{font:800 22px Rubik;color:var(--ink);margin-bottom:6px}
+.sr{padding:12px 0;border-bottom:1px solid #eee}
+.sr .u{font:600 13px ui-monospace,Consolas,monospace;color:#2f7a4f}
+.sr a{display:block;font:800 17px Rubik;color:#2763b0;cursor:pointer;margin:2px 0}
+.sbox{display:flex;gap:8px;margin:10px 0 16px}
+.sbox input{flex:1;padding:12px 16px;border-radius:24px;border:1.5px solid #ccd;font-size:16px}
+.sbox button{border:0;border-radius:24px;padding:0 18px;background:var(--sky);font:800 15px Rubik}
+.slogo{font:800 40px Rubik;text-align:center;margin:30px 0 6px;letter-spacing:-1px}
+.slogo span:nth-child(1){color:#3d7dd8}.slogo span:nth-child(2){color:#d85a4a}.slogo span:nth-child(3){color:#e2a92b}.slogo span:nth-child(4){color:#3d7dd8}.slogo span:nth-child(5){color:#2f9a62}.slogo span:nth-child(6){color:#d85a4a}
+
+/* feed */
+.feed{max-width:520px;margin:0 auto;padding:14px;display:flex;flex-direction:column;gap:14px}
+.post{background:#fff;border-radius:16px;box-shadow:0 0 0 1px var(--line),0 3px 0 var(--shadow);overflow:hidden}
+.ph{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.ph b{font:800 15px Rubik}
+.ph small{color:var(--muted);font-size:12.5px;display:block}
+.vf{display:inline-block;width:16px;height:16px;vertical-align:-3px;margin-left:3px}
+.pimg{position:relative;background:#eef}
+.pimg svg{width:100%;height:auto}
+.chkph{position:absolute;right:10px;bottom:10px;display:flex;gap:6px;align-items:center;border:0;border-radius:12px;padding:7px 11px;background:rgba(251,251,250,.95);font:800 13px Nunito;box-shadow:0 2px 0 var(--shadow)}
+.chkph svg{width:16px;height:16px}
+.pt{padding:10px 12px 12px;font-size:15px}
+.pt .small{font-size:11.5px;color:var(--muted);margin-top:6px}
+.likes{display:flex;gap:14px;padding:0 12px 10px;color:var(--muted);font:700 13px Nunito}
+
+/* tools */
+.tabs{display:flex;gap:6px;padding:10px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tab{border:0;border-radius:11px;padding:8px 12px;font:800 14px Nunito;background:rgba(59,52,80,.05);display:flex;gap:6px;align-items:center}
+.tab svg{width:17px;height:17px}
+.tab.on{background:var(--lilac)}
+.tpane{padding:16px}
+.tpane .row{display:flex;gap:8px}
+.tpane input{flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);font:600 14px ui-monospace,Consolas,monospace;background:#fff}
+.res{margin-top:14px;padding:14px;border-radius:14px;background:#fff;box-shadow:0 0 0 1px var(--line);font-size:15px}
+.res dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px}
+.res dt{color:var(--muted);font-weight:700}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap}
+.thumb{width:92px;border:0;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 0 0 1px var(--line),0 2px 0 var(--shadow);padding:0}
+.thumb.on{box-shadow:0 0 0 3px var(--coral)}
+.thumb svg{width:100%;height:auto}
+.tl{margin-top:8px;display:flex;flex-direction:column;gap:8px}
+.tl div{display:flex;gap:10px;align-items:baseline}
+.tl b{font:800 14px ui-monospace,Consolas,monospace;min-width:84px}
+.note{font-size:14px;color:var(--muted)}
+
+/* dialogs */
+dialog{border:0;border-radius:22px;padding:0;max-width:520px;width:calc(100% - 28px);max-height:calc(100% - 40px);margin:auto;background:var(--card);color:var(--ink);box-shadow:0 6px 0 var(--shadow),0 30px 60px -20px rgba(0,0,0,.4)}
+dialog::backdrop{background:rgba(30,25,45,.45)}
+.dlg{padding:22px;position:relative}
+.dlg h2{font:800 24px Rubik,sans-serif;margin-bottom:8px;padding-right:40px}
+.dlg h3{font:800 16px Rubik,sans-serif;margin:18px 0 8px}
+.close{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:12px;border:0;background:rgba(59,52,80,.06);font:700 24px/1 Nunito}
+.seg{display:flex;gap:6px;background:rgba(59,52,80,.06);padding:4px;border-radius:14px}
+.seg button{flex:1;border:0;border-radius:11px;padding:9px;background:none;font:800 14px Nunito;display:flex;gap:6px;align-items:center;justify-content:center}
+.seg button svg{width:18px;height:18px}
+.seg button.on{background:var(--card);box-shadow:0 2px 0 var(--shadow),0 0 0 1px var(--line)}
+.steps{display:flex;flex-direction:column;gap:9px}
+.steps div{display:flex;gap:11px;align-items:center;font-size:15px}
+.steps .si{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;flex:none}
+.steps .si svg{width:20px;height:20px}
+.keys{display:grid;grid-template-columns:auto 1fr;gap:7px 12px;font-size:15px;align-items:center}
+kbd{font:800 13px ui-monospace,Consolas,monospace;padding:3px 8px;border-radius:8px;background:#fff;box-shadow:0 2px 0 var(--shadow),0 0 0 1px var(--line);white-space:nowrap}
+.gh{display:inline-flex;align-items:center;gap:8px;margin-top:18px;font:800 15px Nunito;color:var(--ink);text-decoration:none;padding:10px 14px;border-radius:13px;background:rgba(59,52,80,.06)}
+.gh svg{width:19px;height:19px;color:#d9a21b}
+.dfoot{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.verdict{display:flex;align-items:center;gap:16px;margin:6px 0 12px}
+.bigstamp{font:800 22px Rubik;text-transform:uppercase;border:4px solid currentColor;border-radius:14px;padding:8px 14px;transform:rotate(-8deg);white-space:nowrap}
+.rl{display:flex;flex-direction:column;gap:8px}
+.ri{display:flex;gap:10px;font-size:14.5px;line-height:1.35}
+.ri svg{width:20px;height:20px;flex:none;margin-top:1px}
+.ri.y svg{color:var(--ok)}.ri.n svg{color:var(--stamp)}
+.ri b{display:block}
+.pts{font:800 15px Rubik;margin-top:12px}
+.stars{display:flex;gap:6px;justify-content:center;margin:8px 0}
+.stars svg{width:44px;height:44px}
+.rank{text-align:center;font:800 22px Rubik;margin-bottom:4px}
+.sumt{width:100%;border-collapse:collapse;margin-top:10px;font-size:14.5px}
+.sumt td{padding:7px 4px;border-bottom:1px solid var(--line)}
+.sumt td:last-child{text-align:right;font-weight:800}
+
+.toast{position:fixed;left:50%;bottom:76px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:#fff;padding:11px 18px;border-radius:14px;font:700 15px Nunito;z-index:2000;transition:.25s;pointer-events:none;max-width:calc(100% - 30px);text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%)}
+
+
+/* site skins */
+.sk-scam{background:linear-gradient(160deg,#2b1d5c,#7a2a8f);color:#fff;min-height:100%}
+.sk-scam .pg h1{font-size:30px;text-align:center}
+.timer{font:800 34px ui-monospace,Consolas,monospace;text-align:center;color:#ffd84a;margin:8px 0}
+.sk-scam .go{background:#38d27a;color:#10331f}
+.sk-scam .fld input{border-color:#a98ad6}
+.sk-sp{background:#fff}
+.sp-top{background:#7a5a3a;color:#fff;padding:12px 22px;font:800 20px Rubik;display:flex;align-items:center;gap:10px}
+.sp-top.bad{background:#9a6c43}
+.sk-lp .lp-top{background:#c43c2f;color:#fff;padding:12px 22px;font:800 26px Rubik;letter-spacing:.5px}
+.sk-lp .lp-nav{background:#2d2d2d;color:#ddd;padding:6px 22px;font:700 13px Nunito}
+.share{display:inline-block;margin-top:10px;padding:10px 16px;border-radius:10px;background:#c43c2f;color:#fff;font:800 15px Rubik}
+.gov-top{background:#2c5a8c;color:#fff;padding:12px 22px;font:800 18px Rubik}
+.pb-top{background:#3b3450;color:#fff;padding:12px 22px;font:800 20px Rubik;display:flex;gap:10px;align-items:center}
+.pb-top i{display:inline-grid;grid-template-columns:repeat(2,8px);gap:2px}
+.pb-top i b{width:8px;height:8px;background:#9fe3c0;border-radius:2px}
+.pb-top i b:nth-child(2){background:#f6c6a6}.pb-top i b:nth-child(3){background:#bddcf3}
+.cardform{background:#f6f7fb;border-radius:14px;padding:14px;margin-top:12px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="i-msg" viewBox="0 0 24 24"><path class="ink" d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></symbol>
+ <symbol id="i-sms" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3" class="ink"/><rect x="8.5" y="5" width="7" height="11" rx="1" fill="#fff" opacity=".85"/></symbol>
+ <symbol id="i-web" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" class="stk"/><path class="stk" d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></symbol>
+ <symbol id="i-feed" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" class="stk"/><circle cx="12" cy="12" r="4" class="stk"/><circle cx="17" cy="7" r="1.3" class="ink"/></symbol>
+ <symbol id="i-tools" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6" class="stk" style="stroke-width:2.8"/><path class="stk" style="stroke-width:3.2" d="M15 15l6 6"/></symbol>
+ <symbol id="i-case" viewBox="0 0 24 24"><path class="ink" d="M3 6a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+ <symbol id="i-marker" viewBox="0 0 24 24"><path class="ink" d="M14.5 3.5l6 6L11 19H5v-6z"/><path class="ink" d="M3 21h18v-1.6H3z" opacity=".5"/></symbol>
+ <symbol id="i-x" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.8" d="M6 6l12 12M18 6L6 18"/></symbol>
+ <symbol id="i-play" viewBox="0 0 24 24"><path class="ink" d="M7 4l13 8-13 8z"/></symbol>
+ <symbol id="i-ctl" viewBox="0 0 24 24"><path class="stk" d="M4 7h9M18 7h2M4 17h3M12 17h8"/><circle cx="15.5" cy="7" r="2.6" class="ink"/><circle cx="9.5" cy="17" r="2.6" class="ink"/></symbol>
+ <symbol id="i-back" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.8" d="M15 5l-7 7 7 7"/></symbol>
+ <symbol id="i-fwd" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.8" d="M9 5l7 7-7 7"/></symbol>
+ <symbol id="i-reload" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.6" d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" class="ink"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+ <symbol id="i-miss" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" class="ink"/><path d="M8 8l8 8M16 8l-8 8" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></symbol>
+ <symbol id="i-q" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" class="stk" style="stroke-dasharray:3 3"/></symbol>
+ <symbol id="i-star" viewBox="0 0 24 24"><path class="ink" d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></symbol>
+ <symbol id="i-snd" viewBox="0 0 24 24"><path class="ink" d="M4 9h4l5-4v14l-5-4H4z"/><path class="stk" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></symbol>
+ <symbol id="i-mute" viewBox="0 0 24 24"><path class="ink" d="M4 9h4l5-4v14l-5-4H4z"/><path class="stk" d="M16 9l5 6M21 9l-5 6"/></symbol>
+ <symbol id="i-dossier" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3" class="stk"/><path class="stk" d="M8 8h8M8 12h8M8 16h5"/></symbol>
+ <symbol id="i-photo" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" class="stk"/><circle cx="9" cy="10" r="2" class="ink"/><path class="stk" d="M4 17l5-4 4 3 3-2 4 3"/></symbol>
+ <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" class="stk"/><path class="stk" d="M12 11v6"/><circle cx="12" cy="7.6" r="1.4" class="ink"/></symbol>
+ <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3" class="ink"/><path class="stk" d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+ <symbol id="i-home" viewBox="0 0 24 24"><path class="ink" d="M12 3l9 8h-3v9h-5v-6h-2v6H6v-9H3z"/></symbol>
+ <symbol id="i-pc" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="13" rx="2.5" class="ink"/><path class="stk" d="M8 21h8M12 17v4"/></symbol>
+ <symbol id="i-bin" viewBox="0 0 24 24"><path class="ink" d="M5 7h14l-1.3 13a2 2 0 0 1-2 1.8H8.3a2 2 0 0 1-2-1.8z"/><path class="stk" d="M3 6h18M9 6V3.5h6V6"/></symbol>
+ <symbol id="i-book" viewBox="0 0 24 24"><path class="ink" d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v16H6.5A2.5 2.5 0 0 0 4 20.5z"/><path class="stk" d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></symbol>
+ <symbol id="i-bell" viewBox="0 0 24 24"><path class="ink" d="M12 3a6 6 0 0 0-6 6v4l-2 3h16l-2-3V9a6 6 0 0 0-6-6z"/><path class="stk" d="M10 19.5a2 2 0 0 0 4 0"/></symbol>
+ <symbol id="i-power" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.8" d="M12 3v8M7 6.5a7 7 0 1 0 10 0"/></symbol>
+ <symbol id="i-gh" viewBox="0 0 24 24"><path class="ink" d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.6.4-1.1.7-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></symbol>
+ <symbol id="i-vf" viewBox="0 0 24 24"><path fill="#3d8bdc" d="M12 1.5l2.6 2 3.2-.3 1 3.1 2.8 1.6-.9 3.1.9 3.1-2.8 1.6-1 3.1-3.2-.3-2.6 2-2.6-2-3.2.3-1-3.1-2.8-1.6.9-3.1-.9-3.1 2.8-1.6 1-3.1 3.2.3z"/><path d="M7.5 12.2l3 3 6-6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<section id="os" aria-label="Комп'ютер детектива">
+ <div class="desk" id="desk">
+  <div class="icons" id="icons"></div>
+ </div>
+ <div class="notifs" id="notifs" aria-live="polite"></div>
+ <div class="startm" id="startm" hidden>
+  <div class="sm-user"><span class="av" style="background:var(--peach);width:42px;height:42px">С</span><span><b style="font:800 16px Rubik">Стажер</b><small style="display:block;color:var(--muted)">Бюро перевірки фактів</small></span></div>
+  <div class="sm-grid" id="smGrid"></div>
+  <div class="sm-foot"><span class="note" id="smBest"></span><button class="trb" id="powerBtn" type="button" aria-label="Вимкнути" title="Вимкнути"><svg viewBox="0 0 24 24"><use href="#i-power"/></svg></button></div>
+ </div>
+ <div class="ncenter" id="ncenter" hidden>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><b style="font:800 17px Rubik">Сповіщення</b><button class="hintb" id="nClear" type="button">Очистити</button></div>
+  <div id="nList"></div>
+ </div>
+ <div class="taskbar">
+  <button class="startb" id="startBtn" type="button" aria-label="Пуск" title="Пуск"><img alt="" width="28" height="28" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='4' width='56' height='56' rx='16' fill='%23bddcf3'/%3E%3Crect x='14' y='13' width='28' height='36' rx='5' fill='%23fbfbfa'/%3E%3Cpath d='M19 22h18M19 29h14M19 36h10' stroke='%233b3450' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='40' cy='38' r='9' fill='none' stroke='%23eba497' stroke-width='5'/%3E%3Cpath d='M46.5 44.5l7 7' stroke='%23eba497' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E"></button>
+  <button class="tb casebtn" id="tbCase" type="button"><span class="ico c-case"><svg viewBox="0 0 24 24"><use href="#i-case"/></svg></span><span class="lbl" id="tbCaseL">Справа</span></button>
+  <div class="tbapps" id="tbApps"></div>
+  <div class="tray">
+   <button class="trb mkb" id="trMk" type="button" aria-pressed="false" title="Маркер доказів (M)"><svg viewBox="0 0 24 24"><use href="#i-marker"/></svg><span class="lbl">Маркер</span></button>
+   <button class="trb" id="trSnd" type="button" aria-label="Звук" title="Звук"></button>
+   <button class="trb" id="trBell" type="button" aria-label="Сповіщення" title="Сповіщення"><svg viewBox="0 0 24 24"><use href="#i-bell"/></svg><span class="badge" id="bellN" hidden></span></button>
+   <span class="clock" id="clock"></span>
+  </div>
+ </div>
+</section>
+<div class="boot" id="boot"><div><img alt="" width="84" height="84" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='4' width='56' height='56' rx='16' fill='%23bddcf3'/%3E%3Crect x='14' y='13' width='28' height='36' rx='5' fill='%23fbfbfa'/%3E%3Cpath d='M19 22h18M19 29h14M19 36h10' stroke='%233b3450' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='40' cy='38' r='9' fill='none' stroke='%23eba497' stroke-width='5'/%3E%3Cpath d='M46.5 44.5l7 7' stroke='%23eba497' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E"><div class="bl"><i></i></div></div></div>
+<div class="off" id="off" hidden><div><p style="margin-bottom:18px;font:700 17px Nunito;opacity:.8">Комп'ютер вимкнено</p><button class="powerbig" id="powerOn" type="button" aria-label="Увімкнути"><svg viewBox="0 0 24 24"><use href="#i-power"/></svg></button></div></div>
+
+
+<dialog id="repDlg"><div class="dlg" id="repBody"></div></dialog>
+<dialog id="endDlg"><div class="dlg" id="endBody"></div></dialog>
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+/* ---------- helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('fc-' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('fc-' + k, JSON.stringify(v)); } catch (e) {} }
+};
+let rnd = Math.random;
+const pick = a => a[Math.floor(rnd() * a.length)];
+const ri = (a, b) => a + Math.floor(rnd() * (b - a + 1));
+const icon = (id, cls = '') => `<svg viewBox="0 0 24 24" class="${cls}"><use href="#${id}"/></svg>`;
+let toastT;
+function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('on'), 2600); }
+
+/* ---------- sound ---------- */
+let sound = store.get('sound', true), actx;
+function tone(f, d = .12, type = 'sine', v = .07, delay = 0) {
+  if (!sound) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const t = actx.currentTime + delay, o = actx.createOscillator(), g = actx.createGain();
+    o.type = type; o.frequency.value = f; g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+    o.connect(g).connect(actx.destination); o.start(t); o.stop(t + d + .02);
+  } catch (e) {}
+}
+const sfx = {
+  click: () => tone(520, .05, 'triangle', .04),
+  mark: () => { tone(660, .08, 'triangle'); tone(990, .1, 'triangle', .06, .07); },
+  bad: () => tone(180, .18, 'square', .04),
+  ding: () => { tone(880, .12); tone(1320, .18, 'sine', .05, .1); },
+  stamp: () => { tone(90, .25, 'triangle', .14); tone(60, .3, 'sine', .12, .02); },
+  win: () => [523, 659, 784, 1046].forEach((f, i) => tone(f, .18, 'triangle', .06, i * .1))
+};
+
+/* ---------- world registries ---------- */
+let PAGES, DOSSIER, PHOTOS, SEARCH, CHATS, SMS, FEED;
+function resetWorld() {
+  PAGES = {}; DOSSIER = {}; PHOTOS = {}; SEARCH = []; CHATS = {}; SMS = []; FEED = [];
+  /* постійні сайти світу */
+  PAGES['poshuk.web'] = () => searchPage('');
+  PAGES['stara-poshta.ua'] = () => `<div class="sk-sp"><div class="sp-top">${spLogo()}Стара пошта</div><div class="pg">
+    <h1>Відстежити посилку</h1><p>Усі твої відправлення — в особистому кабінеті.</p>
+    <div class="cardform"><b>Мої посилки</b><p class="mk" data-ev="noparcel">Активних посилок немає. Ти нічого не очікуєш.</p></div>
+    <p class="meta">Стара пошта ніколи не просить оплатити доставку за посиланням із SMS.</p></div></div>`;
+  PAGES['pixelbank.ua'] = () => `<div class="pb-top"><i><b></b><b></b><b></b><b></b></i>ПіксельБанк</div><div class="pg">
+    <h1>ПіксельБанк</h1><p>Картки, перекази, накопичення.</p><p><span class="lnk" data-go="pixelbank.ua/500">Акція «500 грн для школярів» →</span></p></div>`;
+  DOSSIER['stara-poshta.ua'] = {created: '2009 рік', owner: 'ТОВ «Стара пошта»', note: 'Офіційний сайт служби доставки.'};
+  DOSSIER['pixelbank.ua'] = {created: '2012 рік', owner: 'АТ «ПіксельБанк»', note: 'Офіційний сайт банку.'};
+  DOSSIER['lypove.gov.ua'] = {created: '2014 рік', owner: 'Липівська міська рада', note: 'Офіційний сайт міської ради.'};
+}
+const spLogo = () => `<svg viewBox="0 0 24 24" width="26" height="26"><rect x="3" y="6" width="18" height="13" rx="2" fill="#f6e19c"/><path d="M3 9l9 5 9-5" fill="none" stroke="#7a5a3a" stroke-width="2"/></svg>`;
+function host(u) { return String(u).replace(/^https?:\/\//, '').replace(/^www\./, '').split(/[/?#]/)[0].toLowerCase(); }
+function normUrl(u) { return String(u).trim().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '').toLowerCase(); }
+
+/* ---------- SVG photos ---------- */
+const PH = {
+  shark: (s = 1) => `<svg viewBox="0 0 400 260" aria-label="Фото: акула на затопленій вулиці"><rect width="400" height="260" fill="#9fb4c8"/><rect x="0" y="40" width="90" height="130" fill="#c8b9a6"/><rect x="18" y="62" width="20" height="26" fill="#6b7c8f"/><rect x="52" y="62" width="20" height="26" fill="#6b7c8f"/><rect x="100" y="20" width="120" height="150" fill="#d9cbb5"/><rect x="118" y="44" width="24" height="30" fill="#6b7c8f"/><rect x="160" y="44" width="24" height="30" fill="#6b7c8f"/><rect x="118" y="92" width="24" height="30" fill="#6b7c8f"/><rect x="160" y="92" width="24" height="30" fill="#6b7c8f"/><rect x="232" y="56" width="168" height="114" fill="#bfae98"/><rect x="250" y="76" width="22" height="26" fill="#6b7c8f"/><rect x="300" y="76" width="22" height="26" fill="#6b7c8f"/><rect x="350" y="76" width="22" height="26" fill="#6b7c8f"/><rect x="0" y="150" width="400" height="110" fill="#7d8a6c"/><path d="M0 158q40-6 80 0t80 0 80 0 80 0 80 0v102H0z" fill="#6f7d5d" opacity=".7"/><path d="M150 205q60-22 130-6q-30 4-40 16q-40 6-90-10z" fill="#5a6a78"/><path d="M215 197l18-38 10 36z" fill="#4b5a68"/><path d="M276 199l22-14-6 20z" fill="#4b5a68"/><circle cx="170" cy="203" r="2.6" fill="#111"/><path d="M60 230q30-4 60 0M260 238q40-5 80 0" stroke="#9aa88a" stroke-width="3" fill="none"/></svg>`,
+  promo: (sum) => `<svg viewBox="0 0 400 260" aria-label="Банер ПіксельБанку"><rect width="400" height="260" fill="#3b3450"/><g fill="#9fe3c0"><rect x="30" y="30" width="22" height="22" rx="4"/><rect x="56" y="56" width="22" height="22" rx="4" fill="#f6c6a6"/><rect x="30" y="56" width="22" height="22" rx="4" fill="#bddcf3"/><rect x="56" y="30" width="22" height="22" rx="4"/></g><text x="200" y="140" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="800" font-size="72" fill="#f6e19c">${sum} ₴</text><text x="200" y="185" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="700" font-size="24" fill="#fff">кожному школяру*</text><rect x="250" y="200" width="120" height="40" rx="10" fill="#bfe3cf"/><text x="310" y="226" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="800" font-size="16" fill="#3b3450">Отримати</text></svg>`,
+  coins: () => `<svg viewBox="0 0 300 120" width="260" style="margin:6px auto"><g font-family="Rubik" font-weight="800" font-size="30" text-anchor="middle">${[40, 110, 180, 250].map((x, i) => `<circle cx="${x}" cy="${60 + (i % 2 ? -10 : 10)}" r="32" fill="#ffd84a" stroke="#c99a10" stroke-width="5"/><text x="${x}" y="${71 + (i % 2 ? -10 : 10)}" fill="#a87a00">R</text>`).join('')}</g></svg>`
+};
+
+/* ---------- shift (cases) ---------- */
+const FRIENDS = ['Максим', 'Дмитро', 'Софія', 'Остап', 'Аня', 'Тимур', 'Злата', 'Назар'];
+const SISTERS = ['Оля', 'Катя', 'Даринка', 'Мирослава'];
+const AVC = ['var(--sky)', 'var(--mint)', 'var(--peach)', 'var(--lilac)', 'var(--butter)', 'var(--pink)'];
+const VERD = {fake: 'Фейк', true: 'Правда', manip: 'Маніпуляція'};
+
+function buildShift() {
+  resetWorld();
+  const friend = pick(FRIENDS), sister = pick(SISTERS);
+  seedHistory(friend, sister);
+  const cases = [];
+
+  /* 1. Безкоштовні робакси */
+  {
+    const dom = pick(['roblox-free-robux.top', 'robux-gift.click', 'free-robux24.xyz']);
+    const amount = pick([1000, 5000, 10000]), mins = pick([2, 3, 5]);
+    cases.push({
+      app: 'msg', chat: friend, title: 'Безкоштовні робакси', verdict: 'fake',
+      brief: `${friend} скинув у Месенджер посилання на безкоштовні робакси. Перевір, чи безпечно туди переходити.`,
+      hint: 'Подивись уважно на адресу сайту і на те, що він просить ввести. Можна перевірити сайт у «Досьє сайту».',
+      ev: {
+        domain1: {label: `Дивний домен ${dom}`, why: 'Справжні роздачі Roblox бувають лише на офіційному сайті roblox.com, а не на випадкових доменах .top, .click чи .xyz.'},
+        free: {label: 'Обіцянка «безкоштовно для всіх»', why: 'Шахраї приманюють халявою: валюту ігор ніхто не роздає просто так.'},
+        timer: {label: 'Таймер, що підганяє', why: 'Відлік часу не дає подумати. Поспіх — улюблений прийом шахраїв.'},
+        pass: {label: 'Просять пароль від акаунта', why: 'Жоден справжній подарунок не вимагає твого пароля. З ним акаунт просто вкрадуть.'},
+        age1: {label: `Сайт створено ${pick(['3 дні', '5 днів', 'тиждень'])} тому`, why: 'Свіжий сайт без історії — типова ознака шахрайської сторінки.'}
+      },
+      setup() {
+        addChat(friend, [
+          {t: `<span class="mk">Йоу!!</span> тут дають <span class="mk" data-ev="free">безкоштовні робакси</span> 😱 я вже забрав ${amount}`, time: '16:41'},
+          {t: `<span class="lnk mk" data-ev="domain1" data-go="${dom}">https://${dom}/gift</span>`, time: '16:41'},
+          {t: `встигни, там лише ${mins} хв!!`, time: '16:42'}
+        ]);
+        setReplies(friend, [
+          {t: 'Не вводь туди пароль! Це шахраї, вони крадуть акаунти', ans: 'ой 😳 я якраз хотів ввести… дякую, що сказав!'},
+          {t: 'Зараз гляну 👀', ans: 'давай швидше, бо згорить!!'},
+          {t: 'Перевірю й напишу', ans: 'ок, чекаю'}
+        ]);
+        PAGES[dom] = PAGES[dom + '/gift'] = () => `<div class="sk-scam"><div class="pg">
+          <h1 class="mk" data-ev="free">БЕЗКОШТОВНІ РОБАКСИ ДЛЯ ВСІХ!</h1>
+          ${PH.coins()}
+          <p style="text-align:center" class="mk">Отримай ${amount} R$ прямо зараз</p>
+          <div class="timer mk" data-ev="timer" id="scamTimer">0${mins}:00</div>
+          <p style="text-align:center;font-size:14px" class="mk" data-ev="timer">Пропозиція згорить, коли закінчиться час!</p>
+          <form data-trap="pass">
+            <label class="fld"><span>Нікнейм у Roblox</span><input autocomplete="off"></label>
+            <label class="fld"><span class="mk" data-ev="pass">Пароль від акаунта</span><input type="password" autocomplete="off"></label>
+            <button class="go" type="submit">Забрати робакси</button>
+          </form></div></div>`;
+        DOSSIER[dom] = {created: '<span class="mk" data-ev="age1">' + cases[0].ev.age1.label.replace('Сайт створено ', '') + '</span>', owner: '<span class="mk">приховано</span>', note: 'Сайт не має жодного стосунку до компанії Roblox.'};
+      }
+    });
+  }
+
+  /* 2. Посилка затримана */
+  {
+    const dom = pick(['stara-poshta.delivery-pay.xyz', 'stara-poshta.pay-dostavka.top', 'stara-poshta.parcel-fee.online']);
+    const sum = pick([19, 24, 29]);
+    const num = '+44 7' + ri(100, 999) + ' ' + ri(100000, 999999);
+    cases.push({
+      app: 'sms', title: 'Посилка затримана', verdict: 'fake',
+      brief: 'Тобі прийшла SMS про посилку, яку «затримали». Ти нічого не замовляв. Що це?',
+      hint: 'Справжня адреса сайту — це остання частина перед першою «/». Перевір її в «Досьє сайту» і зайди на офіційний сайт Старої пошти із закладок.',
+      ev: {
+        sender: {label: `Іноземний номер ${num}`, why: 'Служба доставки пише з назвою відправника, а не з випадкового іноземного номера.'},
+        domain2: {label: 'Справжній домен — не stara-poshta.ua', why: `У ${dom} головна частина — ${dom.split('.').slice(1).join('.')}. «stara-poshta» на початку — лише маскування.`},
+        pay: {label: `Просять оплатити ${sum} грн за посиланням`, why: 'Стара пошта не просить доплатити за посиланням із SMS. Невелика сума — щоб не насторожився.'},
+        card: {label: 'Вимагають дані картки і CVV', why: 'CVV-код не можна вводити на невідомих сайтах: з ним злодії знімуть усі гроші з картки.'},
+        noparcel: {label: 'В офіційному кабінеті посилок немає', why: 'Перевірка на справжньому сайті — найнадійніший спосіб: посилки просто не існує.'}
+      },
+      setup() {
+        addSms({from: num, fromMk: 'sender', time: '09:13', t: `Stara Poshta: Vasha posylka zatrymana. <span class="mk" data-ev="pay">Oplatit dostavku ${sum} grn</span> do 18:00: <span class="lnk mk" data-ev="domain2" data-go="${dom}">${dom}</span>`});
+        PAGES[dom] = () => `<div class="sk-sp"><div class="sp-top bad">${spLogo()}<span class="mk">Стара пошта</span></div><div class="pg">
+          <h1>Ваша посилка чекає</h1><p class="mk">Відправлення №${ri(20000000, 59999999)}0${ri(10, 99)} затримано на складі.</p>
+          <p class="mk" data-ev="pay">Сплатіть доставку ${sum},00 грн, щоб отримати посилку сьогодні.</p>
+          <form class="cardform" data-trap="card">
+           <label class="fld"><span>Номер картки</span><input inputmode="numeric" autocomplete="off" placeholder="0000 0000 0000 0000"></label>
+           <label class="fld"><span class="mk" data-ev="card">Термін дії та CVV-код</span><input autocomplete="off" placeholder="MM/РР   CVV"></label>
+           <button class="go" style="background:#7a5a3a;color:#fff" type="submit">Сплатити ${sum} грн</button>
+          </form></div></div>`;
+        DOSSIER[host(dom)] = {created: pick(['вчора', '2 дні тому']), owner: 'приховано', note: `Домен ${dom.split('.').slice(1).join('.')} не належить Старій пошті.`};
+        DOSSIER[dom.split('.').slice(1).join('.')] = DOSSIER[host(dom)];
+      }
+    });
+  }
+
+  /* 3. Школи закривають */
+  {
+    const head = pick(['ШКОЛИ ЗАКРИВАЮТЬ ДО БЕРЕЗНЯ!!!', 'УСІ ШКОЛИ ЗАКРИЮТЬ ДО ВЕСНИ!!!', 'ТЕРМІНОВО! ШКОЛИ НА КАРАНТИН ДО БЕРЕЗНЯ!']);
+    const day = ri(3, 27), mon = pick(['лютого', 'березня', 'жовтня']);
+    cases.push({
+      app: 'msg', chat: 'Бабуся', title: 'Школи закривають', verdict: 'fake',
+      brief: 'Бабуся переслала новину й питає, чи правда, що школи закривають до березня.',
+      hint: 'Зверни увагу на дату новини й на те, хто «джерело». Пошукай, чи пишуть про це офіційні сайти.',
+      ev: {
+        caps: {label: 'Заголовок великими літерами і «!!!»', why: 'Крик у заголовку грає на емоціях. Серйозні медіа так не пишуть.'},
+        anon: {label: 'Джерело без імені', why: '«Джерело в міністерстві» не можна перевірити. Справжня новина називає, хто це сказав.'},
+        date: {label: `Новина минулого року (${day} ${mon} 2025)`, why: 'Стару новину пересилають як свіжу. Завжди дивись на дату.'},
+        official3: {label: 'Міська рада: навчання за графіком', why: 'Офіційне джерело спростовує новину. Інші сайти лише передруковують Липову правду.'}
+      },
+      setup() {
+        addChat('Бабуся', [
+          {fwd: 'Переслано з «Липова правда»', t: `<b class="mk" data-ev="caps">${head}</b><br><span class="lnk mk" data-go="lypova-pravda.info/news/shkoly">lypova-pravda.info/news/shkoly</span>`, time: '18:20'},
+          {t: '<span class="mk">Це правда??</span> Треба вже купувати путівку в село?', time: '18:21'}
+        ]);
+        setReplies('Бабуся', [
+          {t: 'Бабусю, це фейк. Міська рада пише, що навчання за звичайним графіком', ans: 'Ох, а я вже сусідкам переслала 🙈 Зараз напишу їм. Дякую, онучку!'},
+          {t: 'Не знаю, зараз перевірю', ans: 'Перевір, бо я хвилююся'},
+          {t: 'Ура, канікули! 🎉', ans: 'Ти ж спершу перевір 🤨'}
+        ]);
+        PAGES['lypova-pravda.info/news/shkoly'] = PAGES['lypova-pravda.info'] = () => `<div class="sk-lp"><div class="lp-top mk">ЛИПОВА ПРАВДА</div><div class="lp-nav">Новини · Скандали · Сенсації · Гороскоп</div><div class="pg">
+          <h1 class="mk" data-ev="caps">${head}</h1>
+          <p class="meta"><span class="mk" data-ev="date">${day} ${mon} 2025</span> · <span class="mk">Редакція</span> · 18 452 перегляди</p>
+          <p>Учні всієї країни підуть на довгі канікули аж до березня. <span class="mk" data-ev="anon">Про це нам повідомило джерело в міністерстві, яке побажало залишитися невідомим.</span></p>
+          <p class="mk">Батькам радять уже зараз планувати відпочинок. Деталі — згодом.</p>
+          <span class="share mk">Перешли всім, поки не видалили!</span></div></div>`;
+        DOSSIER['lypova-pravda.info'] = {created: '4 місяці тому', owner: 'приховано', note: 'Сайт часто публікує сенсації без джерел.'};
+        PAGES['lypove.gov.ua'] = PAGES['lypove.gov.ua/news'] = () => `<div class="gov-top">Липівська міська рада</div><div class="pg">
+          <h1>Освіта: розклад канікул</h1><p class="meta">Оновлено цього тижня</p>
+          <p class="mk" data-ev="official3">Навчання у школах триває за звичайним графіком. Зимові канікули — з 25 грудня до 11 січня.</p>
+          <p class="mk">Чутки про закриття шкіл до березня не відповідають дійсності.</p></div>`;
+        SEARCH.push({keys: ['школ', 'карантин', 'канікул', 'закрива', 'березн'], res: [
+          {u: 'lypova-pravda.info/news/shkoly', t: head.toLowerCase().replace(/!+/g, '!'), d: `${day} ${mon} 2025 — джерело в міністерстві повідомило…`},
+          {u: 'super-novyny.blog/shkoly', t: 'Школи закриють? (передрук)', d: 'За даними Липової правди…', go: 'super-novyny.blog/shkoly'},
+          {u: 'lypove.gov.ua/news', t: 'Освіта: розклад канікул — Липівська міська рада', d: 'Навчання у школах триває за звичайним графіком…'}
+        ]});
+        PAGES['super-novyny.blog/shkoly'] = () => `<div class="pg"><h1>Школи закриють?</h1><p class="meta">Блог «Супер новини»</p><p class="mk">Як пише Липова правда, школи можуть закрити до березня. Чекаємо подробиць!</p></div>`;
+      }
+    });
+  }
+
+  /* 4. Акула на вулиці */
+  {
+    const year = pick([2011, 2013, 2015]);
+    cases.push({
+      app: 'feed', title: 'Акула на вулиці', verdict: 'fake',
+      brief: `${sister} показує у Стрічці фото: після злив вулицею пливе акула. Справжнє фото?`,
+      hint: 'Під фото є кнопка «Перевірити фото». Подивись, де це фото з\'являлося раніше і коли його зняли.',
+      ev: {
+        now: {label: 'Підпис «щойно»', why: 'Підпис робить старе фото «свіжим». Підпис може бути яким завгодно.'},
+        reverse: {label: `Фото гуляє інтернетом з ${year} року`, why: 'Пошук за фото показав десятки старих публікацій: його виставляють при кожній повені.'},
+        meta: {label: `Дата зйомки — ${year} рік`, why: 'Властивості файлу видають справжню дату. Отже, сьогоднішньої акули на вулиці не було.'}
+      },
+      setup() {
+        PHOTOS.shark = {svg: PH.shark(), name: 'Акула на вулиці',
+          reverse: `<p><b class="mk" data-ev="reverse">Найраніше: ${year} рік</b></p><div class="tl">
+            <div><b>${year}</b><span>форум про фотомонтаж: «Склеїв акулу і повінь для прикольчику»</span></div>
+            <div><b>${year + 3}</b><span>пост «Повінь у місті, акула на вулиці»</span></div>
+            <div><b>${year + 7}</b><span>те саме фото після злив в іншій країні</span></div>
+            <div><b>2026</b><span>ще 34 публікації з різними містами</span></div></div>`,
+          meta: `<dl><dt>Дата зйомки</dt><dd class="mk" data-ev="meta">${ri(2, 28)}.0${ri(3, 9)}.${year}</dd><dt>Програма</dt><dd class="mk">Фоторедактор (змінено)</dd><dt>Розмір</dt><dd class="mk">1200 × 780</dd></dl>`};
+        addPost({author: 'weather_wow_ua', av: 'W', time: '7 хв', photo: 'shark',
+          text: `<span class="mk" data-ev="now">ЩОЙНО!</span> Після злив акула пливе прямо вулицею 😱🦈 <span class="mk">Обережно!!!</span>`, likes: ri(12, 48) + ' тис.', com: ri(800, 3000)});
+        addChat(sister, [{t: 'Глянь у Стрічці пост про акулу 😱😱 це взагалі реально??', time: '19:47'}]);
+        setReplies(sister, [
+          {t: 'Це старе фото, його склеїли ще багато років тому', ans: 'а я вже повірила 😅 добре, що не переслала'},
+          {t: 'Жесть 😱', ans: 'ага, я в шоці'},
+          {t: 'Зараз перевірю', ans: 'ок'}
+        ]);
+      }
+    });
+  }
+
+  /* 5. ПіксельБанк дарує */
+  {
+    const sum = pick([300, 500]);
+    const until = pick(['31 грудня', '15 січня']);
+    cases.push({
+      app: 'feed', title: `ПіксельБанк дарує ${sum} грн`, verdict: 'manip',
+      brief: `ПіксельБанк пише, що дарує школярам ${sum} грн. Подарунок для всіх? Перевір пост і умови.`,
+      hint: 'Акаунт справжній. Але прочитай дрібний текст під постом і умови на офіційному сайті банку.',
+      ev: {
+        cond: {label: 'Гроші лише за відкриття картки', why: 'Головну умову сховано в дрібному тексті. Це не подарунок «кожному», а реклама картки.'},
+        age5: {label: 'Лише з 14 років і за згодою батьків', why: 'Більшості школярів акція взагалі не підходить, хоча пост каже «кожному».'},
+        official5: {label: 'Умови на сайті: тільки нові клієнти', why: 'Офіційний сайт підтверджує: факт правдивий, але подано його так, щоб ти зрозумів інакше.'}
+      },
+      setup() {
+        PHOTOS.promo = {svg: PH.promo(sum), name: 'Банер ПіксельБанку',
+          reverse: '<p><b>Знайдено лише на офіційних сторінках ПіксельБанку.</b></p><p class="note">Банер справжній, його не підробляли.</p>',
+          meta: `<dl><dt>Створено</dt><dd>цього місяця</dd><dt>Автор</dt><dd>ПіксельБанк</dd></dl>`};
+        addPost({author: 'pixelbank', verified: 1, av: 'P', time: '1 год', photo: 'promo',
+          text: `Даруємо <span class="mk">${sum} грн</span> кожному школяру! 🎁 Встигни до ${until}.`,
+          small: `<span class="mk" data-ev="cond">*Нарахування після відкриття картки ПіксельБанку</span>, <span class="mk" data-ev="age5">для клієнтів від 14 років за згодою батьків</span>. Умови: <span class="lnk mk" data-go="pixelbank.ua/500">pixelbank.ua/500</span>`,
+          likes: ri(3, 9) + ' тис.', com: ri(200, 900)});
+        PAGES['pixelbank.ua/500'] = () => `<div class="pb-top"><i><b></b><b></b><b></b><b></b></i>ПіксельБанк</div><div class="pg">
+          <h1>Акція «${sum} грн для школярів»</h1><p class="meta">Діє до ${until}</p>
+          <p class="mk" data-ev="official5">Бонус ${sum} грн отримують лише нові клієнти, які відкрили дитячу картку ПіксельБанку.</p>
+          <p class="mk" data-ev="age5">Відкрити картку можна з 14 років за згодою батьків.</p>
+          <p class="mk">Бонус нараховується протягом 30 днів після першої покупки карткою.</p></div>`;
+      }
+    });
+  }
+  cases.forEach((c, i) => { c.n = i; });
+  return cases;
+}
+
+/* ---------- history ---------- */
+function addHist(name, msgs) {
+  if (!CHATS[name]) CHATS[name] = {name, msgs: [], unread: 0, c: AVC[Object.keys(CHATS).length % AVC.length]};
+  msgs.forEach(m => CHATS[name].msgs.push({...m, case: -1}));
+  CHATS[name].last = Object.keys(CHATS).length;
+}
+function seedHistory(friend, sister) {
+  addHist('Клас 7-Б', [
+    {day: 'Вчора', from: 'Вікторія Олегівна', t: 'Діти, завтра інформатика в 205 кабінеті. Не забудьте навушники!', time: '18:02'},
+    {from: 'Марко', t: 'а д/з яке?', time: '18:10'},
+    {from: 'Злата', t: 'блок-схема «як перейти дорогу»', time: '18:11'},
+    {me: 1, t: 'дякую 🙏', time: '18:15'}
+  ]);
+  addHist(sister, [
+    {day: 'Вчора', t: 'Ти брав мою зарядку??', time: '20:41'},
+    {me: 1, t: 'Вона на кухні', time: '20:43'},
+    {t: 'Знайшла 👍', time: '20:44'}
+  ]);
+  addHist('Тато', [
+    {day: 'Вчора', t: 'Заберу тебе з гуртка о 17:30', time: '13:05'},
+    {me: 1, t: 'Ок, чекаю біля входу', time: '13:20'},
+    {day: 'Сьогодні', t: 'Сьогодні буду пізніше, вечеря в холодильнику', time: '10:12'}
+  ]);
+  addHist('Бабуся', [
+    {day: 'Вчора', t: 'Онучку, ти поїв?', time: '12:10'},
+    {me: 1, t: 'Так, бабусю 😊', time: '12:31'},
+    {t: 'Молодець. Приїжджай у неділю, спечу пиріжки з вишнями', time: '12:40'},
+    {me: 1, t: 'Приїду!! ❤️', time: '12:41'}
+  ]);
+  addHist(friend, [
+    {day: 'Вчора', t: 'ти зробив д/з з інфи?', time: '19:20'},
+    {me: 1, t: 'та, там легко', time: '19:31'},
+    {t: 'скинь фотку плз 🥺', time: '19:31'},
+    {me: 1, t: 'сам зроби 😄 це 5 хвилин', time: '19:33'},
+    {t: 'ну ок(', time: '19:34'},
+    {day: 'Сьогодні', t: 'ти вже пройшов новий рівень?', time: '15:02'},
+    {me: 1, t: 'ще ні, ввечері зайду', time: '15:05'}
+  ]);
+  CHATS[sister].replies = [{t: 'Будь ласка 😊'}, {t: 'Наступного разу питай 😄', ans: 'Добре-добре 🙄'}];
+  CHATS['Тато'].replies = [{t: 'Добре, тату 👍', ans: 'Не сиди довго за комп\'ютером 😉'}, {t: 'А що на вечерю?', ans: 'Вареники! 🥟'}];
+  addHist('Мама', [
+    {day: 'Вчора', t: 'Сонечко, я сьогодні до 18:00 на роботі', time: '08:15'},
+    {me: 1, t: 'Ок', time: '08:20'},
+    {t: 'Суп у холодильнику, розігрій 🙂', time: '08:21'},
+    {day: 'Сьогодні', t: 'Як контрольна з математики?', time: '13:20'},
+    {me: 1, t: 'Здається, на 10!', time: '13:42'},
+    {t: 'Молодець!! 💛 Купи, будь ласка, хліб по дорозі', time: '13:45'},
+    {me: 1, t: 'Добре', time: '13:46'}
+  ]);
+}
+
+function sendReply(k) {
+  const ch = CHATS[curChat]; if (!ch || !ch.replies) return;
+  const r = ch.replies[k]; ch.replies = null;
+  ch.msgs.push({me: 1, t: esc(r.t), time: nowT(), case: -1}); sfx.click();
+  if (r.ans) {
+    ch.typing = 1;
+    setTimeout(() => {
+      ch.typing = 0; ch.msgs.push({t: esc(r.ans), time: nowT(), case: -1});
+      if (r.next) ch.replies = r.next;
+      if (wins.msg && curChat === ch.name) { renderMsg(); tone(740, .08, 'triangle', .04); }
+      else { ch.unread++; notify({app: 'msg', chat: ch.name, title: ch.name, text: r.ans}); renderBadges(); }
+    }, 1500);
+  }
+  renderMsg();
+}
+function setReplies(name, list) { if (CHATS[name]) CHATS[name].replies = list; }
+
+/* ---------- content adders ---------- */
+function addChat(name, msgs) {
+  if (!CHATS[name]) CHATS[name] = {name, msgs: [], unread: 0, c: AVC[Object.keys(CHATS).length % AVC.length]};
+  msgs.forEach(m => CHATS[name].msgs.push({...m, case: S.ci}));
+  CHATS[name].unread += msgs.filter(m => !m.me).length;
+  CHATS[name].last = 1000 + S.ci * 10 + Object.keys(CHATS).length + (Date.now() % 1);
+}
+function addSms(m) { SMS.push({...m, case: S.ci, unread: 1}); }
+function addPost(p) { FEED.unshift({...p, case: S.ci, unread: 1}); }
+
+/* ---------- seeded random ---------- */
+function mulberry(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const nowT = () => new Date().toTimeString().slice(0, 5);
+
+/* ---------- state ---------- */
+const S = {seed: 0, cases: [], ci: 0, score: 0, results: [], found: new Set(), misses: 0, hint: false, traps: 0, active: false};
+let marker = false;
+function build() {
+  rnd = mulberry(S.seed);
+  closeAllWins();
+  B.hist = []; B.pos = -1; curChat = null; curPhoto = null; dossierQ = ''; fxPath = 'Комп\'ютер'; NOTIFS.length = 0;
+  S.cases = buildShift();
+}
+function newShift() {
+  S.seed = Math.floor(Math.random() * 1e9); S.score = 0; S.results = [];
+  build(); setMarker(false);
+  beginCase(0);
+}
+function beginCase(i, silent) {
+  S.ci = i; S.found = new Set(); S.misses = 0; S.hint = false; S.traps = 0;
+  const c = S.cases[i];
+  c.setup();
+  S.active = true;
+  renderAll(); save();
+  if (!silent) notifyCase(c);
+}
+function save() { store.set('progress', {seed: S.seed, ci: S.ci, score: S.score, results: S.results, found: [...S.found], misses: S.misses, hint: S.hint, traps: S.traps}); }
+function restore(p) {
+  S.seed = p.seed; build();
+  for (let i = 0; i < p.ci; i++) { S.ci = i; S.cases[i].setup(); }
+  S.ci = p.ci; S.cases[p.ci].setup();
+  Object.assign(S, {score: p.score, results: p.results || [], found: new Set(p.found || []), misses: p.misses || 0, hint: !!p.hint, traps: p.traps || 0, active: true});
+  Object.values(CHATS).forEach(c => c.unread = 0); SMS.forEach(m => m.unread = 0); FEED.forEach(f => f.unread = 0);
+  renderAll();
+  if (S.results.length > S.ci) { S.active = false; if (S.ci < S.cases.length - 1) beginCase(S.ci + 1); else endShift(); }
+}
+function notifyCase(c) {
+  setTimeout(() => {
+    notify({app: 'case', title: 'Бюро перевірки фактів', text: `Нова справа ${S.ci + 1} з ${S.cases.length}: ${c.title}`});
+    const ch = Object.values(CHATS).find(x => x.msgs.some(m => m.case === S.ci && !m.me));
+    setTimeout(() => {
+      if (c.app === 'sms') { const m = SMS[SMS.length - 1]; notify({app: 'sms', title: m.from, text: strip(m.t)}); }
+      else if (ch) { const m = [...ch.msgs].reverse().find(m => m.case === S.ci && !m.me); notify({app: 'msg', chat: ch.name, title: ch.name, text: strip(m.t)}); }
+      else if (c.app === 'feed') { const p = FEED[0]; notify({app: 'feed', title: 'Стрічка · ' + p.author, text: strip(p.text)}); }
+    }, 1600);
+  }, 700);
+}
+
+/* ---------- notifications ---------- */
+const NOTIFS = [];
+function notify(n) {
+  n.time = nowT(); NOTIFS.unshift(n); sfx.ding();
+  const el = document.createElement('div'); el.className = 'notif';
+  el.innerHTML = `<span class="ico ${APPS[n.app].c}">${icon(APPS[n.app].i)}</span><span style="min-width:0"><b>${esc(n.title)}</b><small>${esc(n.text)}</small></span><button class="nx" type="button" aria-label="Закрити">${icon('i-x')}</button>`;
+  el.onclick = e => { if (!e.target.closest('.nx')) openNotif(n); hideN(el); };
+  $('#notifs').prepend(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('on')));
+  setTimeout(() => hideN(el), 7000);
+  renderBell();
+}
+function hideN(el) { el.classList.remove('on'); setTimeout(() => el.remove(), 300); }
+function openNotif(n) {
+  n.read = 1;
+  if (n.chat) curChat = n.chat;
+  openWin(n.app); if (n.app === 'msg') renderMsg();
+  $('#ncenter').hidden = true; renderBell();
+}
+function renderBell() {
+  const k = NOTIFS.filter(n => !n.read).length, b = $('#bellN');
+  b.hidden = !k; b.textContent = k;
+  $('#nList').innerHTML = NOTIFS.length ? NOTIFS.map((n, i) => `<div class="notif on" data-ni="${i}" style="box-shadow:0 0 0 1px var(--line);margin-bottom:8px"><span class="ico ${APPS[n.app].c}">${icon(APPS[n.app].i)}</span><span style="min-width:0"><b>${esc(n.title)}</b><small>${esc(n.text)}</small></span><span class="note" style="margin-left:auto">${n.time}</span></div>`).join('') : '<p class="note">Нових сповіщень немає.</p>';
+}
+
+/* ---------- OS & windows ---------- */
+const APPS = {
+  case: {t: 'Справи', i: 'i-case', c: 'c-case', w: 330, h: 600},
+  msg: {t: 'Месенджер', i: 'i-msg', c: 'c-msg', w: 580, h: 460},
+  sms: {t: 'Повідомлення', i: 'i-sms', c: 'c-sms', w: 380, h: 460},
+  web: {t: 'Браузер', i: 'i-web', c: 'c-web', w: 700, h: 540},
+  feed: {t: 'Стрічка', i: 'i-feed', c: 'c-feed', w: 460, h: 560},
+  tools: {t: 'Інструменти', i: 'i-tools', c: 'c-tools', w: 500, h: 480},
+  pc: {t: 'Комп\'ютер', i: 'i-pc', c: 'c-pc', w: 620, h: 420},
+  guide: {t: 'Підручник фактчекера', i: 'i-book', c: 'c-guide', w: 680, h: 520},
+  notes: {t: 'Блокнот', i: 'i-dossier', c: 'c-notes', w: 460, h: 380},
+  photos: {t: 'Фото', i: 'i-photo', c: 'c-photos', w: 520, h: 420},
+  settings: {t: 'Налаштування', i: 'i-ctl', c: 'c-set', w: 460, h: 520}
+};
+const DESK = [['pc'], ['bin', 'Кошик', 'i-bin', 'c-bin'], ['guide', 'Підручник'], ['case'], ['msg'], ['sms'], ['web'], ['feed'], ['tools']];
+const START = ['case', 'msg', 'sms', 'web', 'feed', 'tools', 'pc', 'guide', 'settings'];
+let wins = {}, ztop = 20;
+const isMobile = () => matchMedia('(max-width:760px)').matches;
+
+function drawDesk() {
+  $('#icons').innerHTML = DESK.map(([a, t, i, c]) => {
+    const A = APPS[a] || {};
+    return `<button class="dic" type="button" ${a === 'bin' ? 'data-open="pc" data-path="Кошик"' : `data-open="${a}"`}><span class="ico ${c || A.c}">${icon(i || A.i)}</span>${t || A.t}<span class="badge" data-badge="${a}" hidden></span></button>`;
+  }).join('');
+  $('#smGrid').innerHTML = START.map(a => `<button type="button" data-open="${a}"><span class="ico ${APPS[a].c}">${icon(APPS[a].i)}</span>${APPS[a].t.replace(' фактчекера', '')}</button>`).join('');
+}
+function closeAllWins() { Object.values(wins).forEach(w => w.el.remove()); wins = {}; }
+function openWin(app, focusOnly) {
+  let w = wins[app];
+  $('#startm').hidden = true; $('#startBtn').classList.remove('on'); $('#ncenter').hidden = true;
+  if (!w) {
+    const A = APPS[app], el = document.createElement('div');
+    el.className = 'win'; el.dataset.app = app;
+    el.innerHTML = `<div class="wt"><span class="ico ${A.c}">${icon(A.i)}</span><b>${A.t}</b><button class="wclose" type="button" aria-label="Закрити">${icon('i-x')}</button></div><div class="wb"></div>`;
+    const desk = $('#desk'), dw = desk.clientWidth, dh = desk.clientHeight;
+    const n = Object.keys(wins).filter(k => k !== 'case').length;
+    let W = Math.min(A.w, dw - 40), H = Math.min(A.h, dh - 30);
+    let x, y;
+    if (app === 'case') { x = dw - W - 14; y = 14; H = Math.min(A.h, dh - 28); }
+    else { x = Math.min(220 + n * 32, Math.max(10, dw - W - 360)); y = Math.min(16 + n * 28, Math.max(10, dh - H - 10)); }
+    Object.assign(el.style, {left: x + 'px', top: y + 'px', width: W + 'px', height: H + 'px'});
+    desk.appendChild(el);
+    w = wins[app] = {el, body: $('.wb', el)};
+    $('.wclose', el).onclick = e => { e.stopPropagation(); closeWin(app); };
+    el.addEventListener('pointerdown', () => focusWin(app));
+    dragify(el, $('.wt', el));
+    renderApp(app);
+  }
+  focusWin(app);
+  if (!focusOnly) sfx.click();
+  markSeen(app);
+  renderTaskbar();
+  return w;
+}
+function closeWin(app) {
+  const w = wins[app]; if (!w) return; w.el.remove(); delete wins[app];
+  if (isMobile()) { const rest = Object.keys(wins); if (rest.length) focusWin(rest[rest.length - 1]); }
+  renderTaskbar();
+}
+let focused = null;
+function focusWin(app) {
+  const w = wins[app]; if (!w) return;
+  w.el.style.zIndex = ++ztop;
+  if (isMobile()) Object.entries(wins).forEach(([k, o]) => { o.el.style.visibility = k === app ? 'visible' : 'hidden'; });
+  focused = app; renderTaskbar();
+}
+function renderTaskbar() {
+  $('#tbApps').innerHTML = Object.keys(wins).filter(a => a !== 'case').map(a => `<button class="tb ${a === focused ? 'on' : ''}" data-open="${a}" type="button"><span class="ico ${APPS[a].c}">${icon(APPS[a].i)}</span><span class="lbl">${APPS[a].t}</span></button>`).join('');
+  const c = S.cases[S.ci];
+  $('#tbCaseL').textContent = c && S.active ? `${isMobile() ? '' : 'Справа '}${S.ci + 1}/${S.cases.length} · ${S.found.size}/${Object.keys(c.ev).length}` : 'Справи';
+  $('#tbCase').classList.toggle('on', focused === 'case' && !!wins.case);
+}
+function dragify(el, handle) {
+  let sx, sy, ox, oy, id = null;
+  handle.addEventListener('pointerdown', e => {
+    if (isMobile() || e.target.closest('button')) return;
+    id = e.pointerId; handle.setPointerCapture(id);
+    sx = e.clientX; sy = e.clientY; ox = el.offsetLeft; oy = el.offsetTop; handle.style.cursor = 'grabbing';
+  });
+  handle.addEventListener('pointermove', e => {
+    if (e.pointerId !== id) return;
+    const d = $('#desk');
+    el.style.left = Math.max(-el.offsetWidth + 80, Math.min(d.clientWidth - 80, ox + e.clientX - sx)) + 'px';
+    el.style.top = Math.max(0, Math.min(d.clientHeight - 44, oy + e.clientY - sy)) + 'px';
+  });
+  const up = e => { if (e.pointerId === id) { id = null; handle.style.cursor = ''; } };
+  handle.addEventListener('pointerup', up); handle.addEventListener('pointercancel', up);
+}
+
+/* ---------- badges ---------- */
+function unreadOf(app) {
+  if (app === 'msg') return Object.values(CHATS).reduce((s, c) => s + c.unread, 0);
+  if (app === 'sms') return SMS.filter(m => m.unread).length;
+  if (app === 'feed') return FEED.filter(p => p.unread).length;
+  return 0;
+}
+function renderBadges() {
+  $$('[data-badge]').forEach(b => { const n = unreadOf(b.dataset.badge); b.hidden = !n; b.textContent = n; });
+}
+function markSeen(app) {
+  if (app === 'sms') SMS.forEach(m => m.unread = 0);
+  if (app === 'feed') FEED.forEach(p => p.unread = 0);
+  NOTIFS.forEach(n => { if (n.app === app && app !== 'msg') n.read = 1; });
+  renderBadges(); renderBell();
+}
+
+/* ---------- files ---------- */
+let fxPath = 'Комп\'ютер';
+const IMG = {
+  cat: `<svg viewBox="0 0 300 200"><rect width="300" height="200" fill="#f6e1c4"/><rect y="150" width="300" height="50" fill="#d9b98f"/><ellipse cx="150" cy="140" rx="70" ry="42" fill="#8a8f98"/><circle cx="150" cy="92" r="38" fill="#8a8f98"/><path d="M118 70l6-30 20 22zM182 70l-6-30-20 22z" fill="#8a8f98"/><circle cx="137" cy="90" r="5" fill="#2b2b2b"/><circle cx="163" cy="90" r="5" fill="#2b2b2b"/><path d="M146 102l4 4 4-4" fill="#e7a0a0"/><path d="M118 100h-22M118 106h-20M182 100h22M182 106h20" stroke="#5c5f66" stroke-width="2"/><path d="M215 150q40-10 30-50" stroke="#8a8f98" stroke-width="14" fill="none" stroke-linecap="round"/></svg>`,
+  mount: `<svg viewBox="0 0 300 200"><rect width="300" height="200" fill="#cfe6f7"/><circle cx="240" cy="44" r="20" fill="#f6e19c"/><path d="M0 150l70-80 50 50 60-90 120 120v50H0z" fill="#7fa58a"/><path d="M180 30l22 33-14-6-8 10-8-10-14 6z" fill="#fff"/><path d="M0 170q80-20 160 0t140 0v30H0z" fill="#5f8a6c"/></svg>`,
+  meme: `<svg viewBox="0 0 300 200"><rect width="300" height="200" fill="#fbfbfa"/><text x="150" y="40" text-anchor="middle" font-family="Rubik" font-weight="800" font-size="20" fill="#3b3450">Коли вчитель каже</text><text x="150" y="66" text-anchor="middle" font-family="Rubik" font-weight="800" font-size="20" fill="#3b3450">«Ще одне завдання»</text><circle cx="150" cy="135" r="45" fill="#f6e19c"/><circle cx="135" cy="125" r="6" fill="#3b3450"/><circle cx="165" cy="125" r="6" fill="#3b3450"/><path d="M130 155q20-14 40 0" stroke="#3b3450" stroke-width="5" fill="none" stroke-linecap="round"/></svg>`
+};
+const FS = {
+  'Документи': [
+    {n: 'Підручник фактчекера', k: 'guide'},
+    {n: 'Домашка з інформатики.txt', k: 'txt', b: 'Завдання на понеділок:\n1. Скласти блок-схему «Як перейти дорогу».\n2. Повторити: що таке алгоритм.\n3. Принести навушники.'},
+    {n: 'Список покупок.txt', k: 'txt', b: 'Від мами:\n— хліб\n— молоко 2 шт\n— яблука\n— щось смачне до чаю :)'}
+  ],
+  'Завантаження': [
+    {n: 'розклад_уроків.txt', k: 'txt', b: 'Пн: математика, укр. мова, інформатика, фізкультура\nВт: англійська, історія, біологія, мистецтво\nСр: математика, географія, інформатика, музика'},
+    {n: 'skin_generator.exe', k: 'exe'}
+  ],
+  'Зображення': [{n: 'Кіт Пиріжок.png', k: 'img', s: 'cat'}, {n: 'Карпати.jpg', k: 'img', s: 'mount'}],
+  'Кошик': [{n: 'старий_реферат.txt', k: 'txt', b: 'Реферат про динозаврів (чернетка, не здавати)'}, {n: 'мем.png', k: 'img', s: 'meme'}]
+};
+const FX_ICON = {dir: ['i-case', 'c-butter'], guide: ['i-book', 'c-guide'], txt: ['i-dossier', 'c-notes'], img: ['i-photo', 'c-photos'], exe: ['i-tools', 'c-bin'], app: null};
+function renderPc() {
+  const w = wins.pc; if (!w) return;
+  const places = ['Комп\'ютер', 'Робочий стіл', 'Документи', 'Завантаження', 'Зображення', 'Кошик'];
+  let items;
+  if (fxPath === 'Комп\'ютер') items = places.slice(1).map(p => ({n: p, k: 'dir'}));
+  else if (fxPath === 'Робочий стіл') items = DESK.map(([a, t, i, c]) => ({n: t || APPS[a].t, k: 'app', a, i: i || APPS[a].i, c: c || APPS[a].c}));
+  else items = FS[fxPath] || [];
+  w.body.innerHTML = `<div class="fx"><div class="fxs">${places.map(p => `<button type="button" data-fx="${p}" class="${p === fxPath ? 'on' : ''}">${icon(p === 'Кошик' ? 'i-bin' : p === 'Комп\'ютер' ? 'i-pc' : 'i-case')}${p}</button>`).join('')}</div>
+    <div class="fxm"><div class="fxp">${icon(fxPath === 'Кошик' ? 'i-bin' : 'i-case')}${fxPath}${fxPath === 'Кошик' && items.length ? '<button class="btn sm" style="margin-left:auto" id="binClear" type="button">Очистити кошик</button>' : ''}</div>
+    <div class="fxg">${items.length ? items.map((f, i) => { const [ic, cl] = f.k === 'app' ? [f.i, f.c] : FX_ICON[f.k]; return `<button class="fi" type="button" data-fi="${i}"><span class="ico ${cl}">${icon(ic)}</span>${esc(f.n)}</button>`; }).join('') : '<p class="note" style="grid-column:1/-1;padding:10px">Тут порожньо.</p>'}</div></div></div>`;
+  w.items = items;
+}
+let noteFile = null, photoFile = null;
+function openFile(f) {
+  if (f.k === 'dir') { fxPath = f.n; renderPc(); return; }
+  if (f.k === 'app') { openWin(f.a === 'bin' ? 'pc' : f.a); if (f.a === 'bin') { fxPath = 'Кошик'; renderPc(); } return; }
+  if (f.k === 'guide') { openWin('guide'); return; }
+  if (f.k === 'txt') { noteFile = f; openWin('notes'); renderNotes(); return; }
+  if (f.k === 'img') { photoFile = f; openWin('photos'); renderPhotos(); return; }
+  if (f.k === 'exe') { sfx.bad(); noteFile = {n: f.n, b: 'Файл заблоковано.\n\nЦю програму завантажено з невідомого сайту. Такі «генератори скінів» чи «робаксів» часто містять віруси або крадуть паролі.\n\nНевідомі .exe-файли з інтернету не запускай. Краще видали його.'}; openWin('notes'); renderNotes(); }
+}
+function renderNotes() { const w = wins.notes; if (!w) return; w.el.querySelector('.wt b').textContent = noteFile ? noteFile.n + ' — Блокнот' : 'Блокнот'; w.body.innerHTML = `<div class="note-body">${noteFile ? esc(noteFile.b) : 'Відкрий текстовий файл у «Комп\'ютері».'}</div>`; }
+function renderPhotos() { const w = wins.photos; if (!w) return; w.el.querySelector('.wt b').textContent = photoFile ? photoFile.n : 'Фото'; w.body.innerHTML = photoFile ? `<div style="padding:14px;display:grid;place-items:center;height:100%">${IMG[photoFile.s].replace('<svg', '<svg style="width:100%;max-height:100%;border-radius:12px"')}</div>` : '<div class="empty-app">Відкрий фото в «Комп\'ютері».</div>'; }
+
+/* ---------- guide ---------- */
+const GUIDE = [
+  ['Як тут усе влаштовано', `<p>Це твій робочий комп'ютер у <b>Бюро перевірки фактів</b>. Тобі пишуть друзі й рідні, приходять SMS і новини. Твоє завдання — розібратися, де правда, а де ні.</p>
+   <ul><li><b>Пуск</b> (кнопка ліворуч унизу) — усі програми й налаштування.</li><li><b>Панель знизу</b> — відкриті вікна, «Справи», маркер, звук, сповіщення й годинник.</li><li><b>Сповіщення</b> з'являються праворуч унизу. Пропустив — натисни дзвіночок.</li><li><b>Справи</b> — що зараз треба перевірити, знайдені докази й печатки.</li><li>Вікна можна перетягувати за заголовок і закривати хрестиком.</li></ul>`],
+  ['Як розслідувати', `<ol><li>Прочитай справу у «Справах».</li><li>Відкрий повідомлення, перейди за посиланням, подивись пост.</li><li>Перевір: пошук в інтернеті, «Досьє сайту», «Пошук за фото», «Властивості фото».</li><li>Увімкни <b>маркер</b> (кнопка на панелі або клавіша <kbd>M</kbd>) і натискай на підозрілі місця. Влучний доказ підсвітиться жовтим.</li><li>Постав печатку: <b>Фейк</b>, <b>Правда</b> або <b>Маніпуляція</b>.</li></ol>
+   <p>Бали: печатка — 40, кожен доказ — 15. Помилковий доказ −5, підказка −10, введені дані на сайті шахраїв −10.</p>`],
+  ['Ознаки фейку', `<ul><li><b>Емоції й КАПС:</b> «ТЕРМІНОВО!!!», «ШОК», купа смайлів.</li><li><b>Поспіх:</b> таймери, «лише 2 хвилини», «поки не видалили».</li><li><b>Халява:</b> безкоштовна валюта в іграх, подарунки «всім».</li><li><b>Джерело без імені:</b> «джерело повідомило», «вчені довели».</li><li><b>Дата:</b> стара новина, яку пересилають як свіжу.</li><li><b>Просять дані:</b> пароль, код з SMS, номер картки, CVV.</li><li><b>Ніхто більше не пише:</b> про важливу подію пишуть офіційні сайти й різні медіа.</li></ul>`],
+  ['Читаємо адресу сайту', `<p>Справжній власник сайту — це <b>остання частина адреси перед першою косою рискою «/»</b>.</p>
+   <div class="ex">stara-poshta.ua/track — сайт <b>stara-poshta.ua</b> ✔</div>
+   <div class="ex">stara-poshta.pay-dostavka.top — сайт <b>pay-dostavka.top</b> ✘</div>
+   <p>Шахраї ставлять відому назву на початок, щоб обдурити. Перевір адресу в «Інструментах → Досьє сайту»: коли сайт створено й кому він належить. Сайт, якому кілька днів, — привід насторожитися.</p>`],
+  ['Перевіряємо фото', `<ul><li><b>Пошук за фото</b> показує, де картинка з'являлася раніше. Якщо фото «з сьогоднішньої повені» є в інтернеті з 2011 року — це фейк.</li><li><b>Властивості фото</b> — дата зйомки й програма, у якій фото змінювали.</li><li>Фото від ШІ часто видають дивні пальці, «пливучий» текст, неправильні тіні й відблиски.</li></ul>`],
+  ['Фейк, правда чи маніпуляція', `<ul><li><b>Фейк</b> — неправда або обман: вигадана новина, шахрайський сайт, старе фото з новим підписом.</li><li><b>Правда</b> — інформацію підтверджують надійні джерела.</li><li><b>Маніпуляція</b> — факти правдиві, але подані так, щоб ти зрозумів неправильно: важливу умову сховали дрібним шрифтом, вирвали з контексту.</li></ul>`],
+  ['Правила безпеки', `<ul><li>Нікому не кажи пароль і код із SMS. Навіть «службі підтримки».</li><li>Не вводь дані картки на сайтах за посиланням із повідомлення.</li><li>Перевіряй новини на офіційних сайтах, а не в пересланих повідомленнях.</li><li>Не пересилай, поки не перевірив.</li><li>Не запускай невідомі програми з інтернету.</li><li>Сумніваєшся — порадься з дорослими.</li></ul>`]
+];
+let gi = 0;
+function renderGuide() {
+  const w = wins.guide; if (!w) return;
+  w.body.innerHTML = `<div class="guide"><div class="gs">${GUIDE.map((g, i) => `<button type="button" data-gi="${i}" class="${i === gi ? 'on' : ''}"><b>${i + 1}</b>${g[0]}</button>`).join('')}</div>
+   <article class="gc"><h2>${GUIDE[gi][0]}</h2>${GUIDE[gi][1]}<div class="gnav">${gi > 0 ? `<button class="btn sm" type="button" data-gi="${gi - 1}">${icon('i-back')}Назад</button>` : '<span></span>'}${gi < GUIDE.length - 1 ? `<button class="btn sm main" type="button" data-gi="${gi + 1}">Далі${icon('i-fwd')}</button>` : `<button class="btn sm main" type="button" data-open="case">${icon('i-case')}До справ</button>`}</div></article></div>`;
+  $('.gc', w.body).scrollTop = 0;
+}
+
+/* ---------- settings ---------- */
+function renderSettings() {
+  const w = wins.settings; if (!w) return;
+  const best = store.get('best', 0);
+  w.body.innerHTML = `<div class="setp">
+   <p>Тренажер медіаграмотності ІТ-Майстерні: розслідуй повідомлення, сайти й фото та визначай, де фейк, а де правда.</p>
+   <h3>Звук</h3>
+   <div class="seg" id="sndSeg"><button type="button" data-v="1" class="${sound ? 'on' : ''}">${icon('i-snd')}Увімкнено</button><button type="button" data-v="0" class="${sound ? '' : 'on'}">${icon('i-mute')}Вимкнено</button></div>
+   <h3>Керування</h3>
+   <div class="keys"><span>Миша / дотик</span><span>відкривати програми й файли, перетягувати вікна за заголовок</span><kbd>M</kbd><span>увімкнути або вимкнути маркер</span><kbd>Esc</kbd><span>закрити вікно чи меню</span></div>
+   <h3>Зміна</h3>
+   <p>${S.active ? `Справа ${S.ci + 1} з ${S.cases.length}, ${S.score} балів.` : ''} ${best ? `Рекорд: ${best} балів.` : ''}</p>
+   <div class="dfoot" style="margin-top:4px"><button class="btn sm" id="newShiftB" type="button">${icon('i-reload')}Почати нову зміну</button><button class="btn sm" type="button" data-open="guide">${icon('i-book')}Підручник</button></div>
+   <a class="gh" href="https://github.com/whyuxavier/it-maysternia" target="_blank" rel="noopener">${icon('i-gh').replace('<svg', '<svg style="color:var(--ink)"')}GitHub${icon('i-star')}</a>
+  </div>`;
+}
+function setSound(v) { sound = v; store.set('sound', v); $('#trSnd').innerHTML = icon(v ? 'i-snd' : 'i-mute'); renderSettings(); }
+
+/* ---------- app renderers ---------- */
+function renderAll() { Object.keys(wins).forEach(renderApp); renderBadges(); renderTaskbar(); }
+function renderApp(app) {
+  const w = wins[app]; if (!w) return;
+  ({case: renderCase, msg: renderMsg, sms: renderSms, web: renderWeb, feed: renderFeed, tools: renderTools, pc: renderPc, guide: renderGuide, notes: renderNotes, photos: renderPhotos, settings: renderSettings})[app]();
+}
+
+let curChat = null;
+function renderMsg() {
+  const w = wins.msg; if (!w) return;
+  const list = Object.values(CHATS).sort((a, b) => b.last - a.last);
+  if (!list.length) { w.body.innerHTML = '<div class="empty-app">Повідомлень поки немає</div>'; return; }
+  if (!curChat || !CHATS[curChat]) curChat = isMobile() ? null : list[0].name;
+  const ch = curChat && CHATS[curChat];
+  if (ch) ch.unread = 0;
+  w.body.innerHTML = `<div class="chat ${ch ? 'open' : ''}" style="height:100%">
+    <div class="chats">${list.map(c => `<button class="ch ${c.name === curChat ? 'on' : ''}" data-chat="${esc(c.name)}" type="button"><span class="av" style="background:${c.c}">${esc(c.name[0])}</span><span><b>${esc(c.name)}</b>${c.unread ? ` <span class="badge" style="position:static;display:inline-block">${c.unread}</span>` : ''}<small>${esc(strip(c.msgs[c.msgs.length - 1].t))}</small></span></button>`).join('')}</div>
+    <div class="conv">${ch ? `<div class="convh"><button class="back" type="button" data-chat="" aria-label="Назад">${icon('i-back')}</button><span class="av" style="background:${ch.c}">${esc(ch.name[0])}</span>${esc(ch.name)}</div>
+      <div class="msgs">${ch.msgs.map(m => `${m.day ? `<div class="daysep">${m.day}</div>` : ''}<div class="bub ${m.me ? 'me' : ''}" data-case="${m.case}">${m.from ? `<div class="fwd who">${m.from}</div>` : ''}${m.fwd ? `<div class="fwd">${m.fwd}</div>` : ''}${m.t}<time>${m.time}</time></div>`).join('')}</div>
+      ${(() => { const last = ch.msgs[ch.msgs.length - 1], rp = ch.replies && last && !last.me ? ch.replies : null; return `<div class="replies">${rp ? `<span class="rph">Обери відповідь</span>${rp.map((r, k) => `<button class="rep" type="button" data-rep="${k}">${esc(r.t)}</button>`).join('')}` : `<span class="rph">${ch.typing ? esc(ch.name) + ' друкує…' : 'Відповісти можна, коли тобі напишуть.'}</span>`}</div>`; })()}` : ''}</div></div>`;
+  const ms = $('.msgs', w.body); if (ms) ms.scrollTop = ms.scrollHeight;
+  renderBadges();
+}
+const strip = h => h.replace(/<[^>]+>/g, '');
+function renderSms() {
+  const w = wins.sms; if (!w) return;
+  w.body.innerHTML = SMS.length ? `<div class="msgs" style="height:100%">${SMS.map(m => `<div style="font:800 13px Nunito;color:var(--muted);margin-top:6px"><span class="mk" data-ev="${m.fromMk || ''}">${esc(m.from)}</span></div><div class="bub" data-case="${m.case}">${m.t}<time>${m.time}</time></div>`).join('')}</div>` : '<div class="empty-app">Повідомлень поки немає</div>';
+}
+function renderFeed() {
+  const w = wins.feed; if (!w) return;
+  w.body.innerHTML = FEED.length ? `<div class="feed">${FEED.map(p => `<article class="post" data-case="${p.case}">
+    <div class="ph"><span class="av" style="background:var(--lilac)">${p.av}</span><span><b class="mk">${esc(p.author)}</b>${p.verified ? `<svg class="vf mk" viewBox="0 0 24 24" aria-label="Підтверджений акаунт"><use href="#i-vf"/></svg>` : ''}<small>${p.time}</small></span></div>
+    <div class="pimg"><div class="mk">${PHOTOS[p.photo].svg}</div><button class="chkph" type="button" data-photo="${p.photo}">${icon('i-tools')}Перевірити фото</button></div>
+    <div class="likes"><span class="mk">♥ ${p.likes}</span><span>💬 ${p.com}</span></div>
+    <div class="pt">${p.text}${p.small ? `<div class="small">${p.small}</div>` : ''}</div></article>`).join('')}</div>` : '<div class="empty-app">Стрічка порожня</div>';
+}
+
+/* browser */
+const B = {hist: [], pos: -1};
+function renderWeb() {
+  const w = wins.web; if (!w) return;
+  if (!$('.br', w.body)) {
+    w.body.innerHTML = `<div class="br"><div class="brbar"><button type="button" data-nav="back" aria-label="Назад">${icon('i-back')}</button><button type="button" data-nav="fwd" aria-label="Вперед">${icon('i-fwd')}</button><button type="button" data-nav="reload" aria-label="Оновити">${icon('i-reload')}</button>
+      <form class="url" id="urlF"><input id="urlIn" aria-label="Адреса сайту" spellcheck="false" autocomplete="off"></form></div>
+      <div class="bms"><button class="bm" type="button" data-go="poshuk.web">Пошук</button><button class="bm" type="button" data-go="stara-poshta.ua">Стара пошта</button><button class="bm" type="button" data-go="pixelbank.ua">ПіксельБанк</button><button class="bm" type="button" data-go="lypove.gov.ua">Міська рада</button></div>
+      <div class="page" id="page"></div></div>`;
+    if (B.pos < 0) go('poshuk.web', true);
+  }
+  showPage();
+}
+function go(u, silent) {
+  u = normUrl(u);
+  B.hist = B.hist.slice(0, B.pos + 1); B.hist.push(u); B.pos = B.hist.length - 1;
+  if (!wins.web) openWin('web'); else { focusWin('web'); showPage(); }
+  if (!silent) sfx.click();
+}
+let scamTick;
+function showPage() {
+  const w = wins.web; if (!w || !$('#page', w.body)) return;
+  const u = B.hist[B.pos] || 'poshuk.web';
+  $('#urlIn', w.body).value = u === 'poshuk.web' ? 'poshuk.web' : 'https://' + u;
+  let f = PAGES[u];
+  if (!f && u.startsWith('poshuk.web/?q=')) f = () => searchPage(decodeURIComponent(u.slice(14)));
+  $('#page', w.body).innerHTML = f ? f() : `<div class="notfound"><h2>Сайт не знайдено</h2><p>Перевір адресу: ${esc(u)}</p></div>`;
+  $('#page', w.body).scrollTop = 0;
+  clearInterval(scamTick);
+  const t = $('#scamTimer', w.body);
+  if (t) { let s = parseInt(t.textContent) * 60; scamTick = setInterval(() => { s = Math.max(0, s - 1); if (!document.body.contains(t)) return clearInterval(scamTick); t.textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); if (!s) s = 180; }, 1000); }
+}
+function searchPage(q) {
+  const ql = q.toLowerCase().trim();
+  let res = [];
+  if (ql) SEARCH.forEach(s => { if (s.keys.some(k => ql.includes(k))) res = res.concat(s.res); });
+  if (ql && /пошт|посил/.test(ql)) res.push({u: 'stara-poshta.ua', t: 'Стара пошта — офіційний сайт', d: 'Відстежити посилку, особистий кабінет.'});
+  if (ql && /піксель|pixel|банк/.test(ql)) res.push({u: 'pixelbank.ua', t: 'ПіксельБанк — офіційний сайт', d: 'Картки, перекази, акції для клієнтів.'});
+  if (ql && /акул|повін|злив/.test(ql)) res.push({u: '', t: 'Порада: для фото краще працює «Пошук за фото» в Інструментах', d: 'Звичайний пошук шукає слова, а не картинки.'});
+  if (ql && /robux|робакс|roblox|роблокс/.test(ql)) res.push({u: 'roblox.com', t: 'Roblox — офіційний сайт', d: 'Робакси можна купити лише в офіційному магазині Roblox.'});
+  return `<div class="pg"><div class="slogo"><span>П</span><span>о</span><span>ш</span><span>у</span><span>к</span><span>!</span></div>
+    <form class="sbox" id="sF"><input id="sIn" value="${esc(q)}" placeholder="Що шукаємо?" aria-label="Пошуковий запит" autocomplete="off"><button type="submit">Знайти</button></form>
+    ${ql ? (res.length ? res.map(r => `<div class="sr"><div class="u">${esc(r.u)}</div><a ${r.u ? `data-go="${r.go || r.u}"` : ''}>${esc(r.t)}</a><div>${esc(r.d)}</div></div>`).join('') : `<p class="meta">За запитом «${esc(q)}» нічого не знайдено.</p>`) : '<p class="meta" style="text-align:center">Шукай новини, сайти й назви компаній.</p>'}</div>`;
+}
+
+/* tools */
+let toolTab = 'dossier', curPhoto = null, dossierQ = '';
+function renderTools() {
+  const w = wins.tools; if (!w) return;
+  const ph = Object.keys(PHOTOS);
+  if (curPhoto && !PHOTOS[curPhoto]) curPhoto = null;
+  const tabs = [['dossier', 'i-dossier', 'Досьє сайту'], ['reverse', 'i-tools', 'Пошук за фото'], ['meta', 'i-photo', 'Властивості фото']];
+  let pane = '';
+  if (toolTab === 'dossier') {
+    const h = dossierQ && host(dossierQ), d = h && DOSSIER[h];
+    pane = `<p class="note">Дізнайся, коли створено сайт і кому він належить.</p>
+      <form class="row" id="dF" style="margin-top:10px"><input id="dIn" value="${esc(dossierQ)}" placeholder="наприклад, stara-poshta.ua" aria-label="Адреса сайту"><button class="btn sm" type="submit">Перевірити</button></form>
+      ${h ? `<div class="res">${d ? `<dl><dt>Сайт</dt><dd><b>${esc(h)}</b></dd><dt>Створено</dt><dd>${d.created}</dd><dt>Власник</dt><dd>${d.owner}</dd></dl><p class="note" style="margin-top:10px">${d.note}</p>` : `<p>Про сайт <b>${esc(h)}</b> даних немає. Можливо, адресу введено з помилкою.</p>`}</div>` : ''}`;
+  } else {
+    pane = ph.length ? `<p class="note">Обери фото${toolTab === 'reverse' ? ' — знайдемо, де воно з\'являлося раніше' : ' — подивимось його властивості'}.</p>
+      <div class="thumbs" style="margin-top:10px">${ph.map(k => `<button class="thumb ${k === curPhoto ? 'on' : ''}" data-pickph="${k}" type="button" aria-label="${esc(PHOTOS[k].name)}">${PHOTOS[k].svg}</button>`).join('')}</div>
+      ${curPhoto ? `<div class="res">${toolTab === 'reverse' ? PHOTOS[curPhoto].reverse : PHOTOS[curPhoto].meta}</div>` : ''}`
+      : '<p class="note">Фото з\'являться тут, коли ти побачиш їх у Стрічці.</p>';
+  }
+  w.body.innerHTML = `<div class="tabs">${tabs.map(t => `<button class="tab ${t[0] === toolTab ? 'on' : ''}" data-tab="${t[0]}" type="button">${icon(t[1])}${t[2]}</button>`).join('')}</div><div class="tpane">${pane}</div>`;
+}
+
+/* case panel */
+function renderCase() {
+  renderTaskbar();
+  const w = wins.case; if (!w) return;
+  const c = S.cases[S.ci];
+  if (!c || (!S.active && S.results.length === S.cases.length)) { w.body.innerHTML = `<div class="casep"><h3>Справ поки немає</h3><p class="brief">Зміну завершено. Можна почати нову.</p><button class="btn main" id="newShiftC" type="button">${icon('i-reload')}Нова зміна</button></div>`; return; }
+  const ids = Object.keys(c.ev);
+  const got = ids.filter(k => S.found.has(k));
+  w.body.innerHTML = `<div class="casep">
+    <div style="display:flex;justify-content:space-between;align-items:center"><span class="num">Справа ${S.ci + 1} з ${S.cases.length}</span><span class="scorepill">${icon('i-star')}${S.score}</span></div>
+    <h3>${esc(c.title)}</h3><p class="brief">${esc(c.brief)}</p>
+    <button class="btn sm" type="button" data-open="${c.app}"><svg viewBox="0 0 24 24"><use href="#${APPS[c.app].i}"/></svg>Відкрити: ${APPS[c.app].t}</button>
+    <div class="evs"><div class="evh"><span>Докази</span><span>${got.length} з ${ids.length}</span></div>
+      ${got.map(k => `<div class="ev got">${icon('i-marker')}<span>${esc(c.ev[k].label)}</span></div>`).join('')}
+      ${ids.slice(got.length).map(() => `<div class="ev empty">${icon('i-q')}<span>Ще не знайдено</span></div>`).join('')}</div>
+    ${S.hint ? `<div class="hintt">${esc(c.hint)}</div>` : '<button class="hintb" id="hintB" type="button">Підказка (−10 балів)</button>'}
+    <div class="stbox"><div class="evh" style="margin-bottom:8px"><span>Печатка</span></div>
+    <div class="stamps"><button class="st fake" data-v="fake" type="button">Фейк</button><button class="st true" data-v="true" type="button">Правда</button><button class="st manip" data-v="manip" type="button">Маніпуляція</button></div></div>
+  </div>`;
+}
+
+/* ---------- marker ---------- */
+function setMarker(on) {
+  marker = on; document.body.classList.toggle('marker', on);
+  $('#trMk').classList.toggle('on', on); $('#trMk').setAttribute('aria-pressed', on);
+}
+function tryMark(el) {
+  const holder = el.closest('[data-case]');
+  const caseOf = holder ? +holder.dataset.case : S.ci;
+  if (caseOf !== S.ci) { toast('Ця справа вже закрита — шукай у новій.'); return; }
+  const id = el.dataset.ev, c = S.cases[S.ci];
+  if (id && c.ev[id]) {
+    if (S.found.has(id)) { toast('Цей доказ уже є.'); return; }
+    S.found.add(id); S.score += 15;
+    $$(`#os .mk[data-ev="${id}"]`).forEach(e => e.classList.add('found'));
+    sfx.mark(); toast('Доказ: ' + c.ev[id].label);
+    renderCase(); save();
+  } else {
+    S.misses++; S.score = Math.max(0, S.score - 5);
+    el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake');
+    sfx.bad(); toast('Це не доказ. −5 балів');
+    renderCase(); save();
+  }
+}
+function restoreFound() { S.found.forEach(id => $$(`#os .mk[data-ev="${id}"]`).forEach(e => { const h = e.closest('[data-case]'); if (!h || +h.dataset.case === S.ci) e.classList.add('found'); })); }
+
+/* ---------- verdict ---------- */
+function verdict(v) {
+  const c = S.cases[S.ci];
+  if (!S.found.size) { sfx.bad(); toast('Без доказів печатку не ставлять. Знайди хоча б один.'); return; }
+  const ok = v === c.verdict;
+  if (ok) S.score += 40;
+  sfx.stamp();
+  const ids = Object.keys(c.ev), total = 40 + ids.length * 15;
+  const got = 15 * S.found.size + (ok ? 40 : 0) - 5 * S.misses - (S.hint ? 10 : 0) - 10 * S.traps;
+  S.results.push({title: c.title, ok, found: S.found.size, all: ids.length, pts: Math.max(0, got), max: total});
+  S.active = false; save();
+  const col = {fake: 'var(--stamp)', true: 'var(--ok)', manip: '#a26a12'}[c.verdict];
+  $('#repBody').innerHTML = `<h2>${ok ? 'Влучно!' : 'Майже…'}</h2>
+    <div class="verdict"><span class="bigstamp" style="color:${col}">${VERD[c.verdict]}</span><p>${ok ? 'Твоя печатка правильна.' : `Ти поставив «${VERD[v]}», а насправді це <b>${VERD[c.verdict].toLowerCase()}</b>.`}</p></div>
+    ${S.traps ? '<p class="hintt" style="margin-bottom:12px">Ти ввів дані на сайті шахраїв. У житті цього робити не можна: дані потрапили б до злодіїв.</p>' : ''}
+    <div class="rl">${ids.map(k => `<div class="ri ${S.found.has(k) ? 'y' : 'n'}">${icon(S.found.has(k) ? 'i-check' : 'i-miss')}<span><b>${esc(c.ev[k].label)}</b>${esc(c.ev[k].why)}</span></div>`).join('')}</div>
+    <p class="pts">За справу: ${Math.max(0, got)} з ${total} балів</p>
+    <div class="dfoot"><button class="btn main" id="nextB" type="button">${icon('i-play')}${S.ci < S.cases.length - 1 ? 'Наступна справа' : 'Підсумок зміни'}</button></div>`;
+  $('#repDlg').showModal();
+  $('#nextB').onclick = () => {
+    $('#repDlg').close(); setMarker(false);
+    if (S.ci < S.cases.length - 1) beginCase(S.ci + 1);
+    else endShift();
+  };
+}
+function endShift() {
+  const max = S.results.reduce((s, r) => s + r.max, 0), sc = S.results.reduce((s, r) => s + r.pts, 0);
+  const p = sc / max, stars = p >= .85 ? 3 : p >= .6 ? 2 : p >= .3 ? 1 : 0;
+  const rank = ['Стажер', 'Молодший фактчекер', 'Фактчекер', 'Головний детектив'][stars];
+  const best = store.get('best', 0); if (sc > best) store.set('best', sc);
+  store.set('progress', null); S.active = false; renderTaskbar(); renderCase();
+  sfx.win();
+  $('#endBody').innerHTML = `<h2>Зміну завершено</h2>
+    <div class="stars">${[0, 1, 2].map(i => `<svg viewBox="0 0 24 24" style="color:${i < stars ? '#e8b43a' : '#ddd6e8'}"><use href="#i-star"/></svg>`).join('')}</div>
+    <div class="rank">${rank}</div><p style="text-align:center">${sc} з ${max} балів${sc > best ? ' · новий рекорд!' : ''}</p>
+    <table class="sumt">${S.results.map(r => `<tr><td>${icon(r.ok ? 'i-check' : 'i-miss').replace('<svg', `<svg style="width:18px;height:18px;display:inline;vertical-align:-4px;color:${r.ok ? 'var(--ok)' : 'var(--stamp)'}"`)} ${esc(r.title)}</td><td>${r.found}/${r.all} доказів</td><td>${r.pts}</td></tr>`).join('')}</table>
+    <p class="note" style="margin-top:12px">Нова зміна — нові люди, сайти й деталі. Завчити відповіді не вийде.</p>
+    <div class="dfoot"><button class="btn main" id="againB" type="button">${icon('i-reload')}Нова зміна</button><button class="btn" id="stayB" type="button">${icon('i-x')}Закрити</button></div>`;
+  $('#endDlg').showModal();
+  $('#againB').onclick = () => { $('#endDlg').close(); newShift(); };
+  $('#stayB').onclick = () => $('#endDlg').close();
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', e => {
+  const t = e.target;
+  if (marker && t.closest('#os .wb') && !t.closest('.casep')) {
+    const mk = t.closest('.mk');
+    if (!t.closest('input,button:not(.mk),form .go')) {
+      e.preventDefault(); e.stopPropagation();
+      if (mk) tryMark(mk); else { sfx.bad(); toast('Натискай на текст чи деталь, яку вважаєш доказом.'); }
+      return;
+    }
+  }
+  if (!t.closest('#startm,#startBtn')) { $('#startm').hidden = true; $('#startBtn').classList.remove('on'); }
+  if (!t.closest('#ncenter,#trBell')) $('#ncenter').hidden = true;
+  const o = t.closest('[data-open]'); if (o) { if (o.dataset.path) { fxPath = o.dataset.path; } openWin(o.dataset.open); if (o.dataset.path) renderPc(); return; }
+  const g = t.closest('[data-go]'); if (g) { e.preventDefault(); go(g.dataset.go); return; }
+  const chEl = t.closest('[data-chat]'); if (chEl) { curChat = chEl.dataset.chat || null; renderMsg(); return; }
+  const tb = t.closest('[data-tab]'); if (tb) { toolTab = tb.dataset.tab; renderTools(); return; }
+  const pp = t.closest('[data-pickph]'); if (pp) { curPhoto = pp.dataset.pickph; renderTools(); return; }
+  const cp = t.closest('.chkph'); if (cp) { curPhoto = cp.dataset.photo; if (toolTab === 'dossier') toolTab = 'reverse'; openWin('tools'); renderTools(); return; }
+  const nv = t.closest('[data-nav]'); if (nv) { const a = nv.dataset.nav; if (a === 'back' && B.pos > 0) B.pos--; if (a === 'fwd' && B.pos < B.hist.length - 1) B.pos++; showPage(); return; }
+  const fx = t.closest('[data-fx]'); if (fx) { fxPath = fx.dataset.fx; renderPc(); return; }
+  const fi = t.closest('[data-fi]'); if (fi) { openFile(wins.pc.items[+fi.dataset.fi]); return; }
+  const gb = t.closest('[data-gi]'); if (gb) { gi = +gb.dataset.gi; renderGuide(); return; }
+  const ni = t.closest('[data-ni]'); if (ni) { openNotif(NOTIFS[+ni.dataset.ni]); return; }
+  const rb = t.closest('[data-rep]'); if (rb) { sendReply(+rb.dataset.rep); return; }
+  const st = t.closest('.st'); if (st) { verdict(st.dataset.v); return; }
+  if (t.closest('#hintB')) { S.hint = true; S.score = Math.max(0, S.score - 10); renderCase(); save(); return; }
+  if (t.closest('#binClear')) { FS['Кошик'] = []; sfx.click(); toast('Кошик очищено'); renderPc(); return; }
+  if (t.closest('#newShiftB') || t.closest('#newShiftC')) { newShift(); return; }
+  const sb = t.closest('#sndSeg button'); if (sb) { setSound(sb.dataset.v === '1'); sfx.click(); return; }
+  if (t.closest('[data-close]')) { t.closest('dialog').close(); return; }
+}, true);
+const mo = new MutationObserver(() => { mo.disconnect(); restoreFound(); mo.observe($('#desk'), {childList: true, subtree: true}); });
+document.addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target;
+  if (f.id === 'urlF') { go($('#urlIn').value); return; }
+  if (f.id === 'sF') { const q = $('#sIn').value; if (q.trim()) go('poshuk.web/?q=' + encodeURIComponent(q.trim())); return; }
+  if (f.id === 'dF') { dossierQ = $('#dIn').value.trim(); renderTools(); return; }
+  if (f.dataset.trap) { S.traps++; S.score = Math.max(0, S.score - 10); sfx.bad(); toast('Стоп! Ти щойно віддав би свої дані шахраям. −10 балів'); renderCase(); save(); }
+});
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input') || document.querySelector('dialog[open]')) return;
+  if (e.key === 'm' || e.key === 'M' || e.key === 'ь' || e.key === 'Ь') { setMarker(!marker); }
+  if (e.key === 'Escape') {
+    if (!$('#startm').hidden || !$('#ncenter').hidden) { $('#startm').hidden = true; $('#ncenter').hidden = true; $('#startBtn').classList.remove('on'); }
+    else if (marker) setMarker(false); else if (focused && wins[focused]) closeWin(focused);
+  }
+});
+$('#trMk').onclick = () => { setMarker(!marker); sfx.click(); toast(marker ? 'Маркер увімкнено: натискай на докази.' : 'Маркер вимкнено.'); };
+$('#trSnd').onclick = () => setSound(!sound);
+$('#trBell').onclick = () => { const n = $('#ncenter'); n.hidden = !n.hidden; $('#startm').hidden = true; renderBell(); };
+$('#tbCase').onclick = () => openWin('case');
+$('#startBtn').onclick = () => { const m = $('#startm'); m.hidden = !m.hidden; $('#startBtn').classList.toggle('on', !m.hidden); $('#smBest').textContent = store.get('best', 0) ? 'Рекорд: ' + store.get('best', 0) : ''; sfx.click(); };
+$('#nClear').onclick = () => { NOTIFS.length = 0; renderBell(); };
+$('#powerBtn').onclick = () => { $('#startm').hidden = true; $('#off').hidden = false; closeAllWins(); setMarker(false); renderTaskbar(); };
+$('#powerOn').onclick = () => { $('#off').hidden = true; boot(); };
+$('#repDlg').addEventListener('cancel', e => e.preventDefault());
+$('#endDlg').addEventListener('cancel', e => e.preventDefault());
+const tick = () => { $('#clock').textContent = nowT(); };
+setInterval(tick, 1000); tick();
+window.addEventListener('resize', () => { if (wins[focused]) focusWin(focused); });
+
+function boot() {
+  const b = $('#boot'); b.hidden = false; b.classList.remove('hide');
+  const fast = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  setTimeout(() => {
+    b.classList.add('hide'); setTimeout(() => b.hidden = true, 400);
+    const p = store.get('progress', null);
+    if (p && p.seed) {
+      restore(p);
+      setTimeout(() => notify({app: 'case', title: 'З поверненням!', text: `Продовжуємо справу ${S.ci + 1}: ${S.cases[S.ci].title}`}), 600);
+    } else {
+      S.seed = Math.floor(Math.random() * 1e9); S.score = 0; S.results = [];
+      build();
+      setTimeout(() => notify({app: 'guide', title: 'Вітаємо, стажере!', text: 'Ти в Бюро перевірки фактів. Почни з Підручника на робочому столі.'}), 500);
+      setTimeout(() => beginCase(0), 2200);
+    }
+  }, fast ? 100 : 1100);
+}
+drawDesk(); setSound(sound); renderBell();
+mo.observe($('#desk'), {childList: true, subtree: true});
+boot();
+</script>
+</body>
+</html>
