@@ -72,11 +72,11 @@ svg.i{width:22px;height:22px;flex:none}
 .mcard .art svg{display:block;width:100%;height:auto}
 .mcard h3{font-size:23px}
 .mcard p{margin:0;color:var(--muted);font-size:15.5px;flex:1}
-.lvls{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.lvls{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:8px}
 .lv{border:0;border-radius:16px;padding:9px 4px 7px;cursor:pointer;background:#fff;box-shadow:0 4px 0 var(--shadow),0 0 0 1px var(--line);display:flex;flex-direction:column;align-items:center;gap:2px;transition:transform .15s,box-shadow .15s}
 .lv:hover{transform:translateY(-2px)}
 .lv:active{transform:translateY(3px);box-shadow:0 1px 0 var(--shadow),0 0 0 1px var(--line)}
-.lv b{font:800 15px Nunito,sans-serif}
+.lv b{font:800 20px Rubik,sans-serif}
 .lv .st{display:flex;gap:1px}
 .lv .st svg{width:15px;height:15px;color:#d9d4e3}
 .lv .st svg.on{color:#efb83a}
@@ -100,17 +100,32 @@ svg.i{width:22px;height:22px;flex:none}
 .it.lifted{opacity:0}
 .ghost{position:fixed;z-index:60;pointer-events:none;margin:0;transform:scale(1.1) rotate(-4deg);box-shadow:0 14px 24px rgba(60,56,72,.25)!important;transition:none}
 .ghost.back{transition:left .25s,top .25s,transform .25s}
-.bks{display:grid;gap:18px}
-.bk{display:flex;flex-direction:column;align-items:center;cursor:pointer;border-radius:22px;padding:6px 4px 0;transition:transform .15s}
-.bk-lab{display:inline-flex;align-items:center;gap:8px;font:800 19px Nunito,sans-serif;background:var(--card);padding:7px 16px;border-radius:14px;box-shadow:0 3px 0 var(--shadow),0 0 0 1px var(--line);margin-bottom:-6px;position:relative;z-index:2}
-.bk-lab svg.i{width:24px;height:24px}
-.bk-lab .sw{width:20px;height:20px;border-radius:50%}
-.bk-body{width:100%;min-height:170px;position:relative;border-radius:12px 12px 30px 30px;background:#e9b07c;
- background-image:repeating-linear-gradient(90deg,rgba(150,90,40,.16) 0 4px,transparent 4px 26px),repeating-linear-gradient(0deg,rgba(255,255,255,.16) 0 10px,transparent 10px 20px);
- box-shadow:inset 0 10px 0 #c98a55,0 5px 0 var(--shadow);padding:22px 12px 14px;display:flex;flex-wrap:wrap;justify-content:center;align-content:flex-end;gap:4px;transition:transform .15s,box-shadow .2s}
-.bk-body svg{width:58px;height:58px;animation:pop .3s both}
-.bk.over .bk-body{transform:translateY(-5px);box-shadow:inset 0 10px 0 #c98a55,0 0 0 5px #fff,0 9px 0 var(--shadow)}
-.bk.hint .bk-body{box-shadow:inset 0 10px 0 #c98a55,0 0 0 6px #8fd1a3,0 5px 0 var(--shadow)}
+.bks{display:grid;gap:18px;align-items:end}
+.bk{display:flex;flex-direction:column;align-items:stretch;cursor:pointer;padding:0 6px;min-width:0}
+.bk-in{min-height:92px;display:flex;flex-wrap:wrap;justify-content:center;align-content:flex-end;gap:0 2px;padding:0 14px;margin-bottom:-6px;position:relative;z-index:1}
+.bk-in svg{width:70px;height:70px;animation:pop .3s both}
+.bk-front{position:relative;z-index:2;height:136px;margin:0 6px;border-radius:8px 8px 34px 34px;background:#e9b07c;
+ background-image:repeating-linear-gradient(90deg,rgba(150,90,40,.17) 0 4px,transparent 4px 26px),repeating-linear-gradient(0deg,rgba(255,255,255,.17) 0 10px,transparent 10px 20px);
+ box-shadow:0 5px 0 var(--shadow);display:grid;place-items:center;padding-top:14px;transition:transform .15s,box-shadow .2s}
+.bk-front::before{content:"";position:absolute;left:-10px;right:-10px;top:-9px;height:20px;border-radius:10px;background:#c98a55;box-shadow:0 3px 0 rgba(120,70,30,.25)}
+.bk-tag{width:84px;height:64px;border-radius:16px;background:#fbfbfa;display:grid;place-items:center;box-shadow:0 3px 0 rgba(90,50,20,.22)}
+.bk-tag svg.i{width:40px;height:40px;color:var(--ink)}
+.bk-tag .sw{width:38px;height:38px;border-radius:50%;box-shadow:inset 0 -3px 0 rgba(0,0,0,.12)}
+.bk-tag.q{background:rgba(255,255,255,.28);box-shadow:inset 0 0 0 3px rgba(255,255,255,.75);font:800 34px Rubik,sans-serif;color:#fff}
+.bk-tag.new{animation:pop .35s both}
+.bk.over .bk-front{transform:translateY(-5px);box-shadow:0 0 0 5px #fff,0 9px 0 var(--shadow)}
+.bk.hint .bk-front{box-shadow:0 0 0 6px #8fd1a3,0 5px 0 var(--shadow)}
+.demo{position:fixed;z-index:70;pointer-events:none;left:0;top:0}
+.demo .dit{width:64px;height:64px;border-radius:16px;background:#fff;box-shadow:0 10px 20px rgba(60,56,72,.25);display:grid;place-items:center}
+.demo .dit svg{width:52px;height:52px}
+.demo .hand{position:absolute;left:34px;top:34px;width:40px;height:40px}
+.jar.dim{opacity:.35}
+.qvis{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px;font:800 40px Rubik,sans-serif;color:var(--ink)}
+.qvis i{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 34% 30%,rgba(255,255,255,.7) 0 14%,transparent 15%),var(--c);box-shadow:0 3px 0 rgba(60,56,72,.2)}
+.qvis .eq{color:var(--muted)}
+.hero-art{cursor:pointer;border-radius:24px}
+.hero-art:focus-visible{outline:3px solid #7d6bc4;outline-offset:4px}
+.hero .acts{display:flex;gap:12px;flex-wrap:wrap}
 .shake{animation:shake .38s}
 @keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
 @keyframes pop{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}
@@ -220,10 +235,17 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
  .it svg{width:56px;height:56px}
  .tray{gap:9px;padding:12px}
  .bks{gap:8px}
- .bk-lab{font-size:15px;padding:6px 10px;gap:5px}
- .bk-lab svg.i{width:19px;height:19px}
- .bk-body{min-height:130px;padding:20px 6px 10px}
- .bk-body svg{width:34px;height:34px}
+ .bk{padding:0 2px}
+ .bk-in{min-height:64px;padding:0 6px;margin-bottom:-4px}
+ .bk-in svg{width:40px;height:40px}
+ .bk-front{height:96px;margin:0 4px;border-radius:6px 6px 24px 24px;padding-top:10px}
+ .bk-front::before{left:-6px;right:-6px;top:-7px;height:15px}
+ .bk-tag{width:58px;height:46px;border-radius:12px}
+ .bk-tag svg.i{width:28px;height:28px}
+ .bk-tag .sw{width:28px;height:28px}
+ .bk-tag.q{font-size:26px}
+ .qvis{font-size:30px;gap:7px}
+ .qvis i{width:36px;height:36px}
  .key{height:56px}
  .disp{height:70px;font-size:46px}
  .ball{width:46px;height:46px}
@@ -294,9 +316,9 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
    <div>
     <h1>Сортувальня</h1>
     <p>Розклади предмети по кошиках, порахуй, додай і відніми.</p>
-    <button class="btn main big" id="goBtn"><svg class="i"><use href="#ic-play"/></svg>Грати</button>
+    <div class="acts"><button class="btn main big" id="goBtn"><svg class="i"><use href="#ic-play"/></svg>Грати</button><button class="btn big" id="lvlBtn"><svg class="i"><use href="#ic-grid"/></svg>Рівні</button></div>
    </div>
-   <div class="hero-art" id="heroArt" aria-hidden="true"></div>
+   <div class="hero-art" id="heroArt" role="button" tabindex="0" aria-label="Грати"></div>
   </div>
  </section>
 
@@ -309,7 +331,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
  <!-- гра -->
  <section id="play" class="wrap play" hidden>
   <div class="bar">
-   <button class="ibtn" id="backBtn" aria-label="До вибору гри"><svg class="i"><use href="#ic-back"/></svg></button>
+   <button class="ibtn" id="backBtn" aria-label="На головну"><svg class="i"><use href="#ic-back"/></svg></button>
    <h2 id="taskText"></h2>
    <span class="sp2"></span>
    <div class="dots" id="dots"></div>
@@ -327,9 +349,10 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
   <p>Тренажер для 2–4 класу: сортуй предмети за ознаками, рахуй, додавай і віднімай.</p>
   <h3>Як грати</h3>
   <ul>
-   <li><b>Розклади по кошиках</b> — поклади кожен предмет у свій кошик.</li>
+   <li><b>Розклади по кошиках</b> — поклади кожен предмет у кошик із потрібною позначкою. На рівнях 4–5 позначок немає: здогадайся сам, як розкласти.</li>
    <li><b>Порахуй</b> — порахуй предмети, додай або відніми й напиши відповідь.</li>
    <li><b>Кульки</b> — розклади кульки по банках за кольором, а тоді дай відповідь на питання.</li>
+   <li><b>Грати</b> — гра сама веде від легкого до складного. <b>Рівні</b> — вибрати будь-який рівень.</li>
    <li>Помилився — спробуй ще. З другої спроби з'явиться підказка.</li>
   </ul>
   <h3>Керування</h3>
@@ -353,7 +376,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
   <p id="rText"></p>
   <div class="acts">
    <button class="btn" id="rAgain"><svg class="i"><use href="#ic-redo"/></svg>Ще раз</button>
-   <button class="btn" id="rModes"><svg class="i"><use href="#ic-grid"/></svg>Ігри</button>
+   <button class="btn" id="rModes"><svg class="i"><use href="#ic-grid"/></svg>Рівні</button>
    <button class="btn main" id="rNext"><svg class="i"><use href="#ic-next"/></svg>Далі</button>
   </div>
  </div>
@@ -430,7 +453,7 @@ const svgItem=(k,c)=>`<svg viewBox="0 0 64 64" aria-hidden="true"><g filter="url
 const use=(id,cls='i')=>`<svg class="${cls}" aria-hidden="true"><use href="#${id}"/></svg>`;
 
 /* ========== ДАНІ ========== */
-const COLORS={red:{c:P.red,n:'Червоне'},blue:{c:P.blue,n:'Синє'},yel:{c:P.yel,n:'Жовте'}};
+const COLORS={red:{c:P.red,n:'Червоне'},blue:{c:P.blue,n:'Синє'},yel:{c:P.yel,n:'Жовте'},grn:{c:'#6fbf7f',n:'Зелене'}};
 const THEMES=[
  {id:'shape2',t:'Кругле і квадратне',b:[{n:'Кругле',k:'k-circle',i:['ball','orange','clock','coin','wheel','button','cookie']},{n:'Квадратне',k:'k-square',i:['dice','gift','window','chess','rubik']}]},
  {id:'edible',t:'Їстівне і неїстівне',b:[{n:'Їстівне',k:'k-food',i:['apple','banana','carrot','bread','cheese','cookie','pear','cherry','pizza','tomato']},{n:'Неїстівне',k:'k-nofood',i:['ball','dice','pencil','key','book','sock','mug','car','chair']}]},
@@ -439,13 +462,19 @@ const THEMES=[
  {id:'living',t:'Живе і неживе',b:[{n:'Живе',k:'k-leaf',i:['cat','fish','bird','flower','tree','hare']},{n:'Неживе',k:'k-stone',i:['stone','ball','car','book','chair','key','mug']}]},
  {id:'transport',t:'Транспорт: суша, вода, повітря',b:[{n:'Суша',k:'k-road',i:['car','bus','bike','train']},{n:'Вода',k:'k-wave',i:['boat','ship','submarine']},{n:'Повітря',k:'k-cloud',i:['plane','helicopter','balloon','rocket']}]},
  {id:'shape3',t:'Кругле, квадратне, трикутне',b:[{n:'Кругле',k:'k-circle',i:['ball','orange','clock','coin','wheel','button']},{n:'Квадратне',k:'k-square',i:['dice','gift','window','chess','rubik']},{n:'Трикутне',k:'k-tri',i:['pizza','sign','tent','flag','cheese']}]},
- {id:'colors',t:'Червоне, синє, жовте',color:true,b:['red','blue','yel'].map(c=>({n:COLORS[c].n,sw:COLORS[c].c,i:['ball','car','star','heart','gift','mug'].map(k=>k+':'+c)}))}
+ {id:'colors',t:'Червоне, синє, жовте',color:true,b:['red','blue','yel'].map(c=>({n:COLORS[c].n,sw:COLORS[c].c,i:['ball','car','star','heart','gift','mug'].map(k=>k+':'+c)}))},
+ {id:'colors4',t:'Чотири кольори',color:true,b:['red','blue','yel','grn'].map(c=>({n:COLORS[c].n,sw:COLORS[c].c,i:['ball','car','star','heart','gift','mug'].map(k=>k+':'+c)}))}
 ];
 const SORT_LV=[
  {themes:['shape2','edible','fruitveg','animals','living'],n:[5,7],min:2,icons:true},
- {themes:['transport','shape3','colors'],n:[7,10],min:1,icons:true},
- {themes:['edible','animals','living','transport','shape3','colors','fruitveg'],n:[9,11],min:1,icons:false}
+ {themes:['transport','shape3','colors'],n:[7,10],min:2,icons:true},
+ {themes:['edible','animals','living','transport','shape3','colors','fruitveg'],n:[9,11],min:2,icons:true},
+ {themes:['shape2','edible','fruitveg','animals','living'],n:[6,8],min:2,icons:false},
+ {themes:['transport','shape3','colors','colors4'],n:[9,12],min:2,icons:false}
 ];
+const NLV={sort:SORT_LV.length,count:3,balls:3};
+/* «Грати» веде цим шляхом від легкого до складного */
+const JOURNEY=[['sort',0],['sort',1],['count',0],['balls',0],['sort',2],['count',1],['balls',1],['sort',3],['count',2],['balls',2],['sort',4]];
 const COUNTABLE=[['apple','яблук'],['ball','м\'ячів'],['star','зірочок'],['car','машинок'],['fish','рибок'],['flower','квіток'],['heart','сердечок'],['pear','груш'],['carrot','морквин'],['gift','подарунків'],['dice','кубиків'],['bird','пташок'],['orange','апельсинів']];
 const BALLC={red:{c:P.red,g:'червоних'},blue:{c:P.blue,g:'синіх'},yel:{c:P.yel,g:'жовтих'},grn:{c:'#6fbf7f',g:'зелених'}};
 const MODES=[
@@ -456,8 +485,8 @@ const MODES=[
 
 /* ========== СХОВИЩЕ ========== */
 const KEY='sortuvalnia-v1';
-const S=(()=>{let d={sound:true,stars:{sort:[0,0,0],count:[0,0,0],balls:[0,0,0]}};
- try{const o=JSON.parse(localStorage.getItem(KEY)||'null');if(o&&typeof o==='object'){if(typeof o.sound==='boolean')d.sound=o.sound;for(const m in d.stars)if(Array.isArray(o.stars?.[m]))d.stars[m]=d.stars[m].map((v,i)=>Math.max(0,Math.min(3,+o.stars[m][i]||0)))}}catch(e){}
+const S=(()=>{let d={sound:true,step:0,stars:{sort:[0,0,0,0,0],count:[0,0,0],balls:[0,0,0]}};
+ try{const o=JSON.parse(localStorage.getItem(KEY)||'null');if(o&&typeof o==='object'){if(typeof o.sound==='boolean')d.sound=o.sound;if(Number.isInteger(o.step))d.step=Math.max(0,Math.min(JOURNEY.length-1,o.step));for(const m in d.stars)if(Array.isArray(o.stars?.[m]))d.stars[m]=d.stars[m].map((v,i)=>Math.max(0,Math.min(3,+o.stars[m][i]||0)))}}catch(e){}
  return d})();
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 
@@ -493,7 +522,7 @@ function shake(el){el.classList.remove('shake');void el.offsetWidth;el.classList
 const PRAISE=['Молодець!','Чудово!','Супер!','Так тримати!','Правильно!'];
 
 /* ========== ЕКРАНИ ========== */
-const G={mode:null,level:0,tasks:[],idx:0,errors:0,say:'',busy:false};
+const G={mode:null,level:0,tasks:[],idx:0,errors:0,say:'',busy:false,jstep:null};
 function show(id){for(const s of ['home','modes','play'])document.getElementById(s).hidden=s!==id;scrollTo(0,0);if(id!=='play'&&'speechSynthesis' in window)speechSynthesis.cancel()}
 function starRow(n,cls=''){return [0,1,2].map(i=>`<svg class="${i<n?'on':''}" aria-hidden="true"><use href="#ic-star"/></svg>`).join('')}
 
@@ -502,7 +531,7 @@ function renderModes(){
  MODES.forEach(m=>{
   const c=document.createElement('article');c.className='mcard';
   c.innerHTML=`<button class="art" style="--bg:${m.bg}" aria-label="${m.t}: почати рівень 1">${modeArt(m.id)}</button><h3>${m.t}</h3><p>${m.d}</p>
-   <div class="lvls">${[0,1,2].map(l=>`<button class="lv" data-l="${l}" aria-label="${m.t}, рівень ${l+1}, зірочок ${S.stars[m.id][l]}"><b>Рівень ${l+1}</b><span class="st">${starRow(S.stars[m.id][l])}</span></button>`).join('')}</div>`;
+   <div class="lvls" style="--n:${NLV[m.id]}">${S.stars[m.id].map((st,l)=>`<button class="lv" data-l="${l}" aria-label="${m.t}, рівень ${l+1}, зірочок ${st}"><b>${l+1}</b><span class="st">${starRow(st)}</span></button>`).join('')}</div>`;
   c.querySelector('.art').onclick=()=>{const l=S.stars[m.id].findIndex(v=>v===0);start(m.id,l<0?0:l)};
   c.querySelectorAll('.lv').forEach(b=>b.onclick=()=>start(m.id,+b.dataset.l));
   g.appendChild(c)
@@ -568,8 +597,9 @@ function draggable(el,onDrop){
 function dropTarget(el,onDrop){el.classList.add('drop');el.addEventListener('click',()=>{if(sel&&!G.busy){const s=sel;setSel(null);onDrop(s,el)}})}
 
 /* ========== СТАРТ ========== */
-function start(mode,level){
- G.mode=mode;G.level=level;G.idx=0;G.errors=0;G.busy=false;sel=null;
+function play(){const [m,l]=JOURNEY[Math.min(S.step,JOURNEY.length-1)];start(m,l,Math.min(S.step,JOURNEY.length-1))}
+function start(mode,level,jstep=null){
+ G.jstep=jstep;G.mode=mode;G.level=level;G.idx=0;G.errors=0;G.busy=false;sel=null;
  if(mode==='sort')G.tasks=makeSortTasks(level);
  if(mode==='count')G.tasks=makeCountTasks(level);
  if(mode==='balls')G.tasks=makeBallTasks(level);
@@ -587,11 +617,13 @@ function finish(){
  $('#rStars').innerHTML=starRow(st);
  $('#rTitle').textContent=st===3?'Чудово!':st===2?'Молодець!':'Гарна спроба!';
  $('#rText').textContent=G.errors===0?'Жодної помилки!':`Помилок: ${G.errors}`;
- $('#rNext').hidden=l>=2;
- Sound.win();$('#res').showModal();
+ if(G.jstep!=null&&S.step<=G.jstep){S.step=Math.min(JOURNEY.length-1,G.jstep+1);save()}
+ $('#rNext').hidden=!nextOf();
+ Sound.win();$('#res').showModal();$('#rNext').hidden||$('#rNext').focus();
 }
-$('#rAgain').onclick=()=>{$('#res').close();start(G.mode,G.level)};
-$('#rNext').onclick=()=>{$('#res').close();start(G.mode,Math.min(2,G.level+1))};
+function nextOf(){if(G.jstep!=null)return G.jstep+1<JOURNEY.length?[...JOURNEY[G.jstep+1],G.jstep+1]:null;return G.level+1<NLV[G.mode]?[G.mode,G.level+1,null]:null}
+$('#rAgain').onclick=()=>{$('#res').close();start(G.mode,G.level,G.jstep)};
+$('#rNext').onclick=()=>{const n=nextOf();$('#res').close();if(n)start(...n);else{renderModes();show('modes')}};
 $('#rModes').onclick=()=>{$('#res').close();renderModes();show('modes')};
 
 /* ========== РЕЖИМ 1: СОРТУВАННЯ ========== */
@@ -612,33 +644,51 @@ function makeSortTasks(l){
 }
 function renderSort(){
  const T=G.tasks[G.idx],th=T.th;
- setText('Розклади: '+th.t.charAt(0).toLowerCase()+th.t.slice(1),'Розклади предмети по кошиках. '+th.t);
+ if(T.icons)setText('Розклади: '+th.t.charAt(0).toLowerCase()+th.t.slice(1),'Розклади предмети по кошиках. '+th.t);
+ else setText('Розклади на групи — здогадайся як','Здогадайся, як розкласти предмети по кошиках');
  const st=$('#stage');
  st.innerHTML=`<div class="panel tray" id="tray"></div><div class="bks" style="grid-template-columns:repeat(${th.b.length},1fr)" id="bks"></div>`;
  const tray=$('#tray'),bks=$('#bks');
  T.items.forEach((it,i)=>{const b=document.createElement('button');b.className='it';b.style.setProperty('--r',rnd(-5,5)+'deg');b.innerHTML=svgItem(it.k,it.c);
   b.setAttribute('aria-label',NAME[it.k]);b.dataset.b=it.b;b.dataset.tries=0;tray.appendChild(b);draggable(b,sortDrop)});
- th.b.forEach((b,bi)=>{const d=document.createElement('div');d.className='bk';d.dataset.b=bi;d.setAttribute('role','button');d.setAttribute('aria-label','Кошик: '+b.n);
-  const ic=T.icons?(b.sw?`<span class="sw" style="background:${b.sw}"></span>`:use(b.k)):'';
-  d.innerHTML=`<span class="bk-lab">${ic}${b.n}</span><div class="bk-body"></div>`;bks.appendChild(d);dropTarget(d,sortDrop)});
+ th.b.forEach((b,bi)=>{const d=document.createElement('div');d.className='bk';d.dataset.cat=T.icons?bi:'';d.setAttribute('role','button');d.setAttribute('aria-label',T.icons?'Кошик: '+b.n:'Порожній кошик');
+  d.innerHTML=`<div class="bk-in"></div><div class="bk-front">${T.icons?tagHTML(b):'<span class="bk-tag q" aria-hidden="true">?</span>'}</div>`;bks.appendChild(d);dropTarget(d,sortDrop)});
+ if(G.idx===0&&(G.level===0||G.level===3)){const first=tray.querySelector('.it');const to=T.icons?bks.querySelector(`.bk[data-cat="${first.dataset.b}"]`):bks.querySelector('.bk');demo(first,to.querySelector('.bk-front'))}
+}
+function tagHTML(b){return `<span class="bk-tag" title="${b.n}">${b.sw?`<span class="sw" style="background:${b.sw}"></span>`:use(b.k)}</span>`}
+/* показ: курсор переносить предмет у кошик (один раз, без постійних анімацій) */
+function demo(from,to){
+ if(reduced||!from||!to||!from.animate)return;
+ setTimeout(()=>{
+  if(!from.isConnected||G.busy)return;
+  const a=from.getBoundingClientRect(),b=to.getBoundingClientRect();
+  const el=document.createElement('div');el.className='demo';
+  el.innerHTML=`<div class="dit">${from.innerHTML}</div><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 8-6 1.6L10 19z" fill="#fff" stroke="#3b3450" stroke-width="1.8" stroke-linejoin="round"/></svg>`;
+  document.body.appendChild(el);
+  const x0=a.left+a.width/2-32,y0=a.top+a.height/2-32,x1=b.left+b.width/2-32,y1=b.top+b.height*.25-32;
+  const an=el.animate([{transform:`translate(${x0}px,${y0}px)`,opacity:0},{transform:`translate(${x0}px,${y0}px)`,opacity:1,offset:.15},{transform:`translate(${x1}px,${y1}px)`,opacity:1,offset:.8},{transform:`translate(${x1}px,${y1+20}px)`,opacity:0}],{duration:1900,easing:'ease-in-out'});
+  const stop=()=>el.remove();an.onfinish=stop;addEventListener('pointerdown',stop,{once:true});
+ },600)
 }
 function sortDrop(el,t){
  if(!t.classList.contains('bk'))return false;
- if(t.dataset.b===el.dataset.b){
-  const body=t.querySelector('.bk-body');body.insertAdjacentHTML('beforeend',el.innerHTML);
-  t.classList.remove('hint');el.remove();Sound.drop();
+ const cat=el.dataset.b,owner=document.querySelector(`#bks .bk[data-cat="${cat}"]`);
+ if(t.dataset.cat===cat||(t.dataset.cat===''&&!owner)){
+  if(t.dataset.cat===''){t.dataset.cat=cat;const b=G.tasks[G.idx].th.b[cat];t.querySelector('.bk-front').innerHTML=tagHTML(b);t.querySelector('.bk-tag').classList.add('new');t.setAttribute('aria-label','Кошик: '+b.n)}
+  t.querySelector('.bk-in').insertAdjacentHTML('beforeend',el.innerHTML);
+  document.querySelectorAll('#bks .bk.hint').forEach(x=>x.classList.remove('hint'));el.remove();Sound.drop();
   if(!$('#tray .it')){G.busy=true;Sound.good();toast(pick(PRAISE));setTimeout(nextTask,reduced?500:1100)}
   return true}
  G.errors++;Sound.bad();shake(t);
  const tr=+el.dataset.tries+1;el.dataset.tries=tr;
- if(tr>=2){document.querySelector(`.bk[data-b="${el.dataset.b}"]`).classList.add('hint');toast('Підказка: цей кошик')}
+ if(tr>=2){(owner?[owner]:[...document.querySelectorAll('#bks .bk[data-cat=""]')]).forEach(x=>x.classList.add('hint'));toast(owner?'Підказка: цей кошик':'Підказка: в порожній кошик')}
  else toast('Спробуй ще раз');
  return false
 }
 
 /* ========== КЛАВІАТУРА ВІДПОВІДІ ========== */
 let padActive=false,ans='',padCheck=null;
-function padHTML(){return `<div class="panel pad"><div class="disp empty" id="disp">?</div><div class="keys">
+function padHTML(top=''){return `<div class="panel pad">${top}<div class="disp empty" id="disp">?</div><div class="keys">
  ${[1,2,3,4,5,6,7,8,9].map(n=>`<button class="key" data-k="${n}">${n}</button>`).join('')}
  <button class="key er" data-k="del" aria-label="Стерти">${use('ic-erase')}</button><button class="key" data-k="0">0</button><button class="key ok" data-k="ok" aria-label="Перевірити">${use('ic-check')}</button>
  </div><div class="msg" id="msg"></div></div>`}
@@ -707,14 +757,14 @@ function makeBallTasks(l){
   const nc=l===0?2:l===1?3:pick([3,4]);
   const cols=shuffle(Object.keys(BALLC)).slice(0,nc);
   const cnt={};cols.forEach(c=>cnt[c]=rnd(2,l===0?5:l===1?6:7));
-  let q,ansV,ask;
+  let q,ansV,ask,kind='sum';
   if(l===0){ask=cols;ansV=cols.reduce((s,c)=>s+cnt[c],0);q=`Скільки ${BALLC[cols[0]].g} і ${BALLC[cols[1]].g} кульок разом?`}
-  else{const kind=l===1?'sum2':pick(['sum2','sum3','diff']);
+  else{kind=l===1?'sum2':pick(['sum2','sum3','diff']);
    if(kind==='sum3'&&nc>=3){ask=shuffle(cols).slice(0,3);ansV=ask.reduce((s,c)=>s+cnt[c],0);q=`Скільки ${BALLC[ask[0]].g}, ${BALLC[ask[1]].g} і ${BALLC[ask[2]].g} кульок разом?`}
    else if(kind==='diff'){ask=shuffle(cols).slice(0,2);if(cnt[ask[0]]===cnt[ask[1]])cnt[ask[0]]++;if(cnt[ask[0]]<cnt[ask[1]])ask.reverse();ansV=cnt[ask[0]]-cnt[ask[1]];q=`На скільки ${BALLC[ask[0]].g} кульок більше, ніж ${BALLC[ask[1]].g}?`}
    else{ask=shuffle(cols).slice(0,2);ansV=cnt[ask[0]]+cnt[ask[1]];q=`Скільки ${BALLC[ask[0]].g} і ${BALLC[ask[1]].g} кульок разом?`}}
   const balls=shuffle(cols.flatMap(c=>Array(cnt[c]).fill(c)));
-  out.push({cols,cnt,balls,ask,ans:ansV,q})}
+  out.push({cols,cnt,balls,ask,ans:ansV,q,kind:kind==='diff'?'diff':'sum'})}
  return out
 }
 function renderBalls(){
@@ -726,6 +776,7 @@ function renderBalls(){
   b.setAttribute('aria-label',BALLC[c].g.replace(/их$/,'а')+' кулька');tray.appendChild(b);draggable(b,ballDrop)});
  shuffle(T.cols).forEach(c=>{const j=document.createElement('div');j.className='jar';j.dataset.c=c;j.style.setProperty('--c',BALLC[c].c);j.setAttribute('role','button');j.setAttribute('aria-label','Банка');
   j.innerHTML=`<div class="lid"></div><div class="glass"></div>`;jars.appendChild(j);dropTarget(j,ballDrop)});
+ if(G.idx===0&&G.level===0){const f=tray.querySelector('.ball');demo(f,jars.querySelector(`.jar[data-c="${f.dataset.c}"] .glass`))}
 }
 function ballDrop(el,t){
  if(!t.classList.contains('jar'))return false;
@@ -740,7 +791,10 @@ function ballDrop(el,t){
 function ballQuestion(){
  const T=G.tasks[G.idx];G.busy=false;
  setText(T.q);
- $('#btray').remove();$('#bgrid').classList.add('q');$('#padSlot').innerHTML=padHTML();
+ const op=T.kind==='diff'?'−':'+';
+ const vis=`<div class="qvis" aria-hidden="true">${T.ask.map(c=>`<i style="--c:${BALLC[c].c}"></i>`).join(`<span>${op}</span>`)}<span class="eq">=</span></div>`;
+ document.querySelectorAll('.jar').forEach(j=>j.classList.toggle('dim',!T.ask.includes(j.dataset.c)));
+ $('#btray').remove();$('#bgrid').classList.add('q');$('#padSlot').innerHTML=padHTML(vis);
  bindPad(v=>answerFlow(v,T,()=>{T.ask.forEach(c=>{const j=document.querySelector(`.jar[data-c="${c}"]`);if(j&&!j.querySelector('.cnt'))j.insertAdjacentHTML('beforeend',`<span class="cnt">${T.cnt[c]}</span>`)})}));
 }
 
@@ -751,13 +805,16 @@ syncSw();
 $('#menuBtn').onclick=()=>menu.showModal();
 menu.addEventListener('click',e=>{if(e.target===menu||e.target.closest('[data-close]'))menu.close()});
 sw.onclick=()=>{S.sound=!S.sound;save();syncSw();Sound.init();Sound.pick()};
-$('#resetBtn').onclick=()=>{if(confirm('Скинути всі зірочки?')){for(const m in S.stars)S.stars[m]=[0,0,0];save();renderModes();toast('Зірочки скинуто')}};
+$('#resetBtn').onclick=()=>{if(confirm('Скинути всі зірочки?')){for(const m in S.stars)S.stars[m]=S.stars[m].map(()=>0);S.step=0;save();renderModes();toast('Зірочки скинуто')}};
 $('#res').addEventListener('cancel',e=>{e.preventDefault();$('#res').close();renderModes();show('modes')});
 
 /* ========== НАВІГАЦІЯ ========== */
-$('#goBtn').onclick=()=>{renderModes();show('modes')};
+$('#goBtn').onclick=play;
+$('#lvlBtn').onclick=()=>{renderModes();show('modes')};
+$('#heroArt').onclick=play;
+$('#heroArt').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();play()}});
 $('#logo').onclick=()=>show('home');
-$('#backBtn').onclick=()=>{renderModes();show('modes')};
+$('#backBtn').onclick=()=>show('home');
 
 /* ========== СТАРТ ========== */
 heroArt();renderModes();
