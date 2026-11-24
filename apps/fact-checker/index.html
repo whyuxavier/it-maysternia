@@ -145,6 +145,8 @@ svg{display:block}
 .gc ul,.gc ol{padding-left:22px;margin:8px 0}.gc li{margin:6px 0}
 .gc .ex{padding:9px 12px;border-radius:12px;background:rgba(59,52,80,.05);margin:8px 0;font:600 14px ui-monospace,Consolas,monospace;word-break:break-all}
 .gnav{display:flex;justify-content:space-between;margin-top:20px;gap:10px}
+.gframe{width:100%;height:100%;border:0;display:block;background:#fff}
+.win.dragging .gframe{pointer-events:none}
 .note-body{padding:18px;white-space:pre-wrap;font:600 15px/1.55 ui-monospace,Consolas,monospace;user-select:text}
 .setp{padding:18px;display:flex;flex-direction:column;gap:8px}
 .setp h3{font:800 16px Rubik;margin-top:10px}
@@ -397,6 +399,7 @@ kbd{font:800 13px ui-monospace,Consolas,monospace;padding:3px 8px;border-radius:
  <symbol id="i-power" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.8" d="M12 3v8M7 6.5a7 7 0 1 0 10 0"/></symbol>
  <symbol id="i-min" viewBox="0 0 24 24"><path class="stk" style="stroke-width:2.8" d="M6 17h12"/></symbol>
  <symbol id="i-max" viewBox="0 0 24 24"><rect x="5.5" y="5.5" width="13" height="13" rx="3" class="stk" style="stroke-width:2.4"/></symbol>
+ <symbol id="i-game" viewBox="0 0 24 24"><path class="ink" d="M7 7h10a5 5 0 0 1 4.9 6l-.7 3.6a2.6 2.6 0 0 1-4.5 1.2L14.5 15h-5l-2.2 2.8a2.6 2.6 0 0 1-4.5-1.2L2.1 13A5 5 0 0 1 7 7z"/><path d="M7.5 9.5v4M5.5 11.5h4" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="10.5" r="1.3" fill="#fff"/><circle cx="18" cy="12.8" r="1.3" fill="#fff"/></symbol>
  <symbol id="i-gh" viewBox="0 0 24 24"><path class="ink" d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.6.4-1.1.7-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></symbol>
  <symbol id="i-vf" viewBox="0 0 24 24"><path fill="#3d8bdc" d="M12 1.5l2.6 2 3.2-.3 1 3.1 2.8 1.6-.9 3.1.9 3.1-2.8 1.6-1 3.1-3.2-.3-2.6 2-2.6-2-3.2.3-1-3.1-2.8-1.6.9-3.1-.9-3.1 2.8-1.6 1-3.1 3.2.3z"/><path d="M7.5 12.2l3 3 6-6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
@@ -861,17 +864,18 @@ const APPS = {
   guide: {t: 'Підручник фактчекера', i: 'i-book', c: 'c-guide', w: 680, h: 520},
   notes: {t: 'Блокнот', i: 'i-dossier', c: 'c-notes', w: 460, h: 380},
   photos: {t: 'Фото', i: 'i-photo', c: 'c-photos', w: 520, h: 420},
-  settings: {t: 'Налаштування', i: 'i-ctl', c: 'c-set', w: 460, h: 520}
+  settings: {t: 'Налаштування', i: 'i-ctl', c: 'c-set', w: 460, h: 520},
+  game: {t: 'Гра', i: 'i-game', c: 'c-butter', w: 860, h: 600}
 };
-const DESK = [['pc'], ['bin', 'Кошик', 'i-bin', 'c-bin'], ['guide', 'Підручник'], ['case'], ['msg'], ['sms'], ['web'], ['feed'], ['tools']];
+const DESK = [['pc'], ['bin', 'Кошик', 'i-bin', 'c-bin', 'Кошик'], ['games', 'Ігри', 'i-game', 'c-butter', 'Ігри'], ['guide', 'Підручник'], ['case'], ['msg'], ['sms'], ['web'], ['feed'], ['tools']];
 const START = ['case', 'msg', 'sms', 'web', 'feed', 'tools', 'pc', 'guide', 'settings'];
 let wins = {}, ztop = 20;
 const isMobile = () => matchMedia('(max-width:760px)').matches;
 
 function drawDesk() {
-  $('#icons').innerHTML = DESK.map(([a, t, i, c]) => {
+  $('#icons').innerHTML = DESK.map(([a, t, i, c, path]) => {
     const A = APPS[a] || {};
-    return `<button class="dic" type="button" ${a === 'bin' ? 'data-open="pc" data-path="Кошик"' : `data-open="${a}"`}><span class="ico ${c || A.c}">${icon(i || A.i)}</span>${t || A.t}<span class="badge" data-badge="${a}" hidden></span></button>`;
+    return `<button class="dic" type="button" ${path ? `data-open="pc" data-path="${path}"` : `data-open="${a}"`}><span class="ico ${c || A.c}">${icon(i || A.i)}</span>${t || A.t}<span class="badge" data-badge="${a}" hidden></span></button>`;
   }).join('');
   $('#smGrid').innerHTML = START.map(a => `<button type="button" data-open="${a}"><span class="ico ${APPS[a].c}">${icon(APPS[a].i)}</span>${APPS[a].t.replace(' фактчекера', '')}</button>`).join('');
 }
@@ -956,7 +960,7 @@ function resizify(el, h) {
   h.addEventListener('pointerdown', e => {
     if (isMobile()) return;
     e.stopPropagation(); id = e.pointerId; h.setPointerCapture(id);
-    sx = e.clientX; sy = e.clientY; ow = el.offsetWidth; oh = el.offsetHeight;
+    sx = e.clientX; sy = e.clientY; ow = el.offsetWidth; oh = el.offsetHeight; el.classList.add('dragging');
     const w = wins[el.dataset.app]; if (w && w.prev) { w.prev = null; el.classList.remove('maxed'); }
   });
   h.addEventListener('pointermove', e => {
@@ -965,7 +969,7 @@ function resizify(el, h) {
     el.style.width = Math.max(300, Math.min(d.clientWidth - el.offsetLeft, ow + e.clientX - sx)) + 'px';
     el.style.height = Math.max(220, Math.min(d.clientHeight - el.offsetTop, oh + e.clientY - sy)) + 'px';
   });
-  const up = e => { if (e.pointerId === id) id = null; };
+  const up = e => { if (e.pointerId === id) { id = null; el.classList.remove('dragging'); } };
   h.addEventListener('pointerup', up); h.addEventListener('pointercancel', up);
 }
 function dragify(el, handle) {
@@ -974,7 +978,7 @@ function dragify(el, handle) {
     if (isMobile() || e.target.closest('button')) return;
     if (el.classList.contains('maxed')) return;
     id = e.pointerId; handle.setPointerCapture(id);
-    sx = e.clientX; sy = e.clientY; ox = el.offsetLeft; oy = el.offsetTop; handle.style.cursor = 'grabbing';
+    sx = e.clientX; sy = e.clientY; ox = el.offsetLeft; oy = el.offsetTop; handle.style.cursor = 'grabbing'; el.classList.add('dragging');
   });
   handle.addEventListener('pointermove', e => {
     if (e.pointerId !== id) return;
@@ -982,7 +986,7 @@ function dragify(el, handle) {
     el.style.left = Math.max(-el.offsetWidth + 80, Math.min(d.clientWidth - 80, ox + e.clientX - sx)) + 'px';
     el.style.top = Math.max(0, Math.min(d.clientHeight - 44, oy + e.clientY - sy)) + 'px';
   });
-  const up = e => { if (e.pointerId === id) { id = null; handle.style.cursor = ''; } };
+  const up = e => { if (e.pointerId === id) { id = null; handle.style.cursor = ''; el.classList.remove('dragging'); } };
   handle.addEventListener('pointerup', up); handle.addEventListener('pointercancel', up);
 }
 
@@ -1020,18 +1024,23 @@ const FS = {
     {n: 'розклад_уроків.txt', k: 'txt', b: 'Пн: математика, укр. мова, інформатика, фізкультура\nВт: англійська, історія, біологія, мистецтво\nСр: математика, географія, інформатика, музика'},
     {n: 'skin_generator.exe', k: 'exe'}
   ],
+  'Ігри': [
+    {n: 'Танграм', k: 'game', p: 'tangram'}, {n: 'Намалюй коло', k: 'game', p: 'draw-circle'}, {n: 'Block Puzzle', k: 'game', p: 'block-puzzle'},
+    {n: 'Сапер', k: 'game', p: 'minesweeper'}, {n: 'WordShaker', k: 'game', p: 'wordshaker'}, {n: 'MOUSE RACER', k: 'game', p: 'mouse-racer'},
+    {n: 'SERVER ROOM', k: 'game', p: 'server-room'}, {n: 'Пікселька', k: 'game', p: 'pixelka'}
+  ],
   'Зображення': [{n: 'Кіт Пиріжок.png', k: 'img', s: 'cat'}, {n: 'Карпати.jpg', k: 'img', s: 'mount'}],
   'Кошик': [{n: 'старий_реферат.txt', k: 'txt', b: 'Реферат про динозаврів (чернетка, не здавати)'}, {n: 'мем.png', k: 'img', s: 'meme'}]
 };
-const FX_ICON = {dir: ['i-case', 'c-butter'], guide: ['i-book', 'c-guide'], txt: ['i-dossier', 'c-notes'], img: ['i-photo', 'c-photos'], exe: ['i-tools', 'c-bin'], app: null};
+const FX_ICON = {dir: ['i-case', 'c-butter'], guide: ['i-book', 'c-guide'], txt: ['i-dossier', 'c-notes'], img: ['i-photo', 'c-photos'], exe: ['i-tools', 'c-bin'], game: ['i-game', 'c-butter'], app: null};
 function renderPc() {
   const w = wins.pc; if (!w) return;
-  const places = ['Комп\'ютер', 'Робочий стіл', 'Документи', 'Завантаження', 'Зображення', 'Кошик'];
+  const places = ['Комп\'ютер', 'Робочий стіл', 'Документи', 'Ігри', 'Завантаження', 'Зображення', 'Кошик'];
   let items;
   if (fxPath === 'Комп\'ютер') items = places.slice(1).map(p => ({n: p, k: 'dir'}));
-  else if (fxPath === 'Робочий стіл') items = DESK.map(([a, t, i, c]) => ({n: t || APPS[a].t, k: 'app', a, i: i || APPS[a].i, c: c || APPS[a].c}));
+  else if (fxPath === 'Робочий стіл') items = DESK.map(([a, t, i, c, path]) => ({n: t || APPS[a].t, k: 'app', a, path, i: i || APPS[a].i, c: c || APPS[a].c}));
   else items = FS[fxPath] || [];
-  w.body.innerHTML = `<div class="fx"><div class="fxs">${places.map(p => `<button type="button" data-fx="${p}" class="${p === fxPath ? 'on' : ''}">${icon(p === 'Кошик' ? 'i-bin' : p === 'Комп\'ютер' ? 'i-pc' : 'i-case')}${p}</button>`).join('')}</div>
+  w.body.innerHTML = `<div class="fx"><div class="fxs">${places.map(p => `<button type="button" data-fx="${p}" class="${p === fxPath ? 'on' : ''}">${icon(p === 'Кошик' ? 'i-bin' : p === 'Ігри' ? 'i-game' : p === 'Комп\'ютер' ? 'i-pc' : 'i-case')}${p}</button>`).join('')}</div>
     <div class="fxm"><div class="fxp">${icon(fxPath === 'Кошик' ? 'i-bin' : 'i-case')}${fxPath}${fxPath === 'Кошик' && items.length ? '<button class="btn sm" style="margin-left:auto" id="binClear" type="button">Очистити кошик</button>' : ''}</div>
     <div class="fxg">${items.length ? items.map((f, i) => { const [ic, cl] = f.k === 'app' ? [f.i, f.c] : FX_ICON[f.k]; return `<button class="fi" type="button" data-fi="${i}"><span class="ico ${cl}">${icon(ic)}</span>${esc(f.n)}</button>`; }).join('') : '<p class="note" style="grid-column:1/-1;padding:10px">Тут порожньо.</p>'}</div></div></div>`;
   w.items = items;
@@ -1039,11 +1048,21 @@ function renderPc() {
 let noteFile = null, photoFile = null;
 function openFile(f) {
   if (f.k === 'dir') { fxPath = f.n; renderPc(); return; }
-  if (f.k === 'app') { openWin(f.a === 'bin' ? 'pc' : f.a); if (f.a === 'bin') { fxPath = 'Кошик'; renderPc(); } return; }
+  if (f.k === 'app') { if (f.path) { fxPath = f.path; openWin('pc'); renderPc(); } else openWin(f.a); return; }
+  if (f.k === 'game') { curGame = f; if (wins.game) { wins.game.body.innerHTML = ''; } openWin('game'); renderGame(); return; }
   if (f.k === 'guide') { openWin('guide'); return; }
   if (f.k === 'txt') { noteFile = f; openWin('notes'); renderNotes(); return; }
   if (f.k === 'img') { photoFile = f; openWin('photos'); renderPhotos(); return; }
   if (f.k === 'exe') { sfx.bad(); noteFile = {n: f.n, b: 'Файл заблоковано.\n\nЦю програму завантажено з невідомого сайту. Такі «генератори скінів» чи «робаксів» часто містять віруси або крадуть паролі.\n\nНевідомі .exe-файли з інтернету не запускай. Краще видали його.'}; openWin('notes'); renderNotes(); }
+}
+let curGame = null;
+function renderGame() {
+  const w = wins.game; if (!w || !curGame) return;
+  w.el.querySelector('.wt b').textContent = curGame.n; APPS.game.t = curGame.n; renderTaskbar();
+  const src = '../' + curGame.p + '/';
+  const f = w.body.querySelector('iframe');
+  if (f && f.dataset.src === src) return;
+  w.body.innerHTML = `<iframe class="gframe" data-src="${src}" src="${src}" title="${esc(curGame.n)}" allow="fullscreen; autoplay"></iframe>`;
 }
 function renderNotes() { const w = wins.notes; if (!w) return; w.el.querySelector('.wt b').textContent = noteFile ? noteFile.n + ' — Блокнот' : 'Блокнот'; w.body.innerHTML = `<div class="note-body">${noteFile ? esc(noteFile.b) : 'Відкрий текстовий файл у «Комп\'ютері».'}</div>`; }
 function renderPhotos() { const w = wins.photos; if (!w) return; w.el.querySelector('.wt b').textContent = photoFile ? photoFile.n : 'Фото'; w.body.innerHTML = photoFile ? `<div style="padding:14px;display:grid;place-items:center;height:100%">${IMG[photoFile.s].replace('<svg', '<svg style="width:100%;max-height:100%;border-radius:12px"')}</div>` : '<div class="empty-app">Відкрий фото в «Комп\'ютері».</div>'; }
@@ -1093,7 +1112,7 @@ function setSound(v) { sound = v; store.set('sound', v); $('#trSnd').innerHTML =
 function renderAll() { Object.keys(wins).forEach(renderApp); renderBadges(); renderTaskbar(); }
 function renderApp(app) {
   const w = wins[app]; if (!w) return;
-  ({case: renderCase, msg: renderMsg, sms: renderSms, web: renderWeb, feed: renderFeed, tools: renderTools, pc: renderPc, guide: renderGuide, notes: renderNotes, photos: renderPhotos, settings: renderSettings})[app]();
+  ({case: renderCase, msg: renderMsg, sms: renderSms, web: renderWeb, feed: renderFeed, tools: renderTools, pc: renderPc, guide: renderGuide, notes: renderNotes, photos: renderPhotos, settings: renderSettings, game: renderGame})[app]();
 }
 
 let curChat = null;
@@ -1368,7 +1387,7 @@ document.addEventListener('contextmenu', e => {
 });
 function hideCtx() { $('#ctx').hidden = true; }
 document.addEventListener('pointerdown', e => { if (!e.target.closest('#ctx')) hideCtx(); }, true);
-window.addEventListener('blur', hideCtx);
+window.addEventListener('blur', () => { hideCtx(); setTimeout(() => { const a = document.activeElement; if (a && a.classList.contains('gframe') && focused !== 'game') focusWin('game'); }, 0); });
 
 /* ---------- infection (наслідок шахрайства) ---------- */
 let INFECTED = false, spamT = [];
