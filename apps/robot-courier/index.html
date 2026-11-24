@@ -121,7 +121,7 @@ button{font:inherit;color:inherit}
 .pp{fill:var(--card)} .gr{fill:var(--grass)} .he{fill:var(--hedge)} .sk{fill:var(--sky)} .bu{fill:var(--butter)} .co{fill:var(--coral)} .li{fill:var(--lilac)} .pe{fill:var(--peach)} .mi{fill:var(--mint)} .ink{fill:var(--ink)}
 .stk{fill:none;stroke:var(--ink);stroke-linecap:round;stroke-linejoin:round}
 
-header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 95%,transparent);border-bottom:1px solid var(--line)}
 .bar{display:flex;align-items:center;justify-content:space-between;height:64px;gap:10px}
 .logo{display:flex;align-items:center;gap:10px;font:800 19px Rubik,sans-serif;background:none;border:0;cursor:pointer;padding:0;white-space:nowrap}
 .logo svg{width:36px;height:36px}
@@ -416,6 +416,10 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
   .chip{font-size:12px}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* швидка прокрутка: фон окремим шаром, без перемальовування */
+body{background-attachment:scroll!important}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:inherit;background-attachment:scroll}
 </style>
 </head>
 <body>

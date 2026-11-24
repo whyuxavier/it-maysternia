@@ -25,7 +25,7 @@ button,input,select{font:inherit;color:inherit}
 .stk{fill:none;stroke:var(--ink);stroke-linecap:round;stroke-linejoin:round}
 :focus-visible{outline:3px solid var(--coral);outline-offset:3px}
 
-header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 95%,transparent);border-bottom:1px solid var(--line)}
 .bar{display:flex;align-items:center;justify-content:space-between;height:64px;gap:10px}
 .logo{display:flex;align-items:center;gap:10px;font:800 19px Rubik,sans-serif;white-space:nowrap}
 .logo svg{width:36px;height:36px}
@@ -257,6 +257,10 @@ dialog::backdrop{background:rgba(30,25,45,.45)}
   .stage .ctrl .btn{padding:10px 12px;font-size:14px}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* швидка прокрутка: фон окремим шаром, без перемальовування */
+body{background-attachment:scroll!important}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:inherit;background-attachment:scroll}
 </style>
 </head>
 <body class="home">

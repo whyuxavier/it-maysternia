@@ -42,7 +42,7 @@ button,input{font:inherit}
 .bg-grid.active .bg-glow{opacity:1}
 
 /* ---------- шапка ---------- */
-.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:12px;height:60px;padding:0 max(16px,calc((100vw - 1080px)/2));background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid color-mix(in srgb,var(--ln) 60%,transparent)}
+.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:12px;height:60px;padding:0 max(16px,calc((100vw - 1080px)/2));background:color-mix(in srgb,var(--bg) 95%,transparent);border-bottom:1px solid color-mix(in srgb,var(--ln) 95%,transparent)}
 .logo{display:flex;align-items:center;gap:10px;font:700 15px var(--fd);color:var(--tx);white-space:nowrap}
 .logo svg{width:30px;height:30px;flex-shrink:0}
 .sp{flex:1}
@@ -284,6 +284,10 @@ h1,h2,h3{font-family:var(--fd);letter-spacing:0}
 #themeBtn svg{width:20px;height:20px;fill:currentColor}
 #themeBtn .sun path{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
 body.dark #themeBtn .moon,body:not(.dark) #themeBtn .sun{display:none}
+
+/* швидка прокрутка: фон окремим шаром, без перемальовування */
+body{background-attachment:scroll!important}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:inherit;background-attachment:scroll}
 </style>
 <script>/* ІТ-Майстерня: ім'я та клас з профілю учня + запис результату для вчителя */
 (function(){

@@ -62,7 +62,7 @@ a{color:inherit}
 #paper feDropShadow{flood-color:var(--shadowc)}
 
 /* header */
-header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);transition:background .4s}
+header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 95%,transparent);border-bottom:1px solid var(--line);transition:background .4s}
 .bar{display:flex;align-items:center;justify-content:space-between;height:68px}
 .logo{white-space:nowrap;flex:none;display:flex;align-items:center;gap:10px;text-decoration:none;font:800 20px Rubik,sans-serif}
 .logo svg{width:38px;height:38px}
@@ -457,7 +457,7 @@ main,footer{position:relative;z-index:1}
   --soft:0 16px 36px rgba(0,0,0,.35);--soft2:0 22px 44px rgba(0,0,0,.45);--lift:inset 0 -3px 0 rgba(0,0,0,.18);
   --blobs:radial-gradient(circle at 12% 8%,rgba(255,170,140,.10) 0,transparent 30%),radial-gradient(circle at 90% 6%,rgba(120,170,255,.10) 0,transparent 32%),radial-gradient(circle at 85% 90%,rgba(160,130,255,.12) 0,transparent 30%),radial-gradient(circle at 8% 85%,rgba(110,220,170,.08) 0,transparent 28%)}
 body{background-color:var(--bg);background-image:var(--blobs);background-attachment:fixed}
-header{background:color-mix(in srgb,var(--bg) 72%,transparent);backdrop-filter:blur(14px)}
+header{background:color-mix(in srgb,var(--bg) 95%,transparent);}
 .logo svg{width:40px;height:40px}
 .by{transform:none}
 .hero h1 span{background:linear-gradient(transparent 62%,color-mix(in srgb,var(--butter) 80%,transparent) 62%)}
@@ -483,7 +483,7 @@ header{background:color-mix(in srgb,var(--bg) 72%,transparent);backdrop-filter:b
 .top3>:nth-child(2) .rank{background:linear-gradient(150deg,#ffe9a6,#f2c75a)}
 .top3>:nth-child(3) .rank{background:linear-gradient(150deg,#b9f0d4,#5fc796)}
 /* бічне меню і заголовки секцій */
-@media (min-width:1024px){.side{transform:none;border-radius:26px;background:color-mix(in srgb,var(--card) 78%,transparent);backdrop-filter:blur(10px);box-shadow:var(--soft),0 0 0 1px var(--line)}}
+@media (min-width:1024px){.side{transform:none;border-radius:26px;background:color-mix(in srgb,var(--card) 95%,transparent);box-shadow:var(--soft),0 0 0 1px var(--line)}}
 .side a{border-radius:16px}
 .side a:hover{background:color-mix(in srgb,var(--card) 70%,transparent);transform:translateX(2px)}
 .side a[aria-current="true"]{background:var(--card);transform:none;box-shadow:0 8px 18px rgba(60,50,140,.12),0 0 0 1px var(--line)}
@@ -509,6 +509,10 @@ dialog{border-radius:26px;box-shadow:var(--soft2),0 0 0 1px var(--line)}
 .sec.fold .fh{display:none!important}
 .more{display:flex;align-items:center;gap:6px;margin:16px auto 0;padding:8px 16px;border:0;border-radius:999px;background:rgba(255,255,255,.7);box-shadow:0 0 0 1px rgba(59,52,80,.12);font:800 14px Nunito,sans-serif;color:#3b3450;cursor:pointer}
 .more:hover{background:#fff}.more span{color:#6f6787}.more svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* швидка прокрутка: фон окремим шаром, без перемальовування */
+body{background-attachment:scroll!important}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:inherit;background-attachment:scroll}
 </style>
 </head>
 <body class="home">

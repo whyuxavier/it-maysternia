@@ -469,6 +469,10 @@ body.proj .rc { width: 300px; }
 @media (prefers-reduced-motion: reduce) {
   .hero-svg *, .hero-svg g { animation: none !important; }
 }
+
+/* швидка прокрутка: фон окремим шаром, без перемальовування */
+body{background-attachment:scroll!important}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:inherit;background-attachment:scroll}
 </style>
 </head>
 <body>

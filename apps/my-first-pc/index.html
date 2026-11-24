@@ -4375,7 +4375,11 @@ document.getElementById('certIn').addEventListener('input',e=>{try{localStorage.
 document.getElementById('certIn').addEventListener('keydown',e=>e.stopPropagation());
 document.getElementById('certPng').onclick=async()=>{const u=await drawCert(),a=document.createElement('a');a.href=u;a.download='Сертифікат '+CERT_APP.name.split(' ')[0]+' — '+((document.getElementById('certIn').value||'').trim()||'учень')+'.png';document.body.appendChild(a);a.click();a.remove()};
 document.getElementById('certPrint').onclick=async()=>{const u=await drawCert(),f=document.createElement('iframe');f.style.cssText='position:fixed;width:0;height:0;border:0;right:0;bottom:0';
-  f.srcdoc=`<!doctype html><html><head><style>@page{size:A4 landscape;margin:0}html,body{margin:0;height:100%}img{width:100%;height:100%;object-fit:contain;display:block}</style></head><body><img src="${u}"></body></html>`;
+  f.srcdoc=`<!doctype html><html><head><style>@page{size:A4 landscape;margin:0}html,body{margin:0;height:100%}img{width:100%;height:100%;object-fit:contain;display:block}
+/* швидка прокрутка: фон окремим шаром, без перемальовування */
+body{background-attachment:scroll!important}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:inherit;background-attachment:scroll}
+</style></head><body><img src="${u}"></body></html>`;
   f.onload=()=>{setTimeout(()=>{f.contentWindow.focus();f.contentWindow.print();setTimeout(()=>f.remove(),1500)},200)};document.body.appendChild(f)};
 renderCerts();
 })();

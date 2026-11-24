@@ -122,7 +122,7 @@ a{color:var(--mint-tx)}
 .hidden{display:none!important}
 
 /* ---------- header ---------- */
-header.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;height:60px;padding:0 18px;background:rgba(39,36,57,0.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;height:60px;padding:0 18px;background:rgba(39,36,57,.95);border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;font-weight:800;font-size:18px;letter-spacing:.2px}
 .brand svg{width:30px;height:30px}
 .top .sp{flex:1}
@@ -1033,7 +1033,11 @@ code:`<!DOCTYPE html>
     .free { transform: translateY(-160px) scale(1.2); opacity: 0; }
     button { padding: 12px 22px; font-size: 18px; border: 0; border-radius: 10px; background: #7ff5cf; cursor: pointer; }
     #msg { font-size: 22px; color: #ffbe6b; min-height: 30px; }
-  </style>
+  
+/* швидка прокрутка: фон окремим шаром, без перемальовування */
+body{background-attachment:scroll!important}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:inherit;background-attachment:scroll}
+</style>
 </head>
 <body>
   <img class="gost" src="img/ghost.svg" alt="Привид">

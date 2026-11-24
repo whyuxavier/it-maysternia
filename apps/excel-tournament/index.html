@@ -271,7 +271,11 @@ html .btn.ib,html[data-theme=dark] .btn.ib{width:38px;height:38px;padding:0;disp
 dialog{background:var(--pw-card);color:var(--pw-ink);border:0;border-radius:22px;box-shadow:0 20px 50px rgba(30,25,45,.25)}
 dialog::backdrop{background:rgba(30,25,45,.45)}
 </style>
-<style data-pw="light">:root{--ac-tx:#2a3f7e;--ok-tx:#2a7e49;--er-tx:#7e2a2a;--pc0:#f9f8fa;--pc1:#6f6787;--pc2:#3b3450;--pc3:#bddcf3;--pc4:#6b82c7;}</style><style data-pw="dark">:root{--ac-tx:#bddcf3;--ok-tx:#bfe3cf;--er-tx:#eba497;--pc0:#282431;--pc1:#a9a2bd;--pc2:#ece8f5;--pc3:#bddcf3;--pc4:#7288ca;}</style>
+<style data-pw="light">:root{--ac-tx:#2a3f7e;--ok-tx:#2a7e49;--er-tx:#7e2a2a;--pc0:#f9f8fa;--pc1:#6f6787;--pc2:#3b3450;--pc3:#bddcf3;--pc4:#6b82c7;}</style><style data-pw="dark">:root{--ac-tx:#bddcf3;--ok-tx:#bfe3cf;--er-tx:#eba497;--pc0:#282431;--pc1:#a9a2bd;--pc2:#ece8f5;--pc3:#bddcf3;--pc4:#7288ca;}
+/* швидка прокрутка: фон окремим шаром, без перемальовування */
+body{background-attachment:scroll!important}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:inherit;background-attachment:scroll}
+</style>
 <script>/* тема квестів: темна за замовчуванням, спільна для всіх квестів ІТ-Майстерні */
 (function(){var t='dark';try{t=localStorage.getItem('pw-theme')||'dark'}catch(e){}
 window.pwTheme=function(n){t=n;document.documentElement.setAttribute('data-theme',n);document.querySelectorAll('style[data-pw]').forEach(function(s){s.media=s.getAttribute('data-pw')===n?'all':'not all'});var m=document.querySelector('meta[name=theme-color]');if(m)m.content=n==='dark'?'#24212e':'#eef3fb';try{localStorage.setItem('pw-theme',n)}catch(e){}};

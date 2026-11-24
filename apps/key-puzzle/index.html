@@ -153,6 +153,10 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
 .rot svg{width:28px;height:28px;flex:none}
 @media (max-width:560px) and (orientation:portrait){.rot{display:flex}.note{display:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* швидка прокрутка: фон окремим шаром, без перемальовування */
+body{background-attachment:scroll!important}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:inherit;background-attachment:scroll}
 </style>
 </head>
 <body>

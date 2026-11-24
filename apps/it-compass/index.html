@@ -32,7 +32,7 @@ input,textarea,select{font:inherit;color:inherit}
 .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
 
 /* header */
-header{position:sticky;top:0;z-index:20;background:rgba(245,247,255,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header{position:sticky;top:0;z-index:20;background:rgba(245,247,255,.95);border-bottom:1px solid var(--line)}
 .hbar{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
 .logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.2rem;cursor:pointer}
 .logo svg{width:32px;height:32px}
@@ -365,6 +365,10 @@ details.box[open] summary{margin-bottom:10px}
   .panel{box-shadow:none;margin:0;padding:0}
   .screen{display:none!important}#s-result{display:block!important}
 }
+
+/* швидка прокрутка: фон окремим шаром, без перемальовування */
+body{background-attachment:scroll!important}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:inherit;background-attachment:scroll}
 </style>
 </head>
 <body>

@@ -128,7 +128,7 @@ a{color:var(--move)}
 :focus-visible{outline:3px solid var(--coral);outline-offset:3px}
 
 /* шапка */
-header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 95%,transparent);border-bottom:1px solid var(--line)}
 .bar{display:flex;align-items:center;justify-content:space-between;height:64px;gap:10px}
 .logo{display:flex;align-items:center;gap:10px;font:800 19px Rubik,sans-serif;background:none;border:0;cursor:pointer;padding:0;white-space:nowrap}
 .logo svg{width:36px;height:36px;overflow:visible}
@@ -469,6 +469,10 @@ kbd{font:700 12px var(--mono);padding:2px 6px;border-radius:6px;background:var(-
   .ed-h .fn{display:none}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* швидка прокрутка: фон окремим шаром, без перемальовування */
+body{background-attachment:scroll!important}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:inherit;background-attachment:scroll}
 </style>
 </head>
 <body>

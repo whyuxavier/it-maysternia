@@ -195,6 +195,10 @@
     .chip, .grid-ctrl{font-size:17px; min-width:0}
     #game{height:calc(100dvh - 70px)}
   }
+
+/* швидка прокрутка: фон окремим шаром, без перемальовування */
+body{background-attachment:scroll!important}
+body::after{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:inherit;background-attachment:scroll}
 </style>
 </head>
 <body data-view="home">
