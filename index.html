@@ -823,12 +823,6 @@ const APPS = [
   {t:'data',exam:1,g:[10,10], title:'Місія «Аналітик даних»',       desc:'Мода, медіана й середнє на практиці',            type:'Тест',       art:'data',      bg:'--lilac',  repo:'data-analysis-quest', url:GH+'it-maysternia/apps/data-analysis-quest/'},
   {t:'data',g:[8,12],  title:'Excel Tournament',             desc:'Змагання з електронних таблиць',                 type:'Квест',         art:'excel',     bg:'--mint',   repo:'excel-tournament', url:GH+'it-maysternia/apps/excel-tournament/'},
 
-  /* — Проєкти: проблемна ситуація з життя, кроки й критерії (сторінка apps/projects) — */
-  {proj:1,g:[1,4],   title:'Проєкт «Піксельна листівка»',   desc:'Створи листівку для рідних на комп\'ютері',  type:'Проєкт', art:'projCard',   bg:'--peach', repo:'it-maysternia', url:GH+'it-maysternia/apps/projects/#card'},
-  {proj:1,g:[5,8],   title:'Проєкт «Пам\'ятка безпеки»',     desc:'Допоможи молодшим не потрапити до шахраїв',   type:'Проєкт', art:'projSafety', bg:'--sky',   repo:'it-maysternia', url:GH+'it-maysternia/apps/projects/#safety'},
-  {proj:1,g:[7,9],   title:'Проєкт «Купи слона»',           desc:'Програма на Python, яка не дає відмовитися',  type:'Проєкт', art:'projElephant', bg:'--lilac', repo:'it-maysternia', url:GH+'it-maysternia/apps/projects/#elephant'},
-  {proj:1,g:[7,9],   title:'Проєкт «Генератор виправдань»',  desc:'Смішна відмовка одним кліком на Python',      type:'Проєкт', art:'projExcuses',  bg:'--butter',repo:'it-maysternia', url:GH+'it-maysternia/apps/projects/#excuses'},
-  {proj:1,g:[9,12],  title:'Проєкт «Бюджет екскурсії»',     desc:'Порахуй і порівняй два варіанти поїздки',     type:'Проєкт', art:'projTrip',   bg:'--mint',  repo:'it-maysternia', url:GH+'it-maysternia/apps/projects/#trip'},
 
   /* — Ігри для перерви — */
   {fun:1,g:[1,12], title:'Танграм',                      desc:'Склади фігуру з семи частинок',                  type:'Гра',         art:'tangram',   bg:'--butter', repo:'tangram', url:GH+'it-maysternia/apps/tangram/'},
@@ -1142,7 +1136,6 @@ const NAV=[
  {id:'all',label:'Усе одразу',color:'--sky',ic:'Category'},
  ...(SHOW_ROUTES?[{id:'routes',label:'Маршрути',color:'--peach',ic:'Discovery'}]:[]),
  ...TOPICS.filter(t=>APPS.some(a=>a.t===t.id)),
- {id:'projects',label:'Проєкти',color:'--coral',ic:'Paper'},
  {id:'exams',label:'Тести',color:'--lilac',ic:'Ticket'},
  {id:'games',label:'Ігри для перерви',color:'--coral',ic:'Game'},
  {id:'teacher',label:'Для вчителя',color:'--butter',ic:'Work'},
@@ -1152,9 +1145,6 @@ const NAV=[
    Вимкнути — там само або кнопкою в шапці.
    Формат: 'Назва картки':[мета, коли на уроці, як організувати, що перевірити] ===== */
 const TIPS={
- 'Проєкт «Піксельна листівка»':['Керування мишею, графічний редактор, збереження файлу — у справжньому завданні.','Підсумок теми, 1–2 уроки.','Учні працюють за кроками на сторінці проєкту; наприкінці друкуєте листівки.','Самооцінка зірочками за «Я вмію…» на сторінці проєкту.'],
- 'Проєкт «Пам\'ятка безпеки»':['Безпека в мережі через створення продукту для реальної аудиторії.','2 уроки після Фішинг-детектора.','Можна в парах; найкращі пам\'ятки покажіть молодшому класу.','Критерії на 12 балів на сторінці проєкту.'],
- 'Проєкт «Бюджет екскурсії»':['Формули, діаграми й висновки на даних — проблемна ситуація з життя класу.','2–3 уроки, підсумок теми про електронні таблиці.','Реальні ціни з сайтів; можна в парах. Сильнішим — умова ЯКЩО/IF.','Критерії на 12 балів на сторінці проєкту.'],
  'Мій перший ПК':['Назви й призначення частин комп\'ютера, пристрої введення й виведення.','Вивчення нового, 10–15 хв.','Спершу разом на проєкторі, потім самостійно. Попросіть показати ці пристрої в класі.','Дитина називає 4–5 пристроїв і пояснює, для чого кожен.'],
  'Тренажер мишки та клавіатури':['Клік, подвійний клік, перетягування, перші літери на клавіатурі.','Розминка 5–10 хв на початку уроку в 1–2 класі.','Індивідуально, по одному рівню за урок. Звук краще вимкнути або дати навушники.','Впевнено перетягує предмети й не губить курсор.'],
  'Клавіатурний пазл':['Розташування клавіш і рядів, українська й англійська розкладки.','Закріплення після знайомства з клавіатурою, 10 хв.','Змагання в парах на час; другий раунд — інша розкладка.','Скільки часу треба, щоб зібрати ряд без підказок.'],
@@ -1401,25 +1391,24 @@ const EXAMS=()=>section('Тести','Ticket','--lilac',APPS.filter(a=>a.exam&&f
 function renderGrid(){
   const id=current;let html='';
   if(id==='routes'){renderAge(true);html=(ME?'':`<div class="rlogin"><div><b>Увійди, щоб зберігати свій прогрес</b><br><small>Кожен учень на цьому комп'ютері має свої позначки.</small></div><button type="button" class="btn main" onclick="openWho()">Увійти</button></div>`)+ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).map(routeHTML).join('')}
-  else if(id==='projects'){renderAge(true);html=section('Проєкти','Paper','--coral',APPS.filter(a=>a.proj&&fitA(a)))}
   else if(id==='exams'){renderAge(true);html=EXAMS()}
   else if(id==='games'){renderAge(true);html=section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))}
   else if(id==='teacher'){renderAge(false);html=section('Для вчителя','Work','--butter',TEACHERS())+(TEACH?resultsHTML():'')}
   else{renderAge(true);
     const tps=id==='all'?TOPICS:TOPICS.filter(t=>t.id===id);
     html+=tps.map(t=>section(t.label,t.ic,t.color,APPS.filter(a=>a.t===t.id&&!a.exam&&fitA(a)))).join('');
-    if(id==='all')html+=section('Проєкти','Paper','--coral',APPS.filter(a=>a.proj&&fitA(a))).replace('<div class="sec">','<div class="sec fold">')+EXAMS().replace('<div class="sec">','<div class="sec fold">')+section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))+section('Для вчителя','Work','--butter',TEACHERS())}
+    if(id==='all')html+=EXAMS().replace('<div class="sec">','<div class="sec fold">')+section('Ігри для перерви','Game','--coral',APPS.filter(a=>a.fun&&fitA(a)))+section('Для вчителя','Work','--butter',TEACHERS())}
   if(!html)html='<p class="empty">Для цього класу тут поки нічого немає — обери інший клас.</p>';
   gridEl.innerHTML=html;fold();
 }
-/* у «Усе одразу» проєкти — один рядок і кнопка «Показати всі» */
+/* у «Усе одразу» тести — один рядок і кнопка «Показати всі» */
 function fold(){gridEl.querySelectorAll('.sec.fold').forEach(sec=>{const g=sec.querySelector('.grid'),it=[...g.children];it.forEach(e=>e.classList.remove('fh'));
   const top=it[0]?it[0].offsetTop:0,hid=it.filter(e=>e.offsetTop>top+4);hid.forEach(e=>e.classList.add('fh'));
   let b=sec.querySelector('.more');if(!hid.length){if(b)b.remove();return}
   if(!b){b=document.createElement('button');b.type='button';b.className='more';b.onclick=()=>{sec.classList.remove('fold');it.forEach(e=>e.classList.remove('fh'));b.remove()};sec.appendChild(b)}
   b.innerHTML=`Показати всі <span>${it.length}</span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>`})}
 let foldT;addEventListener('resize',()=>{clearTimeout(foldT);foldT=setTimeout(fold,150)});
-function navCount(n){if(n.id==='projects')return APPS.filter(a=>a.proj&&fitA(a)).length;if(n.id==='routes')return ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).length;if(n.id==='exams')return APPS.filter(a=>a.exam&&fitA(a)).length;if(n.id==='games')return APPS.filter(a=>a.fun&&fitA(a)).length;if(n.id==='teacher')return APPS.filter(a=>a.teacher).length;if(n.id==='all')return APPS.filter(a=>a.teacher||fitA(a)).length;return APPS.filter(a=>a.t===n.id&&!a.exam&&fitA(a)).length}
+function navCount(n){if(n.id==='routes')return ROUTES.filter(rt=>AGE==='all'||fits({g:rt.g},AGE)).length;if(n.id==='exams')return APPS.filter(a=>a.exam&&fitA(a)).length;if(n.id==='games')return APPS.filter(a=>a.fun&&fitA(a)).length;if(n.id==='teacher')return APPS.filter(a=>a.teacher).length;if(n.id==='all')return APPS.filter(a=>a.teacher||fitA(a)).length;return APPS.filter(a=>a.t===n.id&&!a.exam&&fitA(a)).length}
 function renderSide(){const mc=document.getElementById('mcur');if(mc){const t=NAV.find(x=>x.id===current);mc.textContent=t?t.label:'';mc.hidden=current!=='all'}document.getElementById('mside').innerHTML=sideEl.innerHTML=NAV.map(t=>`<a href="#${t.id}" style="--dot:var(${t.color})"${t.id===current?' aria-current="true"':''}><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">${ICX[t.ic]||''}</svg></span><span class="lb">${t.label}</span><span class="n">${navCount(t)}</span></a>`).join('')};
 function setTab(id){current=id;renderGrid();renderSide()}
 /* старі посилання #1-4, #5-7, #8-11 → «Усе одразу» з потрібним класом */
