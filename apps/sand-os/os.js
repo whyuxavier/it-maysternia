@@ -865,9 +865,9 @@ function openStart(){
   q.addEventListener('keydown',e=>{if(e.key==='Enter'){const f=body.querySelector('.hl')||body.querySelector('[data-app],[data-node]');f&&f.click()}});
   body.addEventListener('click',e=>{const b=e.target.closest('[data-app],[data-node]');if(!b)return;closeStart();if(b.dataset.app)openApp(b.dataset.app);else openNode(F.get(b.dataset.node))});
   $('.sos-user',startEl).onclick=()=>{closeStart();if(window.ITMW&&ITMW.open)ITMW.open()};
-  $('.sos-pw',startEl).onclick=e=>{const r=e.currentTarget.getBoundingClientRect();menu(r.left-150,r.top-215,[
+  $('.sos-pw',startEl).onclick=e=>{const r=e.currentTarget.getBoundingClientRect();menu(r.left-150,r.top-(opt.lock?260:170),[
     {t:'На весь екран',icon:L.full,f:()=>{closeStart();const d=document.documentElement;if(document.fullscreenElement)document.exitFullscreen();else d.requestFullscreen&&d.requestFullscreen().catch(()=>{})}},
-    {t:'Заблокувати',icon:L.about,f:()=>{closeStart();lock()}},{t:'Перезавантажити',icon:L.reload,f:()=>{closeStart();reboot()}},{t:'Вимкнути',icon:L.power,f:()=>{closeStart();shutdown()}}])};
+    ...(opt.lock?[{t:'Змінити користувача',icon:L.about,f:()=>{closeStart();lock()}},{t:'Заблокувати',icon:L.about,f:()=>{closeStart();lock()}}]:[]),{t:'Перезавантажити',icon:L.reload,f:()=>{closeStart();reboot()}},{t:'Вимкнути',icon:L.power,f:()=>{closeStart();shutdown()}}])};
   if(!small())setTimeout(()=>q.focus(),30);
 }
 startB.onclick=openStart;
@@ -1256,7 +1256,7 @@ new ResizeObserver(()=>desktopView.render()).observe(iconsEl);
 iconsEl.addEventListener('pointerdown',()=>{if(active){active=null;OS.wins.forEach(x=>x.el.classList.add('inactive'));drawTasks()}},true);
 addEventListener('beforeunload',saveNow);
 addEventListener('storage',e=>{if(e.key===opt.key&&e.newValue){const s=load();if(s){S=s;emit('fs')}}});
-if(opt.bootAnim)bootScreen('Вмикаємо комп\'ютер…',1100).then(()=>{if(opt.lock)lock();else{snd('boot');emit('ready')}});else if(opt.lock)lock();else setTimeout(()=>emit('ready'),0);
+if(opt.bootAnim)bootScreen('Вмикаємо комп\'ютер…',1100).then(()=>{if(opt.lock&&opt.lockOnStart)lock();else{snd('boot');emit('ready')}});else if(opt.lock&&opt.lockOnStart)lock();else setTimeout(()=>emit('ready'),0);
 OS.wake=()=>bootScreen('Вмикаємо комп\'ютер…',900).then(()=>{snd('boot');desktopView.render()});
 OS.state=()=>S;OS.save=save;OS.saveNow=saveNow;
 return OS;
