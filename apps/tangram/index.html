@@ -316,13 +316,40 @@ function trySnap(p){
     if(d>.6||(best&&d>=best.d))continue;
     if(rel.every(v=>s.rel.some(w=>Math.hypot(v[0]-w[0],v[1]-w[1])<.06)))best={s,d};
   }
-  if(!best)return false;
+  if(!best){softSnap(p);return false}
   p.snap=best.s;best.s.piece=p;
   const w=l2w(best.s.c[0],best.s.c[1]);p.x=w[0];p.y=w[1];
   return true;
 }
+// Якщо фігуру складено іншим способом (напр., два малі трикутники замість середнього),
+// частинку не «прилипає» до готової клітинки — тоді вирівнюємо її по кутах силуету й інших частинок.
+function softSnap(p){
+  const c=w2l(p.x,p.y);
+  const mine=worldVerts(p).map(([X,Y])=>w2l(X,Y));
+  const pts=[];slots.forEach(s=>s.poly.forEach(v=>pts.push(v)));
+  pieces.forEach(q=>{if(q!==p)worldVerts(q).forEach(([X,Y])=>pts.push(w2l(X,Y)))});
+  let best=null;
+  for(const v of mine)for(const w of pts){const dx=w[0]-v[0],dy=w[1]-v[1],d=Math.hypot(dx,dy);if(d<.3&&(!best||d<best.d))best={dx,dy,d}}
+  if(!best||best.d<1e-6)return;
+  const W=l2w(c[0]+best.dx,c[1]+best.dy);p.x=W[0];p.y=W[1];
+}
+function inPoly(x,y,poly){let r=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const[a,b]=poly[i],[c,d]=poly[j];if((b>y)!==(d>y)&&x<(c-a)*(y-b)/(d-b)+a)r=!r}return r}
+// Перевірка за формою: усі частинки разом точно вкривають силует і не налазять одна на одну
+function shapeDone(){
+  const polys=pieces.map(q=>worldVerts(q).map(([X,Y])=>w2l(X,Y)));
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;slots.forEach(s=>s.poly.forEach(([x,y])=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)}));
+  const st=.05;let inside=0,bad=0;
+  for(let y=y0+st/2;y<y1;y+=st)for(let x=x0+st/2;x<x1;x+=st){
+    const sil=slots.some(s=>inPoly(x,y,s.poly));let n=0;for(const q of polys)if(inPoly(x,y,q))n++;
+    if(sil){inside++;if(n!==1)bad++}else if(n)bad++;
+  }
+  // частинки за межами рамки силуету
+  for(const q of polys)for(const[x,y]of q)if(x<x0-.05||x>x1+.05||y<y0-.05||y>y1+.05)return false;
+  return inside>0&&bad/inside<.02;
+}
 function checkWin(){
-  if(slots.every(s=>s.piece)&&!won){won=true;win()}
+  if(won)return;
+  if(slots.every(s=>s.piece)||shapeDone()){won=true;win()}
 }
 
 // ---------- interaction ----------
@@ -351,7 +378,7 @@ function endDrag(e){
   const p=drag.p,moved=drag.moved;drag=null;
   p.drag=false;p.s=1;p.outer.classList.remove('drag');
   if(moved){
-    if(trySnap(p)){sfx('snap');checkWin()}else sfx('drop');
+    if(trySnap(p)){sfx('snap');checkWin()}else{sfx('drop');checkWin()}
     saveLoose();
   }else rotate(p,-45);
   kick();
@@ -362,10 +389,10 @@ const clampX=x=>Math.max(U*.6,Math.min(vw()-U*.6,x)),clampY=y=>Math.max(TOP-10,M
 function rotate(p,d){
   p.a+=d;unsnap(p);
   sfx('turn');
-  if(trySnap(p)){sfx('snap',.12);checkWin()}
+  if(trySnap(p)){sfx('snap',.12)}checkWin()
   kick();saveLoose();
 }
-function flip(p){p.f*=-1;unsnap(p);sfx('turn');if(trySnap(p)){sfx('snap',.12);checkWin()}kick()}
+function flip(p){p.f*=-1;unsnap(p);sfx('turn');if(trySnap(p))sfx('snap',.12);checkWin();kick()}
 
 function placeFlip(){
   const b=$('flipBtn');const p=selected;
