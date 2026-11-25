@@ -1,6 +1,6 @@
 /* =====================================================================
    Sand OS — спільна віртуальна операційна система ІТ-Майстерні.
-   Використовують: apps/sand-os (Пісочниця ПК), apps/fact-checker.
+   Використовують: apps/sand-os (Мій перший ПК), apps/fact-checker.
    Підключення: <script src="../sand-os/os.js"></script>
    const os = SandOS.boot(document.getElementById('os'), {key:'sandos', base:'../'});
    ===================================================================== */
@@ -1338,7 +1338,7 @@ if(opt.fifi){
   function task(id){const t=T.find(x=>x[0]===id);if(!t)return;cur=t;
     say('Завдання',esc(t[3]),[{t:'Як це зробити?',f:el=>{const hw=$('.how',bub);hw.hidden=!hw.hidden;el.remove()}},{t:'Пізніше',f:()=>{cur=null;hide()}}],t[4])}
   function next(after){const l=list(),i=l.findIndex(t=>t[0]===after);return l.slice(i+1).concat(l.slice(0,i)).find(t=>!FS().done[t[0]])}
-  function record(){try{const me=window.ITMW&&ITMW.me&&ITMW.me();if(!me)return;const c=JSON.parse(localStorage.getItem('itm-me')||'null');const R=JSON.parse(localStorage.getItem('itm-results')||'{}');const row=R[c.id]=R[c.id]||{};row._name=me.name;row._cls=me.cls;row['Пісочниця ПК']={g:null,t:doneN()+' з '+list().length+' завдань Фіфі',d:Date.now()};localStorage.setItem('itm-results',JSON.stringify(R))}catch(e){}}
+  function record(){try{const me=window.ITMW&&ITMW.me&&ITMW.me();if(!me)return;const c=JSON.parse(localStorage.getItem('itm-me')||'null');const R=JSON.parse(localStorage.getItem('itm-results')||'{}');const row=R[c.id]=R[c.id]||{};row._name=me.name;row._cls=me.cls;row['Мій перший ПК']={g:null,t:doneN()+' з '+list().length+' завдань Фіфі',d:Date.now()};localStorage.setItem('itm-results',JSON.stringify(R))}catch(e){}}
   const PRAISE=['Молодець!','Супер!','Чудово вийшло!','Так тримати!','Ти справжній майстер!','Ура, вийшло!'];
   OS.on('act',e=>{if(!cur||!cur[5](e))return;const t=cur;cur=null;
     if(!FS().done[t[0]]){FS().done[t[0]]=Date.now();save();record()}
@@ -1356,7 +1356,7 @@ if(opt.fifi){
     x.fillStyle='#3b3450';x.textAlign='center';x.font='800 58px Rubik, Nunito, sans-serif';x.fillText('Сертифікат',450,140);
     x.font='700 24px Nunito, sans-serif';x.fillStyle='#6f6787';x.fillText(name?'вручається':'вручається юному користувачу',450,195);
     if(name){x.font='800 40px Rubik, Nunito, sans-serif';x.fillStyle='#3b3450';x.fillText(name,450,250)}
-    x.font='700 24px Nunito, sans-serif';x.fillStyle='#3b3450';x.fillText('за виконання всіх завдань Фіфі',450,310);x.fillText('в «Пісочниці ПК»',450,345);
+    x.font='700 24px Nunito, sans-serif';x.fillStyle='#3b3450';x.fillText('за виконання всіх завдань Фіфі',450,310);x.fillText('в «Моєму першому ПК»',450,345);
     const d=new Date();x.font='700 20px Nunito, sans-serif';x.fillStyle='#6f6787';x.fillText(d.getDate()+' '+MONTHS_G[d.getMonth()]+' '+d.getFullYear(),450,520);
     const im=new Image();im.onload=()=>{x.drawImage(im,380,355,140,154);fin()};im.onerror=fin;
     im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(I.fifi(true).replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" '));
