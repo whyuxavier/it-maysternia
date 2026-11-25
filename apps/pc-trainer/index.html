@@ -1034,7 +1034,7 @@ header{background:color-mix(in srgb,var(--page) 82%,transparent);border-bottom:1
         <li>Пройди всі рівні тренажера — і отримаєш іменний сертифікат: його можна завантажити або надрукувати.</li>
         <li>Без програшів — помилку можна просто виправити. Час рахується лише в перегонах, з першої клавіші.</li>
         <li>На планшеті довге натискання замінює праву кнопку.</li>
-        <li>Опанували мишку й клавіатуру? Далі — <a href="../my-first-pc/" target="_blank" rel="noopener">ФіфіПК: мій перший комп’ютер</a>.</li>
+        <li>Опанували мишку й клавіатуру? Далі — <a href="../sand-os/" target="_blank" rel="noopener">Пісочниця ПК: віртуальний комп’ютер</a>.</li>
       </ul>
       <ul id="skillsList" hidden></ul>
       <div class="i-links">
@@ -3376,7 +3376,7 @@ function applyTheme(){
 
 $('#bResume').innerHTML=ICON.play+'<span>Продовжити</span>';
 applyTheme();renderSound();renderLefty();showScreen('home');
-const CERT_APP={next:{href:'../my-first-pc/',name:'ФіфіПК',done:'Ти освоїв мишку й клавіатуру! Далі — ФіфіПК',idle:'Далі — ФіфіПК: мій перший комп’ютер'},name:'Фіфіклік · тренажер мишки та клавіатури',allSkill:'Тепер ти справжній майстер мишки й клавіатури!'};
+const CERT_APP={next:window.top!==window.self?null:{href:'../sand-os/',name:'Пісочниця ПК',done:'Ти освоїв мишку й клавіатуру! Далі — Пісочниця ПК',idle:'Далі — Пісочниця ПК: віртуальний комп’ютер'},name:'Фіфіклік · тренажер мишки та клавіатури',allSkill:'Тепер ти справжній майстер мишки й клавіатури!'};
 const CERT_PARTS=[
  {key:'mouse',m:'mouse',title:'Мишка',what:'всіх рівнів розділу «Мишка»',skill:'Тепер ти впевнено керуєш мишкою!',cats:()=>CATS.mouse},
  {key:'keys',m:'keys',title:'Клавіатура',what:'всіх рівнів розділу «Клавіатура»',skill:'Тепер ти знаєш клавіатуру й друкуєш слова та речення!',cats:()=>CATS.keys}];
