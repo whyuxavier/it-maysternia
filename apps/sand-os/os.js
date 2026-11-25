@@ -11,8 +11,8 @@ const VER='1.0';
 const CSS=`
 .sos{position:fixed;inset:0;overflow:hidden;font-family:Nunito,system-ui,sans-serif;color:#3b3450;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;z-index:50}
 .sos *{box-sizing:border-box}
-.sos button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
-.sos input,.sos textarea{font:inherit;color:inherit;user-select:text;-webkit-user-select:text}
+:where(.sos) button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+:where(.sos) input,:where(.sos) textarea{font:inherit;color:inherit;user-select:text;-webkit-user-select:text}
 .sos svg{display:block}
 .sos-wall{position:absolute;inset:0;transition:background .4s}
 .sos-desk{position:absolute;left:0;right:0;top:0;bottom:52px}
@@ -39,7 +39,7 @@ const CSS=`
 .sos-it.sel{background:rgba(160,210,255,.38);border-color:rgba(241,234,223,.9)}
 .sos-it.cut{opacity:.5}
 .sos-it.over,.sos-drop-over{background:rgba(255,226,122,.55)!important;border-color:#ffd23f!important}
-.sos-it.lnk .ic::after{content:'';position:absolute}
+
 .sos-arrow{position:absolute;left:4px;bottom:2px;width:16px;height:16px}
 .sos-ghost{position:fixed;z-index:99999;pointer-events:none;opacity:.85;transform:translate(-50%,-60%) scale(.9)}
 .sos-ghost .sos-it{position:static;background:rgba(160,210,255,.4)}
@@ -407,14 +407,13 @@ function defaults(){
   const deskL=opt.desktop||['pc','browser','notepad','paint','calc'];
   const pos={};deskL.forEach((a,i)=>{const id=lnk('desk',a);if(a==='pc')pos[id]=[0,0]});pos['@bin']=[0,1];
   if(opt.catalog){
-    const g=add('desk','Ігри','dir'),t=add('desk','Тренажери','dir'),to=add('desk','Інструменти','dir');
-    n[g].icon='games';n[t].icon='trainers';n[to].icon='tools';
-    Object.values(OS.apps).forEach(a=>{if(a.cat==='game')lnk(g,a.id);if(a.cat==='trainer')lnk(t,a.id);if(a.cat==='tool')lnk(to,a.id)});
+    const FD={game:['Ігри','games'],trainer:['Тренажери','trainers'],tool:['Інструменти','tools']};
+    (opt.deskFolders||['game','trainer','tool']).forEach(c=>{const l=Object.values(OS.apps).filter(a=>a.cat===c);if(!l.length)return;const f=add('desk',FD[c][0],'dir');n[f].icon=FD[c][1];l.forEach(a=>lnk(f,a.id))});
   }
+  if(opt.seed){opt.seed(add,lnk,n);}else{
   add('desk','Привіт','file','txt','Привіт! Це твій власний комп\'ютер-пісочниця.\n\nТут можна все: створювати папки й файли, перейменовувати, видаляти й повертати їх із кошика.\n\nСпробуй:\n1. Натисни правою кнопкою на робочому столі → «Створити» → «Папку».\n2. Перетягни цей файл у нову папку.\n3. Видали папку, а потім відкрий «Кошик» і поверни її.\n\nНічого не зламається — сміливо пробуй!');
   add('docs','Мій розклад','file','txt','Понеділок: математика, читання, інформатика\nВівторок: українська мова, малювання\nСереда: природознавство, фізкультура\n');
-  add('docs','Список покупок','file','txt','- молоко\n- хліб\n- яблука\n- олівці');
-  if(opt.seed)opt.seed(add,lnk,n);
+  add('docs','Список покупок','file','txt','- молоко\n- хліб\n- яблука\n- олівці');}
   return {v:1,nodes:n,seq:k+1,pos,wall:'sky',lang:'ua',snd:localStorage.getItem(opt.key+'-snd')!=='0',mt:now};
 }
 function load(){try{const s=JSON.parse(localStorage.getItem(opt.key)||'null');if(s&&s.v===1&&s.nodes&&s.nodes.c)return s}catch(e){}return null}
@@ -688,7 +687,7 @@ function View(el,pid,mode,owner){
   };
   function binIcon(){const full=F.kids('trash').length>0;const it=h(`<div class="sos-it" data-id="@bin" data-drop="trash"><div class="ic">${full?I.binFull:I.bin}</div><div class="nm">Кошик</div></div>`);if(V.sel.has('@bin'))it.classList.add('sel');return it}
   function itemEl(n){
-    const it=h(`<div class="sos-it${n.ext==='lnk'?' lnk':''}" data-id="${n.id}"${n.type==='dir'?' data-drop="'+n.id+'"':''} title="${esc(F.full(n))}"><div class="ic" style="position:relative">${F.icon(n)}${n.ext==='lnk'?'<span class="sos-arrow">'+I.lnk+'</span>':''}</div><div class="nm">${esc(n.name)}</div></div>`);
+    const it=h(`<div class="sos-it${n.ext==='lnk'?' sos-lnk':''}" data-id="${n.id}"${n.type==='dir'?' data-drop="'+n.id+'"':''} title="${esc(F.full(n))}"><div class="ic" style="position:relative">${F.icon(n)}${n.ext==='lnk'?'<span class="sos-arrow">'+I.lnk+'</span>':''}</div><div class="nm">${esc(n.name)}</div></div>`);
     if(V.sel.has(n.id))it.classList.add('sel');if(clip&&clip.mode==='cut'&&clip.ids.includes(n.id))it.classList.add('cut');return it}
   V.select=(id,add)=>{if(!add)V.sel.clear();if(id)V.sel.has(id)&&add?V.sel.delete(id):V.sel.add(id);el.querySelectorAll('.sos-it').forEach(x=>x.classList.toggle('sel',V.sel.has(x.dataset.id)));V.onSel&&V.onSel()};
   V.selNodes=()=>[...V.sel].filter(id=>id[0]!=='@').map(F.get).filter(Boolean);
@@ -845,7 +844,7 @@ function closeStart(){if(startEl){startEl.remove();startEl=null;startB.classList
 OS.closeStart=closeStart;
 function openStart(){
   closePop();if(startEl){closeStart();return}
-  const me=window.ITMW&&ITMW.me&&ITMW.me();const nm=me?me.name:'Учень';const ini=nm.split(/\s+/).map(s=>s[0]).join('').slice(0,2).toUpperCase();
+  const me=window.ITMW&&ITMW.me&&ITMW.me();const nm=me?me.name:(opt.user||'Учень');const ini=nm.split(/\s+/).map(s=>s[0]).join('').slice(0,2).toUpperCase();
   startEl=h(`<div class="sos-start" role="dialog" aria-label="Пуск"><div class="sos-sq">${L.search}<input type="search" placeholder="Пошук програм і файлів" aria-label="Пошук"></div><div class="sos-sbody"></div>
    <div class="sos-sfoot"><button class="sos-user" title="${me?'Змінити учня':'Увійти'}"><span>${esc(ini)}</span><b>${esc(nm)}</b></button><button class="sos-pw" title="Живлення" aria-label="Живлення">${L.power}</button></div></div>`);
   root.appendChild(startEl);startB.classList.add('on');snd('click');
@@ -880,8 +879,8 @@ function bootScreen(text,ms){return new Promise(r=>{const b=h(`<div class="sos-b
   const red=matchMedia('(prefers-reduced-motion: reduce)').matches;setTimeout(()=>{b.style.opacity='0';setTimeout(()=>{b.remove();r()},red?10:400)},red?200:ms)})}
 async function reboot(){for(const w of [...OS.wins]){await w.close();if(OS.wins.includes(w))return}saveNow();bootScreen('Перезавантаження…',1300).then(()=>{if(opt.lock)lock();else{snd('boot');views.forEach(v=>v.render())}})}
 async function shutdown(){for(const w of [...OS.wins]){await w.close();if(OS.wins.includes(w))return}saveNow();const b=h(`<div class="sos-boot">${I.logo}<b>Вимикання…</b></div>`);root.appendChild(b);
-  setTimeout(()=>{b.remove();emit('shutdown');if(!opt.lock)return;const off=h(`<div class="sos-off"><button aria-label="Увімкнути" title="Увімкнути">${L.power}</button><span>Комп'ютер вимкнено</span></div>`);root.appendChild(off);
-    $('button',off).onclick=()=>{off.remove();bootScreen('Вмикаємо комп\'ютер…',1100).then(()=>{snd('boot');lock()})}},900)}
+  setTimeout(()=>{b.remove();emit('shutdown');const off=h(`<div class="sos-off"><button aria-label="Увімкнути" title="Увімкнути">${L.power}</button><span>Комп'ютер вимкнено</span></div>`);root.appendChild(off);
+    $('button',off).onclick=()=>{off.remove();bootScreen('Вмикаємо комп\'ютер…',1100).then(()=>{snd('boot');if(opt.lock)lock();else{desktopView.render();emit('ready')}})}},900)}
 function lock(){return new Promise(res=>{
   closeStart();closeMenu();closePop();
   const me=window.ITMW&&ITMW.me&&ITMW.me();const nm=me?me.name:'Учень';const ini=me?nm.split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase():'';
@@ -904,7 +903,7 @@ function lock(){return new Promise(res=>{
   $('.pw',el).onclick=e=>{e.stopPropagation();clearInterval(ti);document.removeEventListener('keydown',kd,true);el.remove();shutdown()};
 })}
 OS.lock=lock;
-OS.reboot=reboot;OS.shutdown=shutdown;
+OS.reboot=reboot;OS.shutdown=shutdown;OS.bootScreen=bootScreen;
 OS.reset=async()=>{OS.wins.slice().forEach(w=>w.close(true));localStorage.removeItem(opt.key);S=defaults();saveNow();setWall(S.wall);setLang(S.lang);drawSnd();await bootScreen('Повертаємо все як було…',1100);desktopView.render();notify('Комп\'ютер як новий','Усі файли й налаштування повернуто до початкових.','info')};
 
 /* =====================================================================
@@ -1149,10 +1148,11 @@ register({id:'calendar',name:'Календар',icon:I.cal,single:true,kw:'да�
 /* --- Налаштування --- */
 register({id:'settings',name:'Налаштування',icon:I.settings,single:true,kw:'шпалери звук мова скинути',open:(sec)=>{
   const W=win({app:'settings',title:'Налаштування',icon:I.settings,w:780,h:520});
-  const SEC=[['wall','Шпалери',L.wall],['sound','Звук і мова',L.snd],['disk','Пам\'ять',L.disk],['reset','Скинути',L.reload],['about','Про систему',L.about]];
+  const EX=opt.settingsSections||[];const SEC=[...EX.map(x=>[x[0],x[1],x[2]]),['wall','Шпалери',L.wall],['sound','Звук і мова',L.snd],['disk','Пам\'ять',L.disk],['reset','Скинути',L.reload],['about','Про систему',L.about]];
   W.body.innerHTML=`<div class="ss"><div class="ss-nav">${SEC.map(([id,n,ic])=>`<button data-s="${id}">${ic}<span>${n}</span></button>`).join('')}</div><div class="ss-body"></div></div>`;
   const body=$('.ss-body',W.body);let cur='wall';
   function draw(s){cur=s||cur;W.body.querySelectorAll('[data-s]').forEach(b=>b.classList.toggle('on',b.dataset.s===cur));
+    const ex=EX.find(x=>x[0]===cur);if(ex){ex[3](body);return}
     if(cur==='wall'){body.innerHTML='<h2>Шпалери</h2><div class="ss-walls">'+WALLS.map(w=>`<button data-w="${w.id}" class="${S.wall===w.id?'on':''}" style="background:${w.css}" title="${esc(w.n)}" aria-label="${esc(w.n)}"></button>`).join('')+'</div>'}
     else if(cur==='sound'){body.innerHTML=`<h2>Звук і мова</h2><div class="ss-row"><div>Звуки системи<small>Клацання, відкриття вікон, кошик</small></div><button class="ss-sw${S.snd?' on':''}" data-x="snd" aria-label="Звук"></button></div>
       <div class="ss-row"><div>Мова вводу<small>Перемикай клавішами Alt+Shift або кнопкою на панелі задач</small></div><div class="ss-seg"><button data-l="ua" class="${S.lang==='ua'?'on':''}">UA</button><button data-l="en" class="${S.lang==='en'?'on':''}">EN</button></div></div>`}
@@ -1168,7 +1168,7 @@ register({id:'settings',name:'Налаштування',icon:I.settings,single:t
     else if(b.dataset.x==='snd'){S.snd=!S.snd;drawSnd();save();draw()}else if(b.dataset.x==='empty'){await emptyBin();draw()}
     else if(b.dataset.x==='reset'){const ok=await OS.confirm('Скинути комп\'ютер','Точно видалити всі файли й повернути комп\'ютер до початкового стану?','Так, скинути','Ні','warn');if(ok)OS.reset()}});
   OS.on('settings',()=>W.el.isConnected&&draw());OS.on('fs',()=>W.el.isConnected&&cur==='disk'&&draw());
-  W.onArg=s=>draw(s);draw(typeof sec==='string'?sec:'wall');return W;
+  W.onArg=s=>draw(s);draw(typeof sec==='string'?sec:(EX[0]?EX[0][0]:'wall'));return W;
 }});
 
 /* --- Браузер --- */
@@ -1241,7 +1241,7 @@ if(opt.catalog){const B=opt.base;
   ['racer','MOUSE RACER','game','car','mouse-racer/','гонки',1],['tangram','Танграм','game','tangram','tangram/','',1],['circle','Намалюй коло','game','circle','draw-circle/','',1],['blocks','Block Puzzle','game','blocks','block-puzzle/','майнкрафт',1],
   ['mines','Сапер','game','mines','minesweeper/','',5],['wordshaker','WordShaker','game','words','wordshaker/','слова',5],['photopuzzle','Пазл з фото','game','photopz','photo-puzzle/','',1],
   ['pixelka','Пікселька','tool','pixel','pixelka/','піксель малювати',1],['flowchart','Блок-схеми','tool','flow','flowchart/','алгоритм',5]
- ].filter(a=>a[6]<=(opt.maxGrade||12)).forEach(([id,name,cat,ic,path,kw])=>register({id,name,cat,icon:I[ic],url:B+path,kw:kw||''}));}
+ ].filter(a=>a[6]<=(opt.maxGrade||12)&&(!opt.catalogCats||opt.catalogCats.includes(a[2]))).forEach(([id,name,cat,ic,path,kw])=>register({id,name,cat,icon:I[ic],url:B+path,kw:kw||''}));}
 (opt.apps||[]).forEach(register);
 
 /* =====================================================================
