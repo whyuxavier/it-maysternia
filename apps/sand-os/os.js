@@ -100,7 +100,7 @@ const CSS=`
 .sos-empty{padding:30px 10px;text-align:center;color:#8a83a0;font-weight:700}
 /* спливаючі */
 .sos-pop{position:absolute;right:8px;bottom:60px;z-index:9500;background:rgba(250,248,252,.97);backdrop-filter:blur(18px);border-radius:14px;box-shadow:0 20px 60px rgba(20,25,60,.45);padding:16px;animation:sosUp .18s ease-out;width:330px;max-width:calc(100% - 16px)}
-.sos-bigtime{font:800 38px Rubik,Nunito,sans-serif}.sos-bigdate{font-weight:700;color:#6f6787;margin-bottom:10px;text-transform:capitalize}
+.sos-bigtime{font:800 38px Rubik,Nunito,sans-serif}.sos-bigdate{font-weight:700;color:#6f6787;margin-bottom:10px}.sos-bigdate::first-letter{text-transform:uppercase}
 .sos-cal{user-select:none}
 .sos-cal .hd{display:flex;align-items:center;gap:6px;margin-bottom:6px}.sos-cal .hd b{flex:1;font:800 16px Rubik,sans-serif;text-transform:capitalize}
 .sos-cal .hd button{width:34px;height:34px;border-radius:8px;font-size:18px;font-weight:800}.sos-cal .hd button:hover{background:#e9eefb}
@@ -234,6 +234,33 @@ const CSS=`
 .sos-boot .dots i:nth-child(2){animation-delay:.15s}.sos-boot .dots i:nth-child(3){animation-delay:.3s}
 .sos-boot b{font:800 20px Rubik,Nunito,sans-serif;opacity:.9}
 @keyframes sosDot{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-6px)}}
+
+/* екран блокування і входу */
+.sos-lock{position:absolute;inset:0;z-index:99990;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.25);cursor:default;transition:opacity .35s}
+.sos-lock::before{content:'';position:absolute;inset:0;background:inherit;filter:none;z-index:-1}
+.sos-lock .lt{position:absolute;left:0;right:0;top:16%;text-align:center;transition:transform .4s,opacity .4s}
+.sos-lock .lt b{display:block;font:700 clamp(72px,12vw,120px)/1 Rubik,Nunito,sans-serif;letter-spacing:-2px}
+.sos-lock .lt span{display:block;font:700 clamp(18px,2.6vw,26px) Nunito,sans-serif;margin-top:10px}.sos-lock .lt span::first-letter{text-transform:uppercase}
+.sos-lock .hint{position:absolute;bottom:9%;left:0;right:0;text-align:center;font-weight:800;font-size:16px;opacity:.9;animation:sosHint 2s ease-in-out 3}
+@keyframes sosHint{50%{transform:translateY(-6px)}}
+.sos-lock.login .lt{transform:translateY(-40px);opacity:0;pointer-events:none}.sos-lock.login .hint{display:none}
+.sos-lock.login{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background-color:rgba(20,25,60,.25)}
+.sos-login{display:none;flex-direction:column;align-items:center;gap:14px;animation:sosUp .35s ease-out}
+.sos-lock.login .sos-login{display:flex}
+.sos-av{width:128px;height:128px;border-radius:50%;background:rgba(255,255,255,.9);display:grid;place-items:center;font:800 46px Rubik,sans-serif;color:#4c5482;box-shadow:0 10px 30px rgba(0,0,0,.25);text-shadow:none}
+.sos-av svg{width:70px;height:70px}
+.sos-login h2{margin:0;font:800 28px Rubik,Nunito,sans-serif}
+.sos-login small{font-weight:700;opacity:.9;font-size:15px;margin-top:-8px}
+.sos-go{display:flex;align-items:center;gap:10px;height:48px;padding:0 22px 0 28px!important;outline:none;border-radius:24px;background:rgba(255,255,255,.92)!important;color:#3b3450!important;font:800 17px Nunito,sans-serif!important;text-shadow:none;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.sos-go:hover{background:#fff!important}.sos-go:focus-visible{box-shadow:0 0 0 4px rgba(255,255,255,.55),0 6px 20px rgba(0,0,0,.2)}.sos-go svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+.sos-sw{font:800 15px Nunito,sans-serif!important;color:#fff!important;opacity:.9;text-decoration:underline;text-underline-offset:4px;padding:6px 10px!important}
+.sos-lock .corner{position:absolute;right:18px;bottom:18px;display:flex;gap:8px}
+.sos-lock .corner button{width:46px;height:46px;border-radius:12px;background:rgba(255,255,255,.18)!important;display:grid;place-items:center;color:#fff!important}
+.sos-lock .corner button:hover{background:rgba(255,255,255,.3)!important}.sos-lock .corner svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
+.sos-welcome{font:800 30px Rubik,Nunito,sans-serif}
+.sos-off{position:absolute;inset:0;z-index:99996;background:#0c1024;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;color:#8f97c0;font-weight:800}
+.sos-off button{width:96px;height:96px;border-radius:50%;background:#1c2346!important;color:#a9cfee!important;display:grid;place-items:center;box-shadow:0 0 0 3px #2b3466}
+.sos-off button:hover{box-shadow:0 0 0 3px #a9cfee}.sos-off svg{width:44px;height:44px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round}
 @media (prefers-reduced-motion:reduce){.sos *{animation-duration:.01s!important;transition-duration:.01s!important}}
 @media (max-width:700px){
  .sos-task span{display:none}.sos-task{padding:0 8px}.sos-clock small{display:none}
@@ -839,9 +866,9 @@ function openStart(){
   q.addEventListener('keydown',e=>{if(e.key==='Enter'){const f=body.querySelector('.hl')||body.querySelector('[data-app],[data-node]');f&&f.click()}});
   body.addEventListener('click',e=>{const b=e.target.closest('[data-app],[data-node]');if(!b)return;closeStart();if(b.dataset.app)openApp(b.dataset.app);else openNode(F.get(b.dataset.node))});
   $('.sos-user',startEl).onclick=()=>{closeStart();if(window.ITMW&&ITMW.open)ITMW.open()};
-  $('.sos-pw',startEl).onclick=e=>{const r=e.currentTarget.getBoundingClientRect();menu(r.left-150,r.top-170,[
+  $('.sos-pw',startEl).onclick=e=>{const r=e.currentTarget.getBoundingClientRect();menu(r.left-150,r.top-215,[
     {t:'На весь екран',icon:L.full,f:()=>{closeStart();const d=document.documentElement;if(document.fullscreenElement)document.exitFullscreen();else d.requestFullscreen&&d.requestFullscreen().catch(()=>{})}},
-    {t:'Перезавантажити',icon:L.reload,f:()=>{closeStart();reboot()}},{t:'Вимкнути',icon:L.power,f:()=>{closeStart();shutdown()}}])};
+    {t:'Заблокувати',icon:L.about,f:()=>{closeStart();lock()}},{t:'Перезавантажити',icon:L.reload,f:()=>{closeStart();reboot()}},{t:'Вимкнути',icon:L.power,f:()=>{closeStart();shutdown()}}])};
   if(!small())setTimeout(()=>q.focus(),30);
 }
 startB.onclick=openStart;
@@ -851,8 +878,32 @@ let metaOnly=false;document.addEventListener('keydown',e=>{metaOnly=e.key==='Met
 /* ---------- завантаження / вимкнення ---------- */
 function bootScreen(text,ms){return new Promise(r=>{const b=h(`<div class="sos-boot">${I.logo}<div class="dots"><i></i><i></i><i></i></div><b>${esc(text)}</b></div>`);root.appendChild(b);
   const red=matchMedia('(prefers-reduced-motion: reduce)').matches;setTimeout(()=>{b.style.opacity='0';setTimeout(()=>{b.remove();r()},red?10:400)},red?200:ms)})}
-async function reboot(){await Promise.all(OS.wins.map(w=>w.close()));if(OS.wins.length)return;saveNow();bootScreen('Перезавантаження…',1300).then(()=>{snd('boot');views.forEach(v=>v.render())})}
-async function shutdown(){for(const w of [...OS.wins]){await w.close();if(OS.wins.includes(w))return}saveNow();const b=h(`<div class="sos-boot">${I.logo}<b>Вимикання…</b></div>`);root.appendChild(b);setTimeout(()=>{b.remove();emit('shutdown')},900)}
+async function reboot(){for(const w of [...OS.wins]){await w.close();if(OS.wins.includes(w))return}saveNow();bootScreen('Перезавантаження…',1300).then(()=>{if(opt.lock)lock();else{snd('boot');views.forEach(v=>v.render())}})}
+async function shutdown(){for(const w of [...OS.wins]){await w.close();if(OS.wins.includes(w))return}saveNow();const b=h(`<div class="sos-boot">${I.logo}<b>Вимикання…</b></div>`);root.appendChild(b);
+  setTimeout(()=>{b.remove();emit('shutdown');if(!opt.lock)return;const off=h(`<div class="sos-off"><button aria-label="Увімкнути" title="Увімкнути">${L.power}</button><span>Комп'ютер вимкнено</span></div>`);root.appendChild(off);
+    $('button',off).onclick=()=>{off.remove();bootScreen('Вмикаємо комп\'ютер…',1100).then(()=>{snd('boot');lock()})}},900)}
+function lock(){return new Promise(res=>{
+  closeStart();closeMenu();closePop();
+  const me=window.ITMW&&ITMW.me&&ITMW.me();const nm=me?me.name:'Учень';const ini=me?nm.split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase():'';
+  const w=WALLS.find(x=>x.id===S.wall)||WALLS[0];const d=new Date();
+  const el=h(`<div class="sos-lock" style="background:${w.css}"><div class="lt"><b></b><span></span></div><div class="hint">Натисни будь-де або будь-яку клавішу</div>
+    <div class="sos-login"><div class="sos-av">${ini?esc(ini):'<svg viewBox="0 0 24 24" fill="#4c5482"><circle cx="12" cy="8" r="4.5"/><path d="M3.5 21a8.5 8.5 0 0 1 17 0z"/></svg>'}</div><h2>${esc(nm)}</h2>${me?'<small>'+esc(me.cls||'')+'</small>':''}
+    <button class="sos-go">Увійти ${L.fwd}</button>${window.ITMW&&ITMW.open?'<button class="sos-sw">'+(me?'Інший учень':'Увійти під своїм іменем')+'</button>':''}</div>
+    <div class="corner"><button class="lg" title="Мова" aria-label="Мова" style="font:800 14px Nunito,sans-serif">${S.lang==='ua'?'UA':'EN'}</button><button class="pw" title="Вимкнути" aria-label="Вимкнути">${L.power}</button></div></div>`);
+  const tk=()=>{const n=new Date();$('.lt b',el).textContent=pad(n.getHours())+':'+pad(n.getMinutes());$('.lt span',el).textContent=DAYS[n.getDay()]+', '+n.getDate()+' '+MONTHS_G[n.getMonth()]};tk();const ti=setInterval(tk,5000);
+  root.appendChild(el);
+  const toLogin=()=>{if(el.classList.contains('login'))return;el.classList.add('login');snd('click');setTimeout(()=>{const g=$('.sos-go',el);g&&g.focus()},60)};
+  const enter=()=>{clearInterval(ti);document.removeEventListener('keydown',kd,true);snd('boot');
+    el.innerHTML=`<div class="sos-welcome">Ласкаво просимо</div>`;setTimeout(()=>{el.style.opacity='0';setTimeout(()=>{el.remove();desktopView.render();emit('ready');res()},350)},700)};
+  const kd=e=>{if(!el.isConnected)return;if(e.key==='Tab')return;if(!e.target.closest||!e.target.closest('dialog'))e.stopPropagation();else return;if(!el.classList.contains('login')){e.preventDefault();toLogin();return}if(e.key==='Enter'&&e.target.closest&&!e.target.closest('.sos-sw,.corner')){e.preventDefault();enter()}if(e.key==='Escape')el.classList.remove('login')};
+  document.addEventListener('keydown',kd,true);
+  el.addEventListener('pointerdown',e=>{if(!el.classList.contains('login')&&!e.target.closest('.corner'))toLogin()});
+  $('.sos-go',el).onclick=enter;
+  const swb=$('.sos-sw',el);if(swb)swb.onclick=()=>ITMW.open();
+  $('.lg',el).onclick=e=>{e.stopPropagation();OS.toggleLang();e.currentTarget.textContent=S.lang==='ua'?'UA':'EN'};
+  $('.pw',el).onclick=e=>{e.stopPropagation();clearInterval(ti);document.removeEventListener('keydown',kd,true);el.remove();shutdown()};
+})}
+OS.lock=lock;
 OS.reboot=reboot;OS.shutdown=shutdown;
 OS.reset=async()=>{OS.wins.slice().forEach(w=>w.close(true));localStorage.removeItem(opt.key);S=defaults();saveNow();setWall(S.wall);setLang(S.lang);drawSnd();await bootScreen('Повертаємо все як було…',1100);desktopView.render();notify('Комп\'ютер як новий','Усі файли й налаштування повернуто до початкових.','info')};
 
@@ -1109,7 +1160,9 @@ register({id:'settings',name:'Налаштування',icon:I.settings,single:t
       body.innerHTML=`<h2>Пам'ять</h2><div class="ss-row"><div>Локальний диск (C:)<div class="ss-meter"><i style="width:${Math.min(100,u/CAP*100).toFixed(1)}%"></i></div><small>Зайнято ${fmtSize(u)} з ${fmtSize(CAP)} · ${plural(files,'файл','файли','файлів')} · у кошику ${F.kids('trash').length}</small></div></div>
       <div class="ss-row"><div>Очистити кошик<small>Звільнить місце, яке займають видалені файли</small></div><button class="sos-btn" data-x="empty">Очистити</button></div>`}
     else if(cur==='reset'){body.innerHTML=`<h2>Скинути комп'ютер</h2><p style="font-weight:700;color:#6f6787;line-height:1.5">Усі твої папки, файли й малюнки буде видалено, а шпалери й налаштування повернуться до початкових. Так комп'ютер стане як новий.</p><button class="sos-btn d" data-x="reset">Скинути все</button>`}
-    else body.innerHTML=`<h2>Про систему</h2><div style="display:flex;gap:16px;align-items:center"><div style="width:70px">${I.logo}</div><div style="font-weight:700;line-height:1.5">${esc(opt.title)} ${VER}<br><span style="color:#6f6787">Безпечний комп'ютер для навчання. Тут можна все — нічого не зламається.</span></div></div>`}
+    else body.innerHTML=`<h2>Про систему</h2><div style="display:flex;gap:16px;align-items:center"><div style="width:70px;flex:none">${I.logo}</div><div style="font-weight:700;line-height:1.5">${esc(opt.title)} ${VER}<br><span style="color:#6f6787">${esc(opt.about||'Безпечний комп\'ютер для навчання. Тут можна все — нічого не зламається.')}</span></div></div>
+      <h2 style="margin-top:22px;font-size:18px">Що спробувати</h2><div style="font-weight:600;line-height:1.7;color:#3b3450">Створити папку: права кнопка на робочому столі → «Створити».<br>Перейменувати: <b>F2</b>. Видалити: <b>Delete</b>. Повернути: «Кошик» → «Відновити».<br>Копіювати й вставити: <b>Ctrl+C</b>, <b>Ctrl+V</b>. Зберегти: <b>Ctrl+S</b>.<br>Змінити мову: <b>Alt+Shift</b>. Відкрити «Пуск»: <b>Ctrl+Esc</b>.<br>На планшеті: дотик — виділити, два дотики — відкрити, довгий дотик — меню.</div>
+      <a href="https://github.com/whyuxavier/it-maysternia" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:10px 14px;border-radius:12px;background:#f6e19c;color:#3b3450;font-weight:800;text-decoration:none"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6L2.5 9.3l6.6-.8z"/></svg>Проєкт на GitHub</a>`}
   W.body.addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;
     if(b.dataset.s)draw(b.dataset.s);else if(b.dataset.w){setWall(b.dataset.w);draw()}else if(b.dataset.l){setLang(b.dataset.l);draw()}
     else if(b.dataset.x==='snd'){S.snd=!S.snd;drawSnd();save();draw()}else if(b.dataset.x==='empty'){await emptyBin();draw()}
@@ -1182,13 +1235,13 @@ register({id:'browser',name:'Браузер',icon:I.web,kw:'інтернет с�
 
 /* --- програми ІТ-Майстерні --- */
 if(opt.catalog){const B=opt.base;
- [['pctrainer','Фіфіклік','trainer','mouse','pc-trainer/','мишка тренажер'],['firstpc','ФіфіПК','trainer','firstpc','my-first-pc/','windows вправи'],['keypuzzle','Клавіатурний пазл','trainer','keys','key-puzzle/','клавіатура'],
-  ['academy','Keyboard Academy','trainer','keys','keyboard-academy/','друк клавіатура'],['sorting','Сортувальня','trainer','sort','sortuvalnia/','сортування лічба'],['robot','Робот-кур\'єр','trainer','robot','robot-courier/','алгоритми'],
-  ['phishing','Фішинг-детектор','trainer','warn','phishing-detector/','безпека'],
-  ['racer','MOUSE RACER','game','car','mouse-racer/','гонки'],['tangram','Танграм','game','tangram','tangram/'],['circle','Намалюй коло','game','circle','draw-circle/'],['blocks','Block Puzzle','game','blocks','block-puzzle/','майнкрафт'],
-  ['mines','Сапер','game','mines','minesweeper/'],['wordshaker','WordShaker','game','words','wordshaker/','слова'],['photopuzzle','Пазл з фото','game','photopz','photo-puzzle/'],
-  ['pixelka','Пікселька','tool','pixel','pixelka/','піксель малювати'],['flowchart','Блок-схеми','tool','flow','flowchart/','алгоритм']
- ].forEach(([id,name,cat,ic,path,kw])=>register({id,name,cat,icon:I[ic],url:B+path,kw:kw||''}));}
+ [['pctrainer','Фіфіклік','trainer','mouse','pc-trainer/','мишка тренажер',1],['firstpc','ФіфіПК','trainer','firstpc','my-first-pc/','windows вправи',1],['keypuzzle','Клавіатурний пазл','trainer','keys','key-puzzle/','клавіатура',1],
+  ['sorting','Сортувальня','trainer','sort','sortuvalnia/','сортування лічба',2],['academy','Keyboard Academy','trainer','keys','keyboard-academy/','друк клавіатура',5],['robot','Робот-кур\'єр','trainer','robot','robot-courier/','алгоритми',5],
+  ['phishing','Фішинг-детектор','trainer','warn','phishing-detector/','безпека',5],
+  ['racer','MOUSE RACER','game','car','mouse-racer/','гонки',1],['tangram','Танграм','game','tangram','tangram/','',1],['circle','Намалюй коло','game','circle','draw-circle/','',1],['blocks','Block Puzzle','game','blocks','block-puzzle/','майнкрафт',1],
+  ['mines','Сапер','game','mines','minesweeper/','',5],['wordshaker','WordShaker','game','words','wordshaker/','слова',5],['photopuzzle','Пазл з фото','game','photopz','photo-puzzle/','',1],
+  ['pixelka','Пікселька','tool','pixel','pixelka/','піксель малювати',1],['flowchart','Блок-схеми','tool','flow','flowchart/','алгоритм',5]
+ ].filter(a=>a[6]<=(opt.maxGrade||12)).forEach(([id,name,cat,ic,path,kw])=>register({id,name,cat,icon:I[ic],url:B+path,kw:kw||''}));}
 (opt.apps||[]).forEach(register);
 
 /* =====================================================================
@@ -1203,7 +1256,7 @@ new ResizeObserver(()=>desktopView.render()).observe(iconsEl);
 iconsEl.addEventListener('pointerdown',()=>{if(active){active=null;OS.wins.forEach(x=>x.el.classList.add('inactive'));drawTasks()}},true);
 addEventListener('beforeunload',saveNow);
 addEventListener('storage',e=>{if(e.key===opt.key&&e.newValue){const s=load();if(s){S=s;emit('fs')}}});
-if(opt.bootAnim)bootScreen('Вмикаємо комп\'ютер…',1100).then(()=>{snd('boot');emit('ready')});else setTimeout(()=>emit('ready'),0);
+if(opt.bootAnim)bootScreen('Вмикаємо комп\'ютер…',1100).then(()=>{if(opt.lock)lock();else{snd('boot');emit('ready')}});else if(opt.lock)lock();else setTimeout(()=>emit('ready'),0);
 OS.wake=()=>bootScreen('Вмикаємо комп\'ютер…',900).then(()=>{snd('boot');desktopView.render()});
 OS.state=()=>S;OS.save=save;OS.saveNow=saveNow;
 return OS;
