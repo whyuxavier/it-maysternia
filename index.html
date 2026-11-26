@@ -77,10 +77,11 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 9
 .plug .sockhole{fill:var(--frame);opacity:.85}
 .plug .cable{fill:none;stroke:var(--muted);stroke-width:4;stroke-linecap:round}
 .plug .pin{fill:var(--butter);stroke:color-mix(in srgb,var(--butter) 60%,#3a2a10);stroke-width:.6}
-.plug .plugshade{fill:color-mix(in srgb,var(--coral) 68%,#2a1a20)}
-.plug .plugring{fill:none;stroke:color-mix(in srgb,var(--coral) 75%,#2a1a20);stroke-width:1.6;opacity:.7}
+.plug .co{fill:var(--accf)}
+.plug .plugshade{fill:color-mix(in srgb,var(--accf) 68%,#1f1a33)}
+.plug .plugring{fill:none;stroke:color-mix(in srgb,var(--accf) 75%,#1f1a33);stroke-width:1.6;opacity:.7}
 .plug .plughl{fill:none;stroke:rgba(255,255,255,.6);stroke-width:2;stroke-linecap:round}
-.plug .plugcore{fill:color-mix(in srgb,var(--coral) 60%,#2a1a20)}
+.plug .plugcore{fill:color-mix(in srgb,var(--accf) 60%,#1f1a33)}
 .plug .front{transform-box:view-box;transform-origin:62px 20px;opacity:1;transform:none;transition:opacity .15s .26s,transform .35s cubic-bezier(.3,1.7,.5,1) .26s}
 .plug .pside{transform-box:view-box;transform-origin:6px 23px;opacity:0;transform:translateX(18px);transition:transform .28s ease-in,opacity .1s .2s}
 :root[data-theme="dark"] .plug .front{opacity:0;transform:scale(1.25);transition:transform .2s ease-out,opacity .12s .1s}
