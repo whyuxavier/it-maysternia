@@ -795,40 +795,40 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 const GH = 'https://whyuxavier.github.io/';
 const APPS = [
   /* — Цифрова грамотність: спершу основи, далі ігри, наприкінці творчість — */
-  {t:'first',g:[1,4],     title:'Тренажер мишки та клавіатури', desc:'Перші кроки з комп\'ютером разом з котиком Фіфі', type:'Тренажер',    art:'pctrainer', bg:'--peach',  repo:'pc-trainer', url:GH+'it-maysternia/apps/pc-trainer/'},
-  {t:'first',g:[1,4],     title:'Мій перший ПК',                 desc:'Віртуальний ПК для перших кроків: вправи з Фіфі', type:'Тренажер', art:'sandos',  bg:'--peach',  repo:'it-maysternia', url:GH+'it-maysternia/apps/sand-os/'},
-  {t:'first',g:[1,4],     title:'Клавіатурний пазл',            desc:'Збери клавіатуру з розсипаних клавіш',            type:'Гра',         art:'keys',      bg:'--sky',    repo:'key-puzzle', url:GH+'it-maysternia/apps/key-puzzle/'},
-  {t:'first',g:[2,4],     title:'Сортувальня',                  desc:'Розклади предмети по кошиках, порахуй і склади',  type:'Тренажер',    art:'sorting',   bg:'--sky',  repo:'sortuvalnia', url:GH+'it-maysternia/apps/sortuvalnia/'},
-  {t:'first',g:[1,7],     title:'MOUSE RACER',                  desc:'Аркадні перегони де мишка - це твоє кермо',      type:'Гра',         art:'racer',     bg:'--mint',  repo:'mouse-racer', url:GH+'it-maysternia/apps/mouse-racer/'},
-  {t:'first',g:[5,12],    title:'Keyboard Academy',             desc:'Вчимося друкувати наосліп',                      type:'Тренажер',    art:'academy',   bg:'--butter', repo:'keyboard-academy', url:GH+'it-maysternia/apps/keyboard-academy/'},
-  {t:'first',g:[1,4], title:'Пазл з твого фото',            desc:'Завантаж своє фото і склади його по шматочках',  type:'Гра',         art:'photopuzzle', bg:'--butter', repo:'photo-puzzle', url:GH+'it-maysternia/apps/photo-puzzle/'},
-  {t:'first',g:[1,12], title:'Пікселька',                    desc:'Малюй піксельні картинки',                        type:'Редактор',    art:'pixel',     bg:'--lilac',  repo:'pixelka', url:GH+'it-maysternia/apps/pixelka/'},
+  {t:'first',g:[1,4],      title:'Тренажер мишки та клавіатури', desc:'Перші кроки з комп\'ютером разом з котиком Фіфі', type:'Тренажер',    art:'pctrainer', bg:'--peach',  repo:'pc-trainer', url:GH+'it-maysternia/apps/pc-trainer/'},
+  {t:'first',g:[1,4],      title:'Мій перший ПК',                 desc:'Віртуальний ПК для перших кроків: вправи з Фіфі', type:'Тренажер', art:'sandos',  bg:'--peach',  repo:'it-maysternia', url:GH+'it-maysternia/apps/sand-os/'},
+  {t:'first',g:[1,4],      title:'Клавіатурний пазл',            desc:'Збери клавіатуру з розсипаних клавіш',            type:'Гра',         art:'keys',      bg:'--sky',    repo:'key-puzzle', url:GH+'it-maysternia/apps/key-puzzle/'},
+  {t:'first',g:[2,4],      title:'Сортувальня',                  desc:'Розклади предмети по кошиках, порахуй і склади',  type:'Тренажер',    art:'sorting',   bg:'--sky',  repo:'sortuvalnia', url:GH+'it-maysternia/apps/sortuvalnia/'},
+  {t:'first',g:[1,7],      title:'MOUSE RACER',                  desc:'Аркадні перегони де мишка - це твоє кермо',      type:'Гра',         art:'racer',     bg:'--mint',  repo:'mouse-racer', url:GH+'it-maysternia/apps/mouse-racer/'},
+  {t:'first',g:[5,12],     title:'Keyboard Academy',             desc:'Вчимося друкувати наосліп',                      type:'Тренажер',    art:'academy',   bg:'--butter', repo:'keyboard-academy', url:GH+'it-maysternia/apps/keyboard-academy/'},
+  {t:'first',g:[1,4],      title:'Пазл з твого фото',            desc:'Завантаж своє фото і склади його по шматочках',  type:'Гра',         art:'photopuzzle', bg:'--butter', repo:'photo-puzzle', url:GH+'it-maysternia/apps/photo-puzzle/'},
+  {t:'first',g:[1,12],     title:'Пікселька',                    desc:'Малюй піксельні картинки',                        type:'Редактор',    art:'pixel',     bg:'--lilac',  repo:'pixelka', url:GH+'it-maysternia/apps/pixelka/'},
 
   /* — Алгоритми і програмування: блок-схеми → роботи → курси Python поспіль → тести → веб, гра наприкінці — */
-  {t:'algo',g:[5,8],   title:'Блок-схеми',                   desc:'Будуй алгоритми з блоків',                       type:'Редактор',    art:'flowchart', bg:'--mint',  repo:'flowchart', url:GH+'it-maysternia/apps/flowchart/'},
-  {t:'algo',g:[5,6],   title:'Робот-кур\'єр',                desc:'Склади програму з блоків і достав посилки',     type:'Гра',         art:'robot',     bg:'--peri',   repo:'robot-courier', url:GH+'it-maysternia/apps/robot-courier/'},
-  {t:'algo',g:[7,8],   title:'Робот-кур\'єр 2.0',            desc:'Керуй роботом командами Python: цикли, умови, функції', type:'Гра',         art:'robot2',    bg:'--peri',  repo:'robot-courier-2', url:GH+'it-maysternia/apps/robot-courier-2/'},
-  {t:'algo',g:[7,7],   title:'Python з нуля · 7 клас',       desc:'Курс Python для 7 класу',                      type:'Курс',        art:'pybook',    bg:'--lilac',  repo:'learn-python-7'},
-  {t:'algo',g:[8,8],   title:'Python з нуля · 8 клас',       desc:'Курс Python для 8 класу',                      type:'Курс',        art:'pybook',    bg:'--mint',   repo:'learn-python'},
-  {t:'algo',g:[9,9],   title:'Python з нуля · 9 клас',       desc:'Курс Python для 9 класу',                      type:'Курс',        art:'pybook',    bg:'--sky',    repo:'learn-python-9'},
+  {t:'algo',g:[5,8],   title:'Блок-схеми',                         desc:'Будуй алгоритми з блоків',                       type:'Редактор',    art:'flowchart', bg:'--mint',  repo:'flowchart', url:GH+'it-maysternia/apps/flowchart/'},
+  {t:'algo',g:[5,6],   title:'Робот-кур\'єр',                      desc:'Склади програму з блоків і достав посилки',     type:'Гра',         art:'robot',     bg:'--peri',   repo:'robot-courier', url:GH+'it-maysternia/apps/robot-courier/'},
+  {t:'algo',g:[7,8],   title:'Робот-кур\'єр 2.0',                  desc:'Керуй роботом командами Python: цикли, умови, функції', type:'Гра',         art:'robot2',    bg:'--peri',  repo:'robot-courier-2', url:GH+'it-maysternia/apps/robot-courier-2/'},
+  {t:'algo',g:[7,7],   title:'Python з нуля · 7 клас',             desc:'Курс Python для 7 класу',                      type:'Курс',        art:'pybook',    bg:'--lilac',  repo:'learn-python-7'},
+  {t:'algo',g:[8,8],   title:'Python з нуля · 8 клас',             desc:'Курс Python для 8 класу',                      type:'Курс',        art:'pybook',    bg:'--mint',   repo:'learn-python'},
+  {t:'algo',g:[9,9],   title:'Python з нуля · 9 клас',             desc:'Курс Python для 9 класу',                      type:'Курс',        art:'pybook',    bg:'--sky',    repo:'learn-python-9'},
   {t:'algo',exam:1,g:[8,8],   title:'Тест: Python, 8 клас',        desc:'Перші кроки в Python',                           type:'Тест',       art:'snake',     bg:'--mint',   repo:'python-quest-8', url:GH+'it-maysternia/apps/python-quest-8/'},
   {t:'algo',exam:1,g:[9,9],   title:'Тест: Python, 9 клас',        desc:'Цикли, списки, Turtle і Tkinter',                type:'Тест',       art:'python9',   bg:'--sky',    repo:'python-quest-9', url:GH+'it-maysternia/apps/python-quest-9/'},
-  {t:'algo',g:[10,12], title:'Веб-програмування',            desc:'HTML, CSS і JavaScript за 12 уроків',            type:'Курс',        art:'web',       bg:'--mint',  repo:'learn-web'},
-  {t:'algo',g:[10,12], title:'Ghost in HTML',                desc:'Виправ код і звільни привида',                   type:'Квест',       art:'ghost',     bg:'--sky',    repo:'ghost-in-html', url:GH+'it-maysternia/apps/ghost-in-html/'},
-  {t:'algo',g:[8,12],  title:'Баг-шторм',                    desc:'Виправ помилки, поки падають вікна',             type:'Гра',         art:'bugs',      bg:'--coral',  repo:'bug-storm', url:GH+'it-maysternia/apps/bug-storm/'},
+  {t:'algo',g:[10,12], title:'Веб-програмування',                  desc:'HTML, CSS і JavaScript за 12 уроків',            type:'Курс',        art:'web',       bg:'--mint',  repo:'learn-web'},
+  {t:'algo',g:[10,12], title:'Ghost in HTML',                      desc:'Виправ код і звільни привида',                   type:'Квест',       art:'ghost',     bg:'--sky',    repo:'ghost-in-html', url:GH+'it-maysternia/apps/ghost-in-html/'},
+  {t:'algo',g:[8,12],  title:'Баг-шторм',                          desc:'Виправ помилки, поки падають вікна',             type:'Гра',         art:'bugs',      bg:'--coral',  repo:'bug-storm', url:GH+'it-maysternia/apps/bug-storm/'},
 
   /* — Дані та безпека: безпека — для всіх, далі місії за класами, турнір наприкінці — */
-  {t:'data',g:[5,12],  title:'Фішинг-детектор',              desc:'Розпізнай шахраїв в іграх, чатах і листах',      type:'Квест',       art:'phishing',  bg:'--sky',    repo:'phishing-detector', url:GH+'it-maysternia/apps/phishing-detector/'},
-  {t:'data',g:[5,12],  title:'Фактчекер',                    desc:'Розслідуй повідомлення, сайти й фото: фейк чи правда?', type:'Тренажер', art:'factcheck', bg:'--peach', repo:'fact-checker', url:GH+'it-maysternia/apps/fact-checker/'},
+  {t:'data',g:[5,12],  title:'Фішинг-детектор',                     desc:'Розпізнай шахраїв в іграх, чатах і листах',      type:'Квест',       art:'phishing',  bg:'--sky',    repo:'phishing-detector', url:GH+'it-maysternia/apps/phishing-detector/'},
+  {t:'data',g:[5,12],  title:'Фактчекер',                           desc:'Розслідуй повідомлення, сайти й фото: фейк чи правда?', type:'Тренажер', art:'factcheck', bg:'--peach', repo:'fact-checker', url:GH+'it-maysternia/apps/fact-checker/'},
   {t:'data',exam:1,g:[9,9],   title:'Місія «Документ»',             desc:'Списки, стовпці, колонтитули й зміст',           type:'Тест',       art:'textdoc',   bg:'--butter', repo:'text-document-quest', url:GH+'it-maysternia/apps/text-document-quest/'},
   {t:'data',exam:1,g:[9,9],   title:'Місія «Інтернет речей»',       desc:'Тест про розумні пристрої',                     type:'Тест',       art:'iot',       bg:'--lilac',  repo:'iot-quest', url:GH+'it-maysternia/apps/iot-quest/'},
   {t:'data',exam:1,g:[10,10], title:'Місія «Аналітик даних»',       desc:'Мода, медіана й середнє на практиці',            type:'Тест',       art:'data',      bg:'--lilac',  repo:'data-analysis-quest', url:GH+'it-maysternia/apps/data-analysis-quest/'},
-  {t:'data',g:[8,12],  title:'Excel Tournament',             desc:'Змагання з електронних таблиць',                 type:'Квест',         art:'excel',     bg:'--mint',   repo:'excel-tournament', url:GH+'it-maysternia/apps/excel-tournament/'},
+  {t:'data',g:[8,12],  title:'Excel Tournament',                    desc:'Змагання з електронних таблиць',                 type:'Квест',         art:'excel',     bg:'--mint',   repo:'excel-tournament', url:GH+'it-maysternia/apps/excel-tournament/'},
 
 
   /* — Ігри для перерви — */
   {fun:1,g:[1,12], title:'Танграм',                      desc:'Склади фігуру з семи частинок',                  type:'Гра',         art:'tangram',   bg:'--butter', repo:'tangram', url:GH+'it-maysternia/apps/tangram/'},
-  {fun:1,g:[1,12], title:'Намалюй коло',                desc:'Намалюй фігуру одним рухом',                     type:'Гра',         art:'circle',    bg:'--peach',  repo:'draw-circle', url:GH+'it-maysternia/apps/draw-circle/'},
+  {fun:1,g:[1,12], title:'Намалюй коло',                 desc:'Намалюй фігуру одним рухом',                     type:'Гра',         art:'circle',    bg:'--peach',  repo:'draw-circle', url:GH+'it-maysternia/apps/draw-circle/'},
   {fun:1,g:[1,12], title:'Block Puzzle',                 desc:'Склади блоки в ряди, як у Майнкрафті',           type:'Гра',         art:'blocks',    bg:'--sky',    repo:'block-puzzle', url:GH+'it-maysternia/apps/block-puzzle/'},
   {fun:1,g:[5,12], title:'Сапер',                        desc:'Знайди всі міни й не підірвись',                 type:'Гра',         art:'mines',     bg:'--sky',    repo:'minesweeper', url:GH+'it-maysternia/apps/minesweeper/'},
   {fun:1,g:[5,12], title:'WordShaker',                   desc:'Знайди якомога більше слів за 3 хвилини',        type:'Гра',         art:'wordshaker',bg:'--sky',    repo:'wordshaker', url:GH+'it-maysternia/apps/wordshaker/'},
@@ -836,10 +836,10 @@ const APPS = [
   {fun:1,g:[5,12], title:'SERVER ROOM',                  desc:'Полагодь серверну разом з професором',           type:'Гра',         art:'server',    bg:'--lilac',  repo:'server-room', url:GH+'it-maysternia/apps/server-room/'},
 
   /* — Для вчителя — (pin:1 — закріплена картка, завжди перша) */
-  {teacher:1, pin:1, title:'Мої матеріали на Всеосвіті', desc:'Розробки уроків, презентації й тести для вчителів', type:'Матеріали', art:'vseosvita', bg:'--peach', url:'https://vseosvita.ua/user/id2306166/library'},
-  {teacher:1, title:'Пульт уроку',               desc:'Колесо імен і завдань, команди й таймер',     type:'Інструмент',  art:'randomizer',bg:'--mint',   repo:'class-randomizer', url:GH+'it-maysternia/apps/class-randomizer/'},
-  {teacher:1, title:'Таймер для уроку',          desc:'Таймер на весь екран з темами',                  type:'Інструмент',  art:'timer',     bg:'--sky',    repo:'class-randomizer', url:GH+'it-maysternia/apps/class-randomizer/#timer'},
+  {teacher:1, pin:1, title:'Матеріали на Всеосвіті', desc:'Розробки уроків, презентації й тести для вчителів', type:'Матеріали', art:'vseosvita', bg:'--peach', url:'https://vseosvita.ua/user/id2306166/library'},
   {teacher:1, title:'Генератор QR-кодів',        desc:'QR-код для посилання на весь екран',             type:'Інструмент',  art:'qr',        bg:'--butter', repo:'qr-creator'},
+  {teacher:1, title:'Пульт уроку',               desc:'Колесо імен і завдань, команди й таймер',        type:'Інструмент',  art:'randomizer',bg:'--mint',   repo:'class-randomizer', url:GH+'it-maysternia/apps/class-randomizer/'},
+  {teacher:1, title:'Таймер для уроку',          desc:'Таймер на весь екран з темами',                  type:'Інструмент',  art:'timer',     bg:'--sky',    repo:'class-randomizer', url:GH+'it-maysternia/apps/class-randomizer/#timer'},
   {teacher:1, title:'Кібертурнір',               desc:'Турнірна сітка для шкільних змагань',            type:'Інструмент',  art:'cyber',     bg:'--lilac',  repo:'cyber-tournament', url:GH+'it-maysternia/apps/cyber-tournament/'},
 ];
 
