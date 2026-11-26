@@ -30,7 +30,7 @@
 <style>
 :root{
   --bg:#f1f0ee; --bg2:#e6e4e1; --ink:#3b3450; --muted:#6f6787; --card:#fbfbfa; --line:rgba(59,52,80,.12);
-  --peach:#f6c6a6; --mint:#bfe3cf; --lilac:#d5c7f1; --sky:#bddcf3; --butter:#f6e19c; --coral:#eba497; --acc:#6f75cc; --accf:#c9c1f3; --pink:#f5bfd3;
+  --peach:#f6c6a6; --mint:#bfe3cf; --lilac:#d5c7f1; --sky:#bddcf3; --peri:#c9cdf5; --butter:#f6e19c; --coral:#eba497; --acc:#6f75cc; --accf:#c9c1f3; --pink:#f5bfd3;
   --paper:#fbfbfa; --frame:#5b5376; --shadow:rgba(60,56,72,.18); --shadowc:#3c3848; --grain:.5;
   --ghost:#ffffff; --gridc:color-mix(in srgb,var(--mint) 70%,transparent);
   --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .3 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -38,7 +38,7 @@
 }
 :root[data-theme="dark"]{
   --bg:#24212e; --bg2:#2c2839; --ink:#e6dfef; --muted:#b4aac8; --card:#353042; --line:rgba(240,233,251,.12);
-  --peach:#b88b74; --mint:#78a691; --lilac:#9284b8; --sky:#7598b3; --butter:#c2ad6a; --coral:#cf9a8e; --acc:#b3b6f3; --accf:#8f86c4; --pink:#b07a92;
+  --peach:#b88b74; --mint:#78a691; --lilac:#9284b8; --sky:#7598b3; --peri:#8088c2; --butter:#c2ad6a; --coral:#cf9a8e; --acc:#b3b6f3; --accf:#8f86c4; --pink:#b07a92;
   --paper:#4a4359; --frame:#1b1924; --shadow:rgba(0,0,0,.45); --shadowc:#000; --grain:.15;
   --ghost:#e6def3; --gridc:color-mix(in srgb,var(--mint) 28%,transparent);
   color-scheme:dark;
@@ -77,11 +77,11 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 9
 .plug .sockhole{fill:var(--frame);opacity:.85}
 .plug .cable{fill:none;stroke:var(--muted);stroke-width:4;stroke-linecap:round}
 .plug .pin{fill:var(--butter);stroke:color-mix(in srgb,var(--butter) 60%,#3a2a10);stroke-width:.6}
-.plug .co{fill:var(--accf)}
-.plug .plugshade{fill:color-mix(in srgb,var(--accf) 68%,#1f1a33)}
-.plug .plugring{fill:none;stroke:color-mix(in srgb,var(--accf) 75%,#1f1a33);stroke-width:1.6;opacity:.7}
+.plug .co{fill:url(#plugG)}
+.plug .plugshade{fill:color-mix(in srgb,#e6c4d8 68%,#1f1a33)}
+.plug .plugring{fill:none;stroke:color-mix(in srgb,#e6c4d8 75%,#1f1a33);stroke-width:1.6;opacity:.7}
 .plug .plughl{fill:none;stroke:rgba(255,255,255,.6);stroke-width:2;stroke-linecap:round}
-.plug .plugcore{fill:color-mix(in srgb,var(--accf) 60%,#1f1a33)}
+.plug .plugcore{fill:color-mix(in srgb,#e6c4d8 60%,#1f1a33)}
 .plug .front{transform-box:view-box;transform-origin:62px 20px;opacity:1;transform:none;transition:opacity .15s .26s,transform .35s cubic-bezier(.3,1.7,.5,1) .26s}
 .plug .pside{transform-box:view-box;transform-origin:6px 23px;opacity:0;transform:translateX(18px);transition:transform .28s ease-in,opacity .1s .2s}
 :root[data-theme="dark"] .plug .front{opacity:0;transform:scale(1.25);transition:transform .2s ease-out,opacity .12s .1s}
@@ -546,7 +546,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
         <div class="tools">
       <button class="tmode" id="tExit" type="button" title="Вимкнути режим вчителя"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Режим вчителя</span></button>
       <button class="plug" id="plug" type="button" aria-label="Перемкнути тему">
-        <svg viewBox="0 0 84 44" aria-hidden="true">
+        <svg viewBox="0 0 84 44" aria-hidden="true"><defs><linearGradient id="plugG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffc9b0"/><stop offset="1" stop-color="#cdbff0"/></linearGradient></defs>
           <rect class="sockshade" x="44" y="5" width="36" height="34" rx="10"/>
           <rect class="sockplate" x="44" y="3" width="36" height="34" rx="10"/>
           <circle class="sockwell" cx="62" cy="20" r="12.5"/>
@@ -796,24 +796,24 @@ const GH = 'https://whyuxavier.github.io/';
 const APPS = [
   /* — Цифрова грамотність: спершу основи, далі ігри, наприкінці творчість — */
   {t:'first',g:[1,4],     title:'Тренажер мишки та клавіатури', desc:'Перші кроки з комп\'ютером разом з котиком Фіфі', type:'Тренажер',    art:'pctrainer', bg:'--peach',  repo:'pc-trainer', url:GH+'it-maysternia/apps/pc-trainer/'},
-  {t:'first',g:[1,4],     title:'Мій перший ПК',                 desc:'Віртуальний ПК для перших кроків: вправи з Фіфі', type:'Тренажер', art:'sandos',  bg:'--lilac',  repo:'it-maysternia', url:GH+'it-maysternia/apps/sand-os/'},
+  {t:'first',g:[1,4],     title:'Мій перший ПК',                 desc:'Віртуальний ПК для перших кроків: вправи з Фіфі', type:'Тренажер', art:'sandos',  bg:'--peach',  repo:'it-maysternia', url:GH+'it-maysternia/apps/sand-os/'},
   {t:'first',g:[1,4],     title:'Клавіатурний пазл',            desc:'Збери клавіатуру з розсипаних клавіш',            type:'Гра',         art:'keys',      bg:'--sky',    repo:'key-puzzle', url:GH+'it-maysternia/apps/key-puzzle/'},
-  {t:'first',g:[2,4],     title:'Сортувальня',                  desc:'Розклади предмети по кошиках, порахуй і склади',  type:'Тренажер',    art:'sorting',   bg:'--peach',  repo:'sortuvalnia', url:GH+'it-maysternia/apps/sortuvalnia/'},
+  {t:'first',g:[2,4],     title:'Сортувальня',                  desc:'Розклади предмети по кошиках, порахуй і склади',  type:'Тренажер',    art:'sorting',   bg:'--sky',  repo:'sortuvalnia', url:GH+'it-maysternia/apps/sortuvalnia/'},
   {t:'first',g:[1,7],     title:'MOUSE RACER',                  desc:'Аркадні перегони де мишка - це твоє кермо',      type:'Гра',         art:'racer',     bg:'--mint',  repo:'mouse-racer', url:GH+'it-maysternia/apps/mouse-racer/'},
   {t:'first',g:[5,12],    title:'Keyboard Academy',             desc:'Вчимося друкувати наосліп',                      type:'Тренажер',    art:'academy',   bg:'--butter', repo:'keyboard-academy', url:GH+'it-maysternia/apps/keyboard-academy/'},
   {t:'first',g:[1,4], title:'Пазл з твого фото',            desc:'Завантаж своє фото і склади його по шматочках',  type:'Гра',         art:'photopuzzle', bg:'--butter', repo:'photo-puzzle', url:GH+'it-maysternia/apps/photo-puzzle/'},
   {t:'first',g:[1,12], title:'Пікселька',                    desc:'Малюй піксельні картинки',                        type:'Редактор',    art:'pixel',     bg:'--lilac',  repo:'pixelka', url:GH+'it-maysternia/apps/pixelka/'},
 
   /* — Алгоритми і програмування: блок-схеми → роботи → курси Python поспіль → тести → веб, гра наприкінці — */
-  {t:'algo',g:[5,8],   title:'Блок-схеми',                   desc:'Будуй алгоритми з блоків',                       type:'Редактор',    art:'flowchart', bg:'--lilac',  repo:'flowchart', url:GH+'it-maysternia/apps/flowchart/'},
-  {t:'algo',g:[5,6],   title:'Робот-кур\'єр',                desc:'Склади програму з блоків і достав посилки',     type:'Гра',         art:'robot',     bg:'--sky',   repo:'robot-courier', url:GH+'it-maysternia/apps/robot-courier/'},
-  {t:'algo',g:[7,8],   title:'Робот-кур\'єр 2.0',            desc:'Керуй роботом командами Python: цикли, умови, функції', type:'Гра',         art:'robot2',    bg:'--sky',  repo:'robot-courier-2', url:GH+'it-maysternia/apps/robot-courier-2/'},
+  {t:'algo',g:[5,8],   title:'Блок-схеми',                   desc:'Будуй алгоритми з блоків',                       type:'Редактор',    art:'flowchart', bg:'--mint',  repo:'flowchart', url:GH+'it-maysternia/apps/flowchart/'},
+  {t:'algo',g:[5,6],   title:'Робот-кур\'єр',                desc:'Склади програму з блоків і достав посилки',     type:'Гра',         art:'robot',     bg:'--peri',   repo:'robot-courier', url:GH+'it-maysternia/apps/robot-courier/'},
+  {t:'algo',g:[7,8],   title:'Робот-кур\'єр 2.0',            desc:'Керуй роботом командами Python: цикли, умови, функції', type:'Гра',         art:'robot2',    bg:'--peri',  repo:'robot-courier-2', url:GH+'it-maysternia/apps/robot-courier-2/'},
   {t:'algo',g:[7,7],   title:'Python з нуля · 7 клас',       desc:'Курс Python для 7 класу',                      type:'Курс',        art:'pybook',    bg:'--lilac',  repo:'learn-python-7'},
   {t:'algo',g:[8,8],   title:'Python з нуля · 8 клас',       desc:'Курс Python для 8 класу',                      type:'Курс',        art:'pybook',    bg:'--mint',   repo:'learn-python'},
   {t:'algo',g:[9,9],   title:'Python з нуля · 9 клас',       desc:'Курс Python для 9 класу',                      type:'Курс',        art:'pybook',    bg:'--sky',    repo:'learn-python-9'},
   {t:'algo',exam:1,g:[8,8],   title:'Тест: Python, 8 клас',        desc:'Перші кроки в Python',                           type:'Тест',       art:'snake',     bg:'--mint',   repo:'python-quest-8', url:GH+'it-maysternia/apps/python-quest-8/'},
   {t:'algo',exam:1,g:[9,9],   title:'Тест: Python, 9 клас',        desc:'Цикли, списки, Turtle і Tkinter',                type:'Тест',       art:'python9',   bg:'--sky',    repo:'python-quest-9', url:GH+'it-maysternia/apps/python-quest-9/'},
-  {t:'algo',g:[10,12], title:'Веб-програмування',            desc:'HTML, CSS і JavaScript за 12 уроків',            type:'Курс',        art:'web',       bg:'--peach',  repo:'learn-web'},
+  {t:'algo',g:[10,12], title:'Веб-програмування',            desc:'HTML, CSS і JavaScript за 12 уроків',            type:'Курс',        art:'web',       bg:'--mint',  repo:'learn-web'},
   {t:'algo',g:[10,12], title:'Ghost in HTML',                desc:'Виправ код і звільни привида',                   type:'Квест',       art:'ghost',     bg:'--sky',    repo:'ghost-in-html', url:GH+'it-maysternia/apps/ghost-in-html/'},
   {t:'algo',g:[8,12],  title:'Баг-шторм',                    desc:'Виправ помилки, поки падають вікна',             type:'Гра',         art:'bugs',      bg:'--coral',  repo:'bug-storm', url:GH+'it-maysternia/apps/bug-storm/'},
 
@@ -846,7 +846,7 @@ const APPS = [
 /* ===== Обкладинки карток: м'яке 3D (полотно 320×200) ===== */
 let UID=0;
 const lg=(id,a,b)=>`<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
-const BGC={sky:['#e8f3ff','#cfe3fb'],peach:['#fff1e8','#ffdcc8'],lilac:['#f1ecff','#ddd3fb'],mint:['#e4f8ee','#c6ecd8'],butter:['#fff6dc','#ffe6a8'],coral:['#ffece8','#ffd2c8']};
+const BGC={peri:['#eceeff','#d2d6fa'],sky:['#e8f3ff','#cfe3fb'],peach:['#fff1e8','#ffdcc8'],lilac:['#f1ecff','#ddd3fb'],mint:['#e4f8ee','#c6ecd8'],butter:['#fff6dc','#ffe6a8'],coral:['#ffece8','#ffd2c8']};
 const GR={w:['#ffffff','#e9e6f6'],v:['#b3a6ff','#6a57e8'],o:['#ffc0a0','#f48a6c'],y:['#ffe9a6','#f2c75a'],m:['#b9f0d4','#5fc796'],s:['#cfe6ff','#86b9ef'],k:['#655d93','#352f58'],p:['#ffd0e0','#f28fb3'],r:['#ffb3ad','#ec6a64'],n:['#e2b08a','#b0724a']};
 const spark=(x,y,r,f)=>`<path d="M${x} ${y-r}Q${x+r*.18} ${y-r*.18} ${x+r} ${y}Q${x+r*.18} ${y+r*.18} ${x} ${y+r}Q${x-r*.18} ${y+r*.18} ${x-r} ${y}Q${x-r*.18} ${y-r*.18} ${x} ${y-r}z" fill="${f}"/>`;
 /* sc: фон, світла пляма, тінь-«підлога», головні предмети з тінню, деталі зверху */
@@ -897,7 +897,7 @@ const ART={
     `<rect x="86" y="72" width="70" height="9" rx="4.5" fill="${u('o')}"/><rect x="86" y="88" width="104" height="8" rx="4" fill="#e3dff5"/><rect x="86" y="102" width="84" height="8" rx="4" fill="#e3dff5"/><rect x="86" y="120" width="48" height="26" rx="8" fill="${u('y')}"/><rect x="140" y="120" width="56" height="26" rx="8" fill="${u('s')}"/>`+
     `<g transform="translate(250 70)">${[0,45,90,135].map(a=>`<rect x="-6" y="-30" width="12" height="60" rx="4" fill="${u('m')}" transform="rotate(${a})"/>`).join('')}<circle r="22" fill="${u('m')}"/><circle r="9" fill="#fff"/></g>`+PCUR(196,120,1.6,u('k')),
     u=>spark(40,60,9,u('y'))+`<circle cx="276" cy="150" r="6" fill="${u('o')}"/>`)},
-  sandos(){return sc('lilac',[268,44,48],u=>
+  sandos(){return sc('peach',[268,44,48],u=>
     `<rect x="148" y="118" width="24" height="24" rx="4" fill="${u('k')}"/><rect x="124" y="138" width="72" height="9" rx="4.5" fill="${u('k')}"/>
      <rect x="70" y="22" width="180" height="104" rx="16" fill="${u('k')}"/><rect x="80" y="32" width="160" height="82" rx="9" fill="${u('s')}"/>
      <rect x="80" y="104" width="160" height="10" fill="#2f2a4a" opacity=".55"/><rect x="86" y="106" width="6" height="6" rx="1.5" fill="#fff"/>
@@ -925,7 +925,7 @@ const ART={
      <path d="M196 108h-20M197 115l-18 5M256 108h20M255 115l18 5" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".85"/>
      <rect x="78" y="72" width="68" height="100" rx="34" fill="${u('w')}"/><path d="M112 72v38" stroke="#d8d3f0" stroke-width="3"/><path d="M80 110h64" stroke="#d8d3f0" stroke-width="3"/><rect x="107" y="84" width="10" height="18" rx="5" fill="${u('v')}"/>`,
     u=>`<ellipse cx="98" cy="84" rx="10" ry="16" fill="url(#gl${UID})"/><ellipse cx="210" cy="72" rx="16" ry="6" fill="url(#gl${UID})"/>`+spark(286,156,9,u('y'))+`<circle cx="40" cy="132" r="6" fill="${u('v')}"/>`)},
-  keys(){return sc('lilac',[274,150,54],u=>
+  keys(){return sc('sky',[274,150,54],u=>
     `<rect x="40" y="96" width="240" height="78" rx="18" fill="${u('k')}"/>`+
     [0,1,2].map(r=>[0,1,2,3,4,5,6].filter(c=>!(r===0&&c===3)).map(c=>`<rect x="${52+c*30+r*7}" y="${106+r*21}" width="24" height="16" rx="5" fill="${u(['w','s','y'][r])}"/>`).join('')).join(''),
     u=>`<rect x="139" y="104" width="28" height="20" rx="6" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="4 4" opacity=".7"/>
@@ -944,7 +944,7 @@ const ART={
       `<circle cx="50" cy="60" r="24" fill="${u('m')}"/><circle cx="62" cy="150" r="28" fill="${u('m')}"/><circle cx="272" cy="112" r="26" fill="${u('m')}"/>
        <rect x="252" y="16" width="44" height="58" rx="22" fill="${u('w')}"/><path d="M274 17v20" stroke="#d8d3f0" stroke-width="2.5"/><rect x="270" y="24" width="8" height="12" rx="4" fill="${u('v')}"/>`},
     u=>`<ellipse cx="42" cy="50" rx="10" ry="6" fill="url(#gl${UID})"/><ellipse cx="262" cy="102" rx="10" ry="6" fill="url(#gl${UID})"/>`+spark(30,110,8,u('y')),false)},
-  sorting(){const bk=(x,u)=>`<path d="M${x} 108h110l-10 58a10 10 0 0 1-10 8H${x+20}a10 10 0 0 1-10-8z" fill="${u('n')}"/><rect x="${x-6}" y="100" width="122" height="14" rx="7" fill="#b0724a"/><path d="M${x+28} 120v46M${x+55} 120v48M${x+82} 120v46" stroke="#b0724a" stroke-width="3" stroke-linecap="round" opacity=".55"/>`;return sc('peach',[272,42,44],u=>
+  sorting(){const bk=(x,u)=>`<path d="M${x} 108h110l-10 58a10 10 0 0 1-10 8H${x+20}a10 10 0 0 1-10-8z" fill="${u('n')}"/><rect x="${x-6}" y="100" width="122" height="14" rx="7" fill="#b0724a"/><path d="M${x+28} 120v46M${x+55} 120v48M${x+82} 120v46" stroke="#b0724a" stroke-width="3" stroke-linecap="round" opacity=".55"/>`;return sc('sky',[272,42,44],u=>
     `<circle cx="84" cy="84" r="22" fill="${u('s')}"/><circle cx="126" cy="88" r="18" fill="${u('o')}"/><rect x="186" y="62" width="38" height="38" rx="8" fill="${u('r')}"/><rect x="230" y="72" width="30" height="30" rx="6" fill="${u('y')}"/>`+bk(50,u)+bk(176,u)+
     `<rect x="85" y="128" width="40" height="30" rx="8" fill="#fff"/><circle cx="105" cy="143" r="8" fill="none" stroke="#352f58" stroke-width="3.5"/><rect x="211" y="128" width="40" height="30" rx="8" fill="#fff"/><rect x="223" y="135" width="16" height="16" rx="2" fill="none" stroke="#352f58" stroke-width="3.5"/>`,
     u=>`<ellipse cx="78" cy="74" rx="8" ry="4" fill="url(#gl${UID})"/>`+spark(36,52,9,u('y'))+`<circle cx="160" cy="40" r="7" fill="${u('m')}"/>`)},
@@ -964,7 +964,7 @@ const ART={
     `<path d="M248 58l38 19-38 19-38-19z" fill="${u('m')}"/><path d="M210 77l38 19v46l-38-19z" fill="${u('n')}"/><path d="M286 77l-38 19v46l38-19z" fill="${u('n')}"/><path d="M286 77l-38 19v46l38-19z" fill="#000" opacity=".14"/>
      <path d="M210 77l38 19v10l-6-2v6l-8-5v-5l-10-4v6l-6-3v-7l-8-4z" fill="${u('m')}"/><path d="M286 77l-38 19v10l7-3v7l9-6v-5l9-4v6l7-4v-6l6-3z" fill="${u('m')}"/><rect x="226" y="112" width="6" height="6" fill="#8b5536" opacity=".5"/><rect x="262" y="118" width="6" height="6" fill="#8b5536" opacity=".5"/>`,
     u=>`<path d="M232 70l16-8 10 5-16 8z" fill="#fff" opacity=".35"/>`+spark(290,40,9,u('y')))},
-  flowchart(){const A=(d)=>`<path d="${d}" stroke="#7a72ad" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;return sc('lilac',[276,40,44],u=>
+  flowchart(){const A=(d)=>`<path d="${d}" stroke="#7a72ad" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;return sc('mint',[276,40,44],u=>
     A('M160 46v14')+A('M120 86H80v30')+A('M200 86h40v30')+A('M74 110l6 7 6-7M234 110l6 7 6-7M154 56l6 7 6-7')+
     `<rect x="118" y="18" width="84" height="28" rx="14" fill="${u('m')}"/><rect x="138" y="29" width="44" height="6" rx="3" fill="#fff"/>
      <path d="M160 62l42 24-42 24-42-24z" fill="${u('y')}"/><rect x="148" y="83" width="24" height="6" rx="3" fill="#fff"/>
@@ -1008,7 +1008,7 @@ const ART={
      <rect x="198" y="140" width="26" height="22" rx="5" fill="${u('s')}"/><path d="M204 151h14" stroke="#fff" stroke-width="3" stroke-linecap="round"/><rect x="98" y="150" width="58" height="8" rx="4" fill="#e3dff5"/>
      <circle cx="238" cy="74" r="24" fill="${u('o')}"/><rect x="235" y="60" width="6" height="18" rx="3" fill="#fff"/><circle cx="238" cy="86" r="3.5" fill="#fff"/>`,
     u=>`<path d="M124 0v50" stroke="#8e88b8" stroke-width="3"/><ellipse cx="112" cy="96" rx="22" ry="7" fill="url(#gl${UID})"/>`+spark(54,62,9,u('y'))+`<circle cx="282" cy="40" r="6" fill="${u('v')}"/>`)},
-  robot2(){return sc('lilac',[276,40,44],u=>
+  robot2(){return sc('peri',[276,40,44],u=>
     `<rect x="28" y="30" width="158" height="128" rx="16" fill="${u('k')}"/><circle cx="44" cy="44" r="4" fill="#ec6a64"/><circle cx="56" cy="44" r="4" fill="#f2c75a"/><circle cx="68" cy="44" r="4" fill="#5fc796"/>`+
     [[44,64,26,'#b3a6ff'],[76,64,58,'#86b9ef'],[60,84,82,'#cfe6ff'],[60,104,60,'#ffc0a0'],[44,124,54,'#b9f0d4']].map(([x,y,w,c])=>`<rect x="${x}" y="${y}" width="${w}" height="9" rx="4.5" fill="${c}"/>`).join('')+
     `<rect x="40" y="62" width="3" height="13" rx="1.5" fill="#86b9ef"/>
@@ -1017,7 +1017,7 @@ const ART={
      <circle cx="246" cy="82" r="32" fill="${u('w')}"/><rect x="224" y="68" width="44" height="28" rx="12" fill="${u('k')}"/><rect x="230" y="78" width="32" height="9" rx="4.5" fill="${u('s')}"/>
      <path d="M246 50v-14" stroke="#7a72ad" stroke-width="4" stroke-linecap="round"/><circle cx="246" cy="32" r="7" fill="${u('o')}"/>`,
     u=>`<path d="M186 120c10 0 12 14 18 16" stroke="#8f86c9" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round" fill="none"/><ellipse cx="236" cy="66" rx="12" ry="5" fill="url(#gl${UID})"/>`+spark(300,150,9,u('y'))+`<circle cx="20" cy="172" r="6" fill="${u('m')}"/>`)},
-  robot(){return sc('mint',[60,40,42],u=>
+  robot(){return sc('peri',[60,40,42],u=>
     `<path d="M232 96l30-26 30 26v60h-60z" fill="${u('o')}"/><path d="M226 100l36-32 36 32" stroke="#e36f53" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
      <rect x="252" y="124" width="20" height="32" rx="5" fill="#fff" opacity=".9"/><rect x="242" y="104" width="14" height="12" rx="3" fill="#fff" opacity=".75"/>
      <g transform="translate(124 104) scale(1.05)"><circle cx="-16" cy="45" r="9" fill="#3a3550"/><circle cx="-16" cy="45" r="3.5" fill="#bfbdcc"/><circle cx="16" cy="45" r="9" fill="#3a3550"/><circle cx="16" cy="45" r="3.5" fill="#bfbdcc"/><rect x="-36" y="6" width="12" height="22" rx="6" fill="#68657a"/><rect x="24" y="6" width="12" height="22" rx="6" fill="#68657a"/><rect x="-26" y="-2" width="52" height="42" rx="12" fill="#8a87a3"/><rect x="-22" y="30" width="44" height="7" rx="3.5" fill="#68657a" opacity=".35"/><rect x="-20" y="9" width="40" height="27" rx="3" fill="#e9c27a"/><rect x="-3" y="9" width="6" height="27" fill="#c99b4f"/><rect x="-20" y="9" width="40" height="5" rx="2" fill="#d9ae62"/><circle cx="-24" cy="27" r="5.5" fill="#68657a"/><circle cx="24" cy="27" r="5.5" fill="#68657a"/><rect x="-7" y="-9" width="14" height="9" fill="#68657a"/><path d="M0 -48v-14" stroke="#3a3550" stroke-width="3"/><circle cx="0" cy="-64" r="5.5" fill="#ee8f80"/><circle cx="0" cy="-28" r="24" fill="#8a87a3"/><path d="M-15 -44a20 20 0 0 1 14 -6" stroke="#bfbdcc" stroke-width="4" fill="none" stroke-linecap="round"/><rect x="-30" y="-35" width="7" height="15" rx="3.5" fill="#68657a"/><rect x="23" y="-35" width="7" height="15" rx="3.5" fill="#68657a"/><rect x="-17" y="-40" width="34" height="23" rx="10" fill="#2f2a40"/><circle cx="-7" cy="-29" r="4.5" fill="#fff"/><circle cx="7" cy="-29" r="4.5" fill="#fff"/><circle cx="-7" cy="-29" r="2" fill="#2f2a40"/><circle cx="7" cy="-29" r="2" fill="#2f2a40"/></g>`,
@@ -1111,12 +1111,13 @@ const ART={
       `<g transform="rotate(8 236 100)"><rect x="202" y="40" width="70" height="122" rx="16" fill="${u('k')}"/><rect x="209" y="52" width="56" height="98" rx="9" fill="${u('s')}"/>
        <path d="M218 72v-8h8M256 64h8v8M264 122v8h-8M226 130h-8v-8" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="216" y="94" width="42" height="4" rx="2" fill="${u('m')}"/></g>`,
       u=>spark(290,36,9,u('o'))+`<circle cx="190" cy="172" r="6" fill="${u('v')}"/>`)},
-  web(){return sc('peach',[56,150,44],u=>
-    `<rect x="46" y="28" width="196" height="136" rx="18" fill="${u('w')}"/><rect x="46" y="28" width="196" height="28" rx="14" fill="${u('v')}"/><rect x="46" y="42" width="196" height="14" fill="${u('v')}"/>
-     <circle cx="62" cy="42" r="4" fill="#fff"/><circle cx="74" cy="42" r="4" fill="#fff" opacity=".7"/><rect x="92" y="36" width="120" height="12" rx="6" fill="#fff" opacity=".35"/>
-     <rect x="60" y="68" width="168" height="40" rx="10" fill="${u('o')}"/>${TX(144,88,22,'&lt;/&gt;','#fff')}
-     <rect x="60" y="118" width="52" height="34" rx="9" fill="${u('s')}"/><rect x="118" y="118" width="52" height="34" rx="9" fill="${u('y')}"/><rect x="176" y="118" width="52" height="34" rx="9" fill="${u('m')}"/>`,
-    u=>`<g filter="url(#sh${UID})"><rect x="232" y="64" width="68" height="26" rx="13" fill="${u('o')}"/>${TX(266,77.5,13,'HTML','#fff')}<rect x="244" y="104" width="56" height="26" rx="13" fill="${u('s')}"/>${TX(272,117.5,13,'CSS','#fff')}<rect x="236" y="144" width="52" height="26" rx="13" fill="${u('y')}"/>${TX(262,157.5,13,'JS','#8a6416')}</g>`+spark(30,40,9,u('y')))},
+  web(){return sc('mint',[276,40,44],u=>
+    `<path d="M50 50q50-14 106 4v122q-56-16-106-4z" fill="${u('k')}"/><path d="M270 50q-50-14-106 4v122q56-16 106-4z" fill="${u('k')}"/>
+     <path d="M58 44q46-12 98 6v118q-52-16-98-6z" fill="${u('w')}"/><path d="M262 44q-46-12-98 6v118q52-16 98-6z" fill="${u('w')}"/><path d="M160 50v120" stroke="#d9d3f1" stroke-width="3"/>`+
+    [[72,70,56,'#ffc0a0'],[84,86,46,'#cfe6ff'],[84,102,52,'#ffe39a'],[72,118,40,'#ffc0a0'],[84,134,56,'#b9f0d4']].map(([x,y,w,c])=>`<rect x="${x}" y="${y}" width="${w}" height="7" rx="3.5" fill="${c}"/>`).join('')+
+    TX(212,94,30,'HTML','url(#o'+UID+')')+`<rect x="186" y="122" width="54" height="7" rx="3.5" fill="#e3dff5"/><rect x="192" y="136" width="42" height="7" rx="3.5" fill="#e3dff5"/>
+     <path d="M232 38h14v34l-7-6-7 6z" fill="${u('r')}"/>`,
+    u=>spark(36,150,9,u('y'))+`<circle cx="290" cy="156" r="6" fill="${u('s')}"/>`)},
   pybook(){return sc('mint',[276,40,44],u=>
     `<path d="M50 50q50-14 106 4v122q-56-16-106-4z" fill="${u('k')}"/><path d="M270 50q-50-14-106 4v122q56-16 106-4z" fill="${u('k')}"/>
      <path d="M58 44q46-12 98 6v118q-52-16-98-6z" fill="${u('w')}"/><path d="M262 44q-46-12-98 6v118q52-16 98-6z" fill="${u('w')}"/><path d="M160 50v120" stroke="#d9d3f1" stroke-width="3"/>`+
