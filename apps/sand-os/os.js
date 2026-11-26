@@ -406,8 +406,8 @@ function defaults(){
   };
   let k=0;const add=(parent,name,type,ext,data,extra)=>{const id='n'+(++k);n[id]=Object.assign({id,name,type,ext:ext||'',data:data||'',parent,ct:now,mt:now},extra||{});return id};
   const lnk=(parent,app,name)=>add(parent,name||OS.apps[app]&&OS.apps[app].name||app,'file','lnk',app);
-  const deskL=opt.desktop||['pc','browser','notepad','paint','calc'];
-  const pos={};deskL.forEach((a,i)=>{const id=lnk('desk',a);if(a==='pc')pos[id]=[0,0]});pos['@bin']=[0,1];
+  const deskL=(opt.desktop||['pc','browser','notepad','paint','calc']).concat((opt.deskAdd||[]).filter(a=>OS.apps[a]));
+  const pos={};deskL.forEach((a,i)=>{const id=lnk('desk',a);if(a==='pc')pos[id]=[0,0];if(a===(opt.deskAdd||[])[0])pos[id]=[0,2]});pos['@bin']=[0,1];
   if(opt.catalog){
     const FD={game:['Ігри','games'],trainer:['Тренажери','trainers'],tool:['Інструменти','tools']};
     (opt.deskFolders||['game','trainer','tool']).forEach(c=>{const l=Object.values(OS.apps).filter(a=>a.cat===c);if(!l.length)return;const f=add('desk',FD[c][0],'dir');n[f].icon=FD[c][1];l.forEach(a=>lnk(f,a.id))});
@@ -416,7 +416,7 @@ function defaults(){
   add('desk','Привіт','file','txt','Привіт! Це твій власний комп\'ютер-пісочниця.\n\nТут можна все: створювати папки й файли, перейменовувати, видаляти й повертати їх із кошика.\n\nСпробуй:\n1. Натисни правою кнопкою на робочому столі → «Створити» → «Папку».\n2. Перетягни цей файл у нову папку.\n3. Видали папку, а потім відкрий «Кошик» і поверни її.\n\nНічого не зламається — сміливо пробуй!');
   add('docs','Мій розклад','file','txt','Понеділок: математика, читання, інформатика\nВівторок: українська мова, малювання\nСереда: природознавство, фізкультура\n');
   add('docs','Список покупок','file','txt','- молоко\n- хліб\n- яблука\n- олівці');}
-  return {v:1,nodes:n,seq:k+1,pos,wall:'sky',lang:'ua',snd:localStorage.getItem(opt.key+'-snd')!=='0',mt:now};
+  return {v:1,nodes:n,seq:k+1,pos,ens:Object.fromEntries((opt.deskAdd||[]).map(a=>[a,1])),wall:'sky',lang:'ua',snd:localStorage.getItem(opt.key+'-snd')!=='0',mt:now};
 }
 function load(){try{const s=JSON.parse(localStorage.getItem(opt.key)||'null');if(s&&s.v===1&&s.nodes&&s.nodes.c)return s}catch(e){}return null}
 let saveT=0,quotaWarned=false;
@@ -1255,6 +1255,11 @@ if(opt.catalog){const B=opt.base;
    СТАРТ
    ===================================================================== */
 S=load()||defaults();
+/* ярлики, що з'явилися в новій версії: додаємо один раз (якщо учень видалить — не повертаємо) */
+(opt.deskAdd||[]).forEach(a=>{S.ens=S.ens||{};if(S.ens[a]||!OS.apps[a])return;S.ens[a]=1;
+  if(Object.values(S.nodes).some(n=>n.parent==='desk'&&n.ext==='lnk'&&n.data===a))return;
+  const id='n'+(S.seq++),now=Date.now();S.nodes[id]={id,name:OS.apps[a].name,type:'file',ext:'lnk',data:a,parent:'desk',ct:now,mt:now};
+  if(!Object.values(S.pos||{}).some(p=>p[0]===0&&p[1]===2))(S.pos=S.pos||{})[id]=[0,2];save()});
 const desktopView=View(iconsEl,'desk','desk',null);iconsEl.dataset.drop='desk';
 OS.desktop=desktopView;
 setWall(S.wall);setLang(S.lang);drawSnd();
@@ -1287,13 +1292,26 @@ if(opt.fifi){
 .ff-row{display:flex!important;align-items:center;gap:10px;width:100%;padding:8px 10px!important;border-radius:10px;text-align:left;font-weight:700!important;font-size:14.5px!important}
 .ff-row:hover{background:#eef3fb}.ff-row svg{width:22px;height:22px;flex:none}.ff-row.done{color:#6f6787}
 .ff-foot{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.sos-ff.tour{z-index:99995}
+.ff-spot{position:fixed;z-index:99980;pointer-events:none;border-radius:12px;box-shadow:0 0 0 4px #f2c55a,0 0 0 9999px rgba(20,25,60,.42)}
+.ff-spot b{position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;background:#f2c55a;color:#3b3450;font:800 15px Rubik,Nunito,sans-serif;padding:5px 12px;border-radius:10px;box-shadow:0 4px 12px rgba(20,25,60,.3)}
+.ff-spot.up b{bottom:calc(100% + 10px)}.ff-spot.dn b{top:calc(100% + 10px)}
+.ff-spot.ok{box-shadow:0 0 0 4px #7ccf9b,0 0 0 9999px rgba(20,25,60,.42)}.ff-spot.ok b{background:#7ccf9b}
+.ff-spot.lite{box-shadow:0 0 0 4px #f2c55a;animation:ffPulse .9s ease 2}
+@keyframes ffPulse{50%{box-shadow:0 0 0 10px rgba(242,197,90,.5)}}
+.ff-hit{position:fixed;z-index:99990;pointer-events:none;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:4px solid #e0574a;animation:ffHit .5s ease forwards}
+.ff-hit.ok{border-color:#4fb57a}
+@keyframes ffHit{from{transform:scale(.4);opacity:1}to{transform:scale(1.5);opacity:0}}
+.ff-dots{display:flex;gap:5px;margin-top:10px}.ff-dots i{width:9px;height:9px;border-radius:50%;background:#e4def0}.ff-dots i.on{background:#e8b04a}
 @media (max-width:700px){.sos-ff .cat{width:64px}.sos-ff .bub{width:auto}}
 `;
   const st=document.createElement('style');st.textContent=FCSS;document.head.appendChild(st);
   if(!S.fifi)S.fifi={done:{},offered:0,off:{}};
   const FS=()=>S.fifi||(S.fifi={done:{},offered:1,off:{}});
-  const SECS=[['mouse','Мишка й вікна'],['files','Файли й папки'],['apps','Програми'],['keys','Клавіатура']];
+  const SECS=[['parts','Частини системи'],['mouse','Мишка й вікна'],['files','Файли й папки'],['apps','Програми'],['keys','Клавіатура']];
   const T=[
+   ['tour','parts','Екскурсія комп\'ютером','Я покажу й назву всі головні частини системи: панель задач, «Пуск», вікно, кнопки й меню.','Читай підказки й натискай «Далі».',e=>e.t==='tour',()=>tour()],
+   ['find','parts','Знайди частини системи','Я називаю частину — ти знаходиш її на екрані й натискаєш.','Помилишся — я скажу, що це було, і покажу правильне місце.',e=>e.t==='partsquiz',()=>quiz()],
    ['pc','mouse','Відкрий «Мій комп\'ютер»','Двічі швидко натисни на значок «Мій комп\'ютер» на робочому столі.','Подвійний клік — це два швидкі натискання лівою кнопкою мишки, не рухаючи її.',e=>e.t==='open'&&(e.app==='explorer'||e.app==='pc')],
    ['sel','mouse','Виділи значок','Натисни один раз на будь-який значок на робочому столі — він підсвітиться.','Один клік лівою кнопкою виділяє. Відкриває — подвійний.',e=>e.t==='select'&&e.desk],
    ['ctx','mouse','Відкрий меню правою кнопкою','Натисни правою кнопкою мишки на порожньому місці робочого столу.','Права кнопка показує меню з діями. Щоб закрити меню, натисни будь-де.',e=>e.t==='ctx'],
@@ -1336,6 +1354,7 @@ if(opt.fifi){
   }
   OS.fifiSay=say;
   function task(id){const t=T.find(x=>x[0]===id);if(!t)return;cur=t;
+    if(t[6]){say('Завдання',esc(t[3]),[{t:'Почати',p:1,f:()=>t[6]()},{t:'Пізніше',f:()=>{cur=null;hide()}}]);return}
     say('Завдання',esc(t[3]),[{t:'Як це зробити?',f:el=>{const hw=$('.how',bub);hw.hidden=!hw.hidden;el.remove()}},{t:'Пізніше',f:()=>{cur=null;hide()}}],t[4])}
   function next(after){const l=list(),i=l.findIndex(t=>t[0]===after);return l.slice(i+1).concat(l.slice(0,i)).find(t=>!FS().done[t[0]])}
   function record(){try{const me=window.ITMW&&ITMW.me&&ITMW.me();if(!me)return;const c=JSON.parse(localStorage.getItem('itm-me')||'null');const R=JSON.parse(localStorage.getItem('itm-results')||'{}');const row=R[c.id]=R[c.id]||{};row._name=me.name;row._cls=me.cls;row['Мій перший ПК']={g:null,t:doneN()+' з '+list().length+' завдань Фіфі',d:Date.now()};localStorage.setItem('itm-results',JSON.stringify(R))}catch(e){}}
@@ -1362,6 +1381,79 @@ if(opt.fifi){
     im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(I.fifi(true).replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" '));
     function fin(){const data=c.toDataURL('image/png');const ex=F.kids('docs').find(n=>n.ext==='png'&&n.name==='Сертифікат від Фіфі');if(ex)F.write(ex.id,data);else F.mk('docs','Сертифікат від Фіфі','file','png',data)}
   }
+
+  /* ---------- екскурсія «Частини системи» ---------- */
+  const firstIcon=()=>$('.sos-icons .sos-it',root);
+  const tw=()=>[...OS.wins].reverse().find(w=>!w.el.classList.contains('min'));
+  const P={
+   desk:{n:'Робочий стіл',d:'Головний екран комп\'ютера. На ньому лежать значки, а позаду — картинка-шпалери.',el:()=>desk,deep:t=>t.closest('.sos-desk')&&!t.closest('.sw')},
+   icon:{n:'Значок',d:'Маленька картинка з підписом. Двічі натисни на значок — і відкриється програма, папка чи файл.',el:firstIcon,deep:t=>t.closest('.sos-icons .sos-it')},
+   bar:{n:'Панель задач',d:'Смуга внизу екрана. На ній — кнопка «Пуск», відкриті програми й годинник.',el:()=>$('.sos-bar',root),deep:t=>t.closest('.sos-bar')},
+   start:{n:'Кнопка «Пуск»',d:'Кнопка ліворуч унизу. Вона відкриває меню з усіма програмами.',el:()=>$('.sos-startb',root),deep:t=>t.closest('.sos-startb')},
+   smenu:{n:'Меню «Пуск»',d:'Тут усі програми й пошук. Почни писати назву — і програма знайдеться.',el:()=>$('.sos-start',root),prep:()=>{if(!$('.sos-start',root))openStart()}},
+   clock:{n:'Годинник',d:'Праворуч унизу — час і дата. Поруч: мова (UA/EN), звук і я, Фіфі.',el:()=>clockB,deep:t=>t.closest('.sos-clock')},
+   win:{n:'Вікно',d:'Кожна програма відкривається у своєму вікні. Вікно можна рухати, згортати й закривати.',el:()=>tw()&&tw().el,deep:t=>t.closest('.sw')},
+   title:{n:'Рядок заголовка',d:'Верхня смужка вікна з назвою програми. Потягни за неї — і вікно переїде.',el:()=>tw()&&$('.swt b',tw().el),deep:t=>t.closest('.swt')},
+   mbar:{n:'Рядок меню',d:'Слова «Файл», «Правка»… Натисни на слово — відкриється список команд.',el:()=>tw()&&$('.sm-bar',tw().el),deep:t=>t.closest('.sm-bar')},
+   min:{n:'Кнопка «Згорнути»',d:'Риска «—» ховає вікно вниз, на панель задач. Програма не закривається.',el:()=>tw()&&$('.mn',tw().el),deep:t=>t.closest('.swt .mn')},
+   max:{n:'Кнопка «Розгорнути»',d:'Квадратик робить вікно на весь екран. Натисни ще раз — і воно стане меншим.',el:()=>tw()&&$('.mx',tw().el),deep:t=>t.closest('.swt .mx')},
+   close:{n:'Кнопка «Закрити»',d:'Хрестик закриває програму.',el:()=>tw()&&$('.swt .x',tw().el),deep:t=>t.closest('.swt .x')},
+   task:{n:'Кнопка програми',d:'Кожна відкрита програма має свою кнопку на панелі задач. Так згорнуте вікно легко повернути.',el:()=>tw()&&tw().task,deep:t=>t.closest('.sos-task')},
+   ctx:{n:'Контекстне меню',d:'Меню від правої кнопки мишки. У ньому дії саме для того місця, де ти натиснув.',el:()=>$('.sos-menu',root)||document.querySelector('.sos-menu'),
+     prep:()=>{const r=iconsEl.getBoundingClientRect();iconsEl.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true,clientX:r.left+r.width*.55,clientY:r.top+r.height*.35,button:2}))}},
+  };
+  const DEEP=['close','max','min','title','mbar','win','start','task','clock','bar','icon','desk'];
+  const whatIs=t=>DEEP.find(k=>P[k].deep(t));
+  let spot=null,mode=null;
+  function spotOn(el,label,cls){if(!el){spotOff();return}const r=el.getBoundingClientRect(),pd=5;
+    if(!spot){spot=document.createElement('div');root.appendChild(spot)}
+    spot.className='ff-spot '+(r.top>innerHeight*.45?'up':'dn')+(cls?' '+cls:'');
+    Object.assign(spot.style,{left:r.left-pd+'px',top:r.top-pd+'px',width:r.width+pd*2+'px',height:r.height+pd*2+'px'});
+    spot.innerHTML=label?'<b>'+esc(label)+'</b>':'';const lb=spot.firstChild;
+    if(lb){const q=lb.getBoundingClientRect(),dx=q.right>innerWidth-6?innerWidth-6-q.right:q.left<6?6-q.left:0;if(dx)lb.style.transform='translateX(calc(-50% + '+dx+'px))'}}
+  function spotOff(){if(spot){spot.remove();spot=null}}
+  function hit(x,y,ok){const d=document.createElement('div');d.className='ff-hit'+(ok?' ok':'');d.style.left=x+'px';d.style.top=y+'px';root.appendChild(d);setTimeout(()=>d.remove(),550)}
+  function ensureWin(){let W=[...OS.wins].reverse().find(w=>$('.sm-bar',w.el));
+    if(!W)W=openApp('notepad');else{W.el.classList.remove('min');W.task.classList.remove('min');focusWin(W)}
+    if(W&&W.el.classList.contains('max')&&!small())W.toggleMax();return W}
+  const clearDesk=()=>{if(small())OS.wins.forEach(w=>{if(!w.el.classList.contains('min')){w.el.classList.add('min');w.task.classList.add('min')}})};
+  /* поки триває екскурсія чи перевірка — кліки по системі не виконують дій */
+  function guard(e){if(!mode||!e.isTrusted||e.target.closest('.sos-ff'))return;
+    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+    if(e.type==='pointerdown'&&mode.click)mode.click(e)}
+  ['pointerdown','pointerup','mousedown','mouseup','click','dblclick','contextmenu'].forEach(ev=>addEventListener(ev,guard,true));
+  addEventListener('keydown',e=>{if(mode&&e.key==='Escape'){e.preventDefault();stopMode()}},true);
+  addEventListener('resize',()=>{if(mode&&mode.redraw)mode.redraw()});
+  function stopMode(){mode=null;spotOff();closeMenu();closeStart();hide();if(bub)bub.classList.remove('tour')}
+  const dots=(n,i)=>'<div class="ff-dots">'+Array.from({length:n},(_,k)=>`<i class="${k<=i?'on':''}"></i>`).join('')+'</div>';
+  function finish(kind){const c=cur;stopMode();cur=c;setTimeout(()=>act({t:kind}),60)}
+  function tour(){
+    const STEPS=['desk','icon','bar','start','smenu','clock','win','title','mbar','min','max','close','task','ctx'];
+    hide();closeStart();closeMenu();
+    const t0=cur;let i=0;mode={};
+    const show=()=>{const k=STEPS[i],p=P[k];closeMenu();if(k!=='smenu')closeStart();
+      if(['win','title','mbar','min','max','close','task'].includes(k))ensureWin();else if(k==='desk'||k==='icon')clearDesk();if(p.prep)p.prep();
+      setTimeout(()=>{if(!mode)return;spotOn(p.el(),p.n);mode.redraw=()=>spotOn(p.el(),p.n);
+        say('Екскурсія · '+(i+1)+' з '+STEPS.length,'<b>'+esc(p.n)+'</b><br>'+esc(p.d)+dots(STEPS.length,i),
+          [...(i?[{t:'Назад',f:()=>{i--;show()}}]:[]),{t:i<STEPS.length-1?'Далі':'Готово',p:1,f:()=>{if(i<STEPS.length-1){i++;show()}else{cur=t0;finish('tour')}}},{t:'Вийти',f:()=>{stopMode();cur=null}}]);
+        bub&&bub.classList.add('tour')},k==='smenu'||k==='ctx'?160:60)};
+    show()}
+  function quiz(){
+    hide();closeStart();closeMenu();ensureWin();
+    const t0=cur,Q=['bar','start','clock','icon','desk','win','title','mbar','task','min','max','close'].sort(()=>Math.random()-.5);
+    let i=0,miss=0,good=0,lock=false;mode={};
+    const ask=()=>{miss=0;spotOff();const p=P[Q[i]];ensureWin();if(Q[i]==='desk'||Q[i]==='icon')clearDesk();
+      say('Знайди · '+(i+1)+' з '+Q.length,'Натисни на <b>'+esc(p.n)+'</b>'+dots(Q.length,i),[{t:'Підказка',f:()=>spotOn(P[Q[i]].el(),'','lite')},{t:'Вийти',f:()=>{stopMode();cur=null}}]);bub&&bub.classList.add('tour')};
+    mode.click=e=>{if(lock)return;const k=whatIs(e.target),want=Q[i];
+      if(k===want||(want==='bar'&&k&&P.bar.deep(e.target))){lock=true;if(!miss)good++;hit(e.clientX,e.clientY,1);spotOn(P[want].el(),P[want].n,'ok');snd('open');
+        setTimeout(()=>{lock=false;i++;if(i<Q.length)ask();else{const tt=t0;stopMode();cur=tt;
+          say('Перевірку завершено!','З першої спроби: <b>'+good+' з '+Q.length+'</b>.'+(good===Q.length?' Ти знаєш комп\'ютер напам\'ять!':' Пройди ще раз — буде ще краще.'),[{t:'Далі',p:1,f:()=>{hide();act({t:'partsquiz'})}}],null,1)}},800);return}
+      miss++;hit(e.clientX,e.clientY,0);snd('err');
+      const txt=k?'Це <b>'+esc(P[k].n)+'</b>. А треба знайти <b>'+esc(P[want].n)+'</b>.':'Тут немає <b>'+esc(P[want].n)+'</b>.';
+      if(miss>=2)spotOn(P[want].el(),'','lite');
+      say('Знайди · '+(i+1)+' з '+Q.length,txt+(miss>=2?' Дивись, я підсвітила.':'')+dots(Q.length,i),[{t:'Підказка',f:()=>spotOn(P[Q[i]].el(),'','lite')},{t:'Вийти',f:()=>{stopMode();cur=null}}]);bub&&bub.classList.add('tour')};
+    ask()}
+  OS.fifiTour=()=>task('tour');
   /* панель */
   let pan=null;
   function closePanel(){if(pan){pan.remove();pan=null}}
@@ -1370,7 +1462,7 @@ if(opt.fifi){
     const l=list(),dn=doneN();
     pan=h(`<div class="sos-pop" style="width:380px"><div class="ff-hd"><i>${I.fifi(dn===l.length&&l.length>0)}</i><div><b>Завдання від Фіфі</b><small>Виконано ${dn} з ${l.length}</small><div class="ff-bar"><i style="width:${l.length?dn/l.length*100:0}%"></i></div></div></div>
       <div class="ff-list">${SECS.filter(s=>!FS().off[s[0]]).map(([sid,sn])=>`<h4>${sn}</h4>`+T.filter(t=>t[1]===sid).map(t=>`<button class="ff-row${FS().done[t[0]]?' done':''}" data-ft="${t[0]}">${STAR(FS().done[t[0]])}<span>${esc(t[2])}</span></button>`).join('')).join('')}</div>
-      <div class="ff-foot">${OS.apps.firstpc?'<button class="sos-btn" data-fx="pc">Вправи ФіфіПК</button>':''}${dn===l.length&&l.length?'<button class="sos-btn" data-fx="cert">Сертифікат</button>':''}<button class="sos-btn" data-fx="hide">Сховати</button></div></div>`);
+      <div class="ff-foot">${OS.apps.firstpc?'<button class="sos-btn p" data-fx="pc">Відкрити ФіфіПК</button>':''}${dn===l.length&&l.length?'<button class="sos-btn" data-fx="cert">Сертифікат</button>':''}<button class="sos-btn" data-fx="hide">Сховати</button></div></div>`);
     pan.addEventListener('click',e=>{const r=e.target.closest('[data-ft]');if(r){closePanel();task(r.dataset.ft);return}
       const b=e.target.closest('[data-fx]');if(!b)return;closePanel();if(b.dataset.fx==='pc')openApp('firstpc');if(b.dataset.fx==='cert')openApp('explorer','docs')});
     root.appendChild(pan);fb.classList.add('on');snd('click');
@@ -1393,7 +1485,10 @@ if(opt.fifi){
     const m=location.hash.match(/fifi=([\w-]+)/);
     if(m){const id=m[1];const sec=SECS.find(s=>s[0]===id);let t=sec?T.find(x=>x[1]===id&&!FS().done[x[0]])||T.find(x=>x[1]===id):T.find(x=>x[0]===id);if(t){FS().offered=1;save();setTimeout(()=>task(t[0]),900)}return}
     if(/open=/.test(location.hash))return;
-    if(!FS().offered){FS().offered=1;save();setTimeout(()=>say('Привіт! Я Фіфі 🐾','Це твій власний комп\'ютер — тут можна все. Показати, як він працює?',[{t:'Так!',p:1,f:()=>{const n=list().find(t=>!FS().done[t[0]]);n?task(n[0]):hide()}},{t:'Пізніше',f:()=>{hide();say('','Добре! Якщо захочеш — я тут, біля годинника 😺',[{t:'Ок',p:1,f:hide}])}}]),1300)}
+    const pcB=OS.apps.firstpc?[{t:'Відкрити ФіфіПК',f:()=>{hide();openApp('firstpc')}}]:[];
+    const later={t:'Пізніше',f:()=>{hide();say('','Добре! Якщо захочеш — я тут, біля годинника 😺',[{t:'Ок',p:1,f:hide}])}};
+    if(!FS().offered){FS().offered=1;FS().news=1;save();setTimeout(()=>say('Привіт! Я Фіфі 🐾','Це твій власний комп\'ютер — тут можна все. Показати, як він працює?'+(pcB.length?'<br>А ще на робочому столі є <b>ФіфіПК</b> — мої вправи.':''),[{t:'Так!',p:1,f:()=>{const n=list().find(t=>!FS().done[t[0]]);n?task(n[0]):hide()}},...pcB,later]),1300)}
+    else if(!FS().news){FS().news=1;save();setTimeout(()=>say('Новинка 🐾','Я тепер вмію проводити <b>екскурсію комп\'ютером</b>.'+(pcB.length?' А <b>ФіфіПК</b> лежить просто на робочому столі.':''),[{t:'Екскурсія',p:1,f:()=>task('tour')},...pcB,later]),1300)}
   });
 }
 /* відкрити програму з посилання: #open=firstpc */
