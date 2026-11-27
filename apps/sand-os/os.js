@@ -1304,6 +1304,37 @@ if(opt.fifi){
 @keyframes ffHit{from{transform:scale(.4);opacity:1}to{transform:scale(1.5);opacity:0}}
 .ff-dots{display:flex;gap:5px;margin-top:10px}.ff-dots i{width:9px;height:9px;border-radius:50%;background:#e4def0}.ff-dots i.on{background:#e8b04a}
 @media (max-width:700px){.sos-ff .cat{width:64px}.sos-ff .bub{width:auto}}
+.ff-card{position:absolute;right:14px;top:14px;z-index:9300;width:330px;max-width:calc(100% - 28px);max-height:calc(100% - 80px);overflow:auto;background:#fff;border-radius:20px;box-shadow:0 16px 44px rgba(20,25,60,.34);color:#3b3450;animation:sosUp .25s ease-out}
+.ff-card .fc-h{display:flex;align-items:center;gap:10px;padding:12px 12px 6px 12px}
+.ff-card .fc-h i{width:46px;flex:none}.ff-card .fc-h i svg{width:100%;height:auto}
+.ff-card .fc-h small{display:block;font:800 13px Rubik,Nunito,sans-serif;color:#8a7cf0}
+.ff-card [hidden]{display:none!important}
+.ff-card .fc-h b{display:block;font:800 19px/1.2 Rubik,Nunito,sans-serif}
+.ff-card .fc-x{margin-left:auto;align-self:flex-start;width:34px;height:34px;flex:none;border-radius:11px;background:#f2eff8;display:grid;place-items:center;color:#6f6787}
+.ff-card .fc-x:hover{background:#e7e1f3}
+.ff-card .fc-story{padding:0 16px 6px;font-weight:700;font-size:14.5px;color:#6f6787;line-height:1.4}
+.ff-card ol{list-style:none;margin:0;padding:6px 10px 4px;display:grid;gap:6px}
+.ff-card li{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border-radius:14px;font-size:15.5px;line-height:1.35}
+.ff-card li .ck{width:28px;height:28px;border-radius:50%;border:3px solid #ddd6ea;flex:none;display:grid;place-items:center;font:800 13px Rubik,Nunito,sans-serif;color:#a99fc0;background:#fff}
+.ff-card li .tx{flex:1;min-width:0}.ff-card li .tx b{font-weight:800}
+.ff-card li.done{color:#8a83a0}.ff-card li.done .ck{background:#6cc58f;border-color:#6cc58f}
+.ff-card li.now{background:#fff6dc;box-shadow:inset 0 0 0 2px #f2c55a}.ff-card li.now .ck{border-color:#e8b04a;color:#b07b14}
+.ff-card li em{display:block;font-style:normal;font-weight:700;font-size:14.5px;color:#5b5378;margin-top:4px}
+.ff-card li em.hw{margin-top:8px;padding:8px 10px;border-radius:10px;background:#fff;color:#6f6787;font-size:14px}
+.ff-card li .acts{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+.ff-card li.pop .ck{animation:ffPop .5s ease}
+@keyframes ffPop{40%{transform:scale(1.35)}}
+.ff-card .fc-f{padding:4px 14px 12px;display:flex;justify-content:flex-end}
+.ff-card .fc-f button{font:800 13.5px Nunito,sans-serif;color:#8a7cf0;text-decoration:underline;padding:4px}
+.ff-mini{position:absolute;right:14px;top:14px;z-index:9300;display:flex;align-items:center;gap:10px;height:54px;padding:0 16px 0 8px;border-radius:27px;background:#fff;box-shadow:0 10px 30px rgba(20,25,60,.3);color:#3b3450;text-align:left;max-width:calc(100% - 28px);animation:sosUp .2s ease-out}
+.ff-mini i{width:40px;flex:none}.ff-mini i svg{width:100%;height:auto}
+.ff-mini span{font:800 15px/1.15 Rubik,Nunito,sans-serif;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.ff-mini small{display:block;font-size:12px;color:#8a7cf0}
+.ff-mini em{font:800 14px Rubik,sans-serif;font-style:normal;background:#fff6dc;color:#b07b14;border-radius:10px;padding:4px 8px;flex:none}
+.ff-where{z-index:9350;box-shadow:0 0 0 5px #f2c55a,0 0 0 9px rgba(242,197,90,.35)!important;animation:ffPulse .9s ease 3!important}
+.ff-mrow{padding:10px!important}.ff-mrow.cur{background:#fff6dc}
+.ff-num{width:28px;height:28px;border-radius:50%;background:#efeaf7;display:grid;place-items:center;font:800 13px Rubik,sans-serif;flex:none}.ff-mrow.done .ff-num{background:none}
+.ff-mt{display:flex;flex-direction:column;font-weight:800}.ff-mt small{font-weight:700;color:#8a83a0;font-size:13px}
+@media (max-width:700px){.ff-card{left:100px;right:8px;top:auto;bottom:62px;width:auto;max-width:none;max-height:calc(100% - 80px)}.ff-card .fc-story,.ff-card li:not(.now),.ff-card .fc-f{display:none}.ff-card .fc-h{padding:10px 10px 2px}.ff-card .fc-h i{width:36px}.ff-card .fc-h b{font-size:16.5px}.ff-card ol{padding:4px 8px 8px}.ff-card li{font-size:14.5px;padding:8px}.ff-mini{right:8px;top:8px}}
 `;
   const st=document.createElement('style');st.textContent=FCSS;document.head.appendChild(st);
   if(!S.fifi)S.fifi={done:{},offered:0,off:{}};
@@ -1335,14 +1366,30 @@ if(opt.fifi){
    ['ctrlc','keys','Копіюй клавішами','Виділи файл, натисни Ctrl + C, потім клікни на порожньому місці й натисни Ctrl + V.','Тримай Ctrl і натисни C (копіювати), потім V (вставити).',e=>e.t==='paste'&&e.via==='key'],
    ['delk','keys','Видали клавішею Delete','Виділи файл і натисни клавішу Delete.','Delete (Del) видаляє виділене в кошик.',e=>e.t==='del'&&e.via==='key'],
   ];
-  const on=t=>!FS().off[t[1]];
-  const list=()=>T.filter(on);
+  const TT=id=>T.find(x=>x[0]===id);
+  /* місії: [id, розділ, назва, історія, кроки, свої назви кроків] */
+  const M=[
+   ['m1','parts','Знайомство з комп\'ютером','Я покажу, з чого складається комп\'ютер, а потім перевіримо, чи ти все запам\'ятав.',['tour','find']],
+   ['m2','mouse','Чарівна мишка','Мишка вміє натискати один раз, двічі і правою кнопкою. Спробуймо!',['sel','pc','ctx']],
+   ['m3','mouse','Слухняні вікна','Кожна програма живе у вікні. Навчимо вікна слухатися.',['start','min','max','close'],{start:'Відкрий програму через «Пуск»'}],
+   ['m4','files','Лад на столі','На робочому столі безлад! Зробимо для файлів окрему папку.',['drag','mkdir','ren','move']],
+   ['m5','files','Ой, видалив!','Не страшно: видалене спершу потрапляє в кошик.',['del','rest','copy']],
+   ['m6','apps','Подарунок для мами','Приготуймо мамі сюрприз на комп\'ютері.',['calc','paint','note','wall'],{calc:'Порахуй цукерки: 7 + 5',paint:'Намалюй листівку й збережи',note:'Напиши привітання в Блокноті й збережи',wall:'Постав малюнок на робочий стіл'}],
+   ['m7','keys','Клавіатурні фокуси','Деякі справи швидше робити клавішами. Спробуй, як справжній майстер!',['lang','f2','ctrlc','delk']],
+  ];
+  const onM=m=>!FS().off[m[1]];
+  const ML=()=>M.filter(onM);
+  const steps=m=>m[4].map(TT).filter(Boolean);
+  const list=()=>ML().flatMap(steps);
   const doneN=()=>list().filter(t=>FS().done[t[0]]).length;
+  const mDone=m=>steps(m).every(t=>FS().done[t[0]]);
+  const mN=m=>steps(m).filter(t=>FS().done[t[0]]).length;
+  const stT=(m,t)=>(m[5]&&m[5][t[0]])||t[2];
   const STAR=d=>`<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z" fill="${d?'#f2c55a':'none'}" stroke="${d?'#d9a53a':'#c4bdd3'}" stroke-width="1.8" stroke-linejoin="round"/></svg>`;
   /* кнопка біля годинника */
-  const fb=h(`<button class="sos-fifib" title="Фіфі — завдання" aria-label="Фіфі — завдання">${I.fifi(false)}</button>`);
+  const fb=h(`<button class="sos-fifib" title="Фіфі — місії" aria-label="Фіфі — місії">${I.fifi(false)}</button>`);
   $('.sos-tray',root).insertBefore(fb,langB);
-  let cur=null,bub=null;
+  let cur=null,bub=null,card=null,hs=null;
   function hide(){if(bub){bub.remove();bub=null}}
   function say(title,text,btns,how,yay){
     hide();closePop();
@@ -1353,19 +1400,60 @@ if(opt.fifi){
     root.appendChild(bub);snd('note');
   }
   OS.fifiSay=say;
-  function task(id){const t=T.find(x=>x[0]===id);if(!t)return;cur=t;
-    if(t[6]){say('Завдання',esc(t[3]),[{t:'Почати',p:1,f:()=>t[6]()},{t:'Пізніше',f:()=>{cur=null;hide()}}]);return}
-    say('Завдання',esc(t[3]),[{t:'Як це зробити?',f:el=>{const hw=$('.how',bub);hw.hidden=!hw.hidden;el.remove()}},{t:'Пізніше',f:()=>{cur=null;hide()}}],t[4])}
-  function next(after){const l=list(),i=l.findIndex(t=>t[0]===after);return l.slice(i+1).concat(l.slice(0,i)).find(t=>!FS().done[t[0]])}
-  function record(){try{const me=window.ITMW&&ITMW.me&&ITMW.me();if(!me)return;const c=JSON.parse(localStorage.getItem('itm-me')||'null');const R=JSON.parse(localStorage.getItem('itm-results')||'{}');const row=R[c.id]=R[c.id]||{};row._name=me.name;row._cls=me.cls;row['Мій перший ПК']={g:null,t:doneN()+' з '+list().length+' завдань Фіфі',d:Date.now()};localStorage.setItem('itm-results',JSON.stringify(R))}catch(e){}}
+  /* ---------- картка місії ---------- */
+  const curM=()=>{const m=M.find(x=>x[0]===FS().m);return m&&onM(m)?m:null};
+  const nextM=after=>{const l=ML(),i=l.findIndex(m=>m[0]===after);return l.slice(i+1).concat(l.slice(0,Math.max(0,i))).find(m=>!mDone(m))};
+  const ib=n=>[...root.querySelectorAll('.sos-icons .sos-it')].find(x=>{const e=$('.nm',x);return e&&e.textContent.trim()===n});
+  const node=x=>x&&x.dataset.id&&x.dataset.id[0]!=='@'&&F.get(x.dataset.id);
+  const anyFile=()=>[...root.querySelectorAll('.sos-icons .sos-it')].find(x=>{const n=node(x);return n&&n.type!=='dir'&&n.ext!=='lnk'});
+  const anyDir=()=>[...root.querySelectorAll('.sos-icons .sos-it')].find(x=>{const n=node(x);return n&&n.type==='dir'});
+  const stB=()=>$('.sos-startb',root);
+  const wb=s=>{const w=[...OS.wins].reverse().find(w=>!w.el.classList.contains('min'));return w&&$(s,w.el)};
+  const TG={sel:()=>$('.sos-icons .sos-it',root),pc:()=>ib('Мій комп\'ютер'),ctx:()=>desk,start:stB,
+    min:()=>wb('.mn')||stB(),max:()=>wb('.mx')||stB(),close:()=>wb('.swt .x')||stB(),
+    drag:()=>$('.sos-icons .sos-it',root),mkdir:()=>desk,ren:()=>anyDir(),move:()=>ib('Привіт')||anyFile(),del:()=>anyFile(),
+    rest:()=>$('[data-id="@bin"]',root),copy:()=>anyFile(),calc:()=>ib('Калькулятор')||stB(),paint:()=>ib('Малювалка')||stB(),
+    note:()=>ib('Блокнот')||stB(),wall:()=>desk,lang:()=>langB,f2:()=>anyFile(),ctrlc:()=>anyFile(),delk:()=>anyFile()};
+  function hsOff(){if(hs){hs.remove();hs=null}}
+  function showWhere(id){hsOff();const f=TG[id],el=f&&f();if(!el)return;
+    const big=el===desk,r=el.getBoundingClientRect(),pd=big?-10:6;
+    hs=document.createElement('div');hs.className='ff-spot lite ff-where '+(r.top>innerHeight*.45?'up':'dn');
+    Object.assign(hs.style,{left:r.left-pd+'px',top:r.top-pd+'px',width:r.width+pd*2+'px',height:r.height+pd*2+'px'});
+    hs.innerHTML='<b>'+(big?'Тут, на порожньому місці':'Тут!')+'</b>';if(big){hs.querySelector('b').style.cssText='top:50%;bottom:auto'}
+    root.appendChild(hs);snd('click');setTimeout(hsOff,3500)}
+  function cardOff(){if(card){card.remove();card=null}hsOff()}
+  const CHK='<svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function renderCard(flash){
+    if(card){card.remove();card=null}
+    const m=curM();if(!m||mode)return;
+    const ss=steps(m),now=ss.find(t=>!FS().done[t[0]]),ml=ML(),dn=mN(m);
+    if(FS().mini){
+      card=h(`<button class="ff-mini" title="Розгорнути місію"><i>${I.fifi(false)}</i><span><small>Місія</small>${esc(m[2])}</span><em>${dn}/${ss.length}</em></button>`);
+      card.onclick=()=>{FS().mini=0;save();renderCard();snd('click')};root.appendChild(card);return}
+    card=h(`<div class="ff-card" role="region" aria-label="Місія"><div class="fc-h"><i>${I.fifi(false)}</i><div><small>Місія ${ml.indexOf(m)+1}/${ml.length}${matchMedia('(max-width:700px)').matches?' · крок '+(ss.indexOf(now)+1)+'/'+ss.length:''}</small><b>${esc(m[2])}</b></div><button class="fc-x" data-fc="mini" title="Згорнути" aria-label="Згорнути">${'<svg viewBox="0 0 24 24" width="18" height="18"><path d="M6 12h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>'}</button></div>
+      <div class="fc-story">${esc(m[3])}</div>
+      <ol>${ss.map((t,k)=>{const d=FS().done[t[0]],n=t===now;return `<li class="${d?'done':n?'now':''}${flash===t[0]?' pop':''}"><span class="ck">${d?CHK:k+1}</span><span class="tx"><b>${esc(stT(m,t))}</b>${n?`<em>${esc(t[3])}</em><span class="acts">${t[6]?'<button class="sos-btn p" data-fc="go">Почати</button>':(TG[t[0]]?'<button class="sos-btn p" data-fc="where">Покажи, де</button>':'')+'<button class="sos-btn" data-fc="how">Підказка</button>'}</span><em class="hw" hidden>${esc(t[4])}</em>`:''}</span></li>`}).join('')}</ol>
+      <div class="fc-f"><button data-fc="all">Усі місії</button></div></div>`);
+    card.addEventListener('click',e=>{const b=e.target.closest('[data-fc]');if(!b)return;const a=b.dataset.fc;
+      if(a==='mini'){FS().mini=1;save();renderCard();snd('click')}
+      if(a==='go'&&now&&now[6]){cur=now;now[6]()}
+      if(a==='where'&&now)showWhere(now[0]);
+      if(a==='how'){const hw=$('.hw',card);if(hw){hw.hidden=false;b.remove()}}
+      if(a==='all')openPanel()});
+    root.appendChild(card);
+  }
+  function startMission(id){const m=M.find(x=>x[0]===id);if(!m)return;FS().m=id;FS().mini=0;save();hide();closePanel();renderCard();snd('note')}
+  function task(id){const m=M.find(x=>x[4].includes(id));if(m)startMission(m[0])}
+  function record(){try{const me=window.ITMW&&ITMW.me&&ITMW.me();if(!me)return;const c=JSON.parse(localStorage.getItem('itm-me')||'null');const R=JSON.parse(localStorage.getItem('itm-results')||'{}');const row=R[c.id]=R[c.id]||{};row._name=me.name;row._cls=me.cls;row['Мій перший ПК']={g:null,t:ML().filter(mDone).length+' з '+ML().length+' місій Фіфі',d:Date.now()};localStorage.setItem('itm-results',JSON.stringify(R))}catch(e){}}
   const PRAISE=['Молодець!','Супер!','Чудово вийшло!','Так тримати!','Ти справжній майстер!','Ура, вийшло!'];
-  OS.on('act',e=>{if(!cur||!cur[5](e))return;const t=cur;cur=null;
-    if(!FS().done[t[0]]){FS().done[t[0]]=Date.now();save();record()}
+  OS.on('act',e=>{const m=curM();if(!m)return;const t=steps(m).find(x=>!FS().done[x[0]]&&x[5](e));if(!t)return;cur=null;
+    FS().done[t[0]]=Date.now();save();record();hsOff();
     fb.classList.remove('on');void fb.offsetWidth;fb.classList.add('on');
-    const n=next(t[0]);
-    setTimeout(()=>{
-      if(doneN()===list().length&&list().length){say('Усі завдання виконано!','Ти пройшов усі мої завдання! Я поклала тобі <b>сертифікат</b> у папку «Документи». Знайдеш? 😺',[{t:'Відкрити Документи',p:1,f:()=>{hide();openApp('explorer','docs')}},{t:'Дякую!',f:hide}],null,1);cert();return}
-      say(PRAISE[Math.floor(Math.random()*PRAISE.length)]+' ⭐','Завдання «'+esc(t[2])+'» виконано.'+(n?'<br>Далі: <b>'+esc(n[2])+'</b>':''),n?[{t:'Далі',p:1,f:()=>task(n[0])},{t:'Досить',f:hide}]:[{t:'Добре',p:1,f:hide}],null,1)},450)});
+    if(!mDone(m)){snd('open');renderCard(t[0]);return}
+    const n=nextM(m[0]);FS().m=null;save();
+    setTimeout(()=>{cardOff();
+      if(ML().every(mDone)){say('Усі місії виконано!','Ти пройшов усі мої місії! Я поклала тобі <b>сертифікат</b> у папку «Документи». Знайдеш? 😺',[{t:'Відкрити Документи',p:1,f:()=>{hide();openApp('explorer','docs')}},{t:'Дякую!',f:hide}],null,1);cert();return}
+      say(PRAISE[Math.floor(Math.random()*PRAISE.length)]+' ⭐','Місію «'+esc(m[2])+'» виконано!'+(n?'<br>Наступна: <b>'+esc(n[2])+'</b>':''),n?[{t:'Далі',p:1,f:()=>startMission(n[0])},{t:'Досить',f:hide}]:[{t:'Добре',p:1,f:hide}],null,1)},450)});
   /* сертифікат */
   function cert(){
     const me=window.ITMW&&ITMW.me&&ITMW.me();const name=me?me.name:'';
@@ -1375,7 +1463,7 @@ if(opt.fifi){
     x.fillStyle='#3b3450';x.textAlign='center';x.font='800 58px Rubik, Nunito, sans-serif';x.fillText('Сертифікат',450,140);
     x.font='700 24px Nunito, sans-serif';x.fillStyle='#6f6787';x.fillText(name?'вручається':'вручається юному користувачу',450,195);
     if(name){x.font='800 40px Rubik, Nunito, sans-serif';x.fillStyle='#3b3450';x.fillText(name,450,250)}
-    x.font='700 24px Nunito, sans-serif';x.fillStyle='#3b3450';x.fillText('за виконання всіх завдань Фіфі',450,310);x.fillText('в «Моєму першому ПК»',450,345);
+    x.font='700 24px Nunito, sans-serif';x.fillStyle='#3b3450';x.fillText('за виконання всіх місій Фіфі',450,310);x.fillText('в «Моєму першому ПК»',450,345);
     const d=new Date();x.font='700 20px Nunito, sans-serif';x.fillStyle='#6f6787';x.fillText(d.getDate()+' '+MONTHS_G[d.getMonth()]+' '+d.getFullYear(),450,520);
     const im=new Image();im.onload=()=>{x.drawImage(im,380,355,140,154);fin()};im.onerror=fin;
     im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(I.fifi(true).replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" '));
@@ -1424,10 +1512,10 @@ if(opt.fifi){
   ['pointerdown','pointerup','mousedown','mouseup','click','dblclick','contextmenu'].forEach(ev=>addEventListener(ev,guard,true));
   addEventListener('keydown',e=>{if(mode&&e.key==='Escape'){e.preventDefault();stopMode()}},true);
   addEventListener('resize',()=>{if(mode&&mode.redraw)mode.redraw()});
-  function stopMode(){mode=null;spotOff();closeMenu();closeStart();hide();if(bub)bub.classList.remove('tour')}
+  function stopMode(){mode=null;spotOff();closeMenu();closeStart();hide();if(bub)bub.classList.remove('tour');renderCard()}
   const dots=(n,i)=>'<div class="ff-dots">'+Array.from({length:n},(_,k)=>`<i class="${k<=i?'on':''}"></i>`).join('')+'</div>';
   function finish(kind){const c=cur;stopMode();cur=c;setTimeout(()=>act({t:kind}),60)}
-  function tour(){
+  function tour(){cardOff();
     const STEPS=['desk','icon','bar','start','smenu','clock','win','title','mbar','min','max','close','task','ctx'];
     hide();closeStart();closeMenu();
     const t0=cur;let i=0;mode={};
@@ -1438,7 +1526,7 @@ if(opt.fifi){
           [...(i?[{t:'Назад',f:()=>{i--;show()}}]:[]),{t:i<STEPS.length-1?'Далі':'Готово',p:1,f:()=>{if(i<STEPS.length-1){i++;show()}else{cur=t0;finish('tour')}}},{t:'Вийти',f:()=>{stopMode();cur=null}}]);
         bub&&bub.classList.add('tour')},k==='smenu'||k==='ctx'?160:60)};
     show()}
-  function quiz(){
+  function quiz(){cardOff();
     hide();closeStart();closeMenu();ensureWin();
     const t0=cur,Q=['bar','start','clock','icon','desk','win','title','mbar','task','min','max','close'].sort(()=>Math.random()-.5);
     let i=0,miss=0,good=0,lock=false;mode={};
@@ -1453,42 +1541,44 @@ if(opt.fifi){
       if(miss>=2)spotOn(P[want].el(),'','lite');
       say('Знайди · '+(i+1)+' з '+Q.length,txt+(miss>=2?' Дивись, я підсвітила.':'')+dots(Q.length,i),[{t:'Підказка',f:()=>spotOn(P[Q[i]].el(),'','lite')},{t:'Вийти',f:()=>{stopMode();cur=null}}]);bub&&bub.classList.add('tour')};
     ask()}
-  OS.fifiTour=()=>task('tour');
-  /* панель */
+  OS.fifiTour=()=>startMission('m1');
+  /* панель усіх місій */
   let pan=null;
   function closePanel(){if(pan){pan.remove();pan=null}}
   function openPanel(){
     if(pan){closePanel();return}closeStart();closePop();hide();
-    const l=list(),dn=doneN();
-    pan=h(`<div class="sos-pop" style="width:380px"><div class="ff-hd"><i>${I.fifi(dn===l.length&&l.length>0)}</i><div><b>Завдання від Фіфі</b><small>Виконано ${dn} з ${l.length}</small><div class="ff-bar"><i style="width:${l.length?dn/l.length*100:0}%"></i></div></div></div>
-      <div class="ff-list">${SECS.filter(s=>!FS().off[s[0]]).map(([sid,sn])=>`<h4>${sn}</h4>`+T.filter(t=>t[1]===sid).map(t=>`<button class="ff-row${FS().done[t[0]]?' done':''}" data-ft="${t[0]}">${STAR(FS().done[t[0]])}<span>${esc(t[2])}</span></button>`).join('')).join('')}</div>
-      <div class="ff-foot">${OS.apps.firstpc?'<button class="sos-btn p" data-fx="pc">Відкрити ФіфіПК</button>':''}${dn===l.length&&l.length?'<button class="sos-btn" data-fx="cert">Сертифікат</button>':''}<button class="sos-btn" data-fx="hide">Сховати</button></div></div>`);
-    pan.addEventListener('click',e=>{const r=e.target.closest('[data-ft]');if(r){closePanel();task(r.dataset.ft);return}
-      const b=e.target.closest('[data-fx]');if(!b)return;closePanel();if(b.dataset.fx==='pc')openApp('firstpc');if(b.dataset.fx==='cert')openApp('explorer','docs')});
+    const ml=ML(),dm=ml.filter(mDone).length;
+    pan=h(`<div class="sos-pop" style="width:390px"><div class="ff-hd"><i>${I.fifi(dm===ml.length&&ml.length>0)}</i><div><b>Місії від Фіфі</b><small>Виконано ${dm} з ${ml.length}</small><div class="ff-bar"><i style="width:${ml.length?dm/ml.length*100:0}%"></i></div></div></div>
+      <div class="ff-list">${ml.map((m,i)=>{const d=mDone(m),n=mN(m),all=steps(m).length;return `<button class="ff-row ff-mrow${d?' done':''}${FS().m===m[0]?' cur':''}" data-ft="${m[0]}"><span class="ff-num">${d?STAR(1):i+1}</span><span class="ff-mt">${esc(m[2])}<small>${d?'Виконано':n?'Зроблено '+n+' з '+all:all+' кроки'}</small></span></button>`}).join('')}</div>
+      <div class="ff-foot">${OS.apps.firstpc?'<button class="sos-btn" data-fx="pc">Відкрити ФіфіПК</button>':''}${dm===ml.length&&ml.length?'<button class="sos-btn" data-fx="cert">Сертифікат</button>':''}${curM()?'<button class="sos-btn" data-fx="stop">Сховати місію</button>':''}</div></div>`);
+    pan.addEventListener('click',e=>{const r=e.target.closest('[data-ft]');if(r){startMission(r.dataset.ft);return}
+      const b=e.target.closest('[data-fx]');if(!b)return;closePanel();if(b.dataset.fx==='pc')openApp('firstpc');if(b.dataset.fx==='cert')openApp('explorer','docs');if(b.dataset.fx==='stop'){FS().m=null;save();cardOff()}});
     root.appendChild(pan);fb.classList.add('on');snd('click');
   }
   fb.onclick=e=>{e.stopPropagation();openPanel()};
-  document.addEventListener('pointerdown',e=>{if(pan&&!e.target.closest('.sos-pop,.sos-fifib'))closePanel()},true);
-  OS.fifiOpen=openPanel;OS.fifiTask=task;
+  document.addEventListener('pointerdown',e=>{if(pan&&!e.target.closest('.sos-pop,.sos-fifib,.ff-card'))closePanel()},true);
+  OS.fifiOpen=openPanel;OS.fifiTask=task;OS.fifiMission=startMission;
   /* розділ «Урок» у налаштуваннях */
   (opt.settingsSections=opt.settingsSections||[]).unshift(['lesson','Урок','<svg viewBox="0 0 24 24"><path d="M4 5h16v11H4zM8 20h8M12 16v4"/></svg>',body=>{
     const me=window.ITMW&&ITMW.me&&ITMW.me();const base=location.href.split('#')[0];
-    body.innerHTML=`<h2>Урок</h2><p style="font-weight:700;color:#6f6787;margin:0 0 12px">Які завдання Фіфі показувати учням:</p>
-      ${SECS.map(([sid,sn])=>`<div class="ss-row"><div>${sn}<small>${T.filter(t=>t[1]===sid).length} завдань · посилання: ${esc(base)}#fifi=${sid}</small></div><button class="ss-sw${FS().off[sid]?'':' on'}" data-sec="${sid}" aria-label="${sn}"></button></div>`).join('')}
+    body.innerHTML=`<h2>Урок</h2><p style="font-weight:700;color:#6f6787;margin:0 0 12px">Які місії Фіфі показувати учням:</p>
+      ${SECS.map(([sid,sn])=>{const ms=M.filter(m=>m[1]===sid);return `<div class="ss-row"><div>${sn}<small>${ms.map(m=>esc(m[2])).join(', ')} · посилання: ${esc(base)}#fifi=${sid}</small></div><button class="ss-sw${FS().off[sid]?'':' on'}" data-sec="${sid}" aria-label="${sn}"></button></div>`}).join('')}
       <h2 style="margin-top:20px;font-size:18px">Звіт${me?': '+esc(me.name)+', '+esc(me.cls):''}</h2>
-      <div class="ss-row" style="display:block;line-height:1.7;font-size:14.5px">${T.map(t=>`${FS().done[t[0]]?'✅':'⬜'} ${esc(t[2])}`).join('<br>')}</div>
-      <div class="ss-row"><div>Почати завдання заново<small>Зірочки Фіфі буде скинуто, файли лишаться</small></div><button class="sos-btn" data-ffr>Скинути</button></div>`;
-    body.onclick=async e=>{const b=e.target.closest('[data-sec]');if(b){FS().off[b.dataset.sec]=!FS().off[b.dataset.sec];save();b.classList.toggle('on')}
-      if(e.target.closest('[data-ffr]')){if(await OS.confirm('Завдання Фіфі','Скинути всі зірочки Фіфі?','Так','Ні','warn')){FS().done={};save();emit('settings')}}}}]);
+      <div class="ss-row" style="display:block;line-height:1.7;font-size:14.5px">${M.map(m=>`${mDone(m)?'✅':'⬜'} <b>${esc(m[2])}</b> — ${mN(m)} з ${steps(m).length}`).join('<br>')}</div>
+      <div class="ss-row"><div>Почати місії заново<small>Зірочки Фіфі буде скинуто, файли лишаться</small></div><button class="sos-btn" data-ffr>Скинути</button></div>`;
+    body.onclick=async e=>{const b=e.target.closest('[data-sec]');if(b){FS().off[b.dataset.sec]=!FS().off[b.dataset.sec];save();b.classList.toggle('on');renderCard()}
+      if(e.target.closest('[data-ffr]')){if(await OS.confirm('Місії Фіфі','Скинути всі зірочки Фіфі?','Так','Ні','warn')){FS().done={};FS().m=null;save();cardOff();emit('settings')}}}}]);
   /* перше знайомство і посилання для уроку */
   OS.on('ready',()=>{
     const m=location.hash.match(/fifi=([\w-]+)/);
-    if(m){const id=m[1];const sec=SECS.find(s=>s[0]===id);let t=sec?T.find(x=>x[1]===id&&!FS().done[x[0]])||T.find(x=>x[1]===id):T.find(x=>x[0]===id);if(t){FS().offered=1;save();setTimeout(()=>task(t[0]),900)}return}
+    if(m){const id=m[1];const sec=SECS.find(s=>s[0]===id);const ms=sec?M.filter(x=>x[1]===id):M.filter(x=>x[0]===id||x[4].includes(id));const t=ms.find(x=>!mDone(x))||ms[0];if(t){FS().offered=1;FS().news=2;save();setTimeout(()=>startMission(t[0]),900)}return}
     if(/open=/.test(location.hash))return;
+    if(curM()){setTimeout(()=>renderCard(),600);return}
+    const first=()=>{const n=ML().find(x=>!mDone(x));n?startMission(n[0]):hide()};
     const pcB=OS.apps.firstpc?[{t:'Відкрити ФіфіПК',f:()=>{hide();openApp('firstpc')}}]:[];
     const later={t:'Пізніше',f:()=>{hide();say('','Добре! Якщо захочеш — я тут, біля годинника 😺',[{t:'Ок',p:1,f:hide}])}};
-    if(!FS().offered){FS().offered=1;FS().news=1;save();setTimeout(()=>say('Привіт! Я Фіфі 🐾','Це твій власний комп\'ютер — тут можна все. Показати, як він працює?'+(pcB.length?'<br>А ще на робочому столі є <b>ФіфіПК</b> — мої вправи.':''),[{t:'Так!',p:1,f:()=>{const n=list().find(t=>!FS().done[t[0]]);n?task(n[0]):hide()}},...pcB,later]),1300)}
-    else if(!FS().news){FS().news=1;save();setTimeout(()=>say('Новинка 🐾','Я тепер вмію проводити <b>екскурсію комп\'ютером</b>.'+(pcB.length?' А <b>ФіфіПК</b> лежить просто на робочому столі.':''),[{t:'Екскурсія',p:1,f:()=>task('tour')},...pcB,later]),1300)}
+    if(!FS().offered){FS().offered=1;FS().news=2;save();setTimeout(()=>say('Привіт! Я Фіфі 🐾','Це твій власний комп\'ютер — тут можна все. Пройдемо разом мою першу місію?',[{t:'Так!',p:1,f:first},...pcB,later]),1300)}
+    else if(FS().news!==2&&ML().some(x=>!mDone(x))){FS().news=2;save();setTimeout(()=>say('Новинка 🐾','Тепер мої завдання — це <b>місії</b>. Картка з кроками весь час буде на екрані, а кнопка «Покажи, де» підкаже, куди натиснути.',[{t:'Почати місію',p:1,f:first},later]),1300)}
   });
 }
 /* відкрити програму з посилання: #open=firstpc */
