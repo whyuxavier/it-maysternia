@@ -134,6 +134,7 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 9
 .tag{display:inline-block;padding:3px 10px;border-radius:9px;font:700 13px Nunito,sans-serif;background:color-mix(in srgb,var(--cbg) 70%,var(--card))}
 
 footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-size:14px;padding:0 0 34px}
+#visits{margin-top:4px;font-size:13px}
 
 /* info */
 dialog{border:0;border-radius:22px;padding:0;max-width:440px;width:calc(100% - 32px);background:var(--card);color:var(--ink);box-shadow:0 6px 0 var(--shadow),0 30px 60px -20px rgba(0,0,0,.4)}
@@ -709,7 +710,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
     </div>
   </section>
 </main>
-<footer>ІТ-Майстерня<span id="visits" hidden> · відвідали: <b></b></span></footer>
+<footer>ІТ-Майстерня<div id="visits" hidden></div></footer>
 
 <dialog id="setDlg" aria-labelledby="setT"><div class="dlg">
   <button class="x" type="button" data-x aria-label="Закрити">×</button>
@@ -1611,7 +1612,11 @@ function gcSlug(u){try{const p=new URL(u,location.href).pathname.split('/').filt
 function gcEv(kind,url){try{if(window.goatcounter&&goatcounter.count)goatcounter.count({path:kind+'/'+gcSlug(url),title:kind==='open'?'Відкрили':'Скопіювали посилання',event:true})}catch(e){}}
 function gcCard(e){if(e.type==='auxclick'&&e.button!==1)return;const c=e.target.closest&&e.target.closest('a.card');if(!c||e.target.closest('.cpy'))return;gcEv('open',c.href)}
 document.addEventListener('click',gcCard);document.addEventListener('auxclick',gcCard);
-fetch(GC+'/counter/TOTAL.json').then(r=>r.ok?r.json():null).then(d=>{if(!d||!d.count)return;const v=document.getElementById('visits');v.querySelector('b').textContent=d.count;v.hidden=false}).catch(()=>{});
+(()=>{const v=document.getElementById('visits'),n=x=>+String(x).replace(/\D/g,''),get=q=>fetch(GC+'/counter/TOTAL.json'+q).then(r=>r.ok?r.json():null).then(d=>d?n(d.count_unique||d.count):null).catch(()=>null);
+  const d=new Date(),day=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const fmt=x=>x.toLocaleString('uk-UA'),ppl=x=>{const a=x%10,b=x%100;return a===1&&b!==11?'людина':a>=2&&a<=4&&(b<12||b>14)?'людини':'людей'};
+  Promise.all([get('?start='+day),get('?start=2026-11-01')]).then(([t,all])=>{if(!t&&!all)return;
+    v.textContent=t?`Сьогодні тут ${t%10===1&&t%100!==11?'побувала':'побували'} ${fmt(t)} ${ppl(t)}${all?', усього '+fmt(all):''}`:'Усього тут побували '+fmt(all)+' '+ppl(all);v.hidden=false})})();
 </script>
 </body>
 </html>
