@@ -1200,7 +1200,7 @@ register({id:'browser',name:'Браузер',icon:I.web,kw:'інтернет с�
   W.body.innerHTML=`<div class="sb-bar"><button class="b" title="Назад">${L.back}</button><button class="f" title="Вперед">${L.fwd}</button><button class="r" title="Оновити (F5)">${L.reload}</button><button class="hm" title="Домашня сторінка">${L.home}</button><input class="sb-url" spellcheck="false" aria-label="Адреса сайту"></div><div class="sb-page"><div class="sb-load"></div><div class="sb-in"></div></div>`;
   const page=$('.sb-in',W.body),urlI=$('.sb-url',W.body),ld=$('.sb-load',W.body),pg=$('.sb-page',W.body);let hist=[],hi=-1;
   const SITES={
-   'shukayko.ua':()=>({t:'Шукайко',h:`<div class="sb-logo"><span>Шу</span><span>кай</span><span>ко</span><span>!</span></div><form class="sb-sform"><input name="q" placeholder="Що шукаємо?" aria-label="Пошук"><button>Знайти</button></form>
+   'vseznayko.ua':()=>({t:'Всезнайко',h:`<div class="sb-logo"><span>Все</span><span>знай</span><span>ко</span><span>!</span></div><form class="sb-sform"><input name="q" placeholder="Що шукаємо?" aria-label="Пошук"><button>Знайти</button></form>
      <div class="sb-tiles">${[['vikidity.ua','Вікі-дитя',I.notepad],['pogoda.ua','Погода',I.photo],['shpalery.ua','Шпалери',I.img],['zagadky.ua','Загадки',I.txt],['vikidity.ua/bezpeka','Безпека',I.info]].map(([u,n,ic])=>`<button data-go="${u}"><i>${ic}</i>${n}</button>`).join('')}</div>`}),
    'vikidity.ua':()=>({t:'Вікі-дитя',h:`<h1>Вікі-дитя</h1><p class="lead">Енциклопедія для допитливих. Обери статтю:</p>${Object.entries(ART).map(([k,a])=>`<p>• <span data-go="vikidity.ua/${k}">${a.t}</span></p>`).join('')}`}),
    'pogoda.ua':()=>{const d=new Date();let s=d.getFullYear()*372+d.getMonth()*31+d.getDate();const rnd=()=>{s=(s*9301+49297)%233280;return s/233280};const m=d.getMonth(),base=[-2,0,5,11,17,21,23,22,17,10,4,0][m];
@@ -1217,26 +1217,26 @@ register({id:'browser',name:'Браузер',icon:I.web,kw:'інтернет с�
     if(/шпалер|малюн|картин|фон/.test(s))res.push(['shpalery.ua','Безкоштовні шпалери','Завантаж гарні шпалери для робочого столу.']);
     if(/загад/.test(s))res.push(['zagadky.ua','Загадки про комп\'ютер','Відгадай загадки й завантаж файл.']);
     (opt.searchMore||(()=>[]))(s).forEach(r=>res.push(r));
-    return{t:q+' — Шукайко',h:`<form class="sb-sform" style="margin:0 0 20px"><input name="q" value="${esc(q)}" aria-label="Пошук"><button>Знайти</button></form>`+(res.length?res.map(r=>`<div class="sb-res"><small>${esc(r[0])}</small><span data-go="${esc(r[0])}">${esc(r[1])}</span><p>${esc(r[2])}</p></div>`).join(''):`<p class="lead">За запитом «${esc(q)}» нічого не знайдено. Спробуй інші слова: «мишка», «погода», «шпалери».</p>`)}}
-  function nav(u,nohist){u=norm(u)||'shukayko.ua';let r;
+    return{t:q+' — Всезнайко',h:`<form class="sb-sform" style="margin:0 0 20px"><input name="q" value="${esc(q)}" aria-label="Пошук"><button>Знайти</button></form>`+(res.length?res.map(r=>`<div class="sb-res"><small>${esc(r[0])}</small><span data-go="${esc(r[0])}">${esc(r[1])}</span><p>${esc(r[2])}</p></div>`).join(''):`<p class="lead">За запитом «${esc(q)}» нічого не знайдено. Спробуй інші слова: «мишка», «погода», «шпалери».</p>`)}}
+  function nav(u,nohist){u=norm(u)||'vseznayko.ua';let r;
     if(u.startsWith('?'))r=search(decodeURIComponent(u.slice(1)));
     else if(SITES[u])r=SITES[u]();
     else if(!u.includes('.')&&!u.includes('/')){u='?'+u;r=search(u.slice(1))}
-    else r={t:'Сайт не знайдено',h:`<div class="sb-404">${I.web}<h1>Не вдається знайти сайт</h1><p>Перевір, чи правильно написано адресу <b>${esc(u)}</b>.</p><p><span data-go="shukayko.ua">Повернутися до пошуку</span></p></div>`};
+    else r={t:'Сайт не знайдено',h:`<div class="sb-404">${I.web}<h1>Не вдається знайти сайт</h1><p>Перевір, чи правильно написано адресу <b>${esc(u)}</b>.</p><p><span data-go="vseznayko.ua">Повернутися до пошуку</span></p></div>`};
     if(!nohist){hist=hist.slice(0,hi+1);hist.push(u);hi=hist.length-1}
     ld.style.transition='none';ld.style.width='0';ld.offsetWidth;ld.style.transition='';ld.style.width='70%';
-    setTimeout(()=>{page.innerHTML=r.h;pg.scrollTop=0;urlI.value=u.startsWith('?')?'shukayko.ua/?q='+decodeURIComponent(u.slice(1)):u;W.setTitle(r.t+' — Браузер');ld.style.width='100%';setTimeout(()=>{ld.style.transition='none';ld.style.width='0'},250);
+    setTimeout(()=>{page.innerHTML=r.h;pg.scrollTop=0;urlI.value=u.startsWith('?')?'vseznayko.ua/?q='+decodeURIComponent(u.slice(1)):u;W.setTitle(r.t+' — Браузер');ld.style.width='100%';setTimeout(()=>{ld.style.transition='none';ld.style.width='0'},250);
       $('.b',W.body).disabled=hi<=0;$('.f',W.body).disabled=hi>=hist.length-1;const f=page.querySelector('form');if(f)f.onsubmit=e=>{e.preventDefault();const q=f.q.value.trim();if(q)nav('?'+encodeURIComponent(q))}},220);
   }
   page.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){nav(g.dataset.go);return}const a=e.target.closest('[data-app]');if(a){openApp(OS.apps[a.dataset.app]?a.dataset.app:'browser');return}
     const d=e.target.closest('[data-dl]');if(d){let n;if(d.dataset.dl==='txt')n=F.mk('down','Загадки','file','txt',RIDDLES);else{const i=+d.dataset.dl;n=F.mk('down','Шпалери '+WALLS[i].n,'file','png',wallPng(WALLS[i].css,i))}
       d.textContent='Завантажено ✓';snd('note');notify('Завантаження завершено',F.full(n),'down',{t:'Відкрити папку',f:()=>openApp('explorer','down')})}});
-  urlI.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();const v=urlI.value.trim();const m=v.match(/shukayko\.ua\/\?q=(.*)/i);nav(m?'?'+encodeURIComponent(m[1]):v);urlI.blur()}});
+  urlI.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();const v=urlI.value.trim();const m=v.match(/vseznayko\.ua\/\?q=(.*)/i);nav(m?'?'+encodeURIComponent(m[1]):v);urlI.blur()}});
   urlI.addEventListener('focus',()=>setTimeout(()=>urlI.select(),0));
   $('.b',W.body).onclick=()=>{if(hi>0){hi--;nav(hist[hi],1)}};$('.f',W.body).onclick=()=>{if(hi<hist.length-1){hi++;nav(hist[hi],1)}};
-  $('.r',W.body).onclick=()=>nav(hist[hi],1);$('.hm',W.body).onclick=()=>nav('shukayko.ua');
+  $('.r',W.body).onclick=()=>nav(hist[hi],1);$('.hm',W.body).onclick=()=>nav('vseznayko.ua');
   W.onKey=e=>{if(e.key==='F5'){nav(hist[hi],1);return true}if(e.altKey&&e.key==='ArrowLeft'){$('.b',W.body).click();return true}};
-  W.onArg=u=>nav(u);nav(url||'shukayko.ua');
+  W.onArg=u=>nav(u);nav(url||'vseznayko.ua');
   return W;
 }});
 
