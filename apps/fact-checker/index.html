@@ -402,6 +402,29 @@ kbd{font:800 13px ui-monospace,Consolas,monospace;padding:3px 8px;border-radius:
 .sos .wb{user-select:text;-webkit-user-select:text}
 .sos .ncenter{bottom:60px;z-index:9600}.sos .notifs{bottom:62px;z-index:9400}
 @media (max-width:700px){.sos-tray .mkb .lbl{display:none}.sos-task.fc-case{max-width:none;flex:none}.sos-task.fc-case span{display:inline!important;font-size:12px}.sos-task.fc-case i{display:none}}
+/* Френдс і вільна стрічка */
+.sb-in.fc-full{max-width:none;padding:0;min-height:100%}
+.sb-in.fc-chat{height:100%}
+.fr{min-height:100%;background:#f3f1f8;font:600 15px/1.45 Nunito,system-ui,sans-serif;color:var(--ink)}
+.fr.fr-chats{height:100%;display:flex;flex-direction:column}
+.fr.fr-chats .chat{flex:1;min-height:0;height:auto;background:#fff}
+.frtop{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:8px;padding:8px 14px;background:#fff;border-bottom:1px solid var(--line)}
+.frlogo{display:flex;align-items:center;gap:8px;font:900 22px Rubik,sans-serif;color:#6c5fd0;margin-right:auto}
+.frlogo svg{width:34px;height:30px}
+.sb-in .frtab{position:relative;display:flex;align-items:center;gap:7px;padding:8px 12px;border-radius:12px;font:800 14px Nunito,sans-serif;color:var(--ink)!important;text-decoration:none!important;background:rgba(59,52,80,.05)}
+.sb-in .frtab.on{background:var(--lilac)}
+.frtab svg{width:18px;height:18px}
+.frtab .badge{position:static;box-shadow:none}
+.fr .feed{padding:16px 14px 30px}
+.likes{align-items:center}
+.flag{margin-left:auto;display:inline-flex;align-items:center;gap:5px;border:0;border-radius:10px;padding:5px 10px;background:rgba(196,73,61,.1);color:var(--stamp);font:800 13px Nunito,sans-serif}
+.flag:hover{background:rgba(196,73,61,.18)}
+.flag svg,.flagd svg{width:15px;height:15px}
+.flagd{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font:800 13px Nunito,sans-serif;color:var(--stamp)}
+.flagd.ok{color:var(--ok)}
+.bubf{display:flex;margin-top:6px}
+.howto{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14.5px}
+@media (max-width:700px){.frtab .lbl{display:none}.frlogo{font-size:19px}.fr .feed{padding:10px 8px 24px}}
 </style>
 </head>
 <body>
@@ -439,6 +462,7 @@ kbd{font:800 13px ui-monospace,Consolas,monospace;padding:3px 8px;border-radius:
  <symbol id="i-max" viewBox="0 0 24 24"><rect x="5.5" y="5.5" width="13" height="13" rx="3" class="stk" style="stroke-width:2.4"/></symbol>
  <symbol id="i-game" viewBox="0 0 24 24"><path class="ink" d="M7 7h10a5 5 0 0 1 4.9 6l-.7 3.6a2.6 2.6 0 0 1-4.5 1.2L14.5 15h-5l-2.2 2.8a2.6 2.6 0 0 1-4.5-1.2L2.1 13A5 5 0 0 1 7 7z"/><path d="M7.5 9.5v4M5.5 11.5h4" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="10.5" r="1.3" fill="#fff"/><circle cx="18" cy="12.8" r="1.3" fill="#fff"/></symbol>
  <symbol id="i-gh" viewBox="0 0 24 24"><path class="ink" d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.6.4-1.1.7-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></symbol>
+ <symbol id="i-flag" viewBox="0 0 24 24"><path class="stk" d="M5 21V4"/><path class="ink" d="M5 4h12l-2.5 4L17 12H5z"/></symbol>
  <symbol id="i-vf" viewBox="0 0 24 24"><path fill="#3d8bdc" d="M12 1.5l2.6 2 3.2-.3 1 3.1 2.8 1.6-.9 3.1.9 3.1-2.8 1.6-1 3.1-3.2-.3-2.6 2-2.6-2-3.2.3-1-3.1-2.8-1.6.9-3.1-.9-3.1 2.8-1.6 1-3.1 3.2.3z"/><path d="M7.5 12.2l3 3 6-6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
 
@@ -494,12 +518,12 @@ const sfx = {
   win: () => [523, 659, 784, 1046].forEach((f, i) => tone(f, .18, 'triangle', .06, i * .1))
 };
 
+
 /* ---------- world registries ---------- */
 let PAGES, DOSSIER, PHOTOS, SEARCH, CHATS, SMS, FEED;
 function resetWorld() {
   PAGES = {}; DOSSIER = {}; PHOTOS = {}; SEARCH = []; CHATS = {}; SMS = []; FEED = [];
   /* постійні сайти світу */
-  PAGES['poshuk.web'] = () => searchPage('');
   PAGES['stara-poshta.ua'] = () => `<div class="sk-sp"><div class="sp-top">${spLogo()}Стара пошта</div><div class="pg">
     <h1>Відстежити посилку</h1><p>Усі твої відправлення — в особистому кабінеті.</p>
     <div class="cardform"><b>Мої посилки</b><p class="mk" data-ev="noparcel">Активних посилок немає. Ти нічого не очікуєш.</p></div>
@@ -510,9 +534,12 @@ function resetWorld() {
     ${PAGES['lypove.gov.ua/news'] ? '<div class="sr"><a data-go="lypove.gov.ua/news">Освіта: розклад канікул</a><div>Навчання у школах і канікули.</div></div>' : ''}
     ${PAGES['lypove.gov.ua/afisha'] ? '<div class="sr"><a data-go="lypove.gov.ua/afisha">Фестиваль роботів у міському парку</a><div>Афіша подій для школярів.</div></div>' : ''}
     <div class="sr"><a>Графік вивезення сміття</a><div>Оновлено на зиму.</div></div></div>`;
+  PAGES['roblox.com'] = () => `<div class="pg"><h1>Roblox</h1><p>Робакси можна купити лише в офіційному магазині Roblox або в застосунку гри.</p><p class="meta">Roblox ніколи не просить твій пароль, щоб «подарувати» робакси.</p></div>`;
   DOSSIER['stara-poshta.ua'] = {created: '2009 рік', owner: 'ТОВ «Стара пошта»', note: 'Офіційний сайт служби доставки.'};
   DOSSIER['pixelbank.ua'] = {created: '2012 рік', owner: 'АТ «ПіксельБанк»', note: 'Офіційний сайт банку.'};
   DOSSIER['lypove.gov.ua'] = {created: '2014 рік', owner: 'Липівська міська рада', note: 'Офіційний сайт міської ради.'};
+  DOSSIER['roblox.com'] = {created: '2004 рік', owner: 'Roblox Corporation', note: 'Офіційний сайт гри Roblox.'};
+  DOSSIER['friends.ua'] = {created: '2016 рік', owner: 'ТОВ «Френдс»', note: 'Соцмережа, де ти зараз сидиш.'};
 }
 const spLogo = () => `<svg viewBox="0 0 24 24" width="26" height="26"><rect x="3" y="6" width="18" height="13" rx="2" fill="#f6e19c"/><path d="M3 9l9 5 9-5" fill="none" stroke="#7a5a3a" stroke-width="2"/></svg>`;
 function host(u) { return String(u).replace(/^https?:\/\//, '').replace(/^www\./, '').split(/[/?#]/)[0].toLowerCase(); }
@@ -525,19 +552,39 @@ const PH = {
   coins: () => `<svg viewBox="0 0 300 120" width="260" style="margin:6px auto"><g font-family="Rubik" font-weight="800" font-size="30" text-anchor="middle">${[40, 110, 180, 250].map((x, i) => `<circle cx="${x}" cy="${60 + (i % 2 ? -10 : 10)}" r="32" fill="#ffd84a" stroke="#c99a10" stroke-width="5"/><text x="${x}" y="${71 + (i % 2 ? -10 : 10)}" fill="#a87a00">R</text>`).join('')}</g></svg>`
 };
 
-/* ---------- shift (cases) ---------- */
+
+/* ---------- зміна: історії, що трапляються у стрічці ---------- */
 const FRIENDS = ['Максим', 'Дмитро', 'Софія', 'Остап', 'Аня', 'Тимур', 'Злата', 'Назар'];
 const SISTERS = ['Оля', 'Катя', 'Даринка', 'Мирослава'];
 const AVC = ['var(--sky)', 'var(--mint)', 'var(--peach)', 'var(--lilac)', 'var(--butter)', 'var(--pink)'];
 const VERD = {fake: 'Фейк', true: 'Правда'};
+let CI = -1;
+
+function seedFun(friend, sister) {
+  const f2 = pick(FRIENDS.filter(x => x !== friend));
+  PHOTOS.cat = {svg: IMG.cat, name: 'Кіт на клавіатурі', reverse: '<p><b>Фото є лише в цьому акаунті.</b></p><p class="note">Схоже, автор зняв його сам.</p>', meta: '<dl><dt>Дата зйомки</dt><dd>сьогодні</dd><dt>Пристрій</dt><dd>камера телефона</dd></dl>'};
+  PHOTOS.mount = {svg: IMG.mount, name: 'Карпати', reverse: '<p><b>Фото є лише в цьому акаунті.</b></p>', meta: '<dl><dt>Дата зйомки</dt><dd>минулого літа</dd><dt>Пристрій</dt><dd>камера телефона</dd></dl>'};
+  PHOTOS.meme = {svg: IMG.meme, name: 'Мем', reverse: '<p><b>Мем гуляє інтернетом уже кілька років.</b></p><p class="note">Це жарт, а не новина, тож фейком він не є.</p>', meta: '<dl><dt>Програма</dt><dd>генератор мемів</dd></dl>'};
+  const fun = [
+    {author: friend, av: friend[0], time: '2 год', photo: 'cat', text: 'Мій кіт знову спить на клавіатурі 😹 Як тепер робити домашку?', likes: ri(12, 40), com: ri(2, 9)},
+    {author: 'memes_ua', av: 'M', time: '3 год', photo: 'meme', text: 'Впізнав себе? 😅', likes: ri(2, 9) + ' тис.', com: ri(100, 400)},
+    {author: 'robo_club_lypove', av: 'R', time: '5 год', text: 'Наш робот проїхав лабіринт за 12 секунд! 🤖 Записуйтеся на гурток — заняття щосуботи.', likes: ri(30, 90), com: ri(3, 12)},
+    {author: sister, av: sister[0], time: 'вчора', photo: 'mount', text: 'Карпати 😍 вже скучаю', likes: ri(20, 60), com: ri(1, 6)},
+    {author: f2, av: f2[0], time: 'вчора', text: 'Хто вже пройшов новий рівень у Minecraft? Я застряг на третьому 😭', likes: ri(5, 25), com: ri(4, 15)},
+    {author: 'lypove_library', av: 'Б', time: 'вчора', text: 'У бібліотеці нові комікси й книжки про космос 🚀 Приходьте після уроків!', likes: ri(10, 40), com: ri(0, 5)}
+  ];
+  fun.sort(() => rnd() - .5).forEach(p => FEED.push({...p, case: -1, unread: 0}));
+  SMS.push({from: 'Френдс', time: '08:02', t: 'Твій код для входу у Френдс: ' + ri(1000, 9999) + '. Нікому не повідомляй цей код.', case: -1, unread: 0});
+  SMS.push({from: 'Бібліотека', time: '12:30', t: 'Нагадуємо: книжку «Пригоди робота» треба повернути до п\'ятниці.', case: -1, unread: 0});
+}
 
 function buildShift() {
   resetWorld();
   const friend = pick(FRIENDS), sister = pick(SISTERS);
   FRIEND = friend;
   seedHistory(friend, sister);
+  seedFun(friend, sister);
   const cases = [];
-
   /* 1. Безкоштовні робакси */
   {
     const dom = pick(['roblox-free-robux.top', 'robux-gift.click', 'free-robux24.xyz']);
@@ -561,9 +608,9 @@ function buildShift() {
           {t: `встигни, там лише ${mins} хв!!`, time: '16:42'}
         ]);
         setReplies(friend, [
-          {t: 'Не вводь туди пароль! Це шахраї, вони крадуть акаунти', ans: 'ой 😳 я якраз хотів ввести… дякую, що сказав!'},
-          {t: 'Зараз гляну 👀', ans: 'давай швидше, бо згорить!!'},
-          {t: 'Перевірю й напишу', ans: 'ок, чекаю'}
+          {t: 'Не вводь туди пароль! Це шахраї, вони крадуть акаунти', ans: 'ой 😳 я якраз хотів ввести… дякую, що сказав!', v: 'fake'},
+          {t: 'Ого, дякую! Зараз теж заберу 😍', ans: 'давай, бо згорить!!', v: 'true'},
+          {t: 'Зараз гляну 👀', ans: 'давай швидше!!'}
         ]);
         PAGES[dom] = PAGES[dom + '/gift'] = () => `<div class="sk-scam"><div class="pg">
           <h1 class="mk" data-ev="free">БЕЗКОШТОВНІ РОБАКСИ ДЛЯ ВСІХ!</h1>
@@ -633,9 +680,9 @@ function buildShift() {
           {t: 'Підемо? 🤖 Тільки глянь, чи це правда', time: '17:06'}
         ]);
         setReplies('Мама', [
-          {t: 'Мамо, це правда! Новина є на сайті міської ради. Ходімо 🤖', ans: `Чудово! Тоді в ${day} йдемо 😊`},
-          {t: 'Ще не дивився', ans: 'Глянь, будь ласка'},
-          {t: 'Це фейк', ans: 'Хм, а ти точно перевірив? 🤔'}
+          {t: 'Мамо, це правда! Новина є на сайті міської ради. Ходімо 🤖', ans: `Чудово! Тоді в ${day} йдемо 😊`, v: 'true'},
+          {t: 'Це фейк, не ведись', ans: 'Хм, а ти точно перевірив? 🤔', v: 'fake'},
+          {t: 'Ще не дивився, зараз гляну', ans: 'Глянь, будь ласка'}
         ]);
         PAGES['lypove.gov.ua/afisha'] = () => `<div class="gov-top">Липівська міська рада</div><div class="pg">
           <h1 class="mk" data-ev="calm">Фестиваль роботів у міському парку</h1><p class="meta">Опубліковано цього тижня · Відділ освіти</p>
@@ -667,9 +714,9 @@ function buildShift() {
           {t: '<span class="mk">Це правда??</span> Треба вже купувати путівку в село?', time: '18:21'}
         ]);
         setReplies('Бабуся', [
-          {t: 'Бабусю, це фейк. Міська рада пише, що навчання за звичайним графіком', ans: 'Ох, а я вже сусідкам переслала 🙈 Зараз напишу їм. Дякую, онучку!'},
-          {t: 'Не знаю, зараз перевірю', ans: 'Перевір, бо я хвилююся'},
-          {t: 'Ура, канікули! 🎉', ans: 'Ти ж спершу перевір 🤨'}
+          {t: 'Бабусю, це фейк. Міська рада пише, що навчання за звичайним графіком', ans: 'Ох, а я вже сусідкам переслала 🙈 Зараз напишу їм. Дякую, онучку!', v: 'fake'},
+          {t: 'Так, бабусю, правда! Ура, канікули 🎉', ans: 'Ой лишенько… Тоді приїжджай до мене в село!', v: 'true'},
+          {t: 'Не знаю, зараз перевірю', ans: 'Перевір, бо я хвилююся'}
         ]);
         PAGES['lypova-pravda.info/news/shkoly'] = PAGES['lypova-pravda.info'] = () => `<div class="sk-lp"><div class="lp-top mk">ЛИПОВА ПРАВДА</div><div class="lp-nav">Новини · Скандали · Сенсації · Гороскоп</div><div class="pg">
           <h1 class="mk" data-ev="caps">${head}</h1>
@@ -696,9 +743,9 @@ function buildShift() {
   {
     const year = pick([2011, 2013, 2015]);
     cases.push({
-      app: 'feed', title: 'Акула на вулиці', verdict: 'fake', read: 'Пост про акулу в Стрічці',
+      app: 'feed', title: 'Акула на вулиці', verdict: 'fake', read: 'Допис про акулу у Френдс',
       check: {t: 'Перевір фото в Лупі: де воно з\'являлося раніше?', btn: 'Відкрити Лупу', tool: 'reverse', ok: (k, v) => (k === 'reverse' || k === 'meta') && v === 'shark'},
-      brief: `${sister} показує у Стрічці фото: після злив вулицею пливе акула. Справжнє фото?`,
+      brief: `${sister} показує у Френдс фото: після злив вулицею пливе акула. Справжнє фото?`,
       hint: 'Під фото є кнопка «Перевірити фото». Подивись, де це фото з\'являлося раніше і коли його зняли.',
       ev: {
         now: {label: 'Підпис «щойно»', why: 'Підпис робить старе фото «свіжим». Підпис може бути яким завгодно.'},
@@ -715,10 +762,10 @@ function buildShift() {
           meta: `<dl><dt>Дата зйомки</dt><dd class="mk" data-ev="meta">${ri(2, 28)}.0${ri(3, 9)}.${year}</dd><dt>Програма</dt><dd class="mk">Фоторедактор (змінено)</dd><dt>Розмір</dt><dd class="mk">1200 × 780</dd></dl>`};
         addPost({author: 'weather_wow_ua', av: 'W', time: '7 хв', photo: 'shark',
           text: `<span class="mk" data-ev="now">ЩОЙНО!</span> Після злив акула пливе прямо вулицею 😱🦈 <span class="mk">Обережно!!!</span>`, likes: ri(12, 48) + ' тис.', com: ri(800, 3000)});
-        addChat(sister, [{t: 'Глянь у Стрічці пост про акулу 😱😱 це взагалі реально??', time: '19:47'}]);
+        addChat(sister, [{t: 'Глянь у Френдс допис про акулу 😱😱 це взагалі реально??', time: '19:47'}]);
         setReplies(sister, [
-          {t: 'Це старе фото, його склеїли ще багато років тому', ans: 'а я вже повірила 😅 добре, що не переслала'},
-          {t: 'Жесть 😱', ans: 'ага, я в шоці'},
+          {t: 'Це старе фото, його склеїли ще багато років тому', ans: 'а я вже повірила 😅 добре, що не переслала', v: 'fake'},
+          {t: 'Жесть 😱 Треба переслати всім!', ans: 'ага, вже пересилаю', v: 'true'},
           {t: 'Зараз перевірю', ans: 'ок'}
         ]);
       }
@@ -747,6 +794,12 @@ function buildShift() {
           text: `Даруємо <span class="mk">${sum} грн</span> кожному школяру! 🎁 Встигни до ${until}.`,
           small: `<span class="mk" data-ev="cond">*Нарахування після відкриття картки ПіксельБанку</span>, <span class="mk" data-ev="age5">для клієнтів від 14 років за згодою батьків</span>. Умови: <span class="lnk mk" data-go="pixelbank.ua/500">pixelbank.ua/500</span>`,
           likes: ri(3, 9) + ' тис.', com: ri(200, 900)});
+        addChat(FRIEND, [{t: `ого, ПіксельБанк дарує ${sum} грн кожному школяру 😮 глянь у Френдс`, time: '20:15'}]);
+        setReplies(FRIEND, [
+          {t: 'Не кожному: дрібним шрифтом написано, що треба відкрити картку', ans: 'хм, я й не помітив той текст 🤔', v: 'fake'},
+          {t: 'Круто, треба забрати!', ans: 'ага, я вже хочу 😎', v: 'true'},
+          {t: 'Зараз гляну', ans: 'ок'}
+        ]);
         PAGES['pixelbank.ua/500'] = () => `<div class="pb-top"><i><b></b><b></b><b></b><b></b></i>ПіксельБанк</div><div class="pg">
           <h1>Акція «${sum} грн для школярів»</h1><p class="meta">Діє до ${until}</p>
           <p class="mk" data-ev="official5">Бонус ${sum} грн отримують лише нові клієнти, які відкрили дитячу картку ПіксельБанку.</p>
@@ -755,8 +808,197 @@ function buildShift() {
       }
     });
   }
-  cases.forEach((c, i) => { c.n = i; });
+
+  cases.forEach((c, i) => { c.n = i; c.st = {res: null, ok: false, checked: false, pts: 0}; });
   return cases;
+}
+
+/* ---------- чати ---------- */
+function sendReply(k) {
+  touch();
+  const ch = CHATS[curChat]; if (!ch || !ch.replies) return;
+  const list = ch.replies, r = list[k]; ch.replies = null;
+  const pend = !r.v && r.ci !== undefined && S.cases[r.ci] && !S.cases[r.ci].st.res;
+  ch.msgs.push({me: 1, t: esc(r.t), time: nowT(), case: -1}); sfx.click();
+  const after = () => { if (r.v && r.ci !== undefined) setTimeout(() => verdict(r.ci, r.v), 700); };
+  if (r.ans) {
+    ch.typing = 1;
+    setTimeout(() => {
+      ch.typing = 0; ch.msgs.push({t: esc(r.ans), time: nowT(), case: -1});
+      if (r.next) ch.replies = r.next; else if (pend) ch.replies = list.filter(x => x.v);
+      if (frShown('chats') && curChat === ch.name) { renderMsg(); tone(740, .08, 'triangle', .04); }
+      else { ch.unread++; notify({app: 'msg', chat: ch.name, title: ch.name, text: r.ans}); }
+      renderBadges(); after();
+    }, 1500);
+  } else after();
+  renderMsg();
+}
+function setReplies(name, list) { list.forEach(r => { if (r.ci === undefined) r.ci = CI; }); if (CHATS[name]) CHATS[name].replies = list; }
+
+/* ---------- content adders ---------- */
+function addChat(name, msgs) {
+  if (!CHATS[name]) CHATS[name] = {name, msgs: [], unread: 0, c: AVC[Object.keys(CHATS).length % AVC.length]};
+  msgs.forEach(m => CHATS[name].msgs.push({...m, case: CI}));
+  CHATS[name].unread += msgs.filter(m => !m.me).length;
+  CHATS[name].last = ++chatSeq;
+}
+function addSms(m) { SMS.push({...m, case: CI, unread: 1}); }
+function addPost(p) { FEED.unshift({...p, case: CI, unread: 1}); }
+let chatSeq = 1000;
+
+/* ---------- seeded random ---------- */
+function mulberry(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const nowT = () => new Date().toTimeString().slice(0, 5);
+
+/* ---------- state ---------- */
+const S = {seed: 0, cases: [], shown: 0, score: 0, found: new Set(), active: false, last: 0};
+let marker = false;
+let FRIEND = null, lastAct = Date.now(), nags = 0;
+const touch = () => { lastAct = Date.now(); };
+const shownCases = () => S.cases.slice(0, S.shown);
+const pendingCase = () => shownCases().filter(c => !c.st.res).pop();
+function build() {
+  rnd = mulberry(S.seed);
+  closeAllWins();
+  OS.wins.filter(w => w.app === 'browser').forEach(w => w.close(true));
+  curChat = null; curPhoto = null; dossierQ = ''; NOTIFS.length = 0; chatSeq = 1000; CI = -1;
+  S.cases = buildShift(); S.shown = 0; S.found = new Set(); nags = 0;
+}
+function newShift(quiet) {
+  S.seed = Math.floor(Math.random() * 1e9); S.score = 0;
+  build(); setMarker(false);
+  S.active = true; S.last = Date.now(); touch();
+  save(); renderAll();
+  if (!quiet) setTimeout(() => browse('friends.ua'), 500);
+}
+function showCase(i) {
+  CI = i; S.cases[i].setup(); CI = -1;
+  S.shown = i + 1; S.last = Date.now(); nags = 0;
+  save(); renderAll(); notifyCase(i);
+}
+function save() { store.set('progress3', {seed: S.seed, shown: S.shown, score: S.score, st: S.cases.map(c => c.st), found: [...S.found]}); }
+function restore(p) {
+  S.seed = p.seed; build();
+  for (let i = 0; i < p.shown; i++) { CI = i; S.cases[i].setup(); }
+  CI = -1; S.shown = p.shown; S.score = p.score || 0; S.found = new Set(p.found || []);
+  (p.st || []).forEach((st, i) => { if (S.cases[i]) Object.assign(S.cases[i].st, st); });
+  Object.values(CHATS).forEach(c => { c.unread = 0; if (c.replies && c.replies.some(r => r.ci !== undefined && S.cases[r.ci] && S.cases[r.ci].st.res)) c.replies = null; });
+  SMS.forEach(m => m.unread = 0); FEED.forEach(f => f.unread = 0);
+  S.active = true; S.last = Date.now();
+  renderAll();
+}
+function notifyCase(i) {
+  const c = S.cases[i];
+  const ch = Object.values(CHATS).find(x => x.msgs.some(m => m.case === i && !m.me));
+  const chat = () => { const m = ch && [...ch.msgs].reverse().find(m => m.case === i && !m.me); if (m) notify({app: 'msg', chat: ch.name, title: ch.name, text: strip(m.t)}); };
+  setTimeout(() => {
+    if (c.app === 'sms') { const m = SMS[SMS.length - 1]; notify({app: 'sms', title: m.from, text: strip(m.t)}); }
+    if (c.app === 'feed') { const p = FEED.find(x => x.case === i); if (p) notify({app: 'feed', title: 'Френдс · ' + p.author, text: strip(p.text)}); }
+    if (ch) setTimeout(chat, c.app === 'msg' ? 0 : 2500);
+  }, 300);
+}
+
+/* ---------- notifications ---------- */
+const NOTIFS = [];
+function notify(n) {
+  n.time = nowT(); NOTIFS.unshift(n); sfx.ding();
+  const A = APPS[n.app] || APPS.guide;
+  const el = document.createElement('div'); el.className = 'notif';
+  el.innerHTML = `<span class="ico ${A.c}">${icon(A.i)}</span><span style="min-width:0"><b>${esc(n.title)}</b><small>${esc(n.text)}</small></span><button class="nx" type="button" aria-label="Закрити">${icon('i-x')}</button>`;
+  el.onclick = e => { if (!e.target.closest('.nx')) openNotif(n); hideN(el); };
+  $('#notifs').prepend(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('on')));
+  setTimeout(() => hideN(el), 7000);
+  renderBell();
+}
+function hideN(el) { el.classList.remove('on'); setTimeout(() => el.remove(), 300); }
+function openNotif(n) {
+  n.read = 1;
+  if (n.chat) curChat = n.chat;
+  openWin(n.app);
+  $('#ncenter').hidden = true; renderBell();
+}
+function renderBell() {
+  const k = NOTIFS.filter(n => !n.read).length, b = $('#bellN');
+  b.hidden = !k; b.textContent = k;
+  $('#nList').innerHTML = NOTIFS.length ? NOTIFS.map((n, i) => { const A = APPS[n.app] || APPS.guide; return `<div class="notif on" data-ni="${i}" style="box-shadow:0 0 0 1px var(--line);margin-bottom:8px"><span class="ico ${A.c}">${icon(A.i)}</span><span style="min-width:0"><b>${esc(n.title)}</b><small>${esc(n.text)}</small></span><span class="note" style="margin-left:auto">${n.time}</span></div>`; }).join('') : '<p class="note">Нових сповіщень немає.</p>';
+}
+
+/* ---------- OS & windows ---------- */
+const APPS = {
+  case: {t: 'Журнал фактчекера', i: 'i-case', c: 'c-case', w: 360, h: 600},
+  msg: {t: 'Френдс', i: 'i-msg', c: 'c-msg'},
+  feed: {t: 'Френдс', i: 'i-feed', c: 'c-feed'},
+  web: {t: 'Браузер', i: 'i-web', c: 'c-web'},
+  sms: {t: 'SMS', i: 'i-sms', c: 'c-sms', w: 400, h: 500},
+  tools: {t: 'Лупа', i: 'i-tools', c: 'c-tools', w: 520, h: 480},
+  guide: {t: 'Підручник фактчекера', i: 'i-book', c: 'c-guide', w: 680, h: 520}
+};
+const FCI = {
+  case: `<svg viewBox="0 0 64 56"><rect x="6" y="14" width="52" height="36" rx="6" fill="#f6c6a6" stroke="#c9825e" stroke-width="3"/><path d="M24 14V9a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v5" fill="none" stroke="#c9825e" stroke-width="3"/><circle cx="31" cy="31" r="8" fill="#fff" stroke="#3b3450" stroke-width="3"/><path d="M37 37l6 6" stroke="#3b3450" stroke-width="3.5" stroke-linecap="round"/></svg>`,
+  sms: `<svg viewBox="0 0 64 56"><rect x="18" y="3" width="28" height="50" rx="6" fill="#3b3450"/><rect x="21" y="9" width="22" height="36" rx="2" fill="#bfe3cf"/><path d="M24 15h16v10H29l-5 4z" fill="#fff"/><circle cx="32" cy="49" r="2" fill="#bfe3cf"/></svg>`,
+  friends: `<svg viewBox="0 0 64 56"><rect x="6" y="3" width="52" height="50" rx="14" fill="#d5c7f1" stroke="#6c5fd0" stroke-width="3"/><circle cx="24" cy="22" r="7" fill="#fff" stroke="#6c5fd0" stroke-width="3"/><circle cx="41" cy="22" r="7" fill="#f6c6a6" stroke="#6c5fd0" stroke-width="3"/><path d="M12 43c2-7 7-10 12-10s10 3 12 10M29 43c2-7 7-10 12-10s10 3 12 10" fill="none" stroke="#6c5fd0" stroke-width="3" stroke-linecap="round"/></svg>`,
+  tools: `<svg viewBox="0 0 64 56"><circle cx="27" cy="24" r="15" fill="#e9e4f5" stroke="#6c5fd0" stroke-width="4"/><path d="M38 35l14 14" stroke="#6c5fd0" stroke-width="7" stroke-linecap="round"/><path d="M20 24a7 7 0 0 1 7-7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`,
+  marker: `<svg viewBox="0 0 64 56"><path d="M12 48h40" stroke="#ffe86b" stroke-width="9" stroke-linecap="round"/><path d="M38 6l12 12-20 20H18V26z" fill="#ffd84a" stroke="#b08a10" stroke-width="3" stroke-linejoin="round"/><path d="M18 26l12 12" stroke="#b08a10" stroke-width="3"/><path d="M18 38l-5 6h9z" fill="#3b3450"/></svg>`,
+  guide: `<svg viewBox="0 0 64 56"><path d="M8 8h18a6 6 0 0 1 6 6v36a5 5 0 0 0-5-5H8z" fill="#fff" stroke="#e07a6a" stroke-width="3" stroke-linejoin="round"/><path d="M56 8H38a6 6 0 0 0-6 6v36a5 5 0 0 1 5-5h19z" fill="#ffe0da" stroke="#e07a6a" stroke-width="3" stroke-linejoin="round"/><path d="M14 18h10M14 26h10M40 18h10M40 26h10" stroke="#e0a090" stroke-width="2.6" stroke-linecap="round"/></svg>`
+};
+let wins = {}, focused = null, OS = null;
+const isMobile = () => matchMedia('(max-width:700px)').matches;
+function browse(u) { if (!OS) return; OS.closeStart(); $('#ncenter').hidden = true; return OS.browse(u === undefined ? undefined : normUrl(u)); }
+function openWin(app, focusOnly) {
+  if (!OS) return;
+  if (app === 'feed' || app === 'friends') return browse('friends.ua');
+  if (app === 'msg') return browse('friends.ua/chats');
+  if (app === 'web') return browse();
+  if (!APPS[app] || !APPS[app].w) return;
+  OS.closeStart(); $('#ncenter').hidden = true;
+  let w = wins[app];
+  if (!w) {
+    const A = APPS[app];
+    const W = OS.win({app: 'fc-' + app, title: A.t, icon: FCI[app] || FCI.case, w: A.w, h: A.h});
+    W.el.dataset.app = app; W.body.classList.add('wb');
+    w = wins[app] = {el: W.el, body: W.body, W};
+    W.onClose = () => { if (wins[app] === w) delete wins[app]; if (focused === app) focused = null; renderTaskbar(); };
+    W.onFocus = () => { focused = app; renderTaskbar(); };
+    if (app === 'case') W.task.style.display = 'none';
+    if (app === 'case' && !W.el.classList.contains('max')) { W.el.style.left = Math.max(4, OS.desk.clientWidth - W.el.offsetWidth - 14) + 'px'; W.el.style.top = '14px'; }
+    renderApp(app);
+  } else if (w.el.classList.contains('min')) { w.el.classList.remove('min'); w.W.task.classList.remove('min'); }
+  w.W.focus(); focused = app;
+  if (!focusOnly) sfx.click();
+  if (app === 'sms') markSeen('sms');
+  renderTaskbar();
+  return w;
+}
+function closeWin(app) { const w = wins[app]; if (w) w.W.close(true); }
+function closeAllWins() { Object.keys(wins).forEach(closeWin); wins = {}; }
+function tbClick(app) {
+  const w = wins[app];
+  if (!w || w.el.classList.contains('min')) return openWin(app);
+  if (OS.activeWin() === w.W) { w.W.minimize(); return renderTaskbar(); }
+  w.W.focus();
+}
+function renderTaskbar() {
+  const l = $('#tbCaseL'); if (!l) return;
+  l.textContent = `★ ${S.score}` + (isMobile() ? '' : ' · Журнал');
+  $('#tbCase').classList.toggle('on', !!wins.case && !!OS && OS.activeWin() === wins.case.W && !wins.case.el.classList.contains('min'));
+}
+
+/* ---------- badges ---------- */
+function unreadOf(app) {
+  if (app === 'msg') return Object.values(CHATS).reduce((s, c) => s + c.unread, 0);
+  if (app === 'sms') return SMS.filter(m => m.unread).length;
+  if (app === 'feed') return FEED.filter(p => p.unread).length;
+  return 0;
+}
+function renderBadges() {
+  $$('[data-badge]').forEach(b => { const n = unreadOf(b.dataset.badge); b.hidden = !n; b.textContent = n; });
+}
+function markSeen(app) {
+  if (app === 'sms') SMS.forEach(m => m.unread = 0);
+  if (app === 'feed') FEED.forEach(p => p.unread = 0);
+  NOTIFS.forEach(n => { if (n.app === app && app !== 'msg') n.read = 1; });
+  renderBadges(); renderBell();
 }
 
 /* ---------- history ---------- */
@@ -809,195 +1051,6 @@ function seedHistory(friend, sister) {
     {me: 1, t: 'Добре', time: '13:46'}
   ]);
 }
-
-function sendReply(k) {
-  touch();
-  const ch = CHATS[curChat]; if (!ch || !ch.replies) return;
-  const r = ch.replies[k]; ch.replies = null;
-  ch.msgs.push({me: 1, t: esc(r.t), time: nowT(), case: -1}); sfx.click();
-  if (r.ans) {
-    ch.typing = 1;
-    setTimeout(() => {
-      ch.typing = 0; ch.msgs.push({t: esc(r.ans), time: nowT(), case: -1});
-      if (r.next) ch.replies = r.next;
-      if (ibx('msg') && curChat === ch.name) { renderMsg(); tone(740, .08, 'triangle', .04); }
-      else { ch.unread++; notify({app: 'msg', chat: ch.name, title: ch.name, text: r.ans}); renderBadges(); }
-    }, 1500);
-  }
-  renderMsg();
-}
-function setReplies(name, list) { if (CHATS[name]) CHATS[name].replies = list; }
-
-/* ---------- content adders ---------- */
-function addChat(name, msgs) {
-  if (!CHATS[name]) CHATS[name] = {name, msgs: [], unread: 0, c: AVC[Object.keys(CHATS).length % AVC.length]};
-  msgs.forEach(m => CHATS[name].msgs.push({...m, case: S.ci}));
-  CHATS[name].unread += msgs.filter(m => !m.me).length;
-  CHATS[name].last = 1000 + S.ci * 10 + Object.keys(CHATS).length + (Date.now() % 1);
-}
-function addSms(m) { SMS.push({...m, case: S.ci, unread: 1}); }
-function addPost(p) { FEED.unshift({...p, case: S.ci, unread: 1}); }
-
-/* ---------- seeded random ---------- */
-function mulberry(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-const nowT = () => new Date().toTimeString().slice(0, 5);
-
-/* ---------- state ---------- */
-const S = {seed: 0, cases: [], ci: 0, score: 0, results: [], found: new Set(), misses: 0, hint: false, traps: 0, active: false, read: false, checked: false};
-let marker = false;
-let FRIEND = null, lastAct = Date.now(), nags = 0;
-const touch = () => { lastAct = Date.now(); };
-function build() {
-  rnd = mulberry(S.seed);
-  closeAllWins();
-  B.hist = []; B.pos = -1; curChat = null; curPhoto = null; dossierQ = ''; NOTIFS.length = 0;
-  S.cases = buildShift();
-}
-function newShift() {
-  S.seed = Math.floor(Math.random() * 1e9); S.score = 0; S.results = [];
-  build(); setMarker(false);
-  beginCase(0);
-}
-function beginCase(i, silent) {
-  S.ci = i; S.found = new Set(); S.misses = 0; S.hint = false; S.traps = 0; S.read = false; S.checked = false; nags = 0; touch();
-  const c = S.cases[i];
-  c.setup();
-  S.active = true;
-  renderAll(); save();
-  if (!silent) notifyCase(c);
-}
-function save() { store.set('progress2', {seed: S.seed, ci: S.ci, score: S.score, results: S.results, found: [...S.found], misses: S.misses, hint: S.hint, traps: S.traps, read: S.read, checked: S.checked}); }
-function restore(p) {
-  S.seed = p.seed; build();
-  for (let i = 0; i < p.ci; i++) { S.ci = i; S.cases[i].setup(); }
-  S.ci = p.ci; S.cases[p.ci].setup();
-  Object.assign(S, {score: p.score, results: p.results || [], found: new Set(p.found || []), misses: p.misses || 0, hint: !!p.hint, traps: p.traps || 0, read: !!p.read, checked: !!p.checked, active: true});
-  Object.values(CHATS).forEach(c => c.unread = 0); SMS.forEach(m => m.unread = 0); FEED.forEach(f => f.unread = 0);
-  renderAll();
-  if (S.results.length > S.ci) { S.active = false; if (S.ci < S.cases.length - 1) beginCase(S.ci + 1); else endShift(); }
-}
-function notifyCase(c) {
-  setTimeout(() => {
-    notify({app: 'case', title: 'Бюро перевірки фактів', text: `Нова справа ${S.ci + 1} з ${S.cases.length}: ${c.title}`});
-    const ch = Object.values(CHATS).find(x => x.msgs.some(m => m.case === S.ci && !m.me));
-    setTimeout(() => {
-      if (c.app === 'sms') { const m = SMS[SMS.length - 1]; notify({app: 'sms', title: m.from, text: strip(m.t)}); }
-      else if (ch) { const m = [...ch.msgs].reverse().find(m => m.case === S.ci && !m.me); if (m) notify({app: 'msg', chat: ch.name, title: ch.name, text: strip(m.t)}); }
-      else if (c.app === 'feed') { const p = FEED[0]; notify({app: 'feed', title: 'Стрічка · ' + p.author, text: strip(p.text)}); }
-    }, 1600);
-  }, 700);
-}
-
-/* ---------- notifications ---------- */
-const NOTIFS = [];
-function notify(n) {
-  n.time = nowT(); NOTIFS.unshift(n); sfx.ding();
-  const el = document.createElement('div'); el.className = 'notif';
-  el.innerHTML = `<span class="ico ${APPS[n.app].c}">${icon(APPS[n.app].i)}</span><span style="min-width:0"><b>${esc(n.title)}</b><small>${esc(n.text)}</small></span><button class="nx" type="button" aria-label="Закрити">${icon('i-x')}</button>`;
-  el.onclick = e => { if (!e.target.closest('.nx')) openNotif(n); hideN(el); };
-  $('#notifs').prepend(el);
-  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('on')));
-  setTimeout(() => hideN(el), 7000);
-  renderBell();
-}
-function hideN(el) { el.classList.remove('on'); setTimeout(() => el.remove(), 300); }
-function openNotif(n) {
-  n.read = 1;
-  if (n.chat) curChat = n.chat;
-  openWin(n.app); if (n.app === 'msg') renderInbox();
-  $('#ncenter').hidden = true; renderBell();
-}
-function renderBell() {
-  const k = NOTIFS.filter(n => !n.read).length, b = $('#bellN');
-  b.hidden = !k; b.textContent = k;
-  $('#nList').innerHTML = NOTIFS.length ? NOTIFS.map((n, i) => `<div class="notif on" data-ni="${i}" style="box-shadow:0 0 0 1px var(--line);margin-bottom:8px"><span class="ico ${APPS[n.app].c}">${icon(APPS[n.app].i)}</span><span style="min-width:0"><b>${esc(n.title)}</b><small>${esc(n.text)}</small></span><span class="note" style="margin-left:auto">${n.time}</span></div>`).join('') : '<p class="note">Нових сповіщень немає.</p>';
-}
-
-/* ---------- OS & windows ---------- */
-const APPS = {
-  case: {t: 'Справа', i: 'i-case', c: 'c-case', w: 340, h: 620},
-  inbox: {t: 'Повідомлення', i: 'i-msg', c: 'c-msg', w: 620, h: 520},
-  msg: {t: 'Месенджер', i: 'i-msg', c: 'c-msg', w: 580, h: 460},
-  sms: {t: 'Повідомлення', i: 'i-sms', c: 'c-sms', w: 380, h: 460},
-  web: {t: 'Браузер', i: 'i-web', c: 'c-web', w: 700, h: 540},
-  feed: {t: 'Стрічка', i: 'i-feed', c: 'c-feed', w: 460, h: 560},
-  tools: {t: 'Лупа', i: 'i-tools', c: 'c-tools', w: 520, h: 480},
-  pc: {t: 'Комп\'ютер', i: 'i-pc', c: 'c-pc', w: 620, h: 420},
-  guide: {t: 'Підручник фактчекера', i: 'i-book', c: 'c-guide', w: 680, h: 520},
-  notes: {t: 'Блокнот', i: 'i-dossier', c: 'c-notes', w: 460, h: 380},
-  photos: {t: 'Фото', i: 'i-photo', c: 'c-photos', w: 520, h: 420},
-  settings: {t: 'Налаштування', i: 'i-ctl', c: 'c-set', w: 460, h: 520},
-  game: {t: 'Гра', i: 'i-game', c: 'c-butter', w: 860, h: 600}
-};
-const FCI = {
-  case: `<svg viewBox="0 0 64 56"><rect x="6" y="14" width="52" height="36" rx="6" fill="#f6c6a6" stroke="#c9825e" stroke-width="3"/><path d="M24 14V9a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v5" fill="none" stroke="#c9825e" stroke-width="3"/><circle cx="31" cy="31" r="8" fill="#fff" stroke="#3b3450" stroke-width="3"/><path d="M37 37l6 6" stroke="#3b3450" stroke-width="3.5" stroke-linecap="round"/></svg>`,
-  msg: `<svg viewBox="0 0 64 56"><path d="M8 10h34a5 5 0 0 1 5 5v18a5 5 0 0 1-5 5H22l-9 8v-8H8a5 5 0 0 1-5-5V15a5 5 0 0 1 5-5z" fill="#bddcf3" stroke="#4f7fbf" stroke-width="3" stroke-linejoin="round"/><path d="M50 20h6a4 4 0 0 1 4 4v15a4 4 0 0 1-4 4h-3v6l-7-6H32" fill="#fff" stroke="#4f7fbf" stroke-width="3" stroke-linejoin="round"/><circle cx="16" cy="24" r="3" fill="#4f7fbf"/><circle cx="25" cy="24" r="3" fill="#4f7fbf"/><circle cx="34" cy="24" r="3" fill="#4f7fbf"/></svg>`,
-  sms: `<svg viewBox="0 0 64 56"><rect x="18" y="3" width="28" height="50" rx="6" fill="#3b3450"/><rect x="21" y="9" width="22" height="36" rx="2" fill="#bfe3cf"/><path d="M24 15h16v10H29l-5 4z" fill="#fff"/><circle cx="32" cy="49" r="2" fill="#bfe3cf"/></svg>`,
-  web: SandOS.icons.web,
-  feed: `<svg viewBox="0 0 64 56"><rect x="8" y="4" width="48" height="48" rx="12" fill="#f5bfd3" stroke="#d3739a" stroke-width="3"/><rect x="16" y="12" width="32" height="20" rx="4" fill="#fff"/><path d="M32 46c-6-4-9-7-9-10a4.5 4.5 0 0 1 9-1 4.5 4.5 0 0 1 9 1c0 3-3 6-9 10z" fill="#e0574a"/></svg>`,
-  tools: `<svg viewBox="0 0 64 56"><circle cx="27" cy="24" r="15" fill="#e9e4f5" stroke="#6c5fd0" stroke-width="4"/><path d="M38 35l14 14" stroke="#6c5fd0" stroke-width="7" stroke-linecap="round"/><path d="M20 24a7 7 0 0 1 7-7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`,
-  guide: `<svg viewBox="0 0 64 56"><path d="M8 8h18a6 6 0 0 1 6 6v36a5 5 0 0 0-5-5H8z" fill="#fff" stroke="#e07a6a" stroke-width="3" stroke-linejoin="round"/><path d="M56 8H38a6 6 0 0 0-6 6v36a5 5 0 0 1 5-5h19z" fill="#ffe0da" stroke="#e07a6a" stroke-width="3" stroke-linejoin="round"/><path d="M14 18h10M14 26h10M40 18h10M40 26h10" stroke="#e0a090" stroke-width="2.6" stroke-linecap="round"/></svg>`
-};
-FCI.inbox = FCI.sms;
-const FC_APPS = ['case', 'inbox', 'web', 'tools', 'guide'];
-let wins = {}, focused = null, OS = null;
-const isMobile = () => matchMedia('(max-width:700px)').matches;
-let inboxTab = 'msg';
-function openWin(app, focusOnly) {
-  if (!OS) return;
-  if (app === 'msg' || app === 'sms' || app === 'feed') { inboxTab = app; app = 'inbox'; if (wins.inbox) renderInbox(); }
-  OS.closeStart(); $('#ncenter').hidden = true;
-  let w = wins[app];
-  if (!w) {
-    const A = APPS[app];
-    const W = OS.win({app: 'fc-' + app, title: A.t, icon: FCI[app] || FCI.case, w: A.w, h: A.h});
-    W.el.dataset.app = app; W.body.classList.add('wb');
-    w = wins[app] = {el: W.el, body: W.body, W};
-    W.onClose = () => { if (wins[app] === w) delete wins[app]; if (focused === app) focused = null; renderTaskbar(); };
-    W.onFocus = () => { focused = app; renderTaskbar(); };
-    if (app === 'case') { W.task.style.display = 'none'; if (!W.el.classList.contains('max')) { W.el.style.left = Math.max(4, OS.desk.clientWidth - W.el.offsetWidth - 14) + 'px'; W.el.style.top = '14px'; } }
-    renderApp(app);
-  } else if (w.el.classList.contains('min')) { w.el.classList.remove('min'); w.W.task.classList.remove('min'); }
-  w.W.focus(); focused = app;
-  if (!focusOnly) sfx.click();
-  markSeen(app === 'inbox' ? inboxTab : app); renderTaskbar();
-  return w;
-}
-function closeWin(app) { const w = wins[app]; if (w) w.W.close(true); }
-function closeAllWins() { Object.keys(wins).forEach(closeWin); wins = {}; }
-function minWin(app) { const w = wins[app]; if (w) w.W.minimize(); renderTaskbar(); }
-function maxWin(app) { const w = wins[app]; if (w) w.W.toggleMax(); }
-function focusWin(app) { const w = wins[app]; if (w && !w.el.classList.contains('min')) w.W.focus(); }
-function tbClick(app) {
-  const w = wins[app];
-  if (!w || w.el.classList.contains('min')) return openWin(app);
-  if (OS.activeWin() === w.W) return minWin(app);
-  focusWin(app);
-}
-function renderTaskbar() {
-  const l = $('#tbCaseL'); if (!l) return;
-  const c = S.cases[S.ci];
-  l.textContent = c && S.active ? `${isMobile() ? '' : 'Справа '}${S.ci + 1}/${S.cases.length} · крок ${stepNo()}/3` : 'Справа';
-  $('#tbCase').classList.toggle('on', !!wins.case && !!OS && OS.activeWin() === wins.case.W && !wins.case.el.classList.contains('min'));
-}
-
-/* ---------- badges ---------- */
-function unreadOf(app) {
-  if (app === 'msg') return Object.values(CHATS).reduce((s, c) => s + c.unread, 0);
-  if (app === 'sms') return SMS.filter(m => m.unread).length;
-  if (app === 'feed') return FEED.filter(p => p.unread).length;
-  return 0;
-}
-function renderBadges() {
-  $$('[data-badge]').forEach(b => { const n = unreadOf(b.dataset.badge); b.hidden = !n; b.textContent = n; });
-}
-function markSeen(app) {
-  if (app === 'sms') SMS.forEach(m => m.unread = 0);
-  if (app === 'feed') FEED.forEach(p => p.unread = 0);
-  NOTIFS.forEach(n => { if (n.app === app && app !== 'msg') n.read = 1; });
-  renderBadges(); renderBell();
-}
-
 /* ---------- files (у Sand OS) ---------- */
 const IMG = {
   cat: `<svg viewBox="0 0 300 200"><rect width="300" height="200" fill="#f6e1c4"/><rect y="150" width="300" height="50" fill="#d9b98f"/><ellipse cx="150" cy="140" rx="70" ry="42" fill="#8a8f98"/><circle cx="150" cy="92" r="38" fill="#8a8f98"/><path d="M118 70l6-30 20 22zM182 70l-6-30-20 22z" fill="#8a8f98"/><circle cx="137" cy="90" r="5" fill="#2b2b2b"/><circle cx="163" cy="90" r="5" fill="#2b2b2b"/><path d="M146 102l4 4 4-4" fill="#e7a0a0"/><path d="M118 100h-22M118 106h-20M182 100h22M182 106h20" stroke="#5c5f66" stroke-width="2"/><path d="M215 150q40-10 30-50" stroke="#8a8f98" stroke-width="14" fill="none" stroke-linecap="round"/></svg>`,
@@ -1006,7 +1059,7 @@ const IMG = {
 };
 const svgUrl = k => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(IMG[k].replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" '));
 function fcSeed(add, lnk) {
-  ['guide', 'case', 'inbox', 'web', 'tools'].forEach(a => lnk('desk', 'fc-' + a));
+  ['fc-friends', 'browser', 'fc-sms', 'fc-tools', 'fc-marker', 'fc-case', 'fc-guide'].forEach(a => lnk('desk', a));
   add('docs', 'Домашка з інформатики', 'file', 'txt', 'Завдання на понеділок:\n1. Скласти блок-схему «Як перейти дорогу».\n2. Повторити: що таке алгоритм.\n3. Принести навушники.');
   add('docs', 'Список покупок', 'file', 'txt', 'Від мами:\n— хліб\n— молоко 2 шт\n— яблука\n— щось смачне до чаю :)');
   add('down', 'розклад_уроків', 'file', 'txt', 'Пн: математика, укр. мова, інформатика, фізкультура\nВт: англійська, історія, біологія, мистецтво\nСр: математика, географія, укр. література');
@@ -1023,25 +1076,25 @@ function openExe() {
 
 /* ---------- guide ---------- */
 const GUIDE = [
-  ['Як тут усе влаштовано', `<p>Це твій робочий комп'ютер у <b>Бюро перевірки фактів</b>. Тобі пишуть друзі й рідні, приходять SMS і пости — усе це у вікні <b>Повідомлення</b>. Твоє завдання — розібратися, де правда, а де ні.</p>
-   <ul><li><b>Пуск</b> (кнопка ліворуч унизу) — усі програми й налаштування.</li><li><b>Панель знизу</b> — відкриті вікна, «Справи», маркер, звук, сповіщення й годинник.</li><li><b>Сповіщення</b> з'являються праворуч унизу. Пропустив — натисни дзвіночок.</li><li><b>Справа</b> — що зараз треба перевірити: три кроки і печатка.</li><li>Вікна можна перетягувати за заголовок і закривати хрестиком.</li></ul>`],
-  ['Як розслідувати', `<p>У кожній справі — <b>три кроки</b>. Вікно «Справа» показує, який крок зараз.</p><ol><li><b>Прочитай</b> повідомлення або пост.</li><li><b>Перевір</b>: у Браузері (офіційні сайти) або в Лупі (досьє сайту, пошук за фото).</li><li><b>Виріши</b>: постав печатку <b>Фейк</b> або <b>Правда</b>.</li></ol>
-   <p><b>Бонус:</b> увімкни маркер (кнопка внизу або клавіша <kbd>M</kbd>) і натискай на підозрілі слова. Влучна ознака підсвітиться жовтим.</p>
-   <p>Бали: перевірка — 20, правильна печатка — 50, кожна ознака — 10. Помилка маркером −5, введені дані на сайті шахраїв −10.</p>`],
+  ['Як тут усе влаштовано', `<p>Це твій комп'ютер. Ти сидиш у соцмережі <b>Френдс</b>: гортаєш стрічку, переписуєшся з друзями й рідними. Але час від часу там трапляється щось підозріле.</p>
+   <ul><li><b>Френдс</b> відкривається в браузері: вкладки «Стрічка» і «Повідомлення».</li><li><b>SMS</b> — повідомлення на телефон.</li><li><b>Лупа</b> — перевірити сайт або фото.</li><li><b>Маркер</b> — позначати ознаки фейку (клавіша <kbd>M</kbd>).</li><li><b>Журнал</b> (кнопка з зіркою внизу) — твої бали й усе, що ти вже перевірив.</li></ul>`],
+  ['Як грати', `<ol><li><b>Гортай</b> Френдс, читай чати й SMS.</li><li>Помітив щось підозріле — <b>перевір</b>: адресу сайту й фото в Лупі, новину — на офіційному сайті (закладки в браузері).</li><li><b>Виріши</b>: під дописом чи SMS натисни «Фейк?», а в чаті просто обери відповідь — так ти скажеш, правда це чи ні.</li></ol>
+   <p><b>Бонус:</b> увімкни маркер і натискай на підозрілі слова. Влучна ознака підсвітиться жовтим.</p>
+   <p>Бали: перевірка — 20, правильне рішення — 50, кожна ознака — 10. Помилка маркером чи «Фейк?» на звичайному дописі −5.</p>`],
   ['Ознаки фейку', `<ul><li><b>Емоції й КАПС:</b> «ТЕРМІНОВО!!!», «ШОК», купа смайлів.</li><li><b>Поспіх:</b> таймери, «лише 2 хвилини», «поки не видалили».</li><li><b>Халява:</b> безкоштовна валюта в іграх, подарунки «всім».</li><li><b>Джерело без імені:</b> «джерело повідомило», «вчені довели».</li><li><b>Дата:</b> стара новина, яку пересилають як свіжу.</li><li><b>Просять дані:</b> пароль, код з SMS, номер картки, CVV.</li><li><b>Ніхто більше не пише:</b> про важливу подію пишуть офіційні сайти й різні медіа.</li></ul>`],
   ['Читаємо адресу сайту', `<p>Справжній власник сайту — це <b>остання частина адреси перед першою косою рискою «/»</b>.</p>
    <div class="ex">stara-poshta.ua/track — сайт <b>stara-poshta.ua</b> ✔</div>
    <div class="ex">stara-poshta.pay-dostavka.top — сайт <b>pay-dostavka.top</b> ✘</div>
    <p>Шахраї ставлять відому назву на початок, щоб обдурити. Перевір адресу в «Лупі → Досьє сайту»: коли сайт створено й кому він належить. Сайт, якому кілька днів, — привід насторожитися.</p>`],
   ['Перевіряємо фото', `<ul><li><b>Пошук за фото</b> показує, де картинка з'являлася раніше. Якщо фото «з сьогоднішньої повені» є в інтернеті з 2011 року — це фейк.</li><li><b>Властивості фото</b> — дата зйомки й програма, у якій фото змінювали.</li><li>Фото від ШІ часто видають дивні пальці, «пливучий» текст, неправильні тіні й відблиски.</li></ul>`],
-  ['Фейк чи правда', `<ul><li><b>Фейк</b> — неправда або обман: вигадана новина, шахрайський сайт, старе фото з новим підписом.</li><li><b>Правда</b> — інформацію підтверджують надійні джерела, наприклад офіційний сайт.</li><li><b>Хитрий випадок</b> — частина правдива, але важливу умову сховали дрібним шрифтом. Якщо головна обіцянка неправдива — став «Фейк».</li></ul>`],
+  ['Фейк чи правда', `<ul><li><b>Фейк</b> — неправда або обман: вигадана новина, шахрайський сайт, старе фото з новим підписом.</li><li><b>Правда</b> — інформацію підтверджують надійні джерела, наприклад офіційний сайт.</li><li><b>Хитрий випадок</b> — частина правдива, але важливу умову сховали дрібним шрифтом. Якщо головна обіцянка неправдива — це фейк.</li><li>Мем чи жарт від друга — не фейк. Не все в стрічці треба підозрювати.</li></ul>`],
   ['Правила безпеки', `<ul><li>Нікому не кажи пароль і код із SMS. Навіть «службі підтримки».</li><li>Не вводь дані картки на сайтах за посиланням із повідомлення.</li><li>Перевіряй новини на офіційних сайтах, а не в пересланих повідомленнях.</li><li>Не пересилай, поки не перевірив.</li><li>Не запускай невідомі програми з інтернету.</li><li>Сумніваєшся — порадься з дорослими.</li></ul>`]
 ];
 let gi = 0;
 function renderGuide() {
   const w = wins.guide; if (!w) return;
   w.body.innerHTML = `<div class="guide"><div class="gs">${GUIDE.map((g, i) => `<button type="button" data-gi="${i}" class="${i === gi ? 'on' : ''}"><b>${i + 1}</b>${g[0]}</button>`).join('')}</div>
-   <article class="gc"><h2>${GUIDE[gi][0]}</h2>${GUIDE[gi][1]}<div class="gnav">${gi > 0 ? `<button class="btn sm" type="button" data-gi="${gi - 1}">${icon('i-back')}Назад</button>` : '<span></span>'}${gi < GUIDE.length - 1 ? `<button class="btn sm main" type="button" data-gi="${gi + 1}">Далі${icon('i-fwd')}</button>` : `<button class="btn sm main" type="button" data-open="case">${icon('i-case')}До справ</button>`}</div></article></div>`;
+   <article class="gc"><h2>${GUIDE[gi][0]}</h2>${GUIDE[gi][1]}<div class="gnav">${gi > 0 ? `<button class="btn sm" type="button" data-gi="${gi - 1}">${icon('i-back')}Назад</button>` : '<span></span>'}${gi < GUIDE.length - 1 ? `<button class="btn sm main" type="button" data-gi="${gi + 1}">Далі${icon('i-fwd')}</button>` : `<button class="btn sm main" type="button" data-open="friends">${icon('i-feed')}До Френдс</button>`}</div></article></div>`;
   $('.gc', w.body).scrollTop = 0;
 }
 
@@ -1050,123 +1103,104 @@ function renderShift(body) {
   const best = store.get('best', 0);
   body.innerHTML = `<div class="setp">
    <h2 style="font:800 22px Rubik,sans-serif;margin:0 0 10px">Зміна</h2>
-   <p>Тренажер медіаграмотності ІТ-Майстерні: розслідуй повідомлення, сайти й фото та визначай, де фейк, а де правда.</p>
+   <p>Тренажер медіаграмотності ІТ-Майстерні: гортай соцмережу, помічай підозріле, перевіряй і визначай, де фейк, а де правда.</p>
    <h3>Керування</h3>
-   <div class="keys"><span>Миша / дотик</span><span>відкривати програми й файли, перетягувати вікна за заголовок</span><kbd>M</kbd><span>увімкнути або вимкнути маркер</span><kbd>Esc</kbd><span>закрити вікно або вимкнути маркер</span></div>
+   <div class="keys"><span>Миша / дотик</span><span>відкривати програми, гортати Френдс, перетягувати вікна</span><kbd>M</kbd><span>увімкнути або вимкнути маркер (також значок «Маркер» на робочому столі)</span><kbd>Esc</kbd><span>вимкнути маркер або закрити вікно</span></div>
    <h3>Прогрес</h3>
-   <p>${S.active ? `Справа ${S.ci + 1} з ${S.cases.length}, ${S.score} балів.` : ''} ${best ? `Рекорд: ${best} балів.` : ''}</p>
+   <p>${S.active ? `Перевірено ${shownCases().filter(c => c.st.res).length} з ${S.cases.length}, ${S.score} балів.` : ''} ${best ? `Рекорд: ${best} балів.` : ''}</p>
    <div class="dfoot" style="margin-top:4px"><button class="btn sm" data-fc="new" type="button">${icon('i-reload')}Почати нову зміну</button><button class="btn sm" type="button" data-fc="guide">${icon('i-book')}Підручник</button></div>
    <a class="gh" href="https://github.com/whyuxavier/it-maysternia" target="_blank" rel="noopener">${icon('i-gh').replace('<svg', '<svg style="color:var(--ink)"')}GitHub${icon('i-star')}</a>
   </div>`;
   body.querySelector('[data-fc="new"]').onclick = () => newShift();
   body.querySelector('[data-fc="guide"]').onclick = () => openWin('guide');
 }
-function setSound(v) { sound = v; store.set('sound', v); if (OS) OS.setSound(v); }
 
 /* ---------- app renderers ---------- */
-function renderAll() { Object.keys(wins).forEach(renderApp); renderBadges(); renderTaskbar(); }
+function renderAll() { Object.keys(wins).forEach(renderApp); renderFriends(); renderBadges(); renderTaskbar(); }
 function renderApp(app) {
   const w = wins[app]; if (!w) return;
-  ({case: renderCase, inbox: renderInbox, web: renderWeb, tools: renderTools, guide: renderGuide})[app]();
+  ({case: renderCase, sms: renderSms, tools: renderTools, guide: renderGuide})[app]();
 }
-/* Повідомлення: чати, SMS і Стрічка в одному вікні */
-const IBT = [['msg', 'i-msg', 'Чати'], ['sms', 'i-sms', 'SMS'], ['feed', 'i-feed', 'Стрічка']];
-function inboxShell() {
-  const w = wins.inbox; if (!w) return;
-  w.body.innerHTML = `<div class="ibx"><div class="ibt">${IBT.map(t => `<button type="button" data-ibt="${t[0]}" class="${t[0] === inboxTab ? 'on' : ''}">${icon(t[1])}${t[2]}<span class="badge" data-badge="${t[0]}" hidden></span></button>`).join('')}</div><div class="ibp"></div></div>`;
-}
-function ibx(tab) {
-  const w = wins.inbox; if (!w || inboxTab !== tab) return null;
-  if (!$('.ibp', w.body)) inboxShell();
-  return {body: $('.ibp', w.body), el: w.el};
-}
-function renderInbox() { inboxShell(); ({msg: renderMsg, sms: renderSms, feed: renderFeed})[inboxTab](); renderBadges(); }
-function seenCase(tab) {
-  const c = S.cases[S.ci];
-  if (!S.active || S.read || !c || c.app !== tab || (tab === 'msg' && curChat !== c.chat)) return;
-  S.read = true; save(); renderCase(true);
-}
+const strip = h => h.replace(/<[^>]+>/g, '');
+const flagBtn = ci => { const c = S.cases[ci]; return c && c.st.res ? `<span class="flagd ${c.st.ok ? 'ok' : ''}">${icon(c.st.ok ? 'i-check' : 'i-miss')}Перевірено</span>` : `<button class="flag" type="button" data-flag="${ci}">${icon('i-flag')}Фейк?</button>`; };
 
+/* Френдс — соцмережа в браузері */
 let curChat = null;
-function renderMsg() {
-  const w = ibx('msg'); if (!w) return;
-  const list = Object.values(CHATS).sort((a, b) => b.last - a.last);
-  if (!list.length) { w.body.innerHTML = '<div class="empty-app">Повідомлень поки немає</div>'; return; }
-  if (!curChat || !CHATS[curChat]) curChat = isMobile() ? null : list[0].name;
-  const ch = curChat && CHATS[curChat];
-  if (ch) ch.unread = 0;
-  w.body.innerHTML = `<div class="chat ${ch ? 'open' : ''}" style="height:100%">
+const frEls = tab => $$('#os .fr' + (tab ? `[data-frt="${tab}"]` : ''));
+const frShown = tab => frEls(tab).some(el => { const w = el.closest('.sw'); return w && !w.classList.contains('min'); });
+function frPage(tab) { return {t: tab === 'chats' ? 'Повідомлення — Френдс' : 'Френдс', h: `<div class="fr fr-${tab}" data-frt="${tab}"></div>`}; }
+function frTop(tab) {
+  return `<div class="frtop"><span class="frlogo">${FCI.friends}Френдс</span>${[['feed', 'friends.ua', 'i-feed', 'Стрічка', 'feed'], ['chats', 'friends.ua/chats', 'i-msg', 'Повідомлення', 'msg']].map(x => `<span class="frtab ${x[0] === tab ? 'on' : ''}" data-go="${x[1]}">${icon(x[2])}<span class="lbl">${x[3]}</span><span class="badge" data-badge="${x[4]}" hidden></span></span>`).join('')}</div>`;
+}
+function renderFriends() { frEls().forEach(renderFr); }
+function renderFr(el) {
+  if (!el) return;
+  const tab = el.dataset.frt;
+  if (tab === 'chats') {
+    const list = Object.values(CHATS).sort((a, b) => b.last - a.last);
+    if (!curChat || !CHATS[curChat]) curChat = isMobile() ? null : list[0] && list[0].name;
+    const ch = curChat && CHATS[curChat];
+    if (ch) ch.unread = 0;
+    el.innerHTML = frTop(tab) + `<div class="chat ${ch ? 'open' : ''}">
     <div class="chats">${list.map(c => `<button class="ch ${c.name === curChat ? 'on' : ''}" data-chat="${esc(c.name)}" type="button"><span class="av" style="background:${c.c}">${esc(c.name[0])}</span><span><b>${esc(c.name)}</b>${c.unread ? ` <span class="badge" style="position:static;display:inline-block">${c.unread}</span>` : ''}<small>${esc(strip(c.msgs[c.msgs.length - 1].t))}</small></span></button>`).join('')}</div>
     <div class="conv">${ch ? `<div class="convh"><button class="back" type="button" data-chat="" aria-label="Назад">${icon('i-back')}</button><span class="av" style="background:${ch.c}">${esc(ch.name[0])}</span>${esc(ch.name)}</div>
       <div class="msgs">${ch.msgs.map(m => `${m.day ? `<div class="daysep">${m.day}</div>` : ''}<div class="bub ${m.me ? 'me' : ''}" data-case="${m.case}">${m.from ? `<div class="fwd who">${m.from}</div>` : ''}${m.fwd ? `<div class="fwd">${m.fwd}</div>` : ''}${m.t}<time>${m.time}</time></div>`).join('')}</div>
-      ${(() => { const last = ch.msgs[ch.msgs.length - 1], rp = ch.replies && last && !last.me ? ch.replies : null; return `<div class="replies">${rp ? `<span class="rph">Обери відповідь</span>${rp.map((r, k) => `<button class="rep" type="button" data-rep="${k}">${esc(r.t)}</button>`).join('')}` : `<span class="rph">${ch.typing ? esc(ch.name) + ' друкує…' : 'Відповісти можна, коли тобі напишуть.'}</span>`}</div>`; })()}` : ''}</div></div>`;
-  const ms = $('.msgs', w.body); if (ms) ms.scrollTop = ms.scrollHeight;
-  renderBadges(); seenCase('msg');
+      ${(() => { const last = ch.msgs[ch.msgs.length - 1], rp = ch.replies && last && !last.me ? ch.replies : null; return `<div class="replies">${rp ? `<span class="rph">Обери відповідь</span>${rp.map((r, k) => `<button class="rep" type="button" data-rep="${k}">${esc(r.t)}</button>`).join('')}` : `<span class="rph">${ch.typing ? esc(ch.name) + ' друкує…' : 'Відповісти можна, коли тобі напишуть.'}</span>`}</div>`; })()}` : '<div class="empty-app">Обери чат</div>'}</div></div>`;
+    const ms = $('.msgs', el); if (ms) ms.scrollTop = ms.scrollHeight;
+  } else {
+    FEED.forEach(p => p.unread = 0); NOTIFS.forEach(n => { if (n.app === 'feed') n.read = 1; });
+    el.innerHTML = frTop(tab) + `<div class="feed">${FEED.map(p => `<article class="post" data-case="${p.case}">
+    <div class="ph"><span class="av" style="background:${p.case < 0 ? 'var(--mint)' : 'var(--lilac)'}">${p.av}</span><span><b class="mk">${esc(p.author)}</b>${p.verified ? `<svg class="vf mk" viewBox="0 0 24 24" aria-label="Підтверджений акаунт"><use href="#i-vf"/></svg>` : ''}<small>${p.time}</small></span></div>
+    ${p.photo ? `<div class="pimg"><div class="mk">${PHOTOS[p.photo].svg}</div><button class="chkph" type="button" data-photo="${p.photo}">${icon('i-tools')}Перевірити фото</button></div>` : ''}
+    <div class="pt">${p.text}${p.small ? `<div class="small">${p.small}</div>` : ''}</div>
+    <div class="likes"><span class="mk">♥ ${p.likes}</span><span>💬 ${p.com}</span>${flagBtn(p.case)}</div></article>`).join('')}</div>`;
+  }
+  renderBadges(); renderBell();
 }
-const strip = h => h.replace(/<[^>]+>/g, '');
+function renderMsg() { frEls('chats').forEach(renderFr); }
+
 function renderSms() {
-  const w = ibx('sms'); if (!w) return; seenCase('sms');
-  w.body.innerHTML = SMS.length ? `<div class="msgs" style="height:100%">${SMS.map(m => `<div style="font:800 13px Nunito;color:var(--muted);margin-top:6px"><span class="mk" data-ev="${m.fromMk || ''}">${esc(m.from)}</span></div><div class="bub" data-case="${m.case}">${m.t}<time>${m.time}</time></div>`).join('')}</div>` : '<div class="empty-app">Повідомлень поки немає</div>';
-}
-function renderFeed() {
-  const w = ibx('feed'); if (!w) return; seenCase('feed');
-  w.body.innerHTML = FEED.length ? `<div class="feed">${FEED.map(p => `<article class="post" data-case="${p.case}">
-    <div class="ph"><span class="av" style="background:var(--lilac)">${p.av}</span><span><b class="mk">${esc(p.author)}</b>${p.verified ? `<svg class="vf mk" viewBox="0 0 24 24" aria-label="Підтверджений акаунт"><use href="#i-vf"/></svg>` : ''}<small>${p.time}</small></span></div>
-    <div class="pimg"><div class="mk">${PHOTOS[p.photo].svg}</div><button class="chkph" type="button" data-photo="${p.photo}">${icon('i-tools')}Перевірити фото</button></div>
-    <div class="likes"><span class="mk">♥ ${p.likes}</span><span>💬 ${p.com}</span></div>
-    <div class="pt">${p.text}${p.small ? `<div class="small">${p.small}</div>` : ''}</div></article>`).join('')}</div>` : '<div class="empty-app">Стрічка порожня</div>';
+  const w = wins.sms; if (!w) return;
+  w.body.innerHTML = SMS.length ? `<div class="msgs" style="height:100%">${SMS.map(m => `<div style="font:800 13px Nunito;color:var(--muted);margin-top:6px"><span class="mk" data-ev="${m.fromMk || ''}">${esc(m.from)}</span></div><div class="bub" data-case="${m.case}">${m.t}<time>${m.time}</time><div class="bubf">${flagBtn(m.case)}</div></div>`).join('')}</div>` : '<div class="empty-app">Повідомлень поки немає</div>';
+  const ms = $('.msgs', w.body); if (ms) ms.scrollTop = ms.scrollHeight;
 }
 
-/* browser */
-const B = {hist: [], pos: -1};
-function renderWeb() {
-  const w = wins.web; if (!w) return;
-  if (!$('.br', w.body)) {
-    w.body.innerHTML = `<div class="br"><div class="brbar"><button type="button" data-nav="back" aria-label="Назад">${icon('i-back')}</button><button type="button" data-nav="fwd" aria-label="Вперед">${icon('i-fwd')}</button><button type="button" data-nav="reload" aria-label="Оновити">${icon('i-reload')}</button>
-      <form class="url" id="urlF"><input id="urlIn" aria-label="Адреса сайту" spellcheck="false" autocomplete="off"></form></div>
-      <div class="bms"><button class="bm" type="button" data-go="poshuk.web">Пошук</button><button class="bm" type="button" data-go="stara-poshta.ua">Стара пошта</button><button class="bm" type="button" data-go="pixelbank.ua">ПіксельБанк</button><button class="bm" type="button" data-go="lypove.gov.ua">Міська рада</button></div>
-      <div class="page" id="page"></div></div>`;
-    if (B.pos < 0) go('poshuk.web', true);
-  }
-  showPage();
-}
-function go(u, silent) {
-  u = normUrl(u);
-  B.hist = B.hist.slice(0, B.pos + 1); B.hist.push(u); B.pos = B.hist.length - 1;
-  if (!wins.web) openWin('web'); else { focusWin('web'); showPage(); }
-  if (!silent) sfx.click();
-}
+/* браузер: сайти світу Фактчекера */
 let scamTick;
-function fcEv(k, v) {
-  const c = S.cases[S.ci];
-  if (!S.active || S.checked || !c || !c.check.ok(k, v)) return;
-  S.checked = true; S.read = true; save();
-  setTimeout(() => { sfx.mark(); toast('Перевірено! Тепер крок 3: фейк чи правда?'); renderCase(true); if (wins.case && wins.case.el.classList.contains('min')) openWin('case', true); }, 500);
+function fcSite(u) {
+  if (u === 'friends.ua' || u === 'friends.ua/feed') return frPage('feed');
+  if (u === 'friends.ua/chats') return frPage('chats');
+  const f = PAGES && PAGES[u];
+  return f ? {t: host(u), h: f()} : null;
 }
-function showPage() {
-  const w = wins.web; if (!w || !$('#page', w.body)) return;
-  const u = B.hist[B.pos] || 'poshuk.web';
+function fcNav(u, page) {
+  const fr = u.startsWith('friends.ua');
+  page.classList.toggle('fc-full', fr || !!(PAGES && PAGES[u]));
+  page.classList.toggle('fc-chat', u === 'friends.ua/chats');
+  if (fr) renderFr($('.fr', page));
   fcEv('page', u);
-  $('#urlIn', w.body).value = u === 'poshuk.web' ? 'poshuk.web' : 'https://' + u;
-  let f = PAGES[u];
-  if (!f && u.startsWith('poshuk.web/?q=')) f = () => searchPage(decodeURIComponent(u.slice(14)));
-  $('#page', w.body).innerHTML = f ? f() : `<div class="notfound"><h2>Сайт не знайдено</h2><p>Перевір адресу: ${esc(u)}</p></div>`;
-  $('#page', w.body).scrollTop = 0;
   clearInterval(scamTick);
-  const t = $('#scamTimer', w.body);
+  const t = $('#scamTimer', page);
   if (t) { let s = parseInt(t.textContent) * 60; scamTick = setInterval(() => { s = Math.max(0, s - 1); if (!document.body.contains(t)) return clearInterval(scamTick); t.textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); if (!s) s = 180; }, 1000); }
+  restoreFound();
 }
-function searchPage(q) {
-  const ql = q.toLowerCase().trim();
-  let res = [];
-  if (ql) SEARCH.forEach(s => { if (s.keys.some(k => ql.includes(k))) res = res.concat(s.res); });
-  if (ql && /пошт|посил/.test(ql)) res.push({u: 'stara-poshta.ua', t: 'Стара пошта — офіційний сайт', d: 'Відстежити посилку, особистий кабінет.'});
-  if (ql && /піксель|pixel|банк/.test(ql)) res.push({u: 'pixelbank.ua', t: 'ПіксельБанк — офіційний сайт', d: 'Картки, перекази, акції для клієнтів.'});
-  if (ql && /акул|повін|злив/.test(ql)) res.push({u: '', t: 'Порада: для фото краще працює «Пошук за фото» в Інструментах', d: 'Звичайний пошук шукає слова, а не картинки.'});
-  if (ql && /robux|робакс|roblox|роблокс/.test(ql)) res.push({u: 'roblox.com', t: 'Roblox — офіційний сайт', d: 'Робакси можна купити лише в офіційному магазині Roblox.'});
-  return `<div class="pg"><div class="slogo"><span>П</span><span>о</span><span>ш</span><span>у</span><span>к</span><span>!</span></div>
-    <form class="sbox" id="sF"><input id="sIn" value="${esc(q)}" placeholder="Що шукаємо?" aria-label="Пошуковий запит" autocomplete="off"><button type="submit">Знайти</button></form>
-    ${ql ? (res.length ? res.map(r => `<div class="sr"><div class="u">${esc(r.u)}</div><a ${r.u ? `data-go="${r.go || r.u}"` : ''}>${esc(r.t)}</a><div>${esc(r.d)}</div></div>`).join('') : `<p class="meta">За запитом «${esc(q)}» нічого не знайдено.</p>`) : '<p class="meta" style="text-align:center">Шукай новини, сайти й назви компаній.</p>'}</div>`;
+function fcSearch(s) {
+  const res = [];
+  SEARCH.forEach(x => { if (x.keys.some(k => s.includes(k))) x.res.forEach(r => res.push([r.u, r.t, r.d, r.go || r.u])); });
+  if (/пошт|посил/.test(s)) res.push(['stara-poshta.ua', 'Стара пошта — офіційний сайт', 'Відстежити посилку, особистий кабінет.']);
+  if (/піксель|pixel|банк/.test(s)) res.push(['pixelbank.ua', 'ПіксельБанк — офіційний сайт', 'Картки, перекази, акції для клієнтів.']);
+  if (/robux|робакс|roblox|роблокс/.test(s)) res.push(['roblox.com', 'Roblox — офіційний сайт', 'Робакси можна купити лише в офіційному магазині Roblox.']);
+  if (/липов|міськ|рада|фестивал|робот/.test(s)) res.push(['lypove.gov.ua', 'Липівська міська рада — офіційний сайт', 'Новини міста й афіша подій.']);
+  if (/френдс|friends|соцмереж/.test(s)) res.push(['friends.ua', 'Френдс — соцмережа', 'Стрічка друзів і повідомлення.']);
+  return res;
+}
+function fcEv(k, v) {
+  if (!S.active) return;
+  shownCases().forEach(c => {
+    if (c.st.res || c.st.checked || !c.check || !c.check.ok(k, v)) return;
+    c.st.checked = true; S.score += 20; save();
+    setTimeout(() => { sfx.mark(); toast('Перевірку зараховано: +20'); renderTaskbar(); renderCase(); }, 400);
+  });
 }
 
 /* tools */
@@ -1186,102 +1220,96 @@ function renderTools() {
     pane = ph.length ? `<p class="note">Обери фото${toolTab === 'reverse' ? ' — знайдемо, де воно з\'являлося раніше' : ' — подивимось його властивості'}.</p>
       <div class="thumbs" style="margin-top:10px">${ph.map(k => `<button class="thumb ${k === curPhoto ? 'on' : ''}" data-pickph="${k}" type="button" aria-label="${esc(PHOTOS[k].name)}">${PHOTOS[k].svg}</button>`).join('')}</div>
       ${curPhoto ? `<div class="res">${toolTab === 'reverse' ? PHOTOS[curPhoto].reverse : PHOTOS[curPhoto].meta}</div>` : ''}`
-      : '<p class="note">Фото з\'являться тут, коли ти побачиш їх у Стрічці.</p>';
+      : '<p class="note">Фото з\'являться тут, коли ти побачиш їх у Френдс.</p>';
   }
   if (toolTab === 'dossier' && dossierQ) fcEv('dossier', host(dossierQ));
   if (toolTab !== 'dossier' && curPhoto) fcEv(toolTab, curPhoto);
   w.body.innerHTML = `<div class="tabs">${tabs.map(t => `<button class="tab ${t[0] === toolTab ? 'on' : ''}" data-tab="${t[0]}" type="button">${icon(t[1])}${t[2]}</button>`).join('')}</div><div class="tpane">${pane}</div>`;
 }
 
-/* case panel */
-const CK = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-function stepNo() { return S.checked ? 3 : S.read ? 2 : 1; }
-function renderCase(pop) {
+/* ---------- журнал ---------- */
+function renderCase() {
   renderTaskbar();
   const w = wins.case; if (!w) return;
-  const c = S.cases[S.ci];
-  if (!c || (!S.active && S.results.length === S.cases.length)) { w.body.innerHTML = `<div class="casep"><h3>Справ поки немає</h3><p class="brief">Зміну завершено. Можна почати нову.</p><button class="btn main" id="newShiftC" type="button">${icon('i-reload')}Нова зміна</button></div>`; return; }
-  const ids = Object.keys(c.ev), got = ids.filter(k => S.found.has(k)), n = stepNo();
-  const li = (k, cls, title, body) => `<li class="${cls}${pop && k === n - 1 ? ' pop' : ''}"><span class="ck">${cls === 'done' ? CK : k}</span><div class="sx"><b>${title}</b>${body}</div></li>`;
+  const done = shownCases().filter(c => c.st.res);
   w.body.innerHTML = `<div class="casep">
-    <div style="display:flex;justify-content:space-between;align-items:center"><span class="num">Справа ${S.ci + 1} з ${S.cases.length}</span><span class="scorepill">${icon('i-star')}${S.score}</span></div>
-    <h3>${esc(c.title)}</h3><p class="brief">${esc(c.brief)}</p>
-    <ol class="steps">
-      ${li(1, n > 1 ? 'done' : 'now', 'Прочитай', `<small>${esc(c.read)}</small>${n === 1 ? `<button class="btn sm main" type="button" data-open="${c.app}">${icon(APPS[c.app].i)}Відкрити</button>` : ''}`)}
-      ${li(2, n > 2 ? 'done' : n === 2 ? 'now' : '', 'Перевір', `<small>${esc(c.check.t)}</small>${n === 2 ? `<button class="btn sm main" type="button" data-chk>${icon(c.check.tool ? 'i-tools' : c.check.web ? 'i-web' : APPS[c.check.open || c.app].i)}${esc(c.check.btn)}</button>` : ''}`)}
-      ${li(3, n === 3 ? 'now' : 'lock', 'Виріши', `<small>${n === 3 ? 'Що це? Натисни печатку.' : 'Печатку можна поставити після перевірки.'}</small><div class="stamps"><button class="st fake" data-v="fake" type="button">Фейк</button><button class="st true" data-v="true" type="button">Правда</button></div>`)}
-    </ol>
-    ${S.hint ? `<div class="hintt">${esc(c.hint)}</div>` : '<button class="hintb" id="hintB" type="button">Не знаю, що робити — підказка</button>'}
-    <details class="bonus"${got.length ? ' open' : ''}><summary>${icon('i-marker')}Бонус: знайди ознаки маркером · ${got.length} з ${ids.length}</summary>
-      <p class="note">Увімкни маркер (кнопка внизу або клавіша M) і натискай на підозрілі слова. За кожну ознаку +10.</p>
-      <div class="evs">${got.map(k => `<div class="ev got">${icon('i-marker')}<span>${esc(c.ev[k].label)}</span></div>`).join('')}</div></details>
+    <div style="display:flex;justify-content:space-between;align-items:center"><span class="num">${S.active ? 'Зміна триває' : 'Зміну завершено'}</span><span class="scorepill">${icon('i-star')}${S.score}</span></div>
+    <ol class="howto"><li><b>Гортай</b> Френдс, читай чати й SMS.</li><li><b>Перевір</b> підозріле: сайт і фото — у Лупі, новину — на офіційному сайті.</li><li><b>Виріши</b>: «Фейк?» під дописом чи SMS, а в чаті — відповідь другові.</li></ol>
+    <p class="note">${icon('i-marker').replace('<svg', '<svg style="width:16px;height:16px;display:inline;vertical-align:-3px"')} Маркер (клавіша M) — бонус: позначай ознаки фейку, +10 за кожну.</p>
+    <div class="evs"><div class="evh"><span>Перевірено</span><span>${done.length} з ${S.cases.length}</span></div>
+      ${done.length ? done.map(c => `<div class="ev ${c.st.ok ? 'got' : ''}" style="color:${c.st.ok ? 'var(--ok)' : 'var(--stamp)'}">${icon(c.st.ok ? 'i-check' : 'i-miss')}<span style="color:var(--ink)">${esc(c.title)} · ${c.st.pts} б.</span></div>`).join('') : '<div class="ev empty">Поки нічого. Гортай стрічку й будь уважним!</div>'}</div>
+    <div class="dfoot" style="margin-top:0">${S.active ? `<button class="btn sm main" type="button" data-open="friends">${icon('i-feed')}Френдс</button><button class="btn sm" type="button" id="endB">${icon('i-x')}Завершити зміну</button>` : `<button class="btn sm main" type="button" id="newShiftC">${icon('i-reload')}Нова зміна</button>`}</div>
   </div>`;
 }
 
 /* ---------- marker ---------- */
 function setMarker(on) {
   marker = on; document.body.classList.toggle('marker', on);
-  $('#trMk').classList.toggle('on', on); $('#trMk').setAttribute('aria-pressed', on);
+  const b = $('#trMk'); if (b) { b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }
 }
+function toggleMarker() { setMarker(!marker); sfx.click(); toast(marker ? 'Маркер увімкнено: натискай на ознаки фейку.' : 'Маркер вимкнено.'); }
 function tryMark(el) {
   touch();
-  const holder = el.closest('[data-case]');
-  const caseOf = holder ? +holder.dataset.case : S.ci;
-  if (caseOf !== S.ci) { toast('Ця справа вже закрита — шукай у новій.'); return; }
-  const id = el.dataset.ev, c = S.cases[S.ci];
-  if (id && c.ev[id]) {
-    if (S.found.has(id)) { toast('Цей доказ уже є.'); return; }
-    S.found.add(id); S.score += 10;
-    $$(`#os .mk[data-ev="${id}"]`).forEach(e => e.classList.add('found'));
-    sfx.mark(); toast('Доказ: ' + c.ev[id].label);
-    renderCase(); save();
+  const id = el.dataset.ev;
+  const ci = id ? S.cases.findIndex((c, i) => i < S.shown && c.ev[id]) : -1;
+  if (ci >= 0) {
+    const c = S.cases[ci], key = ci + ':' + id;
+    if (c.st.res) { toast('Цю історію вже перевірено.'); return; }
+    if (S.found.has(key)) { toast('Цю ознаку вже знайдено.'); return; }
+    S.found.add(key); S.score += 10;
+    restoreFound();
+    sfx.mark(); toast('Ознака: ' + c.ev[id].label + ' (+10)');
   } else {
-    S.misses++; S.score = Math.max(0, S.score - 5);
+    S.score = Math.max(0, S.score - 5);
     el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake');
-    sfx.bad(); toast('Це не доказ. −5 балів');
-    renderCase(); save();
+    sfx.bad(); toast('Це не ознака фейку. −5 балів');
   }
+  renderCase(); save();
 }
-function restoreFound() { S.found.forEach(id => $$(`#os .mk[data-ev="${id}"]`).forEach(e => { const h = e.closest('[data-case]'); if (!h || +h.dataset.case === S.ci) e.classList.add('found'); })); }
+function restoreFound() { S.found.forEach(k => { const id = k.split(':')[1]; $$(`#os .mk[data-ev="${id}"]`).forEach(e => e.classList.add('found')); }); }
 
-/* ---------- verdict ---------- */
-function verdict(v) {
+/* ---------- flag & verdict ---------- */
+function flag(btn) {
   touch();
-  const c = S.cases[S.ci];
-  if (!S.checked) { sfx.bad(); toast(S.read ? 'Спершу крок 2: перевір, а потім став печатку.' : 'Спершу крок 1: прочитай, що тобі надіслали.'); return; }
-  const ok = v === c.verdict;
-  S.score += 20 + (ok ? 50 : 0);
-  sfx.stamp();
-  const ids = Object.keys(c.ev), total = 70 + ids.length * 10;
-  const got = 20 + 10 * S.found.size + (ok ? 50 : 0) - 5 * S.misses - 10 * S.traps;
-  S.results.push({title: c.title, ok, found: S.found.size, all: ids.length, pts: Math.max(0, got), max: total});
-  S.active = false; save();
-  const col = {fake: 'var(--stamp)', true: 'var(--ok)'}[c.verdict];
+  const ci = +btn.dataset.flag;
+  if (ci >= 0) { verdict(ci, 'fake'); return; }
+  S.score = Math.max(0, S.score - 5);
+  btn.classList.remove('shake'); void btn.offsetWidth; btn.classList.add('shake');
+  sfx.bad(); toast('Це звичайне повідомлення, а не фейк. −5 балів');
+  renderCase(); save();
+}
+function verdict(ci, v) {
+  const c = S.cases[ci];
+  if (!c || c.st.res || !S.active) return;
+  touch();
+  const ok = v === c.verdict, ids = Object.keys(c.ev), got = ids.filter(k => S.found.has(ci + ':' + k));
+  if (ok) S.score += 50;
+  Object.assign(c.st, {res: v, ok, pts: (ok ? 50 : 0) + (c.st.checked ? 20 : 0) + 10 * got.length});
+  Object.values(CHATS).forEach(ch => { if (ch.replies && ch.replies.some(r => r.ci === ci)) ch.replies = null; });
+  S.last = Date.now(); save(); sfx.stamp(); renderAll();
+  const total = 70 + ids.length * 10, col = {fake: 'var(--stamp)', true: 'var(--ok)'}[c.verdict];
+  const all = S.shown >= S.cases.length && S.cases.every(x => x.st.res);
   $('#repBody').innerHTML = `<h2>${ok ? 'Влучно!' : 'Майже…'}</h2>
-    <div class="verdict"><span class="bigstamp" style="color:${col}">${VERD[c.verdict]}</span><p>${ok ? 'Твоя печатка правильна.' : `Ти поставив «${VERD[v]}», а насправді це <b>${VERD[c.verdict].toLowerCase()}</b>.`}</p></div>
-    ${S.traps ? '<p class="hintt" style="margin-bottom:12px">Ти ввів дані на сайті шахраїв. У житті цього робити не можна: дані потрапили б до злодіїв.</p>' : ''}
+    <div class="verdict"><span class="bigstamp" style="color:${col}">${VERD[c.verdict]}</span><p><b>${esc(c.title)}.</b> ${ok ? (v === 'fake' ? 'Ти розпізнав фейк.' : 'Ти правильно перевірив: це правда.') : `Ти вирішив, що це ${VERD[v].toLowerCase()}, а насправді це <b>${VERD[c.verdict].toLowerCase()}</b>.`}</p></div>
     <p class="note" style="margin:0 0 8px">${c.verdict === 'true' ? 'Як зрозуміти, що це правда:' : 'Ознаки, які все видавали:'}</p>
-    <div class="rl">${ids.map(k => `<div class="ri ${S.found.has(k) ? 'y' : 'n'}">${icon(S.found.has(k) ? 'i-check' : 'i-miss')}<span><b>${esc(c.ev[k].label)}</b>${esc(c.ev[k].why)}</span></div>`).join('')}</div>
-    <p class="pts">За справу: ${Math.max(0, got)} з ${total} балів</p>
-    <div class="dfoot"><button class="btn main" id="nextB" type="button">${icon('i-play')}${S.ci < S.cases.length - 1 ? 'Наступна справа' : 'Підсумок зміни'}</button></div>`;
+    <div class="rl">${ids.map(k => { const y = got.includes(k); return `<div class="ri ${y ? 'y' : 'n'}">${icon(y ? 'i-check' : 'i-miss')}<span><b>${esc(c.ev[k].label)}</b>${esc(c.ev[k].why)}</span></div>`; }).join('')}</div>
+    <p class="pts">За цю історію: ${c.st.pts} з ${total} балів${c.st.checked ? '' : ' · наступного разу спершу перевір (+20)'}</p>
+    <div class="dfoot"><button class="btn main" id="nextB" type="button">${icon('i-play')}${all ? 'Підсумок зміни' : 'Гортати далі'}</button></div>`;
   $('#repDlg').showModal();
-  $('#nextB').onclick = () => {
-    $('#repDlg').close(); setMarker(false);
-    if (S.ci < S.cases.length - 1) beginCase(S.ci + 1);
-    else endShift();
-  };
+  $('#nextB').onclick = () => { $('#repDlg').close(); S.last = Date.now(); if (all) endShift(); };
 }
 function endShift() {
-  const max = S.results.reduce((s, r) => s + r.max, 0), sc = S.results.reduce((s, r) => s + r.pts, 0);
-  const p = S.results.filter(r => r.ok).length / S.results.length, stars = p >= .85 ? 3 : p >= .6 ? 2 : p >= .3 ? 1 : 0;
+  const res = shownCases().filter(c => c.st.res);
+  const max = S.cases.reduce((s, c) => s + 70 + Object.keys(c.ev).length * 10, 0), sc = S.score;
+  const p = S.cases.filter(c => c.st.ok).length / S.cases.length, stars = p >= .85 ? 3 : p >= .6 ? 2 : p >= .3 ? 1 : 0;
   const rank = ['Стажер', 'Молодший фактчекер', 'Фактчекер', 'Головний детектив'][stars];
   const best = store.get('best', 0); if (sc > best) store.set('best', sc);
-  store.set('progress2', null); S.active = false; renderTaskbar(); renderCase();
+  store.set('progress3', null); S.active = false; renderAll();
   sfx.win();
   $('#endBody').innerHTML = `<h2>Зміну завершено</h2>
     <div class="stars">${[0, 1, 2].map(i => `<svg viewBox="0 0 24 24" style="color:${i < stars ? '#e8b43a' : '#ddd6e8'}"><use href="#i-star"/></svg>`).join('')}</div>
     <div class="rank">${rank}</div><p style="text-align:center">${sc} з ${max} балів${sc > best ? ' · новий рекорд!' : ''}</p>
-    <table class="sumt">${S.results.map(r => `<tr><td>${icon(r.ok ? 'i-check' : 'i-miss').replace('<svg', `<svg style="width:18px;height:18px;display:inline;vertical-align:-4px;color:${r.ok ? 'var(--ok)' : 'var(--stamp)'}"`)} ${esc(r.title)}</td><td>${r.found}/${r.all} ознак</td><td>${r.pts}</td></tr>`).join('')}</table>
+    <table class="sumt">${S.cases.map(c => `<tr><td>${icon(c.st.ok ? 'i-check' : 'i-miss').replace('<svg', `<svg style="width:18px;height:18px;display:inline;vertical-align:-4px;color:${c.st.ok ? 'var(--ok)' : 'var(--stamp)'}"`)} ${esc(c.title)}</td><td>${c.st.res ? VERD[c.st.res] : '—'}</td><td>${c.st.pts}</td></tr>`).join('')}</table>
     <p class="note" style="margin-top:12px">Нова зміна — нові люди, сайти й деталі. Завчити відповіді не вийде.</p>
     <div class="dfoot"><button class="btn main" id="againB" type="button">${icon('i-reload')}Нова зміна</button><button class="btn" id="stayB" type="button">${icon('i-x')}Закрити</button></div>`;
   $('#endDlg').showModal();
@@ -1297,25 +1325,25 @@ function ctxItems(t) {
   const it = [];
   const sel = String(window.getSelection ? window.getSelection() : '').trim();
   const lnk = t.closest('[data-go]');
-  const winEl = t.closest('.sw[data-app]'), app = winEl && winEl.dataset.app;
-  if (t.closest('.swt') && app) {
+  const winEl = t.closest('.sw'), app = winEl && winEl.dataset.app;
+  if (t.closest('.swt')) return it;
+  if (false) {
     it.push(['Згорнути', 'i-min', () => minWin(app)], ['Розгорнути / відновити', 'i-max', () => maxWin(app)], '-', ['Закрити', 'i-x', () => closeWin(app)]);
     return it;
   }
   if (lnk) {
     const u = lnk.dataset.go;
-    it.push(['Відкрити посилання', 'i-web', () => go(u)], ['Копіювати адресу', 'i-dossier', () => copyText('https://' + u)], ['Перевірити в «Досьє сайту»', 'i-tools', () => { toolTab = 'dossier'; dossierQ = host(u); openWin('tools'); renderTools(); }]);
+    it.push(['Відкрити посилання', 'i-web', () => browse(u)], ['Копіювати адресу', 'i-dossier', () => copyText('https://' + u)], ['Перевірити в «Досьє сайту»', 'i-tools', () => { toolTab = 'dossier'; dossierQ = host(u); openWin('tools'); renderTools(); }]);
   }
   const ph = t.closest('.pimg');
   if (ph) {
     const k = $('.chkph', ph).dataset.photo;
     it.push(['Пошук за фото', 'i-tools', () => { curPhoto = k; toolTab = 'reverse'; openWin('tools'); renderTools(); }], ['Властивості фото', 'i-photo', () => { curPhoto = k; toolTab = 'meta'; openWin('tools'); renderTools(); }]);
   }
-  if (t.closest('.wb')) {
+  if (t.closest('.swb')) {
     if (it.length) it.push('-');
-    if (!t.closest('.casep')) it.push(['Позначити маркером', 'i-marker', () => { const mk = t.closest('.mk'); if (mk) tryMark(mk); else { sfx.bad(); toast('Тут доказу немає.'); } }]);
+    if (!t.closest('.casep,.sb-bar,.sb-bms')) it.push(['Позначити маркером', 'i-marker', () => { const mk = t.closest('.mk'); if (mk) tryMark(mk); else { sfx.bad(); toast('Тут доказу немає.'); } }]);
     if (sel) it.push(['Копіювати', 'i-dossier', () => copyText(sel)]);
-    if (app === 'web') it.push(['Назад', 'i-back', () => { if (B.pos > 0) { B.pos--; showPage(); } }], ['Оновити сторінку', 'i-reload', () => showPage()]);
     return it;
   }
   return it;
@@ -1324,7 +1352,7 @@ let CTX = [];
 document.addEventListener('contextmenu', e => {
   if (!e.target.closest('#os') || e.target.closest('input')) return;
   if (INFECTED) { e.preventDefault(); return; }
-  if (!e.target.closest('.sw[data-app]')) return;
+  if (!e.target.closest('.sw')) return;
   e.preventDefault(); e.stopPropagation();
   CTX = ctxItems(e.target);
   if (!CTX.length) return;
@@ -1369,14 +1397,14 @@ function spawnAd(x, y) {
 }
 function infect(kind) {
   if (INFECTED) return;
-  INFECTED = true; store.set('progress2', null); S.active = false;
+  INFECTED = true; store.set('progress3', null); S.active = false;
   setMarker(false); hideCtx();
   $$('dialog[open]').forEach(d => d.close());
-  const c = S.cases[S.ci], who = c && c.chat ? c.chat : 'Друг';
+  const c = S.cases[S.shown - 1], who = c && c.chat ? c.chat : (FRIEND || 'Друг');
   const NS = kind === 'card'
     ? [['sms', 'ПіксельБанк', 'Списано 2 499 грн. Покупка в інтернеті'], ['sms', 'ПіксельБанк', 'Списано 4 990 грн. Покупка в інтернеті'], ['sms', 'Невідомий номер', 'Ваша картка заблокована. Перейдіть за посиланням…'], ['sms', 'ПіксельБанк', 'Недостатньо коштів на рахунку']]
     : [['msg', 'Roblox', 'Пароль змінено з нового пристрою'], ['msg', who, 'чого ти мені шлеш якісь дивні посилання??'], ['msg', 'Клас 7-Б', 'хто це пише з твого акаунта?? 😳'], ['msg', 'Roblox', 'Усі робакси з акаунта витрачено']];
-  NS.push(['case', 'Система', 'Знайдено підозрілу програму'], ['msg', 'Невідомий', 'Привіт! Хочеш ще безкоштовних подарунків? 🎁']);
+  NS.push(['guide', 'Система', 'Знайдено підозрілу програму'], ['msg', 'Невідомий', 'Привіт! Хочеш ще безкоштовних подарунків? 🎁']);
   $('#os').classList.add('sick');
   $('#spam').hidden = false;
   let n = 0;
@@ -1396,7 +1424,7 @@ function reboot() {
   INFECTED = false;
   closeAllWins();
   OS.bootScreen('Перезавантаження…', 1300).then(() => {
-    newShift();
+    newShift(true);
     setTimeout(() => notify({app: 'guide', title: 'Комп\'ютер перезапущено', text: 'Зміну розпочато заново. Пам\'ятай: пароль і дані картки не вводять за посиланнями з повідомлень.'}), 900);
   });
 }
@@ -1404,78 +1432,78 @@ function reboot() {
 /* ---------- events ---------- */
 document.addEventListener('click', e => {
   const t = e.target;
-  if (marker && t.closest('#os .wb') && !t.closest('.casep')) {
+  if (marker && t.closest('#os .swb') && !t.closest('.casep,.sb-bar,.sb-bms,.frtop,.replies,.chats')) {
     const mk = t.closest('.mk');
     if (!t.closest('input,button:not(.mk),form .go')) {
       e.preventDefault(); e.stopPropagation();
-      if (mk) tryMark(mk); else { sfx.bad(); toast('Натискай на текст чи деталь, яку вважаєш доказом.'); }
+      if (mk) tryMark(mk); else { sfx.bad(); toast('Натискай на текст чи деталь, яку вважаєш ознакою фейку.'); }
       return;
     }
   }
   if (!t.closest('#ncenter,#trBell') && $('#ncenter')) $('#ncenter').hidden = true;
-  if (!t.closest('.sw[data-app],#ncenter,#notifs,#ctx,dialog')) return;
+  if (!t.closest('.sw,#ncenter,#notifs,#ctx,dialog')) return;
   const cx = t.closest('[data-ctx]'); if (cx) { const x = CTX[+cx.dataset.ctx]; hideCtx(); sfx.click(); x[2](); return; }
   if (INFECTED) return;
-  const o = t.closest('[data-open]'); if (o) { const c = S.cases[S.ci]; if (o.dataset.open === 'msg' && c && c.chat && S.active) curChat = c.chat; openWin(o.dataset.open); return; }
-  const g = t.closest('[data-go]'); if (g) { e.preventDefault(); go(g.dataset.go); return; }
-  const ibb = t.closest('[data-ibt]'); if (ibb) { inboxTab = ibb.dataset.ibt; markSeen(inboxTab); renderInbox(); sfx.click(); return; }
+  const o = t.closest('[data-open]'); if (o) { openWin(o.dataset.open); return; }
+  const g = t.closest('[data-go]'); if (g && !g.closest('.sb-page,.sb-bms')) { e.preventDefault(); browse(g.dataset.go); return; }
   const chEl = t.closest('[data-chat]'); if (chEl) { curChat = chEl.dataset.chat || null; renderMsg(); return; }
+  const fl = t.closest('[data-flag]'); if (fl) { flag(fl); return; }
   const tb = t.closest('[data-tab]'); if (tb) { toolTab = tb.dataset.tab; renderTools(); return; }
   const pp = t.closest('[data-pickph]'); if (pp) { curPhoto = pp.dataset.pickph; renderTools(); return; }
   const cp = t.closest('.chkph'); if (cp) { curPhoto = cp.dataset.photo; if (toolTab === 'dossier') toolTab = 'reverse'; openWin('tools'); renderTools(); return; }
-  const nv = t.closest('[data-nav]'); if (nv) { const a = nv.dataset.nav; if (a === 'back' && B.pos > 0) B.pos--; if (a === 'fwd' && B.pos < B.hist.length - 1) B.pos++; showPage(); return; }
   const gb = t.closest('[data-gi]'); if (gb) { gi = +gb.dataset.gi; renderGuide(); return; }
   const ni = t.closest('[data-ni]'); if (ni) { openNotif(NOTIFS[+ni.dataset.ni]); return; }
   const rb = t.closest('[data-rep]'); if (rb) { sendReply(+rb.dataset.rep); return; }
-  const st = t.closest('.st'); if (st) { verdict(st.dataset.v); return; }
-  if (t.closest('#hintB')) { S.hint = true; renderCase(); save(); return; }
-  if (t.closest('[data-chk]')) { const k = S.cases[S.ci].check; if (k.tool) { toolTab = k.tool; dossierPre = k.pre || ''; dossierQ = ''; curPhoto = null; openWin('tools'); renderTools(); } else if (k.web) openWin('web'); else openWin(k.open); return; }
-  if (t.closest('#newShiftB') || t.closest('#newShiftC')) { newShift(); return; }
+  if (t.closest('#endB')) { endShift(); return; }
+  if (t.closest('#newShiftC')) { newShift(); return; }
   if (t.closest('[data-close]')) { t.closest('dialog').close(); return; }
 }, true);
 const mo = new MutationObserver(() => { mo.disconnect(); restoreFound(); mo.observe(OS.desk, {childList: true, subtree: true}); });
 document.addEventListener('submit', e => {
-  e.preventDefault();
   const f = e.target;
-  if (f.id === 'urlF') { go($('#urlIn').value); return; }
-  if (f.id === 'sF') { const q = $('#sIn').value; if (q.trim()) go('poshuk.web/?q=' + encodeURIComponent(q.trim())); return; }
+  if (f.classList.contains('sb-sform')) return;
+  e.preventDefault();
   if (f.id === 'dF') { dossierQ = $('#dIn').value.trim(); dossierPre = ''; renderTools(); return; }
   if (f.dataset.trap) { infect(f.dataset.trap); return; }
 });
 document.addEventListener('keydown', e => {
   if (INFECTED) { hideCtx(); return; }
   if (e.key === 'Escape') hideCtx();
-  if (e.target.matches('input') || document.querySelector('dialog[open]')) return;
-  if (e.key === 'm' || e.key === 'M' || e.key === 'ь' || e.key === 'Ь') { setMarker(!marker); }
-  if (e.key === 'Escape') {
-    if (!$('#ncenter').hidden) { $('#ncenter').hidden = true; }
-    else if (marker) setMarker(false); else if (focused && wins[focused]) closeWin(focused);
-  }
+  if (e.target.matches('input,textarea,[contenteditable],[contenteditable] *') || document.querySelector('dialog[open]') || e.ctrlKey || e.altKey || e.metaKey) return;
+  if (e.key === 'm' || e.key === 'M' || e.key === 'ь' || e.key === 'Ь') { toggleMarker(); }
+  if (e.key === 'Escape' && !$('#ncenter').hidden) $('#ncenter').hidden = true;
+  else if (e.key === 'Escape' && marker) setMarker(false);
 });
 $('#rebootB').onclick = reboot;
 $('#repDlg').addEventListener('cancel', e => e.preventDefault());
 $('#endDlg').addEventListener('cancel', e => e.preventDefault());
 window.addEventListener('resize', renderTaskbar);
 
-/* ---------- запуск: спільна Sand OS ---------- */
+/* ---------- запуск: спільна система «Мого першого ПК» ---------- */
 const osEl = $('#os');
 OS = SandOS.boot(osEl, {
-  key: 'fc-os2', base: '../', title: 'Комп\'ютер детектива', user: 'Стажер', catalogCats: ['game'], deskFolders: ['game'],
-  about: 'Робочий комп\'ютер Бюро перевірки фактів. У кожній справі три кроки: прочитай, перевір, виріши — фейк чи правда.',
+  key: 'fc-os3', base: '../', title: 'Комп\'ютер фактчекера', user: 'Фактчекер', wall: 'peach', catalogCats: ['game'], deskFolders: ['game'],
+  about: 'Тренажер «Фактчекер»: гортай соцмережу Френдс, помічай підозріле, перевіряй і визначай, де фейк, а де правда.',
   desktop: ['pc'], seed: fcSeed, handlers: {exe: openExe},
-  pinned: ['fc-case', 'fc-inbox', 'fc-web', 'fc-tools', 'fc-guide', 'pc', 'notepad', 'paint', 'calc', 'settings', 'bin'],
+  pinned: ['fc-friends', 'browser', 'fc-sms', 'fc-tools', 'fc-guide', 'pc', 'notepad', 'paint', 'calc', 'settings', 'bin'],
+  bookmarks: [['friends.ua', 'Френдс'], ['stara-poshta.ua', 'Стара пошта'], ['pixelbank.ua', 'ПіксельБанк'], ['lypove.gov.ua', 'Міська рада']],
+  tiles: [['friends.ua', 'Френдс', FCI.friends]],
+  site: fcSite, onNav: fcNav, searchMore: fcSearch,
   apps: [
-    ...FC_APPS.map(a => ({id: 'fc-' + a, name: APPS[a].t.replace(' фактчекера', ''), icon: FCI[a], open: () => openWin(a)})),
-    {id: 'browser', name: 'Браузер', icon: FCI.web, hidden: 1, open: () => openWin('web')},
-    ...['msg', 'sms', 'feed'].map(a => ({id: 'fc-' + a, name: APPS[a].t, icon: FCI[a], hidden: 1, open: () => openWin(a)}))
+    {id: 'fc-friends', name: 'Френдс', icon: FCI.friends, kw: 'соцмережа стрічка чати', open: () => browse('friends.ua')},
+    {id: 'fc-sms', name: 'SMS', icon: FCI.sms, kw: 'повідомлення телефон', open: () => openWin('sms')},
+    {id: 'fc-tools', name: 'Лупа', icon: FCI.tools, kw: 'перевірка сайт фото', open: () => openWin('tools')},
+    {id: 'fc-marker', name: 'Маркер', icon: FCI.marker, kw: 'маркер ознаки', open: () => toggleMarker()},
+    {id: 'fc-case', name: 'Журнал', icon: FCI.case, kw: 'бали результати', open: () => openWin('case')},
+    {id: 'fc-guide', name: 'Підручник', icon: FCI.guide, kw: 'правила як грати', open: () => openWin('guide')}
   ],
   settingsSections: [['shift', 'Зміна', '<svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V5h6v2"/></svg>', renderShift]]
 });
 const tray = $('.sos-tray', osEl);
-tray.insertAdjacentHTML('afterbegin', `<button class="trb mkb" id="trMk" type="button" aria-pressed="false" title="Маркер доказів (M)">${icon('i-marker')}<span class="lbl">Маркер</span></button><button class="trb" id="trBell" type="button" aria-label="Сповіщення" title="Сповіщення">${icon('i-bell')}<span class="badge" id="bellN" hidden></span></button>`);
-$('.sos-startb', osEl).insertAdjacentHTML('afterend', `<button class="sos-task fc-case" id="tbCase" type="button"><i>${FCI.case}</i><span id="tbCaseL">Справи</span></button>`);
+tray.insertAdjacentHTML('afterbegin', `<button class="trb mkb" id="trMk" type="button" aria-pressed="false" title="Маркер (M)">${icon('i-marker')}<span class="lbl">Маркер</span></button><button class="trb" id="trBell" type="button" aria-label="Сповіщення" title="Сповіщення">${icon('i-bell')}<span class="badge" id="bellN" hidden></span></button>`);
+$('.sos-startb', osEl).insertAdjacentHTML('afterend', `<button class="sos-task fc-case" id="tbCase" type="button" title="Журнал фактчекера"><i>${FCI.case}</i><span id="tbCaseL">Журнал</span></button>`);
 osEl.append($('#notifs'), $('#ncenter'));
-$('#trMk').onclick = () => { setMarker(!marker); sfx.click(); toast(marker ? 'Маркер увімкнено: натискай на докази.' : 'Маркер вимкнено.'); };
+$('#trMk').onclick = toggleMarker;
 $('#trBell').onclick = () => { const n = $('#ncenter'); n.hidden = !n.hidden; OS.closeStart(); renderBell(); };
 $('#tbCase').onclick = () => tbClick('case');
 $('#nClear').onclick = () => { NOTIFS.length = 0; renderBell(); };
@@ -1485,37 +1513,39 @@ OS.on('shutdown', () => { closeAllWins(); setMarker(false); });
 renderBell();
 mo.observe(OS.desk, {childList: true, subtree: true});
 let started = false;
-/* друг нагадує про себе, якщо учень довго нічого не робить */
-const NAGS = {
-  link: ['ну що, ти перейшов? 👀', 'алло, ти тут?', 'ну відповідай 🥺 перевірив чи ні?'],
-  other: ['ти бачив? що думаєш, це правда? 👀', 'ну що там? я чекаю 😅', 'алло 👀 скажи вже: правда чи ні?']
-};
+const busy = () => !started || !S.active || INFECTED || document.hidden || document.querySelector('dialog[open]') || osEl.querySelector('.sos-lock,.sos-off,.sos-boot');
+/* нові історії з'являються з часом */
 setInterval(() => {
-  if (!started || !S.active || INFECTED || document.hidden || document.querySelector('dialog[open]') || osEl.querySelector('.sos-lock,.sos-off,.sos-boot')) return;
-  const gap = [45, 60, 80][nags]; if (gap === undefined || Date.now() - lastAct < gap * 1000) return;
-  const c = S.cases[S.ci]; if (!c) return;
-  const own = c.app === 'msg' && c.chat && CHATS[c.chat];
-  const who = own ? c.chat : FRIEND; if (!who) return;
-  const t = (own ? NAGS.link : NAGS.other)[nags]; nags++; touch();
+  if (busy() || S.shown >= S.cases.length) return;
+  const pend = shownCases().some(c => !c.st.res);
+  const gap = S.shown === 0 ? 7 : pend ? 45 : 12;
+  if (Date.now() - S.last >= gap * 1000) showCase(S.shown);
+}, 1000);
+/* друг нагадує про себе, якщо учень довго нічого не робить */
+const NAGS = ['ну що, ти глянув? 👀', 'алло, ти тут?', 'ну відповідай 🥺 правда це чи ні?'];
+setInterval(() => {
+  if (busy()) return;
+  const gap = [50, 70, 90][nags]; if (gap === undefined || Date.now() - lastAct < gap * 1000) return;
+  const c = pendingCase(); if (!c || !c.chat || !CHATS[c.chat]) return;
+  const who = c.chat, t = NAGS[nags]; nags++; touch();
   addChat(who, [{t: esc(t), time: nowT()}]);
   const ch = CHATS[who];
   if (!ch.replies) ch.replies = [{t: 'Зараз перевіряю 🔎', ans: 'ок, чекаю'}, {t: 'Секунду, розбираюсь', ans: 'давай 👍'}];
-  if (ibx('msg') && curChat === who && !wins.inbox.el.classList.contains('min')) { ch.unread = 0; renderMsg(); tone(740, .08, 'triangle', .04); }
+  if (frShown('chats') && curChat === who) { ch.unread = 0; renderMsg(); tone(740, .08, 'triangle', .04); }
   else notify({app: 'msg', chat: who, title: who, text: t});
   renderBadges();
 }, 5000);
 OS.on('ready', () => {
-  if (started) { setTimeout(() => notify({app: 'case', title: 'З поверненням!', text: S.active ? `Продовжуємо справу ${S.ci + 1}: ${S.cases[S.ci].title}` : 'Відкрий «Справу», щоб почати.'}), 600); return; }
+  if (started) { setTimeout(() => notify({app: 'guide', title: 'З поверненням!', text: 'Френдс чекає: гортай стрічку й перевіряй підозріле.'}), 600); return; }
   started = true;
-  const p = store.get('progress2', null);
+  const p = store.get('progress3', null);
   if (p && p.seed) {
     restore(p); touch();
-    setTimeout(() => notify({app: 'case', title: 'З поверненням!', text: `Продовжуємо справу ${S.ci + 1}: ${S.cases[S.ci].title}`}), 600);
+    setTimeout(() => notify({app: 'guide', title: 'З поверненням!', text: 'Продовжуємо зміну. Гортай Френдс і будь уважним.'}), 600);
   } else {
-    S.seed = Math.floor(Math.random() * 1e9); S.score = 0; S.results = [];
-    build();
-    setTimeout(() => notify({app: 'guide', title: 'Вітаємо, стажере!', text: 'Ти в Бюро перевірки фактів. Кожна справа — три кроки: прочитай, перевір, виріши.'}), 500);
-    setTimeout(() => { beginCase(0); openWin('case', true); }, 2200);
+    newShift(true);
+    setTimeout(() => notify({app: 'guide', title: 'Вітаємо у Френдс!', text: 'Гортай стрічку й переписуйся з друзями. Помітиш щось підозріле — перевір і скажи, фейк це чи правда.'}), 400);
+    setTimeout(() => browse('friends.ua'), 1200);
   }
 });
 </script>

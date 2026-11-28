@@ -188,6 +188,7 @@ const CSS=`
 .sb-bar svg{width:18px;height:18px;fill:none;stroke:#3b3450;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .sb-url{flex:1;min-width:0;height:34px;border-radius:17px;border:2px solid transparent;background:#fff;padding:0 14px 0 34px;font-size:14.5px;font-weight:700;outline:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236aae8a' stroke-width='2.6'%3E%3Crect x='5' y='11' width='14' height='10' rx='2'/%3E%3Cpath d='M8 11V8a4 4 0 0 1 8 0v3'/%3E%3C/svg%3E");background-repeat:no-repeat;background-size:16px;background-position:12px center}
 .sb-url:focus{border-color:#7f86ee}
+.sb-bms{flex:none;display:flex;gap:6px;padding:6px 10px;background:#f7f5fb;border-bottom:1px solid #e3dcef;overflow-x:auto;scrollbar-width:none}.sb-bms button{flex:none;padding:5px 12px;border-radius:10px;background:#ebe6f4;font:800 13px Nunito,sans-serif;color:#3b3450}.sb-bms button:hover{background:#e0d8f0}
 .sb-page{flex:1;overflow:auto;background:#fff;user-select:text;-webkit-user-select:text;position:relative}
 .sb-load{position:absolute;left:0;top:0;height:3px;background:#7f86ee;width:0;z-index:2;transition:width .35s}
 .sb-in{max-width:760px;margin:0 auto;padding:26px 22px 40px;font-size:16px;line-height:1.55}
@@ -416,7 +417,7 @@ function defaults(){
   add('desk','Привіт','file','txt','Привіт! Це твій власний комп\'ютер-пісочниця.\n\nТут можна все: створювати папки й файли, перейменовувати, видаляти й повертати їх із кошика.\n\nСпробуй:\n1. Натисни правою кнопкою на робочому столі → «Створити» → «Папку».\n2. Перетягни цей файл у нову папку.\n3. Видали папку, а потім відкрий «Кошик» і поверни її.\n\nНічого не зламається — сміливо пробуй!');
   add('docs','Мій розклад','file','txt','Понеділок: математика, читання, інформатика\nВівторок: українська мова, малювання\nСереда: природознавство, фізкультура\n');
   add('docs','Список покупок','file','txt','- молоко\n- хліб\n- яблука\n- олівці');}
-  return {v:1,nodes:n,seq:k+1,pos,ens:Object.fromEntries((opt.deskAdd||[]).map(a=>[a,1])),wall:'sky',lang:'ua',snd:localStorage.getItem(opt.key+'-snd')!=='0',mt:now};
+  return {v:1,nodes:n,seq:k+1,pos,ens:Object.fromEntries((opt.deskAdd||[]).map(a=>[a,1])),wall:opt.wall||'sky',lang:'ua',snd:localStorage.getItem(opt.key+'-snd')!=='0',mt:now};
 }
 function load(){try{const s=JSON.parse(localStorage.getItem(opt.key)||'null');if(s&&s.v===1&&s.nodes&&s.nodes.c)return s}catch(e){}return null}
 let saveT=0,quotaWarned=false;
@@ -651,6 +652,7 @@ function openApp(id,arg){
   return a.open(arg);
 }
 OS.open=openApp;
+OS.browse=u=>{const ex=[...OS.wins].reverse().find(w=>w.app==='browser');if(ex){ex.el.classList.remove('min');ex.task.classList.remove('min');focusWin(ex);if(u!==undefined)ex.onArg(u);return ex}return openApp('browser',u)};
 function openNode(n){
   if(!n)return;
   if(n.type==='dir'){if(n.id==='trash')openApp('bin');else openApp('explorer',n.id);return}
@@ -1197,11 +1199,11 @@ function wallPng(css,n){const c=document.createElement('canvas');c.width=640;c.h
   x.fillStyle='rgba(255,255,255,.25)';x.beginPath();x.arc(500,90,70,0,7);x.fill();x.fillStyle='rgba(255,255,255,.12)';x.beginPath();x.ellipse(200,420,320,110,0,0,7);x.fill();return c.toDataURL('image/png')}
 register({id:'browser',name:'Браузер',icon:I.web,kw:'інтернет сайт пошук',open:(url)=>{
   const W=win({app:'browser',title:'Браузер',icon:I.web,w:960,h:620});
-  W.body.innerHTML=`<div class="sb-bar"><button class="b" title="Назад">${L.back}</button><button class="f" title="Вперед">${L.fwd}</button><button class="r" title="Оновити (F5)">${L.reload}</button><button class="hm" title="Домашня сторінка">${L.home}</button><input class="sb-url" spellcheck="false" aria-label="Адреса сайту"></div><div class="sb-page"><div class="sb-load"></div><div class="sb-in"></div></div>`;
+  W.body.innerHTML=`<div class="sb-bar"><button class="b" title="Назад">${L.back}</button><button class="f" title="Вперед">${L.fwd}</button><button class="r" title="Оновити (F5)">${L.reload}</button><button class="hm" title="Домашня сторінка">${L.home}</button><input class="sb-url" spellcheck="false" aria-label="Адреса сайту"></div>${opt.bookmarks?`<div class="sb-bms">${opt.bookmarks.map(([u,n])=>`<button data-go="${esc(u)}">${esc(n)}</button>`).join('')}</div>`:''}<div class="sb-page"><div class="sb-load"></div><div class="sb-in"></div></div>`;
   const page=$('.sb-in',W.body),urlI=$('.sb-url',W.body),ld=$('.sb-load',W.body),pg=$('.sb-page',W.body);let hist=[],hi=-1;
   const SITES={
    'vseznayko.ua':()=>({t:'Всезнайко',h:`<div class="sb-logo"><span>Все</span><span>знай</span><span>ко</span><span>!</span></div><form class="sb-sform"><input name="q" placeholder="Що шукаємо?" aria-label="Пошук"><button>Знайти</button></form>
-     <div class="sb-tiles">${[['vikidity.ua','Вікі-дитя',I.notepad],['pogoda.ua','Погода',I.photo],['shpalery.ua','Шпалери',I.img],['zagadky.ua','Загадки',I.txt],['vikidity.ua/bezpeka','Безпека',I.info]].map(([u,n,ic])=>`<button data-go="${u}"><i>${ic}</i>${n}</button>`).join('')}</div>`}),
+     <div class="sb-tiles">${[['vikidity.ua','Вікі-дитя',I.notepad],['pogoda.ua','Погода',I.photo],['shpalery.ua','Шпалери',I.img],['zagadky.ua','Загадки',I.txt],['vikidity.ua/bezpeka','Безпека',I.info],...(opt.tiles||[])].map(([u,n,ic])=>`<button data-go="${u}"><i>${ic}</i>${n}</button>`).join('')}</div>`}),
    'vikidity.ua':()=>({t:'Вікі-дитя',h:`<h1>Вікі-дитя</h1><p class="lead">Енциклопедія для допитливих. Обери статтю:</p>${Object.entries(ART).map(([k,a])=>`<p>• <span data-go="vikidity.ua/${k}">${a.t}</span></p>`).join('')}`}),
    'pogoda.ua':()=>{const d=new Date();let s=d.getFullYear()*372+d.getMonth()*31+d.getDate();const rnd=()=>{s=(s*9301+49297)%233280;return s/233280};const m=d.getMonth(),base=[-2,0,5,11,17,21,23,22,17,10,4,0][m];
      return{t:'Погода',h:`<h1>Погода в Борисполі</h1><p class="lead">Прогноз на тиждень</p><div class="sb-wx">${Array.from({length:7},(_,i)=>{const dd=new Date(d);dd.setDate(d.getDate()+i);const k=Math.floor(rnd()*4);const t=Math.round(base+rnd()*6-3);return`<div>${['Нд','Пн','Вт','Ср','Чт','Пт','Сб'][dd.getDay()]}<br>${dd.getDate()}${wxIcon(k)}${t>0?'+':''}${t}°</div>`}).join('')}</div>`}},
@@ -1217,20 +1219,22 @@ register({id:'browser',name:'Браузер',icon:I.web,kw:'інтернет с�
     if(/шпалер|малюн|картин|фон/.test(s))res.push(['shpalery.ua','Безкоштовні шпалери','Завантаж гарні шпалери для робочого столу.']);
     if(/загад/.test(s))res.push(['zagadky.ua','Загадки про комп\'ютер','Відгадай загадки й завантаж файл.']);
     (opt.searchMore||(()=>[]))(s).forEach(r=>res.push(r));
-    return{t:q+' — Всезнайко',h:`<form class="sb-sform" style="margin:0 0 20px"><input name="q" value="${esc(q)}" aria-label="Пошук"><button>Знайти</button></form>`+(res.length?res.map(r=>`<div class="sb-res"><small>${esc(r[0])}</small><span data-go="${esc(r[0])}">${esc(r[1])}</span><p>${esc(r[2])}</p></div>`).join(''):`<p class="lead">За запитом «${esc(q)}» нічого не знайдено. Спробуй інші слова: «мишка», «погода», «шпалери».</p>`)}}
+    return{t:q+' — Всезнайко',h:`<form class="sb-sform" style="margin:0 0 20px"><input name="q" value="${esc(q)}" aria-label="Пошук"><button>Знайти</button></form>`+(res.length?res.map(r=>`<div class="sb-res"><small>${esc(r[0])}</small><span data-go="${esc(r[3]||r[0])}">${esc(r[1])}</span><p>${esc(r[2])}</p></div>`).join(''):`<p class="lead">За запитом «${esc(q)}» нічого не знайдено. Спробуй інші слова: «мишка», «погода», «шпалери».</p>`)}}
   function nav(u,nohist){u=norm(u)||'vseznayko.ua';let r;
     if(u.startsWith('?'))r=search(decodeURIComponent(u.slice(1)));
     else if(SITES[u])r=SITES[u]();
+    else if(opt.site&&(r=opt.site(u))){}
     else if(!u.includes('.')&&!u.includes('/')){u='?'+u;r=search(u.slice(1))}
     else r={t:'Сайт не знайдено',h:`<div class="sb-404">${I.web}<h1>Не вдається знайти сайт</h1><p>Перевір, чи правильно написано адресу <b>${esc(u)}</b>.</p><p><span data-go="vseznayko.ua">Повернутися до пошуку</span></p></div>`};
     if(!nohist){hist=hist.slice(0,hi+1);hist.push(u);hi=hist.length-1}
     ld.style.transition='none';ld.style.width='0';ld.offsetWidth;ld.style.transition='';ld.style.width='70%';
     setTimeout(()=>{page.innerHTML=r.h;pg.scrollTop=0;urlI.value=u.startsWith('?')?'vseznayko.ua/?q='+decodeURIComponent(u.slice(1)):u;W.setTitle(r.t+' — Браузер');ld.style.width='100%';setTimeout(()=>{ld.style.transition='none';ld.style.width='0'},250);
-      $('.b',W.body).disabled=hi<=0;$('.f',W.body).disabled=hi>=hist.length-1;const f=page.querySelector('form');if(f)f.onsubmit=e=>{e.preventDefault();const q=f.q.value.trim();if(q)nav('?'+encodeURIComponent(q))}},220);
+      $('.b',W.body).disabled=hi<=0;$('.f',W.body).disabled=hi>=hist.length-1;opt.onNav&&opt.onNav(u,page,W);const f=page.querySelector('form.sb-sform');if(f)f.onsubmit=e=>{e.preventDefault();const q=f.q.value.trim();if(q)nav('?'+encodeURIComponent(q))}},220);
   }
   page.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){nav(g.dataset.go);return}const a=e.target.closest('[data-app]');if(a){openApp(OS.apps[a.dataset.app]?a.dataset.app:'browser');return}
     const d=e.target.closest('[data-dl]');if(d){let n;if(d.dataset.dl==='txt')n=F.mk('down','Загадки','file','txt',RIDDLES);else{const i=+d.dataset.dl;n=F.mk('down','Шпалери '+WALLS[i].n,'file','png',wallPng(WALLS[i].css,i))}
       d.textContent='Завантажено ✓';snd('note');notify('Завантаження завершено',F.full(n),'down',{t:'Відкрити папку',f:()=>openApp('explorer','down')})}});
+  const bms=$('.sb-bms',W.body);if(bms)bms.onclick=e=>{const g=e.target.closest('[data-go]');if(g)nav(g.dataset.go)};
   urlI.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();const v=urlI.value.trim();const m=v.match(/vseznayko\.ua\/\?q=(.*)/i);nav(m?'?'+encodeURIComponent(m[1]):v);urlI.blur()}});
   urlI.addEventListener('focus',()=>setTimeout(()=>urlI.select(),0));
   $('.b',W.body).onclick=()=>{if(hi>0){hi--;nav(hist[hi],1)}};$('.f',W.body).onclick=()=>{if(hi<hist.length-1){hi++;nav(hist[hi],1)}};
