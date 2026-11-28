@@ -1445,6 +1445,15 @@ if(opt.fifi){
       if(a==='how'){const hw=$('.hw',card);if(hw){hw.hidden=false;b.remove()}}
       if(a==='all')openPanel()});
     root.appendChild(card);
+    /* картку місії можна перетягувати за верхню частину, як вікно */
+    const place=(x,y)=>{const R=root.getBoundingClientRect();x=Math.max(0,Math.min(R.width-card.offsetWidth,x));y=Math.max(0,Math.min(R.height-120,y));Object.assign(card.style,{left:x+'px',top:y+'px',right:'auto',bottom:'auto'})};
+    if(FS().pos)place(FS().pos.x,FS().pos.y);
+    const hd=$('.fc-h',card);hd.style.cursor='grab';hd.style.touchAction='none';
+    hd.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest('button'))return;e.preventDefault();
+      const r=card.getBoundingClientRect(),R=root.getBoundingClientRect(),ox=e.clientX-r.left,oy=e.clientY-r.top;let moved=false;
+      const mv=ev=>{if(!moved&&Math.hypot(ev.clientX-e.clientX,ev.clientY-e.clientY)<4)return;moved=true;hd.style.cursor='grabbing';place(ev.clientX-R.left-ox,ev.clientY-R.top-oy)};
+      const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);hd.style.cursor='grab';root.classList.remove('dragging');if(moved){FS().pos={x:parseFloat(card.style.left),y:parseFloat(card.style.top)};save()}};
+      root.classList.add('dragging');addEventListener('pointermove',mv);addEventListener('pointerup',up)});
   }
   function startMission(id){const m=M.find(x=>x[0]===id);if(!m)return;FS().m=id;FS().mini=0;save();hide();closePanel();renderCard();snd('note')}
   function task(id){const m=M.find(x=>x[4].includes(id));if(m)startMission(m[0])}
